@@ -6,6 +6,7 @@ import React from "react";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import ProvidersOwner from "@/components/ProvidersOwner";
+import Footer from "@/components/shared/Footer";
 
 export const metadata: Metadata = {
   title: {
@@ -47,6 +48,7 @@ export default function RootLayout({
           themeProps={{ attribute: "class", defaultTheme: "dark" }}
         >
           {children}
+          <Footer />
         </ProvidersOwner>
       </body>
     </html>
