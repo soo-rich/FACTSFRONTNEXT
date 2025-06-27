@@ -4,6 +4,8 @@ import { NextAuthOptions } from "next-auth";
 import { AuthService } from "@/service/auth/auth-service";
 import { JwtUtils } from "@/service/jwt/JwtUtils";
 
+// @ts-ignore
+// @ts-ignore
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -41,6 +43,7 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
   callbacks: {
+    //@ts-ignore
     async jwt({ token, user, account }) {
       if (account && user) {
         return {
@@ -81,6 +84,7 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
+    //@ts-ignore
     async session({ session, token }) {
       // Passer les données du token à la session
       session.user = {

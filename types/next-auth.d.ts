@@ -1,7 +1,5 @@
-// src/types/next-auth.d.ts
-
 declare module "next-auth" {
-  type Session = {
+  interface Session {
     bearer?: string;
     refresh?: string;
     error?: string;
@@ -14,5 +12,5 @@ declare module "next-auth" {
       numero?: string;
       role?: string;
     };
-  };
+  }
 }
