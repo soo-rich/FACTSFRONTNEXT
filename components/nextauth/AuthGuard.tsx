@@ -1,0 +1,12 @@
+import { getServerSession } from "next-auth";
+
+import { ChildrenType } from "@/types/types";
+import AuthRedirect from "@/components/nextauth/AuthRedirect";
+
+const AuthGuard = async ({ children }: ChildrenType) => {
+  const session = await getServerSession();
+
+  return <>{session ? children : <AuthRedirect />}</>;
+};
+
+export default AuthGuard;

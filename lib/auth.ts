@@ -1,6 +1,5 @@
-import type { NextAuthOptions } from "next-auth";
-
 import CredentialsProvider from "next-auth/providers/credentials";
+import { NextAuthOptions } from "next-auth";
 
 import { AuthService } from "@/service/auth/auth-service";
 import { JwtUtils } from "@/service/jwt/JwtUtils";
@@ -40,8 +39,6 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/login",
-    signOut: "/login",
-    error: "/login",
   },
   callbacks: {
     async jwt({ token, user, account }) {

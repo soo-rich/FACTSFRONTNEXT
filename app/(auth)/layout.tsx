@@ -7,13 +7,7 @@ export const metadata: Metadata = {
 };
 
 const AuthenticationLayout = ({ children }: ChildrenType) => {
-  return (
-    <div className="justify-center flex flex-col h-screen">
-      <main className="container mx-auto max-w-7xl pt-16 px-6 flex justify-center align-middle  ">
-        {children}
-      </main>
-    </div>
-  );
+  return <main className="bg-gray-100 flex min-h-screen">{children}</main>;
 };
 
 export default AuthenticationLayout;

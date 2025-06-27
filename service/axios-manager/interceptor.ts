@@ -7,14 +7,16 @@ export const InterceptorAxios = (instance: AxiosInstance) => {
       const session = await getSession();
 
       if (session) {
-        config.headers.Authorization = `Bearer ${session.bearer}`;
+        // ne pas ajouter le token sur les route t'authentication
+        if (!config?.url?.includes("auth/login")) {
+          config.headers.Authorization = `Bearer ${session.bearer}`;
+        }
       }
+      console.log("--------", session);
 
       return config;
     },
     (error) => {
-      console.log("error", error);
-
       return Promise.reject(error);
     },
   );

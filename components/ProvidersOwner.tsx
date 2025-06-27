@@ -32,7 +32,7 @@ const ProvidersOwner = ({
   return (
     <HeroUIProvider navigate={router.push}>
       <NextThemesProvider {...themeProps}>
-        <NextAuthProvider>
+        <NextAuthProvider basePath={process.env.NEXTAUTH_BASEPATH}>
           <QueryProvider>
             <ToastProvider
               placement={"top-center"}
