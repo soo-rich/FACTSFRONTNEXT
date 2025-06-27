@@ -6,7 +6,6 @@ import React from "react";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import ProvidersOwner from "@/components/ProvidersOwner";
-import Footer from "@/components/shared/Footer";
 
 export const metadata: Metadata = {
   title: {
@@ -40,7 +39,7 @@ export default function RootLayout({
       </head>
       <body
         className={clsx(
-          "min-h-screen text-foreground bg-background font-sans antialiased",
+          "h-screen text-foreground bg-background font-sans antialiased",
           fontSans.variable,
         )}
       >
@@ -48,7 +47,6 @@ export default function RootLayout({
           themeProps={{ attribute: "class", defaultTheme: "light" }}
         >
           {children}
-          <Footer />
         </ProvidersOwner>
       </body>
     </html>
