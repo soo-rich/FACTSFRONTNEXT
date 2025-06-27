@@ -5,6 +5,7 @@ import type { ThemeProviderProps } from "next-themes";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { HeroUIProvider } from "@heroui/system";
 import { useRouter } from "next/navigation";
+import { ToastProvider } from "@heroui/toast";
 
 import { ChildrenType } from "@/types/types";
 import QueryProvider from "@/components/queryprovider/QueryProvider";
@@ -32,7 +33,9 @@ const ProvidersOwner = ({
     <HeroUIProvider navigate={router.push}>
       <NextThemesProvider {...themeProps}>
         <NextAuthProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <ToastProvider /> {children}
+          </QueryProvider>
         </NextAuthProvider>
       </NextThemesProvider>
     </HeroUIProvider>
