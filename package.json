@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroui/button": "2.2.22",
+    "@heroui/card": "^2.2.21",
     "@heroui/code": "2.2.16",
     "@heroui/input": "2.4.22",
     "@heroui/kbd": "2.2.17",
@@ -17,6 +18,7 @@
     "@heroui/listbox": "2.3.21",
     "@heroui/navbar": "2.2.20",
     "@heroui/progress": "^2.2.18",
+    "@heroui/react": "^2.7.11",
     "@heroui/snippet": "2.2.23",
     "@heroui/switch": "2.2.20",
     "@heroui/system": "2.4.18",

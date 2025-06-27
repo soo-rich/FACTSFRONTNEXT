@@ -45,7 +45,7 @@ export default function RootLayout({
         )}
       >
         <ProvidersOwner
-          themeProps={{ attribute: "class", defaultTheme: "dark" }}
+          themeProps={{ attribute: "class", defaultTheme: "light" }}
         >
           {children}
           <Footer />

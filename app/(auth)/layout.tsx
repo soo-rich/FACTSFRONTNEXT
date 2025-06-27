@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 const AuthenticationLayout = ({ children }: ChildrenType) => {
   return (
-    <div className="relative flex flex-col h-screen">
-      <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow items-center justify-center">
+    <div className="justify-center flex flex-col h-screen">
+      <main className="container mx-auto max-w-7xl pt-16 px-6 flex justify-center align-middle  ">
         {children}
       </main>
     </div>
