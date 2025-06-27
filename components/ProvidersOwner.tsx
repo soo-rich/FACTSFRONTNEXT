@@ -34,7 +34,19 @@ const ProvidersOwner = ({
       <NextThemesProvider {...themeProps}>
         <NextAuthProvider>
           <QueryProvider>
-            <ToastProvider /> {children}
+            <ToastProvider
+              placement={"top-center"}
+              toastProps={{
+                radius: "sm",
+                variant: "solid",
+                shouldShowTimeoutProgress: true,
+                classNames: {
+                  closeIcon:
+                    "text-default-400 hover:text-primary hover:bg-default-100",
+                },
+              }}
+            />
+            {children}
           </QueryProvider>
         </NextAuthProvider>
       </NextThemesProvider>
