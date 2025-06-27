@@ -5,7 +5,6 @@ import { AuthService } from "@/service/auth/auth-service";
 import { JwtUtils } from "@/service/jwt/JwtUtils";
 
 // @ts-ignore
-// @ts-ignore
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
