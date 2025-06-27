@@ -2,7 +2,6 @@
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { GalleryVerticalEnd } from "lucide-react";
 import { cn } from "@heroui/theme";
 import { Link } from "@heroui/link";
 import { signIn } from "next-auth/react";
@@ -14,6 +13,7 @@ import { Input } from "@heroui/input";
 import { CircularProgress } from "@heroui/progress";
 import { Button } from "@heroui/button";
 import { Card } from "@heroui/card";
+import Image from "next/image";
 
 import { schemaLogin } from "@/service/auth/auth-service";
 
@@ -38,15 +38,24 @@ const LoginVew = ({ className, ...props }: React.ComponentProps<"div">) => {
   });
 
   const SubmitForm = async (data: formData) => {
-    console.log("data", data);
     const res = await signIn("credentials", { ...data, redirect: false });
 
     if (res && res.ok && res.error === null) {
+      reset({
+        username: "",
+        password: "",
+      });
       const redirectURL = searchParams.get("redirectTo") ?? "/";
 
-      router.replace(redirectURL);
+      addToast({
+        title: "Connexion",
+        color: "success",
+        description: "Connexion Reussie",
+      });
+      setTimeout(() => {
+        router.replace(redirectURL);
+      }, 5000);
     } else {
-      console.log("error", res?.error);
       addToast({
         title: "Connexion",
         color: "warning",
@@ -73,7 +82,21 @@ const LoginVew = ({ className, ...props }: React.ComponentProps<"div">) => {
                 href="/"
               >
                 <div className="flex size-8 items-center justify-center rounded-md">
-                  <GalleryVerticalEnd className="size-6" />
+                  {/*<GalleryVerticalEnd className="size-6" />*/}
+                  <Image
+                    alt={"SOOSMART GRP."}
+                    blurDataURL={"/identity_redim.ico"}
+                    height={100}
+                    layout={"responsive"}
+                    objectFit={"contain"}
+                    objectPosition={"center"}
+                    placeholder={"blur"}
+                    priority={true}
+                    quality={100}
+                    sizes={"md"}
+                    src={"/identity_redim.ico"}
+                    width={100}
+                  />
                 </div>
                 <span className="sr-only">SOOSMART GRP.</span>
               </Link>
@@ -122,7 +145,7 @@ const LoginVew = ({ className, ...props }: React.ComponentProps<"div">) => {
                     className="w-full"
                     disabled={isSubmitting}
                     type="submit"
-                    variant="faded"
+                    variant="solid"
                   >
                     Connexion
                   </Button>

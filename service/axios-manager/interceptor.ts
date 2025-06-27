@@ -1,34 +1,35 @@
-import { AxiosError, AxiosInstance } from 'axios';
-import { getSession } from 'next-auth/react';
+import { AxiosError, AxiosInstance } from "axios";
+import { getSession } from "next-auth/react";
 
 export const InterceptorAxios = (instance: AxiosInstance) => {
   instance.interceptors.request.use(
-    async config => {
+    async (config) => {
       const session = await getSession();
 
       if (session) {
         config.headers.Authorization = `Bearer ${session.bearer}`;
       }
+
       return config;
     },
-    error => {
-      console.log('error', error);
+    (error) => {
+      console.log("error", error);
 
       return Promise.reject(error);
-    }
+    },
   );
 };
 
 export const InterceptorErrorHandler = (instance: AxiosInstance) => {
   instance.interceptors.response.use(
-    response => {
+    (response) => {
       return response;
     },
     (error: AxiosError) => {
       const { response } = error;
 
       if (response) {
-        console.log('response', response.data);
+        console.log("response", response.data);
 
         /*if (response.status === 403) {
                   toast.error('')
@@ -38,17 +39,17 @@ export const InterceptorErrorHandler = (instance: AxiosInstance) => {
       }
 
       return Promise.reject(error);
-    }
+    },
   );
 };
 
 export const InterceptorRemoveParamsNull = (instance: AxiosInstance) => {
-  instance.interceptors.request.use(config => {
+  instance.interceptors.request.use((config) => {
     if (config.params) {
       config.params = Object.fromEntries(
         Object.entries(config.params).filter(
-          ([_, value]) => value !== null && value !== undefined && value !== ''
-        )
+          ([_, value]) => value !== null && value !== undefined && value !== "",
+        ),
       );
     }
 

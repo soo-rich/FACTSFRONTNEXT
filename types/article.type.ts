@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export type ArticleType = {
   id: string;
@@ -7,7 +7,7 @@ export type ArticleType = {
 };
 
 export const articleSchema = z.object({
-  libelle: z.string().min(1, 'le libelle est requis'),
+  libelle: z.string().min(1, "le libelle est requis"),
   prix_unitaire: z.number(),
 });
 

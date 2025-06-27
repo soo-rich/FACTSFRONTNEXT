@@ -1,4 +1,4 @@
-import { Article_Quantite } from './Article_Quantite';
+import { Article_Quantite } from "./Article_Quantite";
 
 export type FactureType = {
   id: string;

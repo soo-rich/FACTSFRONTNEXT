@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 type IconComponent = React.ComponentType<any>;
 
@@ -10,7 +10,7 @@ type NavItem = {
 
 type NavItemWithSub = NavItem & {
   isActive?: boolean;
-  items?: Omit<NavItem, 'icon'>[];
+  items?: Omit<NavItem, "icon">[];
 };
 
 export type TypeNave = {
@@ -19,7 +19,7 @@ export type TypeNave = {
     className?: React.CSSProperties;
     icon?: IconComponent;
   };
-} & { nav?: 'main' | 'secondary'; group?: boolean } & NavItemWithSub;
+} & { nav?: "main" | "secondary"; group?: boolean } & NavItemWithSub;
 
 export type Menytable = {
   name: string;
