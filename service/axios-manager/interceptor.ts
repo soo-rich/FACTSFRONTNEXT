@@ -9,6 +9,7 @@ export const InterceptorAxios = (instance: AxiosInstance) => {
       if (session) {
         // ne pas ajouter le token sur les route t'authentication
         if (!config?.url?.includes("auth/login")) {
+          // @ts-ignore
           config.headers.Authorization = `Bearer ${session?.bearer}`;
         }
       }

@@ -1,29 +1,29 @@
 "use client";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { Link } from "@heroui/link";
-import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { Input } from "@heroui/input";
-import { CircularProgress } from "@heroui/progress";
-import { Button } from "@heroui/button";
-import Image from "next/image";
-import { Card } from "@heroui/card";
-import { addToast } from "@heroui/toast";
 import {
   EyeFilledIcon,
   EyeSlashFilledIcon,
   WarningIcon,
 } from "@heroui/shared-icons";
+import { Input } from "@heroui/input";
+import Image from "next/image";
+import { Button } from "@heroui/button";
+import { CircularProgress } from "@heroui/progress";
+import { Card, CardBody } from "@heroui/card";
+import { clsx } from "clsx";
+import { addToast } from "@heroui/toast";
 import { ShieldCheck } from "lucide-react";
+import { signIn } from "next-auth/react";
 
 import { schemaLogin } from "@/service/auth/auth-service";
 
 type formData = z.infer<typeof schemaLogin>;
 
-const LoginVew = () => {
+const LoginForm = ({ className, ...props }: React.ComponentProps<"div">) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -72,46 +72,28 @@ const LoginVew = () => {
     }
     setTimeout(() => {
       setIsSubmitting(false);
-    }, 500);
+    }, 5000);
   };
 
   const toggleVisibility = () => setVisible(!visible);
 
   return (
-    <div className="w-full flex items-center justify-center bg-white p-8">
-      <Card className="w-full max-w-md px-8 py-8" radius={"sm"} shadow={"lg"}>
-        <form noValidate onSubmit={handleSubmit(SubmitForm)}>
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-col items-center gap-2">
-              <Link
-                className="flex flex-col items-center gap-2 font-medium"
-                href="/"
-              >
-                <div className="flex size-8 items-center justify-center rounded-md">
-                  {/*<GalleryVerticalEnd className="size-6" />*/}
-                  <Image
-                    alt={"SOOSMART GRP."}
-                    blurDataURL={"/identity_redim.ico"}
-                    height={100}
-                    layout={"responsive"}
-                    objectFit={"contain"}
-                    objectPosition={"center"}
-                    placeholder={"blur"}
-                    priority={true}
-                    quality={100}
-                    sizes={"md"}
-                    src={"/identity_redim.ico"}
-                    width={100}
-                  />
-                </div>
-                <span className="sr-only">SOOSMART GRP.</span>
-              </Link>
-              <h1 className="text-xl font-bold">
-                Bienvenue sur SOOSMART FACTS
-              </h1>
-            </div>
-            <div className="flex flex-col space-y-4 gap-4">
-              <div className="w-full">
+    <div className={clsx("flex flex-col gap-6", className)} {...props}>
+      <Card className="overflow-hidden">
+        <CardBody className="grid p-0 md:grid-cols-2">
+          <form
+            noValidate
+            className="p-6 md:p-8"
+            onSubmit={handleSubmit(SubmitForm)}
+          >
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col items-center text-center">
+                <h1 className="text-2xl font-bold">Bienvenue</h1>
+                <p className="text-balance text-muted-foreground">
+                  Connecter avec votre compte
+                </p>
+              </div>
+              <div className="grid gap-2">
                 <Controller
                   control={control}
                   name="username"
@@ -129,7 +111,7 @@ const LoginVew = () => {
                   )}
                 />
               </div>
-              <div className="">
+              <div className="grid gap-2">
                 <Controller
                   control={control}
                   name="password"
@@ -162,37 +144,37 @@ const LoginVew = () => {
                   )}
                 />
               </div>
-              <div className={"flex items-center justify-center gap-2"}>
-                {/*{isSubmitting ? (
+              {isSubmitting ? (
+                <div className={"w-full flex justify-center items-center"}>
                   <CircularProgress
                     className="text-primary w-full"
                     size={"lg"}
                   />
-                ) : (*/}
+                </div>
+              ) : (
                 <Button
-                  className={"w-full bg-primary text-white"}
+                  className={"w-full bg-primary-600"}
                   disabled={isSubmitting}
-                  spinner={
-                    isSubmitting ? (
-                      <CircularProgress
-                        className="text-primary w-full"
-                        size={"lg"}
-                      />
-                    ) : undefined
-                  }
                   type="submit"
                   variant="solid"
                 >
                   Connexion
                 </Button>
-                {/*)}*/}
-              </div>
+              )}
             </div>
+          </form>
+          <div className="relative hidden bg-muted md:block">
+            <Image
+              fill
+              alt="Image"
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              src="/images/loginpage.jpg"
+            />
           </div>
-        </form>
+        </CardBody>
       </Card>
     </div>
   );
 };
 
-export default LoginVew;
+export default LoginForm;

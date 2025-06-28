@@ -1,7 +1,7 @@
-import LoginVew from "@/views/auth/login/LoginVew";
+import LoginForm from "@/views/auth/login/LoginVew";
 
 const Login = () => {
-  return <LoginVew />;
+  return <LoginForm />;
 };
 
 export default Login;

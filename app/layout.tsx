@@ -6,6 +6,7 @@ import React from "react";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import ProvidersOwner from "@/components/ProvidersOwner";
+import { ThemeSwitch } from "@/components/theme-switch";
 
 export const metadata: Metadata = {
   title: {
@@ -47,6 +48,9 @@ export default function RootLayout({
           themeProps={{ attribute: "class", defaultTheme: "light" }}
         >
           {children}
+          <div className={clsx("fixed bottom-4 right-4")}>
+            <ThemeSwitch />
+          </div>
         </ProvidersOwner>
       </body>
     </html>

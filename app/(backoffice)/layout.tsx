@@ -2,7 +2,9 @@ import { Metadata } from "next";
 
 import { ChildrenType } from "@/types/types";
 import AuthGuard from "@/components/nextauth/AuthGuard";
-import { Navbar } from "@/components/shared/front/navbar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
   title: "Administration",
@@ -10,10 +12,13 @@ export const metadata: Metadata = {
 const BackOfficeLayout = ({ children }: ChildrenType) => {
   return (
     <AuthGuard>
-      <div className="relative flex flex-col h-screen">
-        <Navbar />
-        {children}
-      </div>
+      <SidebarProvider>
+        <AppSidebar variant="inset" />
+        <SidebarInset>
+          <SiteHeader />
+          {children}
+        </SidebarInset>
+      </SidebarProvider>
     </AuthGuard>
   );
 };
