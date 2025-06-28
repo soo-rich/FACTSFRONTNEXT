@@ -1,7 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { ChildrenType } from "@/types/types";
+import {ChildrenType} from "@/types/types";
+import type {Metadata} from "next";
+
+export const metadata: Metadata = {
+  title: 'Authentification',
+}
 
 const AuthenticateLayout = ({ children }: ChildrenType) => {
   return (
