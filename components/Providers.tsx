@@ -1,14 +1,14 @@
-'use client';
-import QueryProvider from '@/components/queryclient/QueryProvider';
-import NextAuthProvider from '@/context/nextAuthProvider';
-import { ChildrenType } from '@/types/types';
-import { HeroUIProvider } from '@heroui/react';
+import { ChildrenType } from "@/types/types";
+import { Toaster } from "@/components/ui/sonner";
+import NextAuthProvider from "@/components/auth/NextAuthProvider";
+import QueryProvider from "@/components/queryprovider/QueryProvider";
 
-const Providers = async ({ children }: ChildrenType) => {
+const Providers = ({ children }: ChildrenType) => {
   return (
-    <NextAuthProvider>
+    <NextAuthProvider basePath={process.env.NEXTAUTH_BASEPATH}>
       <QueryProvider>
-        <HeroUIProvider>{children}</HeroUIProvider>
+        {children}
+        <Toaster expand={false} position="top-center" richColors={true} />
       </QueryProvider>
     </NextAuthProvider>
   );

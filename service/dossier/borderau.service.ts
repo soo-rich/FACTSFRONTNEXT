@@ -1,7 +1,7 @@
 import instance from "@/service/axios-manager/instance";
-import { CustomresponseType } from "@/types/customresponse.type";
-import { BorderauType } from "@/types/dossier/borderau.type";
-import { ParamRequests } from "@/types/pagination/paramrequestion.type";
+import {CustomresponseType} from "@/types/customresponse.type";
+import {BorderauType} from "@/types/dossier/borderau.type";
+import {ParamRequests} from "@/types/pagination/paramrequestion.type";
 
 const url = `borderau`;
 
@@ -26,6 +26,7 @@ export class BorderauService {
       })
     ).data;
   }
+  //@ts-ignore
   async Updatedata(id: string, data: any) {
     throw new Error("Method not implemented.");
   }

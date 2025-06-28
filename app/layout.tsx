@@ -1,8 +1,10 @@
-import type {Metadata} from "next";
-import {Toaster} from '@/components/ui/sonner';
-import {Geist, Geist_Mono} from "next/font/google";
+import type { Metadata } from "next";
+
+import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
-import {siteConfig} from "@/config/site";
+import { siteConfig } from "@/config/site";
+import Providers from "@/components/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,16 +17,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: {
-        default: siteConfig.name,
-        template: `%s - ${siteConfig.name}`,
-    },
-    description: siteConfig.description,
-    icons: {
-        icon: "/identity_redim.ico",
-        shortcut: "/identity_redim.ico",
-        apple: "/identity_redim.ico",
-    },
+  title: {
+    default: siteConfig.name,
+    template: `%s - ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  icons: {
+    icon: "/identity_redim.ico",
+    shortcut: "/identity_redim.ico",
+    apple: "/identity_redim.ico",
+  },
 };
 
 export default function RootLayout({
@@ -37,8 +39,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <Toaster position="top-center" expand={false} richColors={true} />
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
