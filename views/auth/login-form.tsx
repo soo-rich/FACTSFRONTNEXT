@@ -25,7 +25,7 @@ const LoginForm = ({
     const router = useRouter();
     const searchParams = useSearchParams();
     const [isSubmitting, setIsSubmitting] = useState(false);
-     const form = useForm<formData>({
+    const form = useForm<formData>({
         resolver: zodResolver(schemaLogin),
         mode: "onChange",
         defaultValues: {
@@ -56,7 +56,7 @@ const LoginForm = ({
         }
         setTimeout(() => {
             setIsSubmitting(false);
-        }, 5000);
+        }, 1000);
     };
 
 
