@@ -21,6 +21,8 @@ import { Button } from "@/components/ui/button";
 import { IconChevronDown, IconLayoutColumns } from "@tabler/icons-react";
 import { InputWithIcon } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { Pagination } from "@/components/ui/pagination";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type TableGeneriqueProps<T> = {
     isLoading: boolean;
@@ -70,6 +72,12 @@ const TableGenerique = <T,>({
     )
     const [sorting, setSorting] = React.useState<SortingState>([])
 
+    const handlePageChange = (newPage: number) => {
+        if (setPage) {
+            setPage(newPage);
+        }
+    };
+
     const table = useReactTable({
         data: table_data ?? [],
         columns,
@@ -108,6 +116,24 @@ const TableGenerique = <T,>({
         <div className={'flex flex-col gap-6'}>
 
             <div className={'flex flex-row items-start align-middle justify-between  gap-4'}>
+                {
+                    pageSize && (
+                        <Select>
+                            <SelectTrigger className="w-32">
+                                <SelectValue placeholder="Select a fruit" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    {[5, 10, 20, 50].map((size) => (
+                                        <SelectItem key={size} value={size.toString()} onClick={() => setPageSize?.(size)}>
+                                            {size} items per page
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    )
+                }
                 {
                     headerSessionLeftt ? headerSessionLeftt : null
                 }
@@ -209,6 +235,9 @@ const TableGenerique = <T,>({
                     </TableBody>
                 </Table>
             </div>
+            {pagination && (<div className="flex justify-end">
+                <Pagination total={0} page={page ?? 0} onChange={handlePageChange} />
+            </div>)}
         </div>
     )
 };

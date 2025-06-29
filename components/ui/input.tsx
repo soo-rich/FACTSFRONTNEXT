@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import {cn} from "@/lib/utils";
-import {Eye, EyeOff, Lock, LucideIcon} from 'lucide-react';
+import { cn } from "@/lib/utils";
+import { Eye, EyeOff, Lock, LucideIcon } from 'lucide-react';
 
 
 type InputWithIconProps = {
@@ -11,7 +11,7 @@ type InputWithIconProps = {
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 
-function Input({className, type, ...props}: React.ComponentProps<"input">) {
+function Input({ className, type, ...props }: React.ComponentProps<"input">) {
     return (
         <input
             className={cn(
@@ -27,12 +27,12 @@ function Input({className, type, ...props}: React.ComponentProps<"input">) {
     );
 }
 
-const PasswordInput = ({className = '', ...props}) => {
+const PasswordInput = ({ className = '', ...props }) => {
     const [showPassword, setShowPassword] = React.useState(false);
 
     return (
         <div className="relative">
-            <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"/>
+            <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
                 type={showPassword ? 'text' : 'password'}
                 className={`pl-10 pr-10 ${className}`}
@@ -43,34 +43,65 @@ const PasswordInput = ({className = '', ...props}) => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
-                {showPassword ? <EyeOff className="h-4 w-4"/> : <Eye className="h-4 w-4"/>}
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
         </div>
     );
 };
 const InputWithIcon = ({
-                           icon: Icon,
-                           iconPosition = 'left',
-                           className,
-                           ...props
-                       }: InputWithIconProps) => {
+    icon: Icon,
+    iconPosition = 'left',
+    className,
+    ...props
+}: InputWithIconProps) => {
     return (
         <div className="relative w-full">
             {iconPosition === 'left' && (
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
-          <Icon className="h-4 w-4"/>
-        </span>
+                    <Icon className="h-4 w-4" />
+                </span>
             )}
 
-            <Input {...props} className={cn(iconPosition === 'left' ? 'pl-9' : 'pr-9', className)}/>
+            <Input {...props} className={cn(iconPosition === 'left' ? 'pl-9' : 'pr-9', className)} />
 
             {iconPosition === 'right' && (
                 <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground">
-          <Icon className="h-4 w-4"/>
-        </span>
+                    <Icon className="h-4 w-4" />
+                </span>
             )}
         </div>
     );
 };
 
-export {Input, PasswordInput, InputWithIcon};
+const DebouncedInput = (
+    ({ value: initialValue, debounce = 300, onChange }: { value: string | number, debounce?: number, onChange: (value: string | number) => void } & Omit<React.ComponentPropsWithoutRef<'input'>, 'onChange'>) => {
+        const [value, setValue] = React.useState(initialValue || '');
+        const [debouncedValue, setDebouncedValue] = React.useState(value);
+        React.useEffect(() => {
+            setValue(initialValue || '');
+        }, [initialValue]);
+
+        React.useEffect(() => {
+            const handler = setTimeout(() => {
+                setDebouncedValue(value);
+            }, debounce);
+
+            return () => {
+                clearTimeout(handler);
+            };
+        }, [value]);
+
+        return (
+            <Input
+                value={debouncedValue}
+                onChange={(e) => {
+                    setValue(e.target.value);
+
+                }}
+                className="w-full"
+            />
+        );
+    }
+);
+
+export { Input, PasswordInput, InputWithIcon, DebouncedInput };
