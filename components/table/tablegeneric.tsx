@@ -1,7 +1,18 @@
 "use client"
 
-import {ColumnDef, Header} from "@tanstack/table-core";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import ErrorView from "@/components/shared/errorviews";
+import LoadingWithoutModal from "@/components/shared/loadingwithoutmodal";
+import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import { InputWithIcon } from "@/components/ui/input";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { IconChevronDown, IconLayoutColumns } from "@tabler/icons-react";
 import {
     ColumnFiltersState,
     flexRender,
@@ -15,21 +26,9 @@ import {
     useReactTable,
     VisibilityState
 } from "@tanstack/react-table";
+import { ColumnDef, Header } from "@tanstack/table-core";
+import { Search } from "lucide-react";
 import * as React from "react";
-import LoadingWithoutModal from "@/components/shared/loadingwithoutmodal";
-import ErrorView from "@/components/shared/errorviews";
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import {Button} from "@/components/ui/button";
-import {IconChevronDown, IconLayoutColumns} from "@tabler/icons-react";
-import {InputWithIcon} from "@/components/ui/input";
-import {Search} from "lucide-react";
-import {Pagination} from "@/components/ui/pagination";
-import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
 type TableGeneriqueProps<T> = {
     isLoading: boolean;
@@ -85,6 +84,12 @@ const TableGenerique = <T,>({
         }
     };
 
+    const handlePageSizeChange = (newPageSize:number)=>{
+        if (setPageSize){
+            setPageSize(newPageSize)
+        }
+    }
+
     const table = useReactTable({
         data: table_data ?? [],
         columns,
@@ -125,15 +130,15 @@ const TableGenerique = <T,>({
             <div className={'flex flex-row items-start align-middle justify-between  gap-4'}>
                 {
                     pageSize && (
-                        <Select>
-                            <SelectTrigger className="w-32">
-                                <SelectValue placeholder="Select a fruit" />
+                        <Select defaultValue="10" onValueChange={e=>handlePageSizeChange(Number(e.toString()))}>
+                            <SelectTrigger >
+                                <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     {[5, 10, 20, 50].map((size) => (
-                                        <SelectItem key={size} value={size.toString()} onClick={() => setPageSize?.(size)}>
-                                            {size} items per page
+                                        <SelectItem key={size} value={size.toString()} >
+                                            {size}
                                         </SelectItem>
                                     ))}
                                 </SelectGroup>
@@ -145,7 +150,7 @@ const TableGenerique = <T,>({
                     headerSessionLeftt ? headerSessionLeftt : null
                 }
                 <div className="flex flex-row justify-between align-middle sm:flex-1 items-center gap-2">
-                    {globalFilter && (<InputWithIcon icon={Search} iconPosition="left" placeholder="Search..." value={globalFilter} onChange={(e) => setGlobalFilter?.(e.target.value)} />)}
+                    {globalFilter && (<InputWithIcon icon={Search} iconPosition="left" placeholder="Search..." value={globalFilter} onChange={(e) => setGlobalFilter?.(e.target.value)} className="bg-primary"/>)}
                     {visibleColumns && (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -188,26 +193,33 @@ const TableGenerique = <T,>({
 
             <div className={'w-full'}>
 
-                <Table>
-                    <TableHeader className="bg-muted sticky top-0 z-10">
+                <Table className=" border-2 rounded">
+                    <TableHeader className="bg-muted sticky top-0 z-10 uppercase rounded-2xl">
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
+                            <TableRow key={headerGroup.id} className="w-full">
+                                {headerGroup.headers.map((header, idx) => {
+                                    const isLast = idx === headerGroup.headers.length - 1;
                                     return (
-                                        <TableHead key={header.id} colSpan={header.colSpan}>
+                                        <TableHead
+                                            key={header.id}
+                                            colSpan={header.colSpan}
+                                            className={`rounded-2xl ${isLast ? "text-center":undefined}`}
+                                        >
                                             {header.isPlaceholder
                                                 ? null
-                                                : renderHeaderCell ? renderHeaderCell(header) : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
+                                                : renderHeaderCell
+                                                    ? renderHeaderCell(header)
+                                                    : flexRender(
+                                                        header.column.columnDef.header,
+                                                        header.getContext()
+                                                    )}
                                         </TableHead>
-                                    )
+                                    );
                                 })}
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <TableBody className="**:data-[slot=table-cell]:first:w-8">
+                    <TableBody>
                         {isLoading ? (<TableRow>
                             <TableCell
                                 colSpan={columns.length}
@@ -243,7 +255,7 @@ const TableGenerique = <T,>({
                 </Table>
             </div>
             {pagination && (<div className="flex justify-end">
-                <Pagination total={0} page={page ?? 0} onChange={handlePageChange} />
+                
             </div>)}
         </div>
     )
