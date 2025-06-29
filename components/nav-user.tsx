@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar,} from "@/components/ui/sidebar";
+import {signOut} from "next-auth/react";
 //import {ModeToggle} from "@/components/themes/ModeToggle";
 
 type navuserpropos = {
@@ -26,6 +27,10 @@ type navuserpropos = {
 
 export function NavUser({ user, dropdown = true }: navuserpropos) {
   const { isMobile } = useSidebar();
+
+  const handleClienttoLogout = async ()=>{
+    await signOut({callbackUrl: "/login"})
+  }
 
   return (
     <SidebarMenu>
@@ -120,7 +125,7 @@ export function NavUser({ user, dropdown = true }: navuserpropos) {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={()=> handleClienttoLogout()}>
                 <LogOut />
                 Log out
               </DropdownMenuItem>
