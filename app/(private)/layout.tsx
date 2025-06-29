@@ -1,8 +1,8 @@
-import {ChildrenType} from "@/types/types";
+import { AppSidebar } from "@/components/app-sidebar";
 import AuthGuard from "@/components/auth/AuthGuard";
-import {SidebarInset, SidebarProvider} from "@/components/ui/sidebar";
-import {AppSidebar} from "@/components/app-sidebar";
-import {AdminHeader} from "@/components/shared/AdminHeader";
+import AdminHeader from "@/components/shared/adminheader";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { ChildrenType } from "@/types/types";
 
 const PrivateLayout = ({children}: ChildrenType) => {
     return (<AuthGuard>
