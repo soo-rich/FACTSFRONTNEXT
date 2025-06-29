@@ -1,13 +1,8 @@
-
 "use client";
 
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import {ChevronRight} from "lucide-react";
 
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import {Collapsible, CollapsibleContent, CollapsibleTrigger,} from "@/components/ui/collapsible";
 import {
     SidebarGroup,
     SidebarGroupLabel,
@@ -19,50 +14,35 @@ import {
     SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import {NavItem} from "@/types/menu/navigation.type";
 
 
-export type NavItem = {
-    groupLabel?: string;
-    items: ItemMenu[];
-}
-
-type ItemMenu = {
-    title: string;
-    url?: string;
-    icon?: LucideIcon;
-    isActive?: boolean;
-    items?: SubItem[];
-};
-
-type SubItem = {
-    title: string;
-    url?: string;
-};
-
-const MenuGenerator = ({items}:{items: NavItem[]}) => {
+const MenuGenerator = ({items}: { items: NavItem[] }) => {
     return (<>
         {
             items.map((navItem, index) => (
                 <SidebarGroup key={index}>
-                    {navItem.groupLabel && <SidebarGroupLabel>{navItem.groupLabel}</SidebarGroupLabel>}
+                    {navItem.groupLabel && <SidebarGroupLabel className={'text-sm'}>{navItem.groupLabel}</SidebarGroupLabel>}
                     <SidebarMenu>{
                         navItem.items.map((item, index) => (
                             item.url ? (<SidebarMenuItem key={index}>
                                 <SidebarMenuButton asChild tooltip={item.title}>
                                     <Link href={item.url}>
-                                        {item.icon && <item.icon className="mr-2 h-4 w-4" />}
+                                        {item.icon && <item.icon className="mr-2 h-4 w-4"/>}
                                         {item.title}
 
                                     </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>) : (
-                                <Collapsible key={index} asChild className="group/collapsible" defaultOpen={item.isActive}>
+                                <Collapsible key={index} asChild className="group/collapsible"
+                                             defaultOpen={item.isActive}>
                                     <SidebarMenuItem>
                                         <CollapsibleTrigger asChild>
                                             <SidebarMenuButton tooltip={item.title}>
-                                                {item.icon && <item.icon />}
+                                                {item.icon && <item.icon/>}
                                                 <span>{item.title}</span>
-                                                <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                                <ChevronRight
+                                                    className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"/>
                                             </SidebarMenuButton>
                                         </CollapsibleTrigger>
                                         <CollapsibleContent>
@@ -70,9 +50,21 @@ const MenuGenerator = ({items}:{items: NavItem[]}) => {
                                                 {item.items?.map((subItem) => (
                                                     <SidebarMenuSubItem key={subItem.title}>
                                                         <SidebarMenuSubButton asChild>
-                                                            {subItem.url?(<Link href={subItem.url}>
-                                                                <span>{subItem.title}</span>
-                                                            </Link>):(<span>{subItem.title}</span>)}
+                                                            {
+                                                                subItem.url ?
+                                                                    (
+                                                                        <Link href={subItem.url}>
+                                                                            {subItem.icon && <subItem.icon/>}
+                                                                            <span>{subItem.title}</span>
+                                                                        </Link>
+                                                                    ) : (
+                                                                        <>
+                                                                            {subItem.icon && <subItem.icon/>}
+                                                                            <span>{subItem.title}</span>
+                                                                        </>
+
+                                                                    )
+                                                            }
                                                         </SidebarMenuSubButton>
                                                     </SidebarMenuSubItem>
                                                 ))}
@@ -88,7 +80,6 @@ const MenuGenerator = ({items}:{items: NavItem[]}) => {
             ))
         }
     </>)
-
 
 
 }

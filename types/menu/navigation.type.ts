@@ -1,27 +1,20 @@
-import React from "react";
+import {LucideIcon} from "lucide-react";
 
-type IconComponent = React.ComponentType<any>;
+export type NavItem = {
+  groupLabel?: string;
+  items: ItemMenu[];
+}
 
-type NavItem = {
+type ItemMenu = {
   title: string;
-  url: string;
-  icon?: IconComponent;
-};
-
-type NavItemWithSub = NavItem & {
+  url?: string;
+  icon?: LucideIcon;
   isActive?: boolean;
-  items?: Omit<NavItem, "icon">[];
+  items?: SubItem[];
 };
 
-export type TypeNave = {
-  special?: {
-    tooltip: string;
-    className?: React.CSSProperties;
-    icon?: IconComponent;
-  };
-} & { nav?: "main" | "secondary"; group?: boolean } & NavItemWithSub;
-
-export type Menytable = {
-  name: string;
-  menu: TypeNave[];
+type SubItem = {
+  title: string;
+  url?: string;
+  icon?: LucideIcon;
 };
