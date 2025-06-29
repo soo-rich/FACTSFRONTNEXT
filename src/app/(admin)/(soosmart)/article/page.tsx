@@ -1,10 +1,7 @@
-import ArticleIndex from "@/views/article";
+import ArticleIndex from '@/views/article';
 
 const ArticlePage = () => {
-    return (
-        <ArticleIndex />
-    );
+  return <ArticleIndex />;
 };
-
 
 export default ArticlePage;

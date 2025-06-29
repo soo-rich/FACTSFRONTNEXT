@@ -1,6 +1,6 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { FlatCompat } from '@eslint/eslintrc';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -10,51 +10,49 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript", "eslint:recommended",
-      "@typescript-eslint/recommended"),
+  ...compat.extends(
+    'next/core-web-vitals',
+    'next/typescript',
+    'eslint:recommended',
+    '@typescript-eslint/recommended',
+    'plugin:prettier/recommended'
+  ),
   {
     rules: {
       // ========== IMPORTS ==========
       // Ordre des imports
-      "import/order": [
-        "error",
+      'import/order': [
+        'error',
         {
-          groups: [
-            "builtin",
-            "external",
-            "internal",
-            "parent",
-            "sibling",
-            "index",
-          ],
-          "newlines-between": "always",
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+          'newlines-between': 'always',
           alphabetize: {
-            order: "asc",
+            order: 'asc',
             caseInsensitive: true,
           },
           pathGroups: [
             {
-              pattern: "@/**",
-              group: "internal",
-              position: "before",
+              pattern: '@/**',
+              group: 'internal',
+              position: 'before',
             },
           ],
         },
       ],
       // Pas d'imports non utilisés
-      "@typescript-eslint/no-unused-vars": [
-        "error",
+      '@typescript-eslint/no-unused-vars': [
+        'error',
         {
-          argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
         },
       ],
       // Préférer les imports nommés
-      "import/prefer-default-export": "off",
+      'import/prefer-default-export': 'off',
 
       // ========== CONSOLE & DEBUG ==========
       // Avertissement pour console.log
-      "no-console": ["warn", { allow: ["warn", "error"] }],
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
       // Pas de debugger
       //"no-debugger": "error",
       // Pas d'alert
@@ -62,24 +60,24 @@ const eslintConfig = [
 
       // ========== CODE QUALITY ==========
       // Variables non utilisées
-      "no-unused-vars": "off", // Désactivé car on utilise la version TypeScript
+      'no-unused-vars': 'off', // Désactivé car on utilise la version TypeScript
       // Pas de var
-      "no-var": "error",
+      'no-var': 'error',
       // Préférer const
-      "prefer-const": "off",
+      'prefer-const': 'off',
       // Pas de code mort
-      "no-unreachable": "error",
+      'no-unreachable': 'error',
       // Pas de conditions toujours vraies/fausses
-      "no-constant-condition": "off",
+      'no-constant-condition': 'off',
 
       // ========== REACT SPECIFIC ==========
       // Hooks rules
-      "react-hooks/rules-of-hooks": "warn",
-      "react-hooks/exhaustive-deps": "warn",
+      'react-hooks/rules-of-hooks': 'warn',
+      'react-hooks/exhaustive-deps': 'warn',
       // Pas de React dans le scope (Next.js)
-      "react/react-in-jsx-scope": "off",
+      'react/react-in-jsx-scope': 'off',
       // Props validation (optionnel)
-      "react/prop-types": "off",
+      'react/prop-types': 'off',
 
       // ========== TYPESCRIPT SPECIFIC ==========
       // Préférer les interfaces
@@ -93,28 +91,28 @@ const eslintConfig = [
 
       // ========== FORMATTING ==========
       // Points-virgules
-      semi: ["error", "never"],
+      semi: ['error', 'never'],
       // Guillemets
-      quotes: ["error", "double", { avoidEscape: true }],
+      quotes: ['error', 'double', { avoidEscape: true }],
       // Virgule trailing
-      "comma-dangle": ["error", "es5"],
+      'comma-dangle': ['error', 'es5'],
       // Espaces
-      "no-trailing-spaces": "error",
-      "no-multiple-empty-lines": ["error", { max: 2, maxEOF: 1 }],
+      'no-trailing-spaces': 'error',
+      'no-multiple-empty-lines': ['error', { max: 2, maxEOF: 1 }],
 
       // ========== NEXT.JS SPECIFIC ==========
       // Pas de <img>, utiliser next/image
-      "@next/next/no-img-element": "error",
+      '@next/next/no-img-element': 'error',
       // Pas de <a>, utiliser next/link
-      "@next/next/no-html-link-for-pages": "error",
+      '@next/next/no-html-link-for-pages': 'error',
     },
   },
   {
     // Configuration spécifique pour les fichiers de configuration
-    files: ["*.config.js", "*.config.mjs", "*.config.ts"],
+    files: ['*.config.js', '*.config.mjs', '*.config.ts'],
     rules: {
-      "no-console": "off",
-      "@typescript-eslint/no-var-requires": "off",
+      'no-console': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
     },
   },
 ];

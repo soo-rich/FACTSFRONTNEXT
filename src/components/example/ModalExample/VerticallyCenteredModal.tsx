@@ -1,15 +1,15 @@
-"use client";
-import React from "react";
-import ComponentCard from "../../common/ComponentCard";
-import Button from "../../ui/button/Button";
-import { Modal } from "../../ui/modal";
-import { useModal } from "@/hooks/useModal";
+'use client';
+import React from 'react';
+import ComponentCard from '../../common/ComponentCard';
+import Button from '../../ui/button/Button';
+import { Modal } from '../../ui/modal';
+import { useModal } from '@/hooks/useModal';
 
 export default function VerticallyCenteredModal() {
   const { isOpen, openModal, closeModal } = useModal();
   const handleSave = () => {
     // Handle save logic here
-    console.log("Saving changes...");
+    console.log('Saving changes...');
     closeModal();
   };
   return (
@@ -28,8 +28,8 @@ export default function VerticallyCenteredModal() {
             All Done! Success Confirmed
           </h4>
           <p className="text-sm leading-6 text-gray-500 dark:text-gray-400">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Pellentesque euismod est quis mauris lacinia pharetra.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod est quis
+            mauris lacinia pharetra.
           </p>
 
           <div className="flex items-center justify-center w-full gap-3 mt-8">

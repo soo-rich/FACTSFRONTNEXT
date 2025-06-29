@@ -1,11 +1,11 @@
-"use client";
-import Image from "next/image";
+'use client';
+import Image from 'next/image';
 
-import CountryMap from "./CountryMap";
-import { useState } from "react";
-import { MoreDotIcon } from "@/icons";
-import { Dropdown } from "../ui/dropdown/Dropdown";
-import { DropdownItem } from "../ui/dropdown/DropdownItem";
+import CountryMap from './CountryMap';
+import { useState } from 'react';
+import { MoreDotIcon } from '@/icons';
+import { Dropdown } from '../ui/dropdown/Dropdown';
+import { DropdownItem } from '../ui/dropdown/DropdownItem';
 
 export default function DemographicCard() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,11 +34,7 @@ export default function DemographicCard() {
           <button onClick={toggleDropdown} className="dropdown-toggle">
             <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
           </button>
-          <Dropdown
-            isOpen={isOpen}
-            onClose={closeDropdown}
-            className="w-40 p-2"
-          >
+          <Dropdown isOpen={isOpen} onClose={closeDropdown} className="w-40 p-2">
             <DropdownItem
               onItemClick={closeDropdown}
               className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
@@ -76,9 +72,7 @@ export default function DemographicCard() {
               />
             </div>
             <div>
-              <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">
-                USA
-              </p>
+              <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">USA</p>
               <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
                 2,379 Customers
               </span>
@@ -89,9 +83,7 @@ export default function DemographicCard() {
             <div className="relative block h-2 w-full max-w-[100px] rounded-sm bg-gray-200 dark:bg-gray-800">
               <div className="absolute left-0 top-0 flex h-full w-[79%] items-center justify-center rounded-sm bg-brand-500 text-xs font-medium text-white"></div>
             </div>
-            <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-              79%
-            </p>
+            <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">79%</p>
           </div>
         </div>
 
@@ -107,9 +99,7 @@ export default function DemographicCard() {
               />
             </div>
             <div>
-              <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">
-                France
-              </p>
+              <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">France</p>
               <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
                 589 Customers
               </span>
@@ -120,9 +110,7 @@ export default function DemographicCard() {
             <div className="relative block h-2 w-full max-w-[100px] rounded-sm bg-gray-200 dark:bg-gray-800">
               <div className="absolute left-0 top-0 flex h-full w-[23%] items-center justify-center rounded-sm bg-brand-500 text-xs font-medium text-white"></div>
             </div>
-            <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-              23%
-            </p>
+            <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">23%</p>
           </div>
         </div>
       </div>

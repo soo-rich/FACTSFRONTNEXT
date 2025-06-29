@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export type ClientType = {
   id: string;
@@ -10,10 +10,10 @@ export type ClientType = {
 };
 
 export const schemaClient = z.object({
-  lieu: z.string().min(1, "le lieu est requis"),
-  nom: z.string().min(1, "le nom est requis"),
+  lieu: z.string().min(1, 'le lieu est requis'),
+  nom: z.string().min(1, 'le nom est requis'),
   sigle: z.string(),
-  telephone: z.number().negative("le numero ne peut est negative"),
+  telephone: z.number().negative('le numero ne peut est negative'),
   potentiel: z.boolean(),
 });
 

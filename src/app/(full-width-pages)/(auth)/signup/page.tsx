@@ -1,9 +1,9 @@
-import SignUpForm from "@/views/auth/SignUpForm";
-import { Metadata } from "next";
+import SignUpForm from '@/views/auth/SignUpForm';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Next.js SignUp Page ",
-  description: "SOOSMART GROUP",
+  title: 'Next.js SignUp Page ',
+  description: 'SOOSMART GROUP',
   // other metadata
 };
 

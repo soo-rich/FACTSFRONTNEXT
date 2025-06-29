@@ -1,12 +1,12 @@
-import { CustomresponseType } from "@/types/customresponse.type";
-import { ProjetType, SaveProjet, UpdateProjet } from "@/types/projet.type";
-import instance from "@/service/axios-manager/instance";
-import { ParamRequests } from "@/types/pagination/paramrequestion.type";
+import { CustomresponseType } from '@/types/customresponse.type';
+import { ProjetType, SaveProjet, UpdateProjet } from '@/types/projet.type';
+import instance from '@/service/axios-manager/instance';
+import { ParamRequests } from '@/types/pagination/paramrequestion.type';
 
 const url = `projet`;
 
 export class ProjetService {
-  static PROJT_KEY = "projet";
+  static PROJT_KEY = 'projet';
 
   async saveProjet(data: SaveProjet) {
     return (await instance.post<ProjetType>(url, data)).data;

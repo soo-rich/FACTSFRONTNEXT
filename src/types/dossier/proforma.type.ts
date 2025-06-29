@@ -1,9 +1,6 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import {
-  Article_Quantite,
-  schemaArticleQuantiteslist,
-} from "@/types/dossier/Article_Quantite";
+import { Article_Quantite, schemaArticleQuantiteslist } from '@/types/dossier/Article_Quantite';
 
 export type ProformaType = {
   id: string;
@@ -22,7 +19,7 @@ export type ProformaType = {
 export const schemaProforma = z.object({
   projet_id: z.string().nullable(),
   client_id: z.string().nullable(),
-  reference: z.string().min(3, "entre au moin 3 carateres"),
+  reference: z.string().min(3, 'entre au moin 3 carateres'),
   articleQuantiteslist: z.array(schemaArticleQuantiteslist).nonempty(),
 });
 

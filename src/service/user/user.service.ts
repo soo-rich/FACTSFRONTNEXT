@@ -1,25 +1,18 @@
-import instance from "@/service/axios-manager/instance";
-import { CustomresponseType } from "@/types/customresponse.type";
-import { ParamRequests } from "@/types/pagination/paramrequestion.type";
-import { UtilisateurDto } from "@/types/utilisateur.type";
+import instance from '@/service/axios-manager/instance';
+import { CustomresponseType } from '@/types/customresponse.type';
+import { ParamRequests } from '@/types/pagination/paramrequestion.type';
+import { UtilisateurDto } from '@/types/utilisateur.type';
 
 const url = `user`;
 
 export class UserService {
-  static USER_KEY = "user";
+  static USER_KEY = 'user';
 
-  static async getAllorOnebyEmail({
-    email,
-    params,
-  }: {
-    email?: string;
-    params?: ParamRequests;
-  }) {
+  static async getAllorOnebyEmail({ email, params }: { email?: string; params?: ParamRequests }) {
     return (
-      await instance.get<CustomresponseType<UtilisateurDto>>(
-        url + (email ? `/${email}` : ""),
-        { params: params },
-      )
+      await instance.get<CustomresponseType<UtilisateurDto>>(url + (email ? `/${email}` : ''), {
+        params: params,
+      })
     ).data;
   }
 
@@ -39,10 +32,7 @@ export class UserService {
     return (await instance.get<boolean>(url + `/${id}/activate`)).data;
   }
 
-  static async changepassword(value: {
-    oldPassword: string;
-    newPassword: string;
-  }) {
+  static async changepassword(value: { oldPassword: string; newPassword: string }) {
     return (await instance.post<boolean>(url + `/change-password`, value)).data;
   }
 }

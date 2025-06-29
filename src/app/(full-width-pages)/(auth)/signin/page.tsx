@@ -1,9 +1,9 @@
-import SignInForm from "@/views/auth/SignInForm";
-import { Metadata } from "next";
+import SignInForm from '@/views/auth/SignInForm';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Connexion | SOOSMART GROUP",
-  description: "Page de connexion",
+  title: 'Connexion | SOOSMART GROUP',
+  description: 'Page de connexion',
 };
 
 export default function SignIn() {

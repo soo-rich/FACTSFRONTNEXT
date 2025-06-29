@@ -1,16 +1,12 @@
-import GridShape from "@/components/common/GridShape";
-import ThemeTogglerTwo from "@/components/common/ThemeTogglerTwo";
+import GridShape from '@/components/common/GridShape';
+import ThemeTogglerTwo from '@/components/common/ThemeTogglerTwo';
 
-import { ThemeProvider } from "@/context/ThemeContext";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import { ThemeProvider } from '@/context/ThemeContext';
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative p-6 bg-white z-1 dark:bg-gray-900 sm:p-0">
       <ThemeProvider>
@@ -22,12 +18,7 @@ export default function AuthLayout({
               <GridShape />
               <div className="flex flex-col items-center max-w-xs">
                 <Link href="/" className="block mb-4">
-                  <Image
-                    width={231}
-                    height={48}
-                    src="/logo-rbg.png"
-                    alt="Logo"
-                  />
+                  <Image width={231} height={48} src="/logo-rbg.png" alt="Logo" />
                 </Link>
                 <p className="text-center text-gray-400 dark:text-white/60">
                   Connecter a l'espace administrateur .

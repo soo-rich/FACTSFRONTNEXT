@@ -1,12 +1,15 @@
 {
-  "name": "free-nextjs-admin-dashboard",
+  "name": "soosmartgroup",
   "version": "2.0.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.15",

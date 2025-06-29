@@ -1,12 +1,12 @@
-import { ParamRequests } from "@/types/pagination/paramrequestion.type";
-import { ArticleType, SaveArticleType } from "@/types/article.type";
-import { CustomresponseType } from "@/types/customresponse.type";
-import instance from "@/service/axios-manager/instance";
+import { ParamRequests } from '@/types/pagination/paramrequestion.type';
+import { ArticleType, SaveArticleType } from '@/types/article.type';
+import { CustomresponseType } from '@/types/customresponse.type';
+import instance from '@/service/axios-manager/instance';
 
-const url = "article";
+const url = 'article';
 
 export class ArticleService {
-  static ARTICLE_KEY = "article";
+  static ARTICLE_KEY = 'article';
 
   static getArticles = async (params?: ParamRequests) => {
     return (

@@ -1,13 +1,11 @@
-import ArticleList from "@/views/article/ArticleList";
+import ArticleList from '@/views/article/ArticleList';
 
 const ArticleIndex = () => {
-    return (
-        <div>
-            
-            <ArticleList />
-        </div>
-    );
+  return (
+    <div>
+      <ArticleList />
+    </div>
+  );
 };
-
 
 export default ArticleIndex;

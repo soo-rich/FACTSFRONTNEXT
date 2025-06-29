@@ -1,9 +1,9 @@
-import {LucideIcon} from "lucide-react";
+import { LucideIcon } from 'lucide-react';
 
 export type NavItem = {
   groupLabel?: string;
   items: ItemMenu[];
-}
+};
 
 type ItemMenu = {
   title: string;

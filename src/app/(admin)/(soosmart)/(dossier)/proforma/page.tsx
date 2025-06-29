@@ -1,5 +1,5 @@
 const Proforma = () => {
-    return (<></>)
-}
+  return <></>;
+};
 
 export default Proforma;

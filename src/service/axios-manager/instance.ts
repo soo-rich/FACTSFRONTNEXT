@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
 import {
   InterceptorAxios,
   InterceptorErrorHandler,
   InterceptorRemoveParamsNull,
-} from "@/service/axios-manager/interceptor";
+} from '@/service/axios-manager/interceptor';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,

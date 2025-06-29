@@ -1,5 +1,5 @@
 const PageProjet = () => {
-    return <></>
-}
+  return <></>;
+};
 
 export default PageProjet;
