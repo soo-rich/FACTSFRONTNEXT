@@ -81,18 +81,18 @@ export default function SignInForm() {
 
                         <form noValidate onSubmit={handleSubmit(SubmitForm)} className="space-y-6">
                             <div className="space-y-6">
-                                <Controller control={control} render={({field}) => (
+                                <Controller control={control} render={({field:{onChange, value}}) => (
                                     <div>
                                         <Label>
                                             Username <span className="text-error-500">*</span>{" "}
                                         </Label>
-                                        <Input {...field} onChange={(e) => field.onChange(e.target.value)}
+                                        <Input defaultValue={value} onChange={(e) => onChange(e.target.value)}
                                                type="text" error={!!errors.username} hint={errors.username?.message}/>
                                     </div>
                                 )} name={'username'}/>
                                 <Controller
                                     control={control}
-                                    render={({field}) => (
+                                    render={({field:{value, onChange}}) => (
                                         <div>
                                             <Label>
                                                 Password <span className="text-error-500">*</span>{" "}
@@ -101,8 +101,8 @@ export default function SignInForm() {
                                             <div className="relative">
 
                                                 <Input
-                                                    {...field}
-                                                    onChange={(e) => field.onChange(e.target.value)}
+                                                    defaultValue={value}
+                                                    onChange={(e) => onChange(e.target.value)}
                                                     error={!!errors.password}
                                                     type={showPassword ? "text" : "password"}
                                                     hint={errors.password?.message}
