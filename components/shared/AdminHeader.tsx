@@ -1,6 +1,6 @@
+import NavigationPath from "@/components/paths/NavigationPath";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
-import NavigationPath from "@/components/paths/NavigationPath";
 
 const AdminHeader = () => {
     return (

@@ -1,8 +1,8 @@
 "use client";
 
-import {ChevronRight} from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
-import {Collapsible, CollapsibleContent, CollapsibleTrigger,} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger, } from "@/components/ui/collapsible";
 import {
     SidebarGroup,
     SidebarGroupLabel,
@@ -13,8 +13,8 @@ import {
     SidebarMenuSubButton,
     SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { NavItem } from "@/types/menu/navigation.type";
 import Link from "next/link";
-import {NavItem} from "@/types/menu/navigation.type";
 
 
 const MenuGenerator = ({items}: { items: NavItem[] }) => {

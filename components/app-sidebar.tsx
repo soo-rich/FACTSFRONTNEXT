@@ -1,13 +1,13 @@
 "use client";
 
+import { getSession } from "next-auth/react";
 import * as React from "react";
-import {useEffect, useState} from "react";
-import {getSession} from "next-auth/react";
+import { useEffect, useState } from "react";
 
-import {NavUser} from "@/components/nav-user";
-import {Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail,} from "@/components/ui/sidebar";
+import { NavUser } from "@/components/nav-user";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, } from "@/components/ui/sidebar";
+import { menu } from "@/config/sidebarmenu";
 import MenuGenerator from "./sidebarmenu/MenuGenerator";
-import {menu} from "@/config/sidebarmenu";
 
 
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
