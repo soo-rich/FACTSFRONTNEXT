@@ -1,5 +1,5 @@
-import { ColumnDef, Header } from "@tanstack/table-core";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {ColumnDef, Header} from "@tanstack/table-core";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {
     ColumnFiltersState,
     flexRender,
@@ -16,13 +16,18 @@ import {
 import * as React from "react";
 import LoadingWithoutModal from "@/components/shared/loadingwithoutmodal";
 import ErrorView from "@/components/shared/errorviews";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { IconChevronDown, IconLayoutColumns } from "@tabler/icons-react";
-import { InputWithIcon } from "@/components/ui/input";
-import { Search } from "lucide-react";
-import { Pagination } from "@/components/ui/pagination";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import {Button} from "@/components/ui/button";
+import {IconChevronDown, IconLayoutColumns} from "@tabler/icons-react";
+import {InputWithIcon} from "@/components/ui/input";
+import {Search} from "lucide-react";
+import {Pagination} from "@/components/ui/pagination";
+import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
 type TableGeneriqueProps<T> = {
     isLoading: boolean;
@@ -164,7 +169,7 @@ const TableGenerique = <T,>({
                                                 className="capitalize"
                                                 checked={column.getIsVisible()}
                                                 onCheckedChange={(value) =>
-                                                    column.toggleVisibility(!!value)
+                                                    column.toggleVisibility(value)
                                                 }
                                             >
                                                 {column.id}
