@@ -16,10 +16,10 @@ import {
 import * as React from "react";
 import LoadingWithoutModal from "@/components/shared/loadingwithoutmodal";
 import ErrorView from "@/components/shared/errorviews";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import { IconChevronDown, IconLayoutColumns } from "@tabler/icons-react";
-import { InputWithIcon } from "../ui/input";
+import { InputWithIcon } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
 type TableGeneriqueProps<T> = {
