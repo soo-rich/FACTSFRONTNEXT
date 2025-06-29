@@ -25,12 +25,12 @@ export default function AuthLayout({
                   <Image
                     width={231}
                     height={48}
-                    src="./images/logo/auth-logo.svg"
+                    src="/logo-rbg.png"
                     alt="Logo"
                   />
                 </Link>
                 <p className="text-center text-gray-400 dark:text-white/60">
-                  Free and Open-Source Tailwind CSS Admin Dashboard Template
+                  Connecter a l'espace administrateur .
                 </p>
               </div>
             </div>
