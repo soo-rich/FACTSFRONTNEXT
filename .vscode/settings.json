@@ -1,0 +1,22 @@
+{
+  "typescript.autoClosingTags": true,
+  "typescript.suggest.autoImports": true,
+  "typescript.suggest.paths": true,
+  "typescript.preferences.importModuleSpecifier": "shortest",
+  "typescript.preferences.quoteStyle": "double",
+  "javascript.autoClosingTags": true,
+  "editor.insertSpaces": true,
+  "javascript.preferences.importModuleSpecifier": "shortest",
+  "javascript.preferences.quoteStyle": "double",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ]
+}
