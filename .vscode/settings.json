@@ -1,0 +1,6 @@
+{
+  "typescript.autoClosingTags": true,
+  "typescript.format.enable": true,
+  "prettier.bracketSpacing": true,
+  "prettier.semi": true
+}
