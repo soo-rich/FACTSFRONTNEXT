@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { schemaLogin } from "@/service/auth/auth-service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HomeIcon, User2Icon } from "lucide-react";
-import { signIn } from 'next-auth/react';
+import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -20,7 +20,7 @@ const LoginForm = ({
   className,
   session,
   ...props
-}: React.ComponentProps<"form"> & { session?: any }) => {
+}: React.ComponentProps<"form"> & { session: any | null }) => {
 
 
 
@@ -128,7 +128,7 @@ const LoginForm = ({
               </Button>)
           }
           {
-            !session ? (<><div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+            session !== null ? (<><div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
               <span className="bg-background text-muted-foreground relative z-10 px-2">
                 Or continue with
               </span>
