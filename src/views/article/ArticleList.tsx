@@ -1,23 +1,15 @@
 'use client';
 
-import OpenDialogOnElementClick from '@/components/dialogs/OpenDialogOnElementClick';
-import TableGenerique from '@/components/table/tablegeneric';
-import { Button, ButtonProps } from '@/components/ui/button';
-import { Dialog } from '@/components/ui/dialog';
 import { ArticleService } from '@/service/article/article.service';
 import { ArticleType } from '@/types/article.type';
 import UtiliMetod from '@/utils/utilsMethod';
 import { useQuery } from '@tanstack/react-query';
 import { createColumnHelper } from '@tanstack/table-core';
 import { PencilLine, Trash2Icon } from 'lucide-react';
-import { ReactNode, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import TableGeneric from '@/components/table/TableGeneric';
 
 const columnHelper = createColumnHelper<ArticleType>();
-const button = (variant?: string, size?: string, children?: ReactNode): ButtonProps => ({
-  variant,
-  size,
-  children,
-});
 
 const ArticleList = () => {
   const [pageIndex, setPageIndex] = useState(0);
@@ -64,26 +56,8 @@ const ArticleList = () => {
   return (
     <div>
       <h1>Articles</h1>
-      <TableGenerique
-        isLoading={false}
-        isError={false}
-        data={data?.content}
-        columns={columns}
-        page={pageIndex}
-        pageSize={pageSize}
-        setPage={setPageIndex}
-        setPageSize={setPageSize}
-        count={data?.totalElements}
-        globalFilter={filter}
-        setGlobalFilter={setFilter}
-        clickElement={
-          <OpenDialogOnElementClick
-            element={Button}
-            dialog={Dialog}
-            elementProps={button('ghost', 'default', 'add')}
-          />
-        }
-      />
+
+      <TableGeneric isLoading={isLoading} isError={isError} data={filteredData} columns={columns} />
     </div>
   );
 };

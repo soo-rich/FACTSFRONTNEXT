@@ -1,11 +1,14 @@
-import { Outfit } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import './globals.css';
 
 import { SidebarProvider } from '@/context/SidebarContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 
-const outfit = Outfit({
+const poppins = Poppins({
   subsets: ['latin'],
+  style: 'normal',
+  variable: '--poppins',
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
 export default function RootLayout({
@@ -15,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className={`${outfit.className} dark:bg-gray-900`}>
+      <body className={`${poppins.className} ${poppins.variable} antialiased dark:bg-gray-900`}>
         <ThemeProvider>
           <SidebarProvider>{children}</SidebarProvider>
         </ThemeProvider>
