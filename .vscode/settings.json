@@ -22,5 +22,8 @@
     "bradlc.vscode-tailwindcss",
     "ms-vscode.vscode-eslint",
     "pmneo.tsimporter"
-  ]
+  ],
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
 }

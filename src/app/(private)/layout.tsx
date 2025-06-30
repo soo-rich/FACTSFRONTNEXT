@@ -1,9 +1,9 @@
 import AuthGuard from "@/components/auth/AuthGuard"
 import { ChildrenType } from "@/types/types"
 
-const PrivateLayout = ({children}:ChildrenType) =>{
+const PrivateLayout = ({ children }: ChildrenType) => {
     return <AuthGuard>
-{children}
+        {children}
     </AuthGuard>
 }
 
