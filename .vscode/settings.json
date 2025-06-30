@@ -1,19 +1,26 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit"
-  },
-  "typescript.preferences.importModuleSpecifier": "relative",
+
+  
   "emmet.includeLanguages": {
     "javascript": "javascriptreact",
     "typescript": "typescriptreact"
+  },
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.suggest.autoImports": true,
+  "typescript.suggest.includeAutomaticOptionalChainCompletions": true,
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+ 
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
   },
   "recommendations": [
     "esbenp.prettier-vscode",
     "ms-vscode.vscode-typescript-next",
     "bradlc.vscode-tailwindcss",
-    "ms-vscode.vscode-eslint"
+    "ms-vscode.vscode-eslint",
+    "pmneo.tsimporter"
   ]
 }

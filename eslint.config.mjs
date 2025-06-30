@@ -37,6 +37,17 @@ const eslintConfig = [
       "no-console": "warn",
       eqeqeq: "error",
       curly: "error",
+       "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["../", "./", "../../"],
+              message: "Utilisez les imports absolus avec @/ au lieu des imports relatifs"
+            }
+          ]
+        }
+      ]
     },
   },
 ];
