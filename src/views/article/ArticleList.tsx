@@ -4,6 +4,7 @@ import TableGeneric from '@/components/table/tablegenric';
 import { ArticleService } from '@/service/article/article.service';
 import { ArticleType } from '@/types/article.type';
 import UtiliMetod from '@/utils/utilMethod';
+import ArticleForm from '@/views/article/form-article';
 
 import { useQuery } from '@tanstack/react-query';
 import { createColumnHelper } from '@tanstack/table-core';
@@ -65,7 +66,7 @@ const ArticleList = () => {
                 },
                 dialogprops: {
                     title: 'Ajouter Un Article',
-                    children: (<></>)
+                    children: (<ArticleForm />)
                 }
 
             }} />
