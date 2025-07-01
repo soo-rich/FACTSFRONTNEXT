@@ -1,4 +1,4 @@
-import Swal, { type SweetAlertIcon } from 'sweetalert2'
+import { type SweetAlertIcon } from 'sweetalert2'
 
 export type SweetconfirmProps = {
   icon?: SweetAlertIcon

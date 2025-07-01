@@ -23,7 +23,6 @@ const ArticleList = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [filter, setFilter] = useState('');
-  const [articleupdate, SetArticle] = useState<ArticleType>();
   const { data, isLoading, isError } = useQuery({
     queryKey: [ArticleService.ARTICLE_KEY, pageIndex, pageSize],
     queryFn: () => ArticleService.getArticles({ page: pageIndex, pagesize: pageSize }),
@@ -113,7 +112,7 @@ const ArticleList = () => {
               dialogprops={{
                 title: 'Ajouter Un Article',
                 description: 'Ajouter un Article',
-                children: (<ArticleForm data={articleupdate} />),
+                children: (<ArticleForm />),
               }}
             />
           </div>
