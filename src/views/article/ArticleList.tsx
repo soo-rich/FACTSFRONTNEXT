@@ -4,30 +4,46 @@ import TableGeneric from '@/components/table/tablegenric';
 import { ArticleService } from '@/service/article/article.service';
 import { ArticleType } from '@/types/article.type';
 import UtiliMetod from '@/utils/utilMethod';
+import utilMethod from '@/utils/utilMethod';
 import ArticleForm from '@/views/article/form-article';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createColumnHelper } from '@tanstack/table-core';
 import { LucidePencil, Plus, Search, Trash2Icon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import OpenDialogonClick from '@/components/dialog/OpenDialogOnClick';
 import { InputWithIcon } from '@/components/ui/input';
-import utilMethod from '@/utils/utilMethod';
+import { toast } from 'sonner';
 
 
 const columnHelper = createColumnHelper<ArticleType>();
 
 const ArticleList = () => {
+  const queryClient = useQueryClient();
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [filter, setFilter] = useState('');
   const [articleupdate, SetArticle] = useState<ArticleType>();
-  const [open, setOpen] = useState(false);
   const { data, isLoading, isError } = useQuery({
     queryKey: [ArticleService.ARTICLE_KEY, pageIndex, pageSize],
     queryFn: () => ArticleService.getArticles({ page: pageIndex, pagesize: pageSize }),
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
+  const DeleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await ArticleService.deleteArticle(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [ArticleService.ARTICLE_KEY, pageIndex, pageSize],
+      });
+      toast.success('Suppresion OK ');
+    },
+    onError: () => {
+      toast.error('Erreur lors de la suppression de l\'article');
+    },
   });
 
   const columns = useMemo(
@@ -54,7 +70,14 @@ const ArticleList = () => {
                 children: (<ArticleForm data={row.original} />),
               }}
             />
-            <Trash2Icon onClick={()=> utilMethod.confirmDialog({icon:'warning', subtitle:`Vous aller suppriimer ${row.original.libelle}`, title:`Suppresion`, confirmAction: ()=>{} })} />
+            <Trash2Icon onClick={() => utilMethod.confirmDialog({
+              icon: 'warning',
+              subtitle: `Vous aller suppriimer ${row.original.libelle}`,
+              title: `Suppresion`,
+              confirmAction: () => {
+                DeleteMutation.mutate(row.original.id);
+              },
+            })} />
           </div>
         ),
       }),
@@ -80,20 +103,20 @@ const ArticleList = () => {
         page={pageIndex}
         pageSize={pageSize} setPage={setPageIndex} setPageSize={setPageSize} visibleColumns={true}
         rightElement={
-        <div className={'flex flex-row gap-3 justify-between align-middle items-end'}>
-          <InputWithIcon icon={Search} iconPosition={'left'} onChange={(e)=>setFilter(e.target.value)}/>
-          <OpenDialogonClick
-            buttonprops={{
-              buttonIcon: Plus,
-              buttonLabel: 'Article',
-            }}
-            dialogprops={{
-              title: 'Ajouter Un Article',
-              description: 'Ajouter un Article',
-              children: (<ArticleForm data={articleupdate} />),
-            }}
-          />
-        </div>
+          <div className={'flex flex-row gap-3 justify-between align-middle items-end'}>
+            <InputWithIcon icon={Search} iconPosition={'left'} onChange={(e) => setFilter(e.target.value)} placeholder={"Recherch un article"} />
+            <OpenDialogonClick
+              buttonprops={{
+                buttonIcon: Plus,
+                buttonLabel: 'Article',
+              }}
+              dialogprops={{
+                title: 'Ajouter Un Article',
+                description: 'Ajouter un Article',
+                children: (<ArticleForm data={articleupdate} />),
+              }}
+            />
+          </div>
 
         }
       />
