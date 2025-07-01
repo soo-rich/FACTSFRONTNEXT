@@ -6,7 +6,7 @@ import instance from "@/service/axios-manager/instance";
 const url = "article";
 
 export class ArticleService {
-  static ARTICLE_KEY = "article";
+  static ARTICLE_KEY = url;
 
   static getArticles = async (params?: ParamRequests) => {
     return (

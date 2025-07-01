@@ -30,7 +30,6 @@ import ErrorView from "@/components/shared/errorviews"
 import LoadingWithoutModal from "@/components/shared/loadingwithoutmodal"
 import { TableGeneriqueProps } from "@/components/table/tablegenericprops"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -53,10 +52,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-
-
-
-const TableGeneric = <T extends { id: UniqueIdentifier },>({ data: tableData, columns, isError, isLoading, page, pageSize, setPage, setPageSize, renderHeaderCell, visibleColumns, buttonDialog }: TableGeneriqueProps<T>
+const TableGeneric = <T extends { id: UniqueIdentifier },>({ data: tableData, columns, isError, isLoading, page, pageSize, setPage, setPageSize, visibleColumns, rightElement }: TableGeneriqueProps<T>
 ) => {
 
   const [rowSelection, setRowSelection] = React.useState({})
@@ -158,7 +154,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({ data: tableData, co
                           className="capitalize"
                           checked={column.getIsVisible()}
                           onCheckedChange={(value) =>
-                            column.toggleVisibility(!!value)
+                            column.toggleVisibility(value)
                           }
                         >
                           {column.id}
@@ -169,27 +165,8 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({ data: tableData, co
               </DropdownMenu>
             )
           }
-
           {
-            buttonDialog?.buttonprops?.visible && (
-              <Dialog open={buttonDialog.buttonprops.open} onOpenChange={buttonDialog.buttonprops.setOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    {buttonDialog.buttonprops.buttonIcon && (<buttonDialog.buttonprops.buttonIcon />)}
-                    <span className="hidden lg:inline">{buttonDialog.buttonprops.buttonLabel ?? 'Ajouter'}</span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>{buttonDialog.dialogprops?.title ?? 'Ajouter'}</DialogTitle>
-                    {buttonDialog.dialogprops?.description && (<DialogDescription>
-                      {buttonDialog.dialogprops.description}
-                    </DialogDescription>)}
-                  </DialogHeader>
-                  {buttonDialog.dialogprops?.children}
-                </DialogContent>
-              </Dialog>
-            )
+            rightElement ? (rightElement) : null
           }
 
         </div>
@@ -241,6 +218,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({ data: tableData, co
 
                 table.getRowModel().rows.map((row) => (
                   <TableRow
+                    key={row.id}
                     className=""
                   >
                     {row.getVisibleCells().map((cell) => (

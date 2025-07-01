@@ -1,6 +1,4 @@
-import { ChildrenType } from "@/types/types";
 import { ColumnDef, ColumnFiltersState, Header } from "@tanstack/react-table";
-import { LucideIcon } from "lucide-react";
 
 
 export type TableGeneriqueProps<T> = {
@@ -19,18 +17,6 @@ export type TableGeneriqueProps<T> = {
     setGlobalFilter?: (value: string) => void
     renderHeaderCell?: (header: Header<T, unknown>) => React.ReactNode
     headerSessionLeftt?: React.ReactNode
-    buttonDialog?: {
-        buttonprops?: {
-            visible?: boolean,
-            buttonIcon?: LucideIcon
-            buttonLabel?: string,
-            open?: boolean,
-            setOpen?: (open: boolean) => void
-        }
-        dialogprops?: {
-            title: string
-            description?: string
-        } & ChildrenType
-    }
+    rightElement?: React.ReactNode
     visibleColumns?: boolean
 };

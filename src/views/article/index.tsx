@@ -1,4 +1,4 @@
-import ArticleList from "./ArticleList";
+import ArticleList from '@/views/article/ArticleList';
 
 
 const ArticleIndex = () => {

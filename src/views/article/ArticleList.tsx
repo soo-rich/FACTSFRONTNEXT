@@ -8,69 +8,96 @@ import ArticleForm from '@/views/article/form-article';
 
 import { useQuery } from '@tanstack/react-query';
 import { createColumnHelper } from '@tanstack/table-core';
-import { PencilLine, Plus, Trash2Icon } from 'lucide-react';
+import { LucidePencil, Plus, Search, Trash2Icon } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import OpenDialogonClick from '@/components/dialog/OpenDialogOnClick';
+import { InputWithIcon } from '@/components/ui/input';
+import utilMethod from '@/utils/utilMethod';
 
 
 const columnHelper = createColumnHelper<ArticleType>();
 
 const ArticleList = () => {
-    const [pageIndex, setPageIndex] = useState(0);
-    const [pageSize, setPageSize] = useState(10);
-    const [filter, setFilter] = useState('');
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(20);
+  const [filter, setFilter] = useState('');
+  const [articleupdate, SetArticle] = useState<ArticleType>();
+  const [open, setOpen] = useState(false);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: [ArticleService.ARTICLE_KEY, pageIndex, pageSize],
+    queryFn: () => ArticleService.getArticles({ page: pageIndex, pagesize: pageSize }),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
 
-    const { data, isLoading, isError } = useQuery({
-        queryKey: [ArticleService.ARTICLE_KEY, pageIndex, pageSize],
-        queryFn: () => ArticleService.getArticles({ page: pageIndex, pagesize: pageSize }),
-        refetchOnWindowFocus: false,
-        staleTime: 1000 * 60 * 5, // 5 minutes
-    });
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor('libelle', {
+        header: 'Title',
+        cell: info => <span>{info.getValue()}</span>,
+      }),
+      columnHelper.accessor('prix_unitaire', {
+        header: 'Content',
+        cell: info => <span>{UtiliMetod.formatDevise(info.getValue())} FCFA</span>,
+      }),
+      columnHelper.display({
+        header: 'Action',
+        cell: ({ row }) => (
+          <div className="flex flex-row gap-2 justify-center">
+            <OpenDialogonClick
+              buttonprops={{
+                buttonIcon: LucidePencil,
+              }}
+              dialogprops={{
+                title: `Mise a jour ${row.original.libelle}`,
+                description: 'Ajouter un Article',
+                children: (<ArticleForm data={row.original} />),
+              }}
+            />
+            <Trash2Icon onClick={()=> utilMethod.confirmDialog({icon:'warning', subtitle:`Vous aller suppriimer ${row.original.libelle}`, title:`Suppresion`, confirmAction: ()=>{} })} />
+          </div>
+        ),
+      }),
+    ],
+    [],
+  );
 
-    const columns = useMemo(
-        () => [
-            columnHelper.accessor('libelle', {
-                header: 'Title',
-                cell: info => <span>{info.getValue()}</span>,
-            }),
-            columnHelper.accessor('prix_unitaire', {
-                header: 'Content',
-                cell: info => <span>{UtiliMetod.formatDevise(info.getValue())} FCFA</span>,
-            }),
-            columnHelper.display({
-                header: 'Action',
-                cell: ({ row }) => (
-                    <div className="flex flex-row gap-2 justify-center">
-                        <PencilLine />
-                        <Trash2Icon />
-                    </div>
-                ),
-            }),
-        ],
-        []
+  const filteredData = useMemo(() => {
+    if (!data || !data.content) return [];
+    return data.content.filter(article =>
+      article.libelle.toLowerCase().includes(filter.toLowerCase()),
     );
+  }, [data, filter]);
 
-    const filteredData = useMemo(() => {
-        if (!data || !data.content) return [];
-        return data.content.filter(article =>
-            article.libelle.toLowerCase().includes(filter.toLowerCase())
-        );
-    }, [data]);
 
-    return (
-        <div>
-            <TableGeneric isLoading={isLoading} isError={isError} data={filteredData} columns={columns} page={pageIndex} pageSize={pageSize} setPage={setPageIndex} setPageSize={setPageSize} visibleColumns={true} buttonDialog={{
-                buttonprops: {
-                    visible: true,
-                    buttonIcon: Plus,
-                    buttonLabel: "Article",
-                },
-                dialogprops: {
-                    title: 'Ajouter Un Article',
-                    children: (<ArticleForm />)
-                }
-
-            }} />
+  return (
+    <>
+      <TableGeneric
+        isLoading={isLoading}
+        isError={isError}
+        data={filteredData}
+        columns={columns}
+        page={pageIndex}
+        pageSize={pageSize} setPage={setPageIndex} setPageSize={setPageSize} visibleColumns={true}
+        rightElement={
+        <div className={'flex flex-row gap-3 justify-between align-middle items-end'}>
+          <InputWithIcon icon={Search} iconPosition={'left'} onChange={(e)=>setFilter(e.target.value)}/>
+          <OpenDialogonClick
+            buttonprops={{
+              buttonIcon: Plus,
+              buttonLabel: 'Article',
+            }}
+            dialogprops={{
+              title: 'Ajouter Un Article',
+              description: 'Ajouter un Article',
+              children: (<ArticleForm data={articleupdate} />),
+            }}
+          />
         </div>
-    );
+
+        }
+      />
+    </>
+  );
 };
 export default ArticleList;
