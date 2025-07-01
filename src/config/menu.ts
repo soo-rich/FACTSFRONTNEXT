@@ -1,13 +1,13 @@
 import { NavItem } from "@/types/menu/navigation.type";
 import {
-    BriefcaseBusiness,
-    FileCheck2,
-    FileClock,
-    FilePen,
-    FolderClosed,
-    LayoutDashboard,
-    Tags,
-    UserCog,
+  BriefcaseBusiness,
+  FileCheck2,
+  FileClock,
+  FilePen,
+  FolderClosed,
+  LayoutDashboard,
+  Tags,
+  UserCog,
 } from "lucide-react";
 
 export const menu: NavItem[] = [
