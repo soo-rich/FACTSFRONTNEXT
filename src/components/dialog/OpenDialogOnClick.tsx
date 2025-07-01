@@ -16,10 +16,10 @@ const OpenDialogonClick = ({ buttonprops, dialogprops }: buttonDialogProps) => {
       <DialogTrigger asChild>
         {
           buttonprops?.buttonIcon && !buttonprops?.buttonLabel ? (
-            <buttonprops.buttonIcon />
+            <buttonprops.buttonIcon className={buttonprops.buttonIconClassName} />
           ) : buttonprops?.buttonLabel ? (
-            <Button variant="outline" size="sm">
-              {buttonprops?.buttonIcon && <buttonprops.buttonIcon />}
+            <Button variant="outline" size="sm" className={buttonprops.buttonClassName}>
+              {buttonprops?.buttonIcon && <buttonprops.buttonIcon className={buttonprops.buttonIconClassName} />}
               <span className="hidden lg:inline">{buttonprops.buttonLabel}</span>
             </Button>
           ) : null

@@ -61,6 +61,7 @@ const ArticleList = () => {
           <div className="flex flex-row gap-2 justify-center">
             <OpenDialogonClick
               buttonprops={{
+                buttonIconClassName:'text-yellow-500',
                 buttonIcon: LucidePencil,
               }}
               dialogprops={{
@@ -69,7 +70,7 @@ const ArticleList = () => {
                 children: (<ArticleForm data={row.original} />),
               }}
             />
-            <Trash2Icon onClick={() => utilMethod.confirmDialog({
+            <Trash2Icon className={'text-red-500'} onClick={() => utilMethod.confirmDialog({
               icon: 'warning',
               subtitle: `Vous aller suppriimer ${row.original.libelle}`,
               title: `Suppresion`,
