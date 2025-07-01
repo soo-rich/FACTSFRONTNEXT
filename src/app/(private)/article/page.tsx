@@ -1,5 +1,7 @@
+import ArticleIndex from "@/views/article"
+
 const ArticlePage = () => {
-    return <></>
+    return <ArticleIndex />
 }
 
 export default ArticlePage

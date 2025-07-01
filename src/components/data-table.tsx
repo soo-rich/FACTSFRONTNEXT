@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import {
   closestCenter,
   DndContext,
@@ -49,11 +48,11 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table"
+import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import { toast } from "sonner"
 import { z } from "zod"
 
-import { useIsMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -105,6 +104,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export const schema = z.object({
   id: z.number(),
@@ -497,9 +497,9 @@ export function DataTable({
                           {header.isPlaceholder
                             ? null
                             : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
                         </TableHead>
                       )
                     })}
