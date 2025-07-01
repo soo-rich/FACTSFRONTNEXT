@@ -9,8 +9,7 @@ import {
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
-  IconLayoutColumns,
-  IconPlus
+  IconLayoutColumns
 } from "@tabler/icons-react"
 import {
   ColumnFiltersState,
@@ -31,6 +30,7 @@ import ErrorView from "@/components/shared/errorviews"
 import LoadingWithoutModal from "@/components/shared/loadingwithoutmodal"
 import { TableGeneriqueProps } from "@/components/table/tablegenericprops"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -56,7 +56,7 @@ import {
 
 
 
-const TableGeneric = <T extends { id: UniqueIdentifier },>({ data: tableData, columns, isError, isLoading, page, pageSize, setPage, setPageSize, renderHeaderCell }: TableGeneriqueProps<T>
+const TableGeneric = <T extends { id: UniqueIdentifier },>({ data: tableData, columns, isError, isLoading, page, pageSize, setPage, setPageSize, renderHeaderCell, visibleColumns, buttonDialog }: TableGeneriqueProps<T>
 ) => {
 
   const [rowSelection, setRowSelection] = React.useState({})
@@ -132,43 +132,66 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({ data: tableData, co
         </div>
 
         <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <IconLayoutColumns />
-                <span className="hidden lg:inline">Customize Columns</span>
-                <span className="lg:hidden">Columns</span>
-                <IconChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              {table
-                .getAllColumns()
-                .filter(
-                  (column) =>
-                    typeof column.accessorFn !== "undefined" &&
-                    column.getCanHide()
-                )
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button variant="outline" size="sm">
-            <IconPlus />
-            <span className="hidden lg:inline">Add Section</span>
-          </Button>
+          {
+            visibleColumns && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <IconLayoutColumns />
+                    <span className="hidden lg:inline">Columns</span>
+                    <span className="lg:hidden">Columns</span>
+                    <IconChevronDown />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  {table
+                    .getAllColumns()
+                    .filter(
+                      (column) =>
+                        typeof column.accessorFn !== "undefined" &&
+                        column.getCanHide()
+                    )
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      )
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )
+          }
+
+          {
+            buttonDialog?.buttonprops?.visible && (
+              <Dialog open={buttonDialog.buttonprops.open} onOpenChange={buttonDialog.buttonprops.setOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    {buttonDialog.buttonprops.buttonIcon && (<buttonDialog.buttonprops.buttonIcon />)}
+                    <span className="hidden lg:inline">{buttonDialog.buttonprops.buttonLabel ?? 'Ajouter'}</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>{buttonDialog.dialogprops?.title ?? 'Ajouter'}</DialogTitle>
+                    {buttonDialog.dialogprops?.description && (<DialogDescription>
+                      {buttonDialog.dialogprops.description}
+                    </DialogDescription>)}
+                  </DialogHeader>
+                  {buttonDialog.dialogprops?.children}
+                </DialogContent>
+              </Dialog>
+            )
+          }
+
         </div>
       </div>
       <div
@@ -177,12 +200,12 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({ data: tableData, co
         <div className="overflow-hidden rounded-lg border">
 
           <Table>
-            <TableHeader className="bg-muted sticky top-0 z-10">
+            <TableHeader className="bg-muted sticky top-0 z-10 **:data-[slot=table-head]:last:text-center">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id} colSpan={header.colSpan}>
+                      <TableHead key={header.id} colSpan={header.colSpan} >
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -195,7 +218,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({ data: tableData, co
                 </TableRow>
               ))}
             </TableHeader>
-            <TableBody className="**:data-[slot=table-cell]:first:w-8">
+            <TableBody className="**:data-[slot=table-cell]:last:w-sm">
               {isLoading ? (
                 <TableRow>
                   <TableCell
@@ -218,10 +241,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({ data: tableData, co
 
                 table.getRowModel().rows.map((row) => (
                   <TableRow
-                    data-state={row.getIsSelected() && "selected"}
-
-                    className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-
+                    className=""
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>

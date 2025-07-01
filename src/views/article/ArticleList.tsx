@@ -7,7 +7,7 @@ import UtiliMetod from '@/utils/utilMethod';
 
 import { useQuery } from '@tanstack/react-query';
 import { createColumnHelper } from '@tanstack/table-core';
-import { PencilLine, Trash2Icon } from 'lucide-react';
+import { PencilLine, Plus, Trash2Icon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 
@@ -29,7 +29,7 @@ const ArticleList = () => {
         () => [
             columnHelper.accessor('libelle', {
                 header: 'Title',
-                cell: info => info.getValue(),
+                cell: info => <span>{info.getValue()}</span>,
             }),
             columnHelper.accessor('prix_unitaire', {
                 header: 'Content',
@@ -57,7 +57,18 @@ const ArticleList = () => {
 
     return (
         <div>
-            <TableGeneric isLoading={isLoading} isError={isError} data={filteredData} columns={columns} page={pageIndex} pageSize={pageSize} setPage={setPageIndex} setPageSize={setPageSize} />
+            <TableGeneric isLoading={isLoading} isError={isError} data={filteredData} columns={columns} page={pageIndex} pageSize={pageSize} setPage={setPageIndex} setPageSize={setPageSize} visibleColumns={true} buttonDialog={{
+                buttonprops: {
+                    visible: true,
+                    buttonIcon: Plus,
+                    buttonLabel: "Article",
+                },
+                dialogprops: {
+                    title: 'Ajouter Un Article',
+                    children: (<></>)
+                }
+
+            }} />
         </div>
     );
 };
