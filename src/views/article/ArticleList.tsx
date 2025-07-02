@@ -21,7 +21,7 @@ const columnHelper = createColumnHelper<ArticleType>();
 const ArticleList = () => {
   const queryClient = useQueryClient();
   const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [filter, setFilter] = useState('');
   const { data, isLoading, isError } = useQuery({
     queryKey: [ArticleService.ARTICLE_KEY, pageIndex, pageSize],
@@ -93,7 +93,11 @@ const ArticleList = () => {
   }, [data, filter]);
 
 
-
+  useEffect(() => {
+    if (data) {
+      queryClient.setQueryData([ArticleService.ARTICLE_KEY, pageIndex, pageSize], data);
+    }
+  }, []);
   return (
     <>
       <TableGeneric

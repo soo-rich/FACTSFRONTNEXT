@@ -29,7 +29,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useEffect } from 'react';
+import { DataPagination } from '@/components/table/data-pagination';
 
 const TableGeneric = <T extends { id: UniqueIdentifier }, >({
                                                               data: tableData,
@@ -54,14 +54,6 @@ const TableGeneric = <T extends { id: UniqueIdentifier }, >({
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
-  const [paget, setPaget] = React.useState<number>(1);
-  useEffect(() => {
-    console.log(paget);
-    if (setPage) {
-      setPage(paget - 1);
-    }
-  }, [paget]);
-
 
   const table = useReactTable({
     data: tableData ?? [],
@@ -72,7 +64,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier }, >({
       columnFilters,
       pagination: {
         pageSize: pageSize ?? 10,
-        pageIndex: paget ,
+        pageIndex: page ?? 0,
       },
     },
     getRowId: (row) => row.id.toString(),
@@ -97,24 +89,24 @@ const TableGeneric = <T extends { id: UniqueIdentifier }, >({
           {
             pageSize && (
               <Select
-              value={`${pageSize}`}
-              onValueChange={(value) => {
-                setPageSize?.(Number(value));
-              }}
-            >
-              <SelectTrigger size="sm" id="rows-per-page">
-                <SelectValue
-                  placeholder={pageSize}
-                />
-              </SelectTrigger>
-              <SelectContent side="top">
-                {[5, 10, 20, 30, 40, 50].map((size) => (
-                  <SelectItem key={size} value={`${size}`}>
-                    {size}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>)
+                value={`${pageSize}`}
+                onValueChange={(value) => {
+                  setPageSize?.(Number(value));
+                }}
+              >
+                <SelectTrigger size="sm" id="rows-per-page">
+                  <SelectValue
+                    placeholder={pageSize}
+                  />
+                </SelectTrigger>
+                <SelectContent side="top">
+                  {[5, 10, 20, 30, 40, 50].map((size) => (
+                    <SelectItem key={size} value={`${size}`}>
+                      {size}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>)
           }
 
         </div>
@@ -240,8 +232,13 @@ const TableGeneric = <T extends { id: UniqueIdentifier }, >({
             {totalElements} lignes.
           </div>
 
-            <div className="ml-auto flex items-center gap-2 lg:ml-0">
-
+          <div className="ml-auto flex items-center gap-2 lg:ml-0">
+            {
+              page && totalPages && totalElements && setPage && (
+                <DataPagination currentPage={page} totalPages={totalPages} totalElements={totalElements}
+                                onPageIndexChange={setPage} />
+              )
+            }
 
           </div>
         </div>
