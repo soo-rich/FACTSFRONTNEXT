@@ -121,54 +121,58 @@ function SimplePagination({
   totalPages,
   currentPageColor,
   onPageIndexChange,
+  className
 }: SimplePaginationProps) {
+  const isMobile = useIsMobile()
   if (totalPages <= 1) return null;
 
   return (
-    <Pagination>
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious
-            onClick={() => onPageIndexChange(Math.max(0, currentPage - 1))}
-            className={currentPage <= 0 ? 'opacity-50 pointer-events-none' : 'cursor-pointer'}
-          />
-        </PaginationItem>
+    <div className={`flex flex-col items-center space-y-4 ${className}`}>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() => onPageIndexChange(Math.max(0, currentPage - 1))}
+              className={currentPage <= 0 ? 'opacity-50 pointer-events-none' : 'cursor-pointer'}
+            />
+          </PaginationItem>
 
-        {/* Afficher les 5 premières pages ou autour de la page courante */}
-        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-          let pageIndex: number;
+          {/* Afficher les 5 premières pages ou autour de la page courante */}
+          {!isMobile ? Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+            let pageIndex: number;
 
-          if (totalPages <= 5) {
-            pageIndex = i;
-          } else if (currentPage <= 2) {
-            pageIndex = i;
-          } else if (currentPage >= totalPages - 3) {
-            pageIndex = totalPages - 5 + i;
-          } else {
-            pageIndex = currentPage - 2 + i;
-          }
+            if (totalPages <= 5) {
+              pageIndex = i;
+            } else if (currentPage <= 2) {
+              pageIndex = i;
+            } else if (currentPage >= totalPages - 3) {
+              pageIndex = totalPages - 5 + i;
+            } else {
+              pageIndex = currentPage - 2 + i;
+            }
 
-          return (
-            <PaginationItem key={pageIndex}>
-              <PaginationLink
-                onClick={() => onPageIndexChange(pageIndex)}
-                isActive={currentPage === pageIndex}
-                className={`cursor-pointer ${currentPage === pageIndex && currentPageColor ? currentPageColor : ''}`}
-              >
-                {pageIndex + 1} {/* Affichage 1-indexed */}
-              </PaginationLink>
-            </PaginationItem>
-          );
-        })}
+            return (
+              <PaginationItem key={pageIndex}>
+                <PaginationLink
+                  onClick={() => onPageIndexChange(pageIndex)}
+                  isActive={currentPage === pageIndex}
+                  className={`cursor-pointer ${currentPage === pageIndex && currentPageColor ? currentPageColor : ''}`}
+                >
+                  {pageIndex + 1} {/* Affichage 1-indexed */}
+                </PaginationLink>
+              </PaginationItem>
+            );
+          }) : null}
 
-        <PaginationItem>
-          <PaginationNext
-            onClick={() => onPageIndexChange(Math.min(totalPages - 1, currentPage + 1))}
-            className={currentPage >= totalPages - 1 ? 'opacity-50 pointer-events-none' : 'cursor-pointer'}
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+          <PaginationItem>
+            <PaginationNext
+              onClick={() => onPageIndexChange(Math.min(totalPages - 1, currentPage + 1))}
+              className={currentPage >= totalPages - 1 ? 'opacity-50 pointer-events-none' : 'cursor-pointer'}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
   );
 }
 

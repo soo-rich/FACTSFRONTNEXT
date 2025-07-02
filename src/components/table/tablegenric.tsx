@@ -48,7 +48,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
 }: TableGeneriqueProps<T>,
 ) => {
 
-  const { visible = true, simple = true } = pagination || {};
+  const { visible = true, simple = false } = pagination || {};
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -87,7 +87,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
     <div
       className="w-full flex-col justify-start gap-6"
     >
-      <div className="flex items-end justify-between align-middle px-4 lg:px-6">
+      <div className="flex items-end justify-between gap-3 align-middle px-4 lg:px-6 sm:flex-col">
         <div className=" items-center gap-2 lg:flex">
           {
             pageSize && (
@@ -114,7 +114,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
 
         </div>
 
-        <div className="flex items-end justify-end gap-2">
+        <div className="flex sm:flex-col items-end justify-end gap-2">
           {
             visibleColumns && (
               <DropdownMenu>
@@ -229,7 +229,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
           </Table>
 
         </div>
-        <div className="flex items-end justify-end px-4">
+        <div className="flex flex-row items-end justify-end px-4">
 
           {
             visible ? (
@@ -242,8 +242,6 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
               )
             ) : null
           }
-
-
         </div>
       </div>
 
