@@ -19,6 +19,7 @@ import * as React from 'react';
 
 import ErrorView from '@/components/shared/errorviews';
 import LoadingWithoutModal from '@/components/shared/loadingwithoutmodal';
+import { DataPagination, SimplePagination } from '@/components/table/data-pagination';
 import { TableGeneriqueProps } from '@/components/table/tablegenericprops';
 import { Button } from '@/components/ui/button';
 import {
@@ -29,23 +30,25 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { DataPagination } from '@/components/table/data-pagination';
 
-const TableGeneric = <T extends { id: UniqueIdentifier }, >({
-                                                              data: tableData,
-                                                              columns,
-                                                              totalPages,
-                                                              totalElements,
-                                                              isError,
-                                                              isLoading,
-                                                              page,
-                                                              pageSize,
-                                                              setPage,
-                                                              setPageSize,
-                                                              visibleColumns,
-                                                              rightElement,
-                                                            }: TableGeneriqueProps<T>,
+const TableGeneric = <T extends { id: UniqueIdentifier },>({
+  data: tableData,
+  columns,
+  totalPages,
+  totalElements,
+  isError,
+  isLoading,
+  page,
+  pageSize,
+  setPage,
+  setPageSize,
+  visibleColumns,
+  rightElement,
+  pagination,
+}: TableGeneriqueProps<T>,
 ) => {
+
+  const { visible = true, simple = true } = pagination || {};
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -54,6 +57,9 @@ const TableGeneric = <T extends { id: UniqueIdentifier }, >({
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
+  const handlePageChange = (page: number) => {
+    setPage?.(page);
+  };
 
   const table = useReactTable({
     data: tableData ?? [],
@@ -62,10 +68,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier }, >({
       sorting,
       columnVisibility,
       columnFilters,
-      pagination: {
-        pageSize: pageSize ?? 10,
-        pageIndex: page ?? 0,
-      },
+
     },
     getRowId: (row) => row.id.toString(),
     onSortingChange: setSorting,
@@ -85,7 +88,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier }, >({
       className="w-full flex-col justify-start gap-6"
     >
       <div className="flex items-end justify-between align-middle px-4 lg:px-6">
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className=" items-center gap-2 lg:flex">
           {
             pageSize && (
               <Select
@@ -111,7 +114,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier }, >({
 
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-end justify-end gap-2">
           {
             visibleColumns && (
               <DropdownMenu>
@@ -226,21 +229,21 @@ const TableGeneric = <T extends { id: UniqueIdentifier }, >({
           </Table>
 
         </div>
-        <div className="flex items-center justify-start px-4">
-          <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-            {pageSize} sur{' '}
-            {totalElements} lignes.
-          </div>
+        <div className="flex items-end justify-end px-4">
 
-          <div className="ml-auto flex items-center gap-2 lg:ml-0">
-            {
-              page && totalPages && totalElements && setPage && (
-                <DataPagination currentPage={page} totalPages={totalPages} totalElements={totalElements}
-                                onPageIndexChange={setPage} />
+          {
+            visible ? (
+              simple ? (
+                <SimplePagination currentPage={page || 0} totalPages={totalPages || 0} onPageIndexChange={handlePageChange} currentPageColor='bg-primary' />
+              ) : (
+
+                <DataPagination currentPage={page || 0} totalPages={totalPages || 0} totalElements={totalElements || 0}
+                  onPageIndexChange={handlePageChange} currentPageColor='bg-primary' />
               )
-            }
+            ) : null
+          }
 
-          </div>
+
         </div>
       </div>
 

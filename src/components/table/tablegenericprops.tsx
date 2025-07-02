@@ -12,7 +12,10 @@ export type TableGeneriqueProps<T> = {
     pageSize?: number;
     setPage?: (page: number) => void;
     setPageSize?: (pageSize: number) => void;
-    pagination?: boolean
+    pagination?: {
+        visible?: boolean;
+        simple?: boolean;
+    }
     columnFilters?: ColumnFiltersState
     globalFilter?: any;
     setGlobalFilter?: (value: string) => void
@@ -20,4 +23,5 @@ export type TableGeneriqueProps<T> = {
     headerSessionLeftt?: React.ReactNode
     rightElement?: React.ReactNode
     visibleColumns?: boolean
+
 };
