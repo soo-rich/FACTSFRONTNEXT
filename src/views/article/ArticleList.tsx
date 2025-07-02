@@ -3,16 +3,15 @@
 import TableGeneric from '@/components/table/tablegenric';
 import { ArticleService } from '@/service/article/article.service';
 import { ArticleType } from '@/types/article.type';
-import UtiliMetod from '@/utils/utilMethod';
-import utilMethod from '@/utils/utilMethod';
+import { default as UtiliMetod, default as utilMethod } from '@/utils/utilMethod';
 import ArticleForm from '@/views/article/form-article';
 
+import OpenDialogonClick from '@/components/dialog/OpenDialogOnClick';
+import { InputWithIcon } from '@/components/ui/input';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createColumnHelper } from '@tanstack/table-core';
 import { LucidePencil, Plus, Search, Trash2Icon } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-import OpenDialogonClick from '@/components/dialog/OpenDialogOnClick';
-import { InputWithIcon } from '@/components/ui/input';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 
@@ -61,7 +60,7 @@ const ArticleList = () => {
           <div className="flex flex-row gap-2 justify-center">
             <OpenDialogonClick
               buttonprops={{
-                buttonIconClassName:'text-yellow-500',
+                buttonIconClassName: 'text-yellow-500',
                 buttonIcon: LucidePencil,
               }}
               dialogprops={{
@@ -93,11 +92,6 @@ const ArticleList = () => {
   }, [data, filter]);
 
 
-  useEffect(() => {
-    if (data) {
-      queryClient.setQueryData([ArticleService.ARTICLE_KEY, pageIndex, pageSize], data);
-    }
-  }, []);
   return (
     <>
       <TableGeneric
@@ -110,7 +104,7 @@ const ArticleList = () => {
         page={pageIndex}
         pageSize={pageSize} setPage={setPageIndex} setPageSize={setPageSize} visibleColumns={true}
         rightElement={
-          <div className={'flex flex-row gap-3 justify-between align-middle items-end'}>
+          <div className={'flex flex-col sm:flex-row gap-3 justify-between align-middle items-end'}>
             <InputWithIcon icon={Search} iconPosition={'left'} onChange={(e) => setFilter(e.target.value)} placeholder={"Recherch un article"} />
             <OpenDialogonClick
               buttonprops={{

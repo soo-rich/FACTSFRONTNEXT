@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   Tags,
   UserCog,
+  Users2Icon,
 } from "lucide-react";
 
 export const menu: NavItem[] = [
@@ -62,6 +63,14 @@ export const menu: NavItem[] = [
         icon: UserCog,
       },
     ],
+  },
+  {
+    groupLabel:'Application',
+    items:[{
+      icon:Users2Icon,
+      title:'Utilisateur',
+      url:'/users'
+    }]
   },
   {
     groupLabel: "Gestion des Articles",

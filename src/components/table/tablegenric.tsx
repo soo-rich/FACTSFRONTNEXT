@@ -87,7 +87,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
     <div
       className="w-full flex-col justify-start gap-6"
     >
-      <div className="flex items-end justify-between gap-3 align-middle px-4 lg:px-6 sm:flex-col">
+      <div className="flex flex-col sm:flex-row items-end justify-between gap-3 align-middle px-4 lg:px-6">
         <div className=" items-center gap-2 lg:flex">
           {
             pageSize && (
@@ -114,7 +114,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
 
         </div>
 
-        <div className="flex sm:flex-col items-end justify-end gap-2">
+        <div className="flex flex-col sm:flex-row items-end justify-end gap-2">
           {
             visibleColumns && (
               <DropdownMenu>
