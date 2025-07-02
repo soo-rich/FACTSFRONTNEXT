@@ -10,7 +10,7 @@ import ArticleForm from '@/views/article/form-article';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createColumnHelper } from '@tanstack/table-core';
 import { LucidePencil, Plus, Search, Trash2Icon } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import OpenDialogonClick from '@/components/dialog/OpenDialogOnClick';
 import { InputWithIcon } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -21,7 +21,7 @@ const columnHelper = createColumnHelper<ArticleType>();
 const ArticleList = () => {
   const queryClient = useQueryClient();
   const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(5);
   const [filter, setFilter] = useState('');
   const { data, isLoading, isError } = useQuery({
     queryKey: [ArticleService.ARTICLE_KEY, pageIndex, pageSize],
@@ -37,7 +37,7 @@ const ArticleList = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [ArticleService.ARTICLE_KEY, pageIndex, pageSize],
-      });
+      }).then(r => r);
       toast.success('Suppresion OK ');
     },
     onError: () => {
@@ -93,6 +93,7 @@ const ArticleList = () => {
   }, [data, filter]);
 
 
+
   return (
     <>
       <TableGeneric
@@ -100,6 +101,8 @@ const ArticleList = () => {
         isError={isError}
         data={filteredData}
         columns={columns}
+        totalPages={data?.totalPages}
+        totalElements={data?.totalElements}
         page={pageIndex}
         pageSize={pageSize} setPage={setPageIndex} setPageSize={setPageSize} visibleColumns={true}
         rightElement={

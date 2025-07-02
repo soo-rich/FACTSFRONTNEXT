@@ -6,7 +6,8 @@ export type TableGeneriqueProps<T> = {
     isError: boolean;
     data: T[] | undefined;
     columns: ColumnDef<T, any>[];
-    count?: number;
+    totalPages?: number;
+    totalElements?: number;
     page?: number;
     pageSize?: number;
     setPage?: (page: number) => void;

@@ -44,7 +44,7 @@ const ErrorView = ({
     return (
         <div className="flex items-center p-24 flex-col text-center">
             <div className="flex flex-col gap-2 is-[90vw] sm:is-[unset] mbe-6">
-                <h4>{title ?? "Une erreur s'est produite 😓"}</h4>
+                <h3>{title ?? "Une erreur s'est produite 😓"}</h3>
                 <p>{subtitle ?? "Veuillez réessayer plustard !"}</p>
             </div>
             {backButton &&
