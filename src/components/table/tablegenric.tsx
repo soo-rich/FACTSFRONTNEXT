@@ -68,7 +68,6 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
       sorting,
       columnVisibility,
       columnFilters,
-
     },
     getRowId: (row) => row.id.toString(),
     onSortingChange: setSorting,
@@ -181,7 +180,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
                 </TableRow>
               ))}
             </TableHeader>
-            <TableBody className="**:data-[slot=table-cell]:last:w-sm">
+            <TableBody className="**:data-[slot=table-cell]:last:max-w-md">
               {isLoading ? (
                 <TableRow>
                   <TableCell

@@ -18,6 +18,8 @@ import { toast } from 'sonner';
 const columnHelper = createColumnHelper<ArticleType>();
 
 const ArticleList = () => {
+
+  const [openDialog, setOpenDialog] = useState(false);
   const queryClient = useQueryClient();
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -59,6 +61,8 @@ const ArticleList = () => {
         cell: ({ row }) => (
           <div className="flex flex-row gap-2 justify-center">
             <OpenDialogonClick
+              open={openDialog}
+              setOpen={setOpenDialog}
               buttonprops={{
                 buttonIconClassName: 'text-yellow-500',
                 buttonIcon: LucidePencil,
@@ -66,7 +70,7 @@ const ArticleList = () => {
               dialogprops={{
                 title: `Mise a jour ${row.original.libelle}`,
                 description: 'Ajouter un Article',
-                children: (<ArticleForm data={row.original} />),
+                children: (<ArticleForm data={row.original} onSucces={() => setOpenDialog(false)} />),
               }}
             />
             <Trash2Icon className={'text-red-500'} onClick={() => utilMethod.confirmDialog({
@@ -85,6 +89,7 @@ const ArticleList = () => {
   );
 
   const filteredData = useMemo(() => {
+    console.log('chamner', data)
     if (!data || !data.content) return [];
     return data.content.filter(article =>
       article.libelle.toLowerCase().includes(filter.toLowerCase()),
@@ -107,6 +112,8 @@ const ArticleList = () => {
           <div className={'flex flex-col sm:flex-row gap-3 justify-between align-middle items-end'}>
             <InputWithIcon icon={Search} iconPosition={'left'} onChange={(e) => setFilter(e.target.value)} placeholder={"Recherch un article"} />
             <OpenDialogonClick
+              open={openDialog}
+              setOpen={setOpenDialog}
               buttonprops={{
                 buttonIcon: Plus,
                 buttonLabel: 'Article',
@@ -114,7 +121,7 @@ const ArticleList = () => {
               dialogprops={{
                 title: 'Ajouter Un Article',
                 description: 'Ajouter un Article',
-                children: (<ArticleForm />),
+                children: (<ArticleForm onSucces={() => setOpenDialog(false)} />),
               }}
             />
           </div>

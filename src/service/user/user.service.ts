@@ -1,7 +1,7 @@
 import instance from "@/service/axios-manager/instance";
 import { CustomresponseType } from "@/types/customresponse.type";
 import { ParamRequests } from "@/types/pagination/paramrequestion.type";
-import { UtilisateurDto } from "@/types/utilisateur.type";
+import { UtilisateurDto, UtilisateurUpdate, UtilsateurRegister } from '@/types/utilisateur.type';
 
 const url = `user`;
 
@@ -23,11 +23,11 @@ export class UserService {
     ).data;
   }
 
-  static async create(user: UtilisateurDto) {
+  static async create(user: UtilsateurRegister) {
     return (await instance.post<UtilisateurDto>(url, user)).data;
   }
 
-  static async update(id: string, user: UtilisateurDto) {
+  static async update({id, user}:{ id: string, user: UtilisateurUpdate }) {
     return (await instance.put<UtilisateurDto>(url + `/${id}`, user)).data;
   }
 

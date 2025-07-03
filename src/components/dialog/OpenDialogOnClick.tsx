@@ -7,12 +7,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 import { buttonDialogProps } from '@/types/types';
+import { useState } from 'react';
 
-const OpenDialogonClick = ({ buttonprops, dialogprops }: buttonDialogProps) => {
+type OpenDialogonClickProps = buttonDialogProps & {
+  open?: boolean,
+  setOpen?: (open: boolean) => void
+}
 
+const OpenDialogonClick = ({ buttonprops, dialogprops, open, setOpen }: OpenDialogonClickProps) => {
+
+  const [internalOpen, setInternalOpen] = useState(false)
+  const isControlled = open !== undefined && setOpen !== undefined
   return (
-    <Dialog>
+    <Dialog open={isControlled ? open : internalOpen} onOpenChange={isControlled ? setOpen! : setInternalOpen}>
       <DialogTrigger asChild>
         {
           buttonprops?.buttonIcon && !buttonprops?.buttonLabel ? (
@@ -26,9 +35,9 @@ const OpenDialogonClick = ({ buttonprops, dialogprops }: buttonDialogProps) => {
         }
 
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className={cn('', dialogprops?.dialogContentClassName?.className)}>
         <DialogHeader>
-          <DialogTitle>{dialogprops?.title ?? 'Ajouter'}</DialogTitle>
+          <DialogTitle>{dialogprops?.title}</DialogTitle>
           {dialogprops?.description && (<DialogDescription>
             {dialogprops?.description ?? ''}
           </DialogDescription>)}

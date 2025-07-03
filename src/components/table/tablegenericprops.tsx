@@ -17,8 +17,6 @@ export type TableGeneriqueProps<T> = {
         simple?: boolean;
     }
     columnFilters?: ColumnFiltersState
-    globalFilter?: any;
-    setGlobalFilter?: (value: string) => void
     renderHeaderCell?: (header: Header<T, unknown>) => React.ReactNode
     headerSessionLeftt?: React.ReactNode
     rightElement?: React.ReactNode

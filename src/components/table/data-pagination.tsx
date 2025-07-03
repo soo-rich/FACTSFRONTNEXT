@@ -33,20 +33,50 @@ function DataPagination({
   const isMobile = useIsMobile()
   if (totalPages <= 1) return null;
 
+  // const getVisiblePages = () => {
+  //   const delta = 2;
+  //   const range = [];
+  //   const rangeWithDots = [];
+
+  //   for (
+  //     let i = Math.max(2, currentPage - delta);
+  //     i <= Math.min(totalPages - 1, currentPage + delta);
+  //     i++
+  //   ) {
+  //     range.push(i);
+  //   }
+
+  //   if (currentPage - delta > 2) {
+  //     rangeWithDots.push(1, '...');
+  //   } else {
+  //     rangeWithDots.push(1);
+  //   }
+
+  //   rangeWithDots.push(...range);
+
+  //   if (currentPage + delta < totalPages - 1) {
+  //     rangeWithDots.push('...', totalPages);
+  //   } else {
+  //     rangeWithDots.push(totalPages);
+  //   }
+
+  //   return rangeWithDots;
+  // };
+
   const getVisiblePages = () => {
     const delta = 2;
     const range = [];
     const rangeWithDots = [];
 
     for (
-      let i = Math.max(2, currentPage - delta);
-      i <= Math.min(totalPages - 1, currentPage + delta);
+      let i = Math.max(2, currentPage + 1 - delta);
+      i <= Math.min(totalPages - 1, currentPage + 1 + delta);
       i++
     ) {
       range.push(i);
     }
 
-    if (currentPage - delta > 2) {
+    if (currentPage + 1 - delta > 2) {
       rangeWithDots.push(1, '...');
     } else {
       rangeWithDots.push(1);
@@ -54,7 +84,7 @@ function DataPagination({
 
     rangeWithDots.push(...range);
 
-    if (currentPage + delta < totalPages - 1) {
+    if (currentPage + 1 + delta < totalPages - 1) {
       rangeWithDots.push('...', totalPages);
     } else {
       rangeWithDots.push(totalPages);
@@ -62,7 +92,6 @@ function DataPagination({
 
     return rangeWithDots;
   };
-
   return (
     <div className={`flex flex-col items-center space-y-4 ${className}`}>
       <Pagination>
@@ -71,7 +100,7 @@ function DataPagination({
             <PaginationPrevious
               onClick={() => onPageIndexChange(currentPage - 1)}
               className={
-                currentPage <= 1
+                currentPage <= 0
                   ? 'pointer-events-none opacity-50'
                   : 'cursor-pointer hover:bg-accent'
               }
@@ -84,9 +113,9 @@ function DataPagination({
                 <PaginationEllipsis />
               ) : (
                 <PaginationLink
-                  onClick={() => onPageIndexChange(page as number)}
-                  isActive={currentPage === page}
-                  className={`cursor-pointer hover:bg-accent ${currentPage === page && currentPageColor ? currentPageColor : ''}`}
+                  onClick={() => onPageIndexChange((page as number) - 1)}
+                  isActive={currentPage === (page as number) - 1}
+                  className={`cursor-pointer hover:bg-accent ${currentPage === (page as number) - 1 && currentPageColor ? currentPageColor : ''}`}
                 >
                   {page}
                 </PaginationLink>
@@ -98,7 +127,7 @@ function DataPagination({
             <PaginationNext
               onClick={() => onPageIndexChange(currentPage + 1)}
               className={
-                currentPage >= totalPages
+                currentPage >= totalPages - 1
                   ? 'pointer-events-none opacity-50'
                   : 'cursor-pointer hover:bg-accent'
               }

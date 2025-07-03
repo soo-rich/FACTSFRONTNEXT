@@ -5,7 +5,7 @@ import { InputWithIcon } from "@/components/ui/input"
 import { ArticleService } from "@/service/article/article.service"
 import { articleSchema, ArticleType } from "@/types/article.type"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Banknote, Tag } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -13,8 +13,8 @@ import z from "zod"
 
 type formdata = z.infer<typeof articleSchema>
 
-const ArticleForm = ({ data: article }: { data?: ArticleType }) => {
-const queryClient = useQueryClient()
+const ArticleForm = ({ data: article, onSucces }: { data?: ArticleType, onSucces?: () => void }) => {
+    const queryClient = useQueryClient()
     const form = useForm({
         resolver: zodResolver(articleSchema),
         mode: 'onChange',
@@ -29,7 +29,7 @@ const queryClient = useQueryClient()
             return article?.id ? ArticleService.updateArticle(article.id, data) : ArticleService.addArticle(data)
         },
         onSuccess: (data) => {
-            article?toast.success(`mise a jour d'article ${data.libelle}`):toast.success(`Ajout d'article ${data.libelle}`)
+            article ? toast.success(`mise a jour d'article ${data.libelle}`) : toast.success(`Ajout d'article ${data.libelle}`)
             queryClient.invalidateQueries({
                 queryKey: [ArticleService.ARTICLE_KEY],
             }).then(r => r)
@@ -37,6 +37,7 @@ const queryClient = useQueryClient()
                 libelle: '',
                 prix_unitaire: 0
             })
+            onSucces?.()
         },
         onError: () => {
             toast.error("Ajout d'article nom aboutie",)
