@@ -14,9 +14,10 @@ import { toast } from 'sonner';
 type UserFormProps = {
   edit?: boolean;
   user?: UtilisateurDto;
+  onSucces?: () => void
 }
 
-const UserForm = ({ user, edit }: UserFormProps) => {
+const UserForm = ({ user, edit, onSucces }: UserFormProps) => {
   const queryClient = useQueryClient();
   const form = useForm<UtilsateurRegister>({
     resolver: zodResolver(userCreateSchema),
@@ -49,12 +50,13 @@ const UserForm = ({ user, edit }: UserFormProps) => {
         queryKey: [UserService.USER_KEY],
       });
       toast.success('Utilisateur ajoute', {
-        duration: 3000,
+        duration: 2000,
       });
+      onSucces?.()
     },
     onError: () => {
       toast.error('Erreur l\'ajout', {
-        duration: 3000,
+        duration: 2000,
       });
     },
   });
@@ -75,10 +77,11 @@ const UserForm = ({ user, edit }: UserFormProps) => {
       toast.success(`Utilisateur ${data?.nom} mis ajour`, {
         duration: 3000,
       });
+      onSucces?.()
     },
     onError: () => {
       toast.error('Erreur la mise a jour', {
-        duration: 3000,
+        duration: 2000
       });
     },
   });

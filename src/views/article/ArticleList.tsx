@@ -20,6 +20,7 @@ const columnHelper = createColumnHelper<ArticleType>();
 const ArticleList = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
+  const [openDialogUp, setOpenDialogUp] = useState(false);
   const queryClient = useQueryClient();
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -61,8 +62,8 @@ const ArticleList = () => {
         cell: ({ row }) => (
           <div className="flex flex-row gap-2 justify-center">
             <OpenDialogonClick
-              open={openDialog}
-              setOpen={setOpenDialog}
+              open={openDialogUp}
+              setOpen={setOpenDialogUp}
               buttonprops={{
                 buttonIconClassName: 'text-yellow-500',
                 buttonIcon: LucidePencil,
@@ -70,7 +71,7 @@ const ArticleList = () => {
               dialogprops={{
                 title: `Mise a jour ${row.original.libelle}`,
                 description: 'Ajouter un Article',
-                children: (<ArticleForm data={row.original} onSucces={() => setOpenDialog(false)} />),
+                children: (<ArticleForm data={row.original} onSucces={() => setOpenDialogUp(false)} />),
               }}
             />
             <Trash2Icon className={'text-red-500'} onClick={() => utilMethod.confirmDialog({
@@ -89,7 +90,6 @@ const ArticleList = () => {
   );
 
   const filteredData = useMemo(() => {
-    console.log('chamner', data)
     if (!data || !data.content) return [];
     return data.content.filter(article =>
       article.libelle.toLowerCase().includes(filter.toLowerCase()),

@@ -16,6 +16,8 @@ const columsHelper = createColumnHelper<UtilisateurDto>();
 
 const UserList = () => {
   const queryClient = useQueryClient();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openDialogN, setOpenDialogN] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [filter, setFilter] = useState('');
@@ -65,14 +67,17 @@ const UserList = () => {
       cell: ({ row }) => (
         <div className={'flex flex-col sm:flex-row gap-3'}>
           <OpenDialogonClick
+            open={openDialog}
+            setOpen={setOpenDialog}
             buttonprops={{
               buttonIconClassName: 'text-yellow-500',
               buttonIcon: PencilLine,
+
             }}
             dialogprops={{
               title: `Mise a jour de ${row.original.nom}`,
               description: 'Modifier un Utiilisateur',
-              children: (<UserForm edit={true} user={row.original} />)
+              children: (<UserForm edit={true} user={row.original} onSucces={() => setOpenDialog(false)} />)
             }} />
 
           <Trash2 className={'text-red-500'} onClick={() => {
@@ -126,6 +131,8 @@ const UserList = () => {
           <InputWithIcon icon={Search} iconPosition={'left'} onChange={(e) => setFilter(e.target.value)}
             placeholder={'Recherch un Utilisteur'} />
           <OpenDialogonClick
+            open={openDialogN}
+            setOpen={setOpenDialogN}
             buttonprops={{
               buttonIcon: Plus,
               buttonLabel: 'Utilisateur',
@@ -133,7 +140,7 @@ const UserList = () => {
             dialogprops={{
               title: 'Utilsateur',
               description: 'Ajouter un utilisateur',
-              children: <UserForm />,
+              children: <UserForm onSucces={() => setOpenDialogN(false)} />,
             }}
           />
         </div>
