@@ -166,7 +166,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id} colSpan={header.colSpan}>
+                      <TableHead key={header.id} colSpan={header.colSpan} className={'uppercase font-medium text-muted-foreground **:data-[slot=table-cell]:last:text-center'}>
                         {header.isPlaceholder
                           ? null
                           : flexRender(
