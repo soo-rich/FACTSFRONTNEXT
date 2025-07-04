@@ -237,7 +237,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
               ) : (
 
                 <DataPagination currentPage={page || 0} totalPages={totalPages || 0} totalElements={totalElements || 0}
-                  onPageIndexChange={handlePageChange} currentPageColor='bg-primary' />
+                  onPageIndexChange={handlePageChange} currentPageColor='bg-gray-400' />
               )
             ) : null
           }
