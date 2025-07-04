@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { schemaLogin } from "@/service/auth/auth-service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HomeIcon, User2Icon } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -18,11 +18,10 @@ type formData = z.infer<typeof schemaLogin>;
 
 const LoginForm = ({
   className,
-  session,
   ...props
-}: React.ComponentProps<"form"> & { session: any | null }) => {
+}: React.ComponentProps<"form">) => {
 
-
+const {data:session} = useSession()
 
 
 
