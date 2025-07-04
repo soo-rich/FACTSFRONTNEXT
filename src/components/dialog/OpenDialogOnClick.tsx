@@ -48,4 +48,31 @@ const OpenDialogonClick = ({ buttonprops, dialogprops, open, setOpen }: OpenDial
   );
 };
 
-export default OpenDialogonClick;
+
+
+
+
+const OpenDialogControl = ({ dialogprops, open, setOpen }: Pick<OpenDialogonClickProps, 'open' | 'setOpen' | 'dialogprops'>) => {
+
+  const [internalOpen, setInternalOpen] = useState(false)
+  const isControlled = open !== undefined && setOpen !== undefined
+  return (
+    <Dialog open={isControlled ? open : internalOpen} onOpenChange={isControlled ? setOpen! : setInternalOpen}>
+      <DialogContent className={cn('', dialogprops?.dialogContentClassName?.className)}>
+        <DialogHeader>
+          <DialogTitle>{dialogprops?.title}</DialogTitle>
+          {dialogprops?.description && (<DialogDescription>
+            {dialogprops?.description ?? ''}
+          </DialogDescription>)}
+        </DialogHeader>
+        {dialogprops?.children}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+
+
+
+export { OpenDialogControl, OpenDialogonClick };
+

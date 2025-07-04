@@ -6,7 +6,7 @@ import { ArticleType } from '@/types/article.type';
 import { default as UtiliMetod, default as utilMethod } from '@/utils/utilMethod';
 import ArticleForm from '@/views/article/form-article';
 
-import OpenDialogonClick from '@/components/dialog/OpenDialogOnClick';
+import { OpenDialogControl, OpenDialogonClick } from '@/components/dialog/OpenDialogOnClick';
 import { InputWithIcon } from '@/components/ui/input';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createColumnHelper } from '@tanstack/table-core';
@@ -20,7 +20,7 @@ const columnHelper = createColumnHelper<ArticleType>();
 const ArticleList = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [openDialogUp, setOpenDialogUp] = useState(false);
+  const [artUp, setArtUp] = useState<ArticleType | null>(null);
   const queryClient = useQueryClient();
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -61,18 +61,8 @@ const ArticleList = () => {
         header: 'Action',
         cell: ({ row }) => (
           <div className="flex flex-row gap-2 justify-center">
-            <OpenDialogonClick
-              open={openDialogUp}
-              setOpen={setOpenDialogUp}
-              buttonprops={{
-                buttonIconClassName: 'text-yellow-500',
-                buttonIcon: LucidePencil,
-              }}
-              dialogprops={{
-                title: `Mise a jour ${row.original.libelle}`,
-                description: 'Ajouter un Article',
-                children: (<ArticleForm data={row.original} onSucces={() => setOpenDialogUp(false)} />),
-              }}
+            < LucidePencil
+              onClick={() => setArtUp(row.original)}
             />
             <Trash2Icon className={'text-red-500'} onClick={() => utilMethod.confirmDialog({
               icon: 'warning',
@@ -128,6 +118,15 @@ const ArticleList = () => {
 
         }
       />
+      <OpenDialogControl open={!!artUp} setOpen={
+        (open) => {
+          if (!open) setArtUp(null)
+        }
+      } dialogprops={{
+        title: `Mise a jour ${artUp?.libelle}`,
+        description: 'Ajouter un Article',
+        children: (<ArticleForm data={artUp ?? undefined} onSucces={() => setArtUp(null)} />),
+      }} />
     </>
   );
 };

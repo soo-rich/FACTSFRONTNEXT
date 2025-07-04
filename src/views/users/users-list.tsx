@@ -1,5 +1,5 @@
 'use client';
-import OpenDialogonClick from '@/components/dialog/OpenDialogOnClick';
+import { OpenDialogControl, OpenDialogonClick } from '@/components/dialog/OpenDialogOnClick';
 import TableGeneric from '@/components/table/tablegenric';
 import { InputWithIcon } from '@/components/ui/input';
 import { UserService } from '@/service/user/user.service';
@@ -16,7 +16,7 @@ const columsHelper = createColumnHelper<UtilisateurDto>();
 
 const UserList = () => {
   const queryClient = useQueryClient();
-  const [openDialog, setOpenDialog] = useState(false);
+  const [editUser, setEditUser] = useState<UtilisateurDto | null>(null);
   const [openDialogN, setOpenDialogN] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -66,19 +66,7 @@ const UserList = () => {
       header: 'Actions',
       cell: ({ row }) => (
         <div className={'flex flex-col sm:flex-row gap-3'}>
-          <OpenDialogonClick
-            open={openDialog}
-            setOpen={setOpenDialog}
-            buttonprops={{
-              buttonIconClassName: 'text-yellow-500',
-              buttonIcon: PencilLine,
-
-            }}
-            dialogprops={{
-              title: `Mise a jour de ${row.original.nom}`,
-              description: 'Modifier un Utiilisateur',
-              children: (<UserForm edit={true} user={row.original} onSucces={() => setOpenDialog(false)} />)
-            }} />
+          <PencilLine onClick={() => setEditUser(row.original)} />
 
           <Trash2 className={'text-red-500'} onClick={() => {
             utilMethod.SuppressionConfirmDialog({
@@ -146,6 +134,13 @@ const UserList = () => {
         </div>
       }
     />
+    <OpenDialogControl open={!!editUser} setOpen={(open) => {
+      if (!open) setEditUser(null)
+    }} dialogprops={{
+      title: `Mise a jour de ${editUser?.nom}`,
+      description: 'Modifier un Utiilisateur',
+      children: (<UserForm edit={true} user={editUser ?? undefined} onSucces={() => setEditUser(null)} />)
+    }} />
   </>);
 };
 
