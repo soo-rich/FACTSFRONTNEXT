@@ -9,7 +9,6 @@ import {
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
@@ -67,7 +66,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
     state: {
       sorting,
       columnVisibility,
-      columnFilters,
+      columnFilters
     },
     getRowId: (row) => row.id.toString(),
     onSortingChange: setSorting,
@@ -75,7 +74,7 @@ const TableGeneric = <T extends { id: UniqueIdentifier },>({
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
