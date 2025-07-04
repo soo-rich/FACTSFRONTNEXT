@@ -1,6 +1,7 @@
 'use client';
 import { OpenDialogControl, OpenDialogonClick } from '@/components/dialog/OpenDialogOnClick';
 import TableGeneric from '@/components/table/tablegenric';
+import CustomTooltip from '@/components/tooltip/custom-tooltip'
 import { InputWithIcon } from '@/components/ui/input';
 import { UserService } from '@/service/user/user.service';
 import { UtilisateurDto } from '@/types/utilisateur.type';
@@ -8,9 +9,10 @@ import { default as UtiliMetod, default as utilMethod } from '@/utils/utilMethod
 import UserForm from '@/views/users/user-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createColumnHelper } from '@tanstack/table-core';
-import { PencilLine, Plus, Search, Trash2 } from 'lucide-react';
+import { Check, PencilLine, Plus, Search, Trash2, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
+import { Switch } from '@/components/ui/switch';
 
 const columsHelper = createColumnHelper<UtilisateurDto>();
 
@@ -28,6 +30,36 @@ const UserList = () => {
       return UserService.getAllorOnebyEmail({ params: { page: pageIndex, pagesize: pageSize } });
     },
   });
+
+  const DeleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await UserService.delete(id);
+    },
+    onSuccess: (data) => {
+      toast.success('Supprimer avec succes');
+      queryClient.invalidateQueries({
+        queryKey: [UserService.USER_KEY],
+      }).then(r => r);
+    },
+    onError: () => {
+      toast.error('Erreur lors de la suppression');
+    },
+  });
+
+  const ChangeActif=useMutation({
+    mutationFn: async(id:string)=>{
+      return await UserService.activateorDesactivate(id)
+    },
+    onSuccess: (data) => {
+      toast.success('Etat mis a jour avec succes');
+      queryClient.invalidateQueries({
+        queryKey: [UserService.USER_KEY],
+      }).then(r => r);
+    },
+    onError: () => {
+      toast.error('Erreur lors du changement d\'etat');
+    },
+  })
 
   const columns = useMemo(() => [
     columsHelper.display({
@@ -60,12 +92,27 @@ const UserList = () => {
     }),
     columsHelper.accessor('actif', {
       header: 'Activer',
-      cell: ({ row }) => row.original?.actif ? 'true' : 'false',
+      cell: ({ row }) =>  {
+       return  row.original.actif
+         ?(
+           <CustomTooltip title={"Descativer"}>
+             <X  onClick={()=>ChangeActif.mutate(row.original.id)}/>
+           </CustomTooltip>
+
+         )
+         :(
+           <CustomTooltip title={"Activer"}>
+
+           <Check color={"#1865db "} onClick={()=>ChangeActif.mutate(row.original.id)} />
+           </CustomTooltip>
+         )
+      }
     }),
     columsHelper.display({
       header: 'Actions',
       cell: ({ row }) => (
         <div className={'flex flex-col sm:flex-row gap-3'}>
+
           <PencilLine onClick={() => setEditUser(row.original)} />
 
           <Trash2 className={'text-red-500'} onClick={() => {
@@ -81,25 +128,11 @@ const UserList = () => {
     }),
   ], []);
 
-  const DeleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      return await UserService.delete(id);
-    },
-    onSuccess: (data) => {
-      toast.success('Supprimer avec succes');
-      queryClient.invalidateQueries({
-        queryKey: [UserService.USER_KEY],
-      }).then(r => r);
-    },
-    onError: () => {
-      toast.error('Erreur lors de la suppression');
-    },
-  });
-
   const filterData = useMemo(() => {
     if (!data || !data.content) return [];
     return data.content.filter(user => user?.nom.toLowerCase().includes(filter.toLowerCase()) || user?.prenom.toLowerCase().includes(filter.toLowerCase()));
   }, [data, filter]);
+
 
   return (<>
     <TableGeneric
