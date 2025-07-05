@@ -9,27 +9,34 @@ const api = "client";
 export class ClientService {
   static CLIENT_KEY = "client";
 
-  async getClients(params?: ParamRequests) {
+  static async getClients(params?: ParamRequests) {
     return (
       await instance.get<CustomresponseType<ClientType>>(api, {
         params: params,
       })
     ).data;
   }
+  static async getClientsByNom(params?: ParamRequests) {
+    return (
+      await instance.get<ClientType[]>(`${api}/search`, {
+        params: params,
+      })
+    ).data;
+  }
 
-  async saveClient(client: ClientSave) {
+  static async saveClient(client: ClientSave) {
     return (await instance.post<ClientType>(api, client)).data;
   }
 
-  async updateClient(id: string, client: ClientSave) {
+  static async updateClient(id: string, client: ClientSave) {
     return (await instance.put<ClientType>(api + "/" + id, client)).data;
   }
 
-  async deleteClient(id: string) {
+  static async deleteClient(id: string) {
     return (await instance.delete<void>(api + "/" + id)).data;
   }
 
-  async changePotentiel(id: string) {
+  static async changePotentiel(id: string) {
     return (await instance.get<Boolean>(api + "/" + id)).data;
   }
 }
