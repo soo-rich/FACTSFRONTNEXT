@@ -2,6 +2,7 @@
 
 import { OpenDialogControl, OpenDialogonClick } from '@/components/dialog/OpenDialogOnClick';
 import TableGeneric from '@/components/table/tablegenric';
+import { Button } from '@/components/ui/button';
 import { InputWithIcon } from '@/components/ui/input';
 import { ArticleService } from '@/service/article/article.service';
 import { ArticleType } from '@/types/article.type';
@@ -60,17 +61,20 @@ const ArticleList = () => {
 				header: 'Action',
 				cell: ({ row }) => (
 					<div className="flex flex-row gap-2 justify-center">
-						<SquarePen
-							onClick={() => setArtUp(row.original)}
-						/>
-						<Trash2Icon className={'text-red-500'} onClick={() => utilMethod.confirmDialog({
+						<Button onClick={() => setArtUp(row.original)} size={'icon'} >
+							<SquarePen
+							/>
+						</Button>
+						<Button onClick={() => utilMethod.confirmDialog({
 							icon: 'warning',
 							subtitle: `Vous aller suppriimer ${row.original.libelle}`,
 							title: `Suppresion`,
 							confirmAction: () => {
 								DeleteMutation.mutate(row.original.id);
 							},
-						})} />
+						})} variant={'destructive'} size={'icon'} >
+							<Trash2Icon />
+						</Button>
 					</div>
 				),
 			}),
@@ -99,7 +103,7 @@ const ArticleList = () => {
 				rightElement={
 					<div className={'flex flex-col sm:flex-row gap-3 justify-between align-middle items-end'}>
 						<InputWithIcon icon={Search} iconPosition={'left'} onChange={(e) => setFilter(e.target.value)}
-						               placeholder={"Recherch un article"} />
+							placeholder={"Recherch un article"} />
 						<OpenDialogonClick
 							open={openDialog}
 							setOpen={setOpenDialog}

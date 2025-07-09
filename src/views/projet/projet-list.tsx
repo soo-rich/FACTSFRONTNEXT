@@ -1,18 +1,19 @@
 'use client'
 
-import { OpenDialogControl, OpenDialogonClick } from '@/components/dialog/OpenDialogOnClick'
+import { OpenDialogControl, OpenDialogonClick } from '@/components/dialog/OpenDialogOnClick';
 import TableGeneric from '@/components/table/tablegenric';
-import CustomTooltip from '@/components/tooltip/custom-tooltip'
-import { InputWithIcon } from '@/components/ui/input'
-import { ProjetService } from '@/service/projet/projet.service'
+import CustomTooltip from '@/components/tooltip/custom-tooltip';
+import { Button } from '@/components/ui/button';
+import { InputWithIcon } from '@/components/ui/input';
+import { ProjetService } from '@/service/projet/projet.service';
 import { ProjetType } from '@/types/projet.type';
-import utilMethod from '@/utils/utilMethod'
-import ProjetForm from '@/views/projet/projet-form'
+import utilMethod from '@/utils/utilMethod';
+import ProjetForm from '@/views/projet/projet-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createColumnHelper } from '@tanstack/table-core';
-import { Check, PencilIcon, Plus, Search, SquarePen, Trash2, X } from 'lucide-react'
+import { Check, Plus, Search, SquarePen, Trash2, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { toast } from 'sonner'
+import { toast } from 'sonner';
 
 
 const colunmsHelper = createColumnHelper<ProjetType>();
@@ -32,7 +33,7 @@ const ProjetList = () => {
 		},
 		onSuccess: () => {
 			toast.success('Suppresion OK ', {
-				duration: 1000,
+				duration: 3000,
 			});
 			queryClient.invalidateQueries({
 				queryKey: [ProjetService.PROJT_KEY, pageIndex, pageSize],
@@ -50,7 +51,7 @@ const ProjetList = () => {
 		},
 		onSuccess: (data) => {
 			toast.success(data ? "C'est devenu un Offre" : "C'est n'es plus un Offre", {
-				duration: 1000,
+				duration: 3000,
 			});
 			queryClient.invalidateQueries({
 				queryKey: [ProjetService.PROJT_KEY, pageIndex, pageSize],
@@ -58,7 +59,7 @@ const ProjetList = () => {
 		},
 		onError: () => {
 			toast.error('Erreur lors de la Changement du projet', {
-				duration: 1000,
+				duration: 5000,
 			});
 		},
 	})
@@ -113,14 +114,16 @@ const ProjetList = () => {
 			header: 'Action',
 			cell: ({ row }) => (
 				<div className="flex flex-row gap-2 justify-center">
-					<SquarePen onClick={() => setProjetUp(row.original)} />
-					<Trash2 className={'text-red-500'} onClick={() => utilMethod.SuppressionConfirmDialog({
+					<Button size={'icon'} onClick={() => setProjetUp(row.original)} >
+						<SquarePen />
+					</Button>
+					<Button variant={'destructive'} size={'icon'} onClick={() => utilMethod.SuppressionConfirmDialog({
 						title: row.original.projet_type,
 						subtitle: `Vous aller suppriimer ${row.original.projet_type}`,
 						confirmAction: () => {
 							DeleteMutation.mutate(row.original.id)
 						},
-					})} />
+					})} ><Trash2 /></Button>
 				</div>
 			),
 		}),
@@ -150,7 +153,7 @@ const ProjetList = () => {
 			rightElement={
 				<div className={'flex flex-col sm:flex-row gap-3 justify-between align-middle items-end'}>
 					<InputWithIcon icon={Search} iconPosition={'left'} onChange={(e) => setFilter(e.target.value)}
-					               placeholder={"Recherch un Projet"} />
+						placeholder={"Recherch un Projet"} />
 					<OpenDialogonClick
 						open={openDialog}
 						setOpen={setOpenDialog}

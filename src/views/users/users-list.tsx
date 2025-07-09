@@ -1,7 +1,8 @@
 'use client';
 import { OpenDialogControl, OpenDialogonClick } from '@/components/dialog/OpenDialogOnClick';
 import TableGeneric from '@/components/table/tablegenric';
-import CustomTooltip from '@/components/tooltip/custom-tooltip'
+import CustomTooltip from '@/components/tooltip/custom-tooltip';
+import { Button } from '@/components/ui/button';
 import { InputWithIcon } from '@/components/ui/input';
 import { UserService } from '@/service/user/user.service';
 import { UtilisateurDto } from '@/types/utilisateur.type';
@@ -112,17 +113,22 @@ const UserList = () => {
 			header: 'Actions',
 			cell: ({ row }) => (
 				<div className={'flex flex-col sm:flex-row gap-3'}>
+					<Button onClick={() => setEditUser(row.original)} size={'icon'} >
+						<SquarePen />
+					</Button>
 
-					<SquarePen onClick={() => setEditUser(row.original)} />
-
-					<Trash2 className={'text-red-500'} onClick={() => {
+					<Button onClick={() => {
 						utilMethod.SuppressionConfirmDialog({
 							title: row.original.nom,
 							confirmAction: () => {
 								DeleteMutation.mutate(row.original.id);
 							},
 						});
-					}} />
+					}} variant={'destructive'} size={'icon'} >
+
+
+						<Trash2 />
+					</Button>
 				</div>
 			),
 		}),
@@ -149,7 +155,7 @@ const UserList = () => {
 			rightElement={
 				<div className={'flex flex-col sm:flex-row gap-3 justify-between align-middle items-end'}>
 					<InputWithIcon icon={Search} iconPosition={'left'} onChange={(e) => setFilter(e.target.value)}
-					               placeholder={'Recherch un Utilisteur'} />
+						placeholder={'Recherch un Utilisteur'} />
 					<OpenDialogonClick
 						open={openDialogN}
 						setOpen={setOpenDialogN}
