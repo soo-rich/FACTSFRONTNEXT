@@ -1,5 +1,6 @@
 'use client'
 
+import { Chip } from '@/components/chip/Chip';
 import { OpenDialogControl, OpenDialogonClick } from "@/components/dialog/OpenDialogOnClick";
 import TableGeneric from "@/components/table/tablegenric";
 import { Button } from "@/components/ui/button";
@@ -26,18 +27,18 @@ const ClientList = () => {
     const [pageSize, setPageSize] = useState(10);
     const [filter, setFilter] = useState('');
 
-    const queryKey = useMemo(() => [ClientService.CLIENT_KEY, pageSize, pageIndex], [pageIndex, pageSize])
-
 
     const DeleteMutaion = useMutation({
-        mutationFn: async (id) => { },
+        mutationFn: async (id: string) => {
+            return await ClientService.deleteClient(id)
+        },
         onSuccess: () => {
 
             toast.success("Supprimer avec succes", {
                 duration: 3000
             })
             queryClient.invalidateQueries({
-                queryKey: [queryKey]
+                queryKey: [ClientService.CLIENT_KEY, pageSize, pageIndex]
             })
         },
         onError: () => {
@@ -62,7 +63,8 @@ const ClientList = () => {
             header: 'Telephone'
         }),
         columnsHealper.accessor('potentiel', {
-            header: 'Potentiel'
+            header: 'Potentiel',
+            cell: ({ row }) => <Chip size={'sm'} variant={row.original.potentiel ? 'success' : 'warning'} title={row.original.potentiel ? 'Oui' : 'Nom'}>{row.original.potentiel ? 'Oui' : 'Nom'}</Chip>
         }),
         columnsHealper.display({
             header: 'Actions',
@@ -73,7 +75,7 @@ const ClientList = () => {
                     </Button>
                     <Button onClick={() => UtiliMetod.SuppressionConfirmDialog({
                         title: `Suppression de ${row.original.nom}`,
-                        confirmAction: () => DeleteMutaion.mutate()
+                        confirmAction: () => DeleteMutaion.mutate(row.original.id)
                     })} variant={'destructive'} size={'icon'}>
                         <Trash2 />
                     </Button>
@@ -84,10 +86,14 @@ const ClientList = () => {
 
     const { data, isLoading, isError } = useQuery(
         {
-            queryKey,
+            queryKey: [ClientService.CLIENT_KEY, pageSize, pageIndex],
             queryFn: async () => {
                 return await ClientService.getClients({ page: pageIndex, pagesize: pageSize })
-            }
+            },
+            refetchOnWindowFocus: true,
+            refetchOnMount: true,
+            refetchOnReconnect: true,
+            staleTime: 5 * 60 * 1000,
         }
     )
 
@@ -131,7 +137,7 @@ const ClientList = () => {
         <OpenDialogControl open={!!clientUp} setOpen={(open) => { if (!open) setClientUp(null) }} dialogprops={{
             title: 'Client',
             description: `Mise a jour de ${clientUp?.nom}`,
-            children: <ClientForm edit={true} data={clientUp ?? undefined} onSucces={() => setOpenDialog(false)} />
+            children: <ClientForm edit={true} data={clientUp ?? undefined} onSucces={() => setClientUp(null)} />
         }} />
     </>
 }

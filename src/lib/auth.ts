@@ -57,6 +57,7 @@ export const authOptions: NextAuthOptions = {
         const currentTime = Math.floor(Date.now() / 1000);
 
         if (decoded && decoded.exp && decoded.exp - currentTime < 300) {
+          console.log("RefreshAccessToken");
           const refresh = await AuthService.refreshToken(
             typeof token?.refresh === "string" ? token.refresh : "",
           );
