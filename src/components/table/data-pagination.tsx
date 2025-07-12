@@ -12,7 +12,7 @@ import {
 import { useIsMobile } from '@/hooks/use-mobile';
 
 type DataPaginationProps = {
-  currentPage: number
+  currentPage: number // 0-based index
   totalPages: number
   totalElements?: number
   onPageIndexChange: (page: number) => void
@@ -23,60 +23,35 @@ type DataPaginationProps = {
 type SimplePaginationProps = Omit<DataPaginationProps, 'totalElements'>
 
 function DataPagination({
-  currentPage,
-  totalPages,
-  totalElements,
-  onPageIndexChange,
-  className,
-  currentPageColor,
-}: DataPaginationProps) {
+                          currentPage,
+                          totalPages,
+                          totalElements,
+                          onPageIndexChange,
+                          className,
+                          currentPageColor,
+                        }: DataPaginationProps) {
   const isMobile = useIsMobile()
   if (totalPages <= 1) return null;
-
-  // const getVisiblePages = () => {
-  //   const delta = 2;
-  //   const range = [];
-  //   const rangeWithDots = [];
-
-  //   for (
-  //     let i = Math.max(2, currentPage - delta);
-  //     i <= Math.min(totalPages - 1, currentPage + delta);
-  //     i++
-  //   ) {
-  //     range.push(i);
-  //   }
-
-  //   if (currentPage - delta > 2) {
-  //     rangeWithDots.push(1, '...');
-  //   } else {
-  //     rangeWithDots.push(1);
-  //   }
-
-  //   rangeWithDots.push(...range);
-
-  //   if (currentPage + delta < totalPages - 1) {
-  //     rangeWithDots.push('...', totalPages);
-  //   } else {
-  //     rangeWithDots.push(totalPages);
-  //   }
-
-  //   return rangeWithDots;
-  // };
 
   const getVisiblePages = () => {
     const delta = 2;
     const range = [];
     const rangeWithDots = [];
 
+    // Convertir currentPage (0-based) vers displayPage (1-based) pour les calculs
+    const displayPage = currentPage + 1;
+
+    // Calculer la plage des pages à afficher
     for (
-      let i = Math.max(2, currentPage + 1 - delta);
-      i <= Math.min(totalPages - 1, currentPage + 1 + delta);
+      let i = Math.max(2, displayPage - delta);
+      i <= Math.min(totalPages - 1, displayPage + delta);
       i++
     ) {
       range.push(i);
     }
 
-    if (currentPage + 1 - delta > 2) {
+    // Ajouter la première page et les points de suspension si nécessaire
+    if (displayPage - delta > 2) {
       rangeWithDots.push(1, '...');
     } else {
       rangeWithDots.push(1);
@@ -84,14 +59,16 @@ function DataPagination({
 
     rangeWithDots.push(...range);
 
-    if (currentPage + 1 + delta < totalPages - 1) {
+    // Ajouter les points de suspension et la dernière page si nécessaire
+    if (displayPage + delta < totalPages - 1) {
       rangeWithDots.push('...', totalPages);
-    } else {
+    } else if (totalPages > 1) {
       rangeWithDots.push(totalPages);
     }
 
     return rangeWithDots;
   };
+
   return (
     <div className={`flex flex-col items-center space-y-4 ${className}`}>
       <Pagination>
@@ -113,9 +90,13 @@ function DataPagination({
                 <PaginationEllipsis />
               ) : (
                 <PaginationLink
-                  onClick={() => onPageIndexChange((page as number) - 1)}
+                  onClick={() => onPageIndexChange((page as number) - 1)} // Convertir vers 0-based
                   isActive={currentPage === (page as number) - 1}
-                  className={`cursor-pointer hover:bg-accent ${currentPage === (page as number) - 1 && currentPageColor ? currentPageColor : ''}`}
+                  className={`cursor-pointer hover:bg-accent ${
+                    currentPage === (page as number) - 1 && currentPageColor
+                      ? currentPageColor
+                      : ''
+                  }`}
                 >
                   {page}
                 </PaginationLink>
@@ -136,22 +117,21 @@ function DataPagination({
         </PaginationContent>
       </Pagination>
 
-      {/* Info pagination */}
+      {/* Info pagination - affichage 1-based pour l'utilisateur */}
       <p className="text-sm text-muted-foreground">
-        Page {currentPage} sur {totalPages} • {totalElements ?? 0} résultat{(totalElements ?? 0) > 1 ? 's' : ''}
+        Page {currentPage + 1} sur {totalPages} • {totalElements ?? 0} résultat{(totalElements ?? 0) > 1 ? 's' : ''}
       </p>
     </div>
   );
 }
 
-
 function SimplePagination({
-  currentPage,
-  totalPages,
-  currentPageColor,
-  onPageIndexChange,
-  className
-}: SimplePaginationProps) {
+                            currentPage,
+                            totalPages,
+                            currentPageColor,
+                            onPageIndexChange,
+                            className
+                          }: SimplePaginationProps) {
   const isMobile = useIsMobile()
   if (totalPages <= 1) return null;
 
@@ -162,11 +142,10 @@ function SimplePagination({
           <PaginationItem>
             <PaginationPrevious
               onClick={() => onPageIndexChange(Math.max(0, currentPage - 1))}
-              className={currentPage <= 0 ? 'opacity-50 pointer-events-none' : 'cursor-pointer'}
+              className={currentPage <= 0 ? 'opacity-50 pointer-events-none' : 'cursor-pointer hover:bg-accent'}
             />
           </PaginationItem>
 
-          {/* Afficher les 5 premières pages ou autour de la page courante */}
           {!isMobile ? Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
             let pageIndex: number;
 
@@ -185,9 +164,13 @@ function SimplePagination({
                 <PaginationLink
                   onClick={() => onPageIndexChange(pageIndex)}
                   isActive={currentPage === pageIndex}
-                  className={`cursor-pointer ${currentPage === pageIndex && currentPageColor ? currentPageColor : ''}`}
+                  className={`cursor-pointer hover:bg-accent ${
+                    currentPage === pageIndex && currentPageColor
+                      ? currentPageColor
+                      : ''
+                  }`}
                 >
-                  {pageIndex + 1} {/* Affichage 1-indexed */}
+                  {pageIndex + 1} {/* Affichage 1-based */}
                 </PaginationLink>
               </PaginationItem>
             );
@@ -196,7 +179,7 @@ function SimplePagination({
           <PaginationItem>
             <PaginationNext
               onClick={() => onPageIndexChange(Math.min(totalPages - 1, currentPage + 1))}
-              className={currentPage >= totalPages - 1 ? 'opacity-50 pointer-events-none' : 'cursor-pointer'}
+              className={currentPage >= totalPages - 1 ? 'opacity-50 pointer-events-none' : 'cursor-pointer hover:bg-accent'}
             />
           </PaginationItem>
         </PaginationContent>
@@ -204,6 +187,5 @@ function SimplePagination({
     </div>
   );
 }
-
 
 export { DataPagination, SimplePagination };

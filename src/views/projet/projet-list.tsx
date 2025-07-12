@@ -76,9 +76,7 @@ const ProjetList = () => {
 	const columns = useMemo(() => [
 		colunmsHelper.display({
 			header: '#',
-			cell: () => (
-				<h5>h1</h5>
-			),
+
 		}),
 		colunmsHelper.accessor('projet_type', {
 			header: 'Projet Type',

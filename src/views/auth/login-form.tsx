@@ -32,8 +32,8 @@ const {data:session} = useSession()
     resolver: zodResolver(schemaLogin),
     mode: "onChange",
     defaultValues: {
-      username: "string",
-      password: "string",
+      username: "Priscilla.Wilderman",
+      password: "123456789",
     },
   });
 
