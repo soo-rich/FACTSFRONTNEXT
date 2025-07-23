@@ -1,15 +1,12 @@
 // Third-party Imports
 import CredentialProvider from 'next-auth/providers/credentials'
-import GoogleProvider from 'next-auth/providers/google'
-import { PrismaAdapter } from '@auth/prisma-adapter'
-import { PrismaClient } from '@prisma/client'
-import type { NextAuthOptions } from 'next-auth'
-import type { Adapter } from 'next-auth/adapters'
+import type {NextAuthOptions} from 'next-auth'
+import {AuthService} from "@/service/auth/auth-service";
+import {JwtUtils} from "@/service/jwt/JwtUtils";
 
-const prisma = new PrismaClient()
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma) as Adapter,
+
 
   // ** Configure one or more authentication providers
   // ** Please refer to https://next-auth.js.org/configuration/options#providers for more `providers` options
@@ -24,7 +21,10 @@ export const authOptions: NextAuthOptions = {
        * As we are using our own Sign-in page, we do not need to change
        * username or password attributes manually in following credentials object.
        */
-      credentials: {},
+      credentials: {
+        username: {label: "Username", type: "text"},
+        password: {label: "Password", type: "password"},
+      },
       async authorize(credentials) {
         /*
          * You need to provide your own logic here that takes the credentials submitted and returns either
@@ -32,44 +32,37 @@ export const authOptions: NextAuthOptions = {
          * For e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
          * You can also use the `req` object to obtain additional parameters (i.e., the request IP address)
          */
-        const { email, password } = credentials as { email: string; password: string }
 
         try {
           // ** Login API Call to match the user credentials and receive user data in response along with his role
-          const res = await fetch(`${process.env.API_URL}/login`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-          })
+          if (!credentials) return null;
+          const res = await AuthService.login({
+            username: credentials.username,
+            password: credentials.password,
+          });
 
-          const data = await res.json()
+          if (res.bearer && res.refresh) {
+            const userInfo = JwtUtils.decode(res.bearer);
 
-          if (res.status === 401) {
-            throw new Error(JSON.stringify(data))
+            return {
+              id: userInfo?.sub,
+              email: userInfo?.email,
+              name: userInfo?.nom || "Utilisateur",
+              numero: userInfo?.numero,
+              role: userInfo?.role,
+              bearer: res.bearer,
+              refresh: res.refresh,
+            };
           }
 
-          if (res.status === 200) {
-            /*
-             * Please unset all the sensitive information of the user either from API response or before returning
-             * user data below. Below return statement will set the user object in the token and the same is set in
-             * the session which will be accessible all over the app.
-             */
-            return data
-          }
-
-          return null
+          return null;
         } catch (e: any) {
           throw new Error(e.message)
         }
       }
     }),
 
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
-    })
+
 
     // ** ...add more providers here
   ],
@@ -104,11 +97,10 @@ export const authOptions: NextAuthOptions = {
      * the `session()` callback. So we have to add custom parameters in `token`
      * via `jwt()` callback to make them accessible in the `session()` callback
      */
-    async jwt({ token, user }) {
-      return { ...token, ...user }
+    async jwt({token, user}) {
+      return {...token, ...user}
     },
-    async session({ session, token }) {
-      console.log({...session, ...token})
+    async session({session, token}) {
       return {...session, ...token}
     }
   }
