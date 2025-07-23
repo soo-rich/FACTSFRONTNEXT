@@ -7,7 +7,7 @@ import {
 } from "@/service/axios-manager/interceptor";
 
 const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_SOOSMART_API_URL,
   timeout: 10000,
 });
 
