@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/:lang(en|fr)',
-        destination: '/:lang/dashboards/crm',
+        destination: '/:lang/dashboard',
         permanent: true,
         locale: false
       },

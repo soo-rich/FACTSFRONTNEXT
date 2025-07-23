@@ -27,6 +27,7 @@ import { i18n } from '@configs/i18n'
 // Util Imports
 import { getDictionary } from '@/utils/getDictionary'
 import { getMode, getSystemMode } from '@core/utils/serverHelpers'
+import ProviderTokenCheker from '@/components/token/TokenChecker'
 
 const Layout = async (props: ChildrenType & { params: Promise<{ lang: Locale }> }) => {
   const params = await props.params
@@ -42,6 +43,7 @@ const Layout = async (props: ChildrenType & { params: Promise<{ lang: Locale }> 
   return (
     <Providers direction={direction}>
       <AuthGuard locale={params.lang}>
+        <ProviderTokenCheker>
         <LayoutWrapper
           systemMode={systemMode}
           verticalLayout={
@@ -68,6 +70,7 @@ const Layout = async (props: ChildrenType & { params: Promise<{ lang: Locale }> 
           </Button>
         </ScrollToTop>
         <Customizer dir={direction} />
+        </ProviderTokenCheker>
       </AuthGuard>
     </Providers>
   )
