@@ -35,9 +35,10 @@
     "@mui/lab": "6.0.0-beta.19",
     "@mui/material": "6.2.1",
     "@mui/material-nextjs": "6.2.1",
-    "@prisma/client": "5.22.0",
     "@reduxjs/toolkit": "2.5.0",
     "@tanstack/match-sorter-utils": "8.19.4",
+    "@tanstack/react-query": "^5.83.0",
+    "@tanstack/react-query-devtools": "^5.83.0",
     "@tanstack/react-table": "8.20.6",
     "@tiptap/extension-color": "^2.26.1",
     "@tiptap/extension-list-item": "^2.26.1",
@@ -79,7 +80,8 @@
     "react-use": "17.6.0",
     "recharts": "2.15.0",
     "server-only": "0.0.1",
-    "valibot": "0.42.1"
+    "valibot": "0.42.1",
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@iconify/json": "2.2.286",

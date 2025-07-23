@@ -54,7 +54,7 @@ export type Config = {
 }
 
 const themeConfig: Config = {
-  templateName: 'Vuexy',
+  templateName: 'SOOSMART',
   homePageUrl: '/dashboard',
   settingsCookieName: 'soosmart',
   mode: 'system', // 'system', 'light', 'dark'

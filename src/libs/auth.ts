@@ -89,7 +89,7 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
 
     // ** Seconds - How long until an idle session expires and is no longer valid
-    maxAge: 30 * 24 * 60 * 60 // ** 30 days
+    maxAge: 24 * 60 * 60 // ** 30 days
   },
 
   // ** Please refer to https://next-auth.js.org/configuration/options#pages for more `pages` options
@@ -105,23 +105,11 @@ export const authOptions: NextAuthOptions = {
      * via `jwt()` callback to make them accessible in the `session()` callback
      */
     async jwt({ token, user }) {
-      if (user) {
-        /*
-         * For adding custom parameters to user in session, we first need to add those parameters
-         * in token which then will be available in the `session()` callback
-         */
-        token.name = user.name
-      }
-
-      return token
+      return { ...token, ...user }
     },
     async session({ session, token }) {
-      if (session.user) {
-        // ** Add custom params to user in session which are added in `jwt()` callback via `token` parameter
-        session.user.name = token.name
-      }
-
-      return session
+      console.log({...session, ...token})
+      return {...session, ...token}
     }
   }
 }

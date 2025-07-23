@@ -1,0 +1,1 @@
+export type FormEditAddType<T> =  { data?: T, onSucces?: () => void, edit?: boolean }
