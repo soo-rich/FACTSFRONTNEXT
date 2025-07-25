@@ -7,6 +7,7 @@ import {createColumnHelper} from "@tanstack/react-table";
 import {ArticleType} from "@/types/soosmart/article.type";
 import UtiliMetod from "@/utils/utilsmethod";
 import TableGeneric from "@components/table/TableGeneric";
+import CustomIconButton from "@core/components/mui/IconButton";
 
 const columnHelper = createColumnHelper<ArticleType>();
 
@@ -20,12 +21,11 @@ const ArticleIndex = () => {
   const {data, isLoading, isError} = useQuery({
     queryKey: [ArticleService.ARTICLE_KEY, pageIndex, pageSize],
     queryFn: async () => {
-     return await  ArticleService.getArticles({page: pageIndex, pagesize: pageSize})
+      return await ArticleService.getArticles({page: pageIndex, pagesize: pageSize})
     },
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
-
 
   const DeleteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -42,32 +42,58 @@ const ArticleIndex = () => {
     },
   });
 
-
   const columns = useMemo(
     () => [
       columnHelper.accessor('libelle', {
-        header: 'Title',
+        header: 'Titre',
         cell: info => <span>{info.getValue()}</span>,
+        enableHiding: true, // Permet de cacher cette colonne
       }),
       columnHelper.accessor('prix_unitaire', {
         header: 'Prix Unitaire',
         cell: info => <span>{UtiliMetod.formatDevise(info.getValue())} FCFA</span>,
+        enableHiding: true, // Permet de cacher cette colonne
       }),
       columnHelper.display({
-        header: 'Action',
+        id: 'actions', // Important: donner un ID à la colonne display
+        header: 'Actions',
         cell: ({row}) => (
-          <></>
+          <div className="flex gap-2">
+
+            <CustomIconButton
+              onClick={() => UtiliMetod.SuppressionConfirmDialog({
+                data: row.original.libelle,
+                confirmAction: () => DeleteMutation.mutate(row.original.id),
+                cancelAction: () => toast.info('Suppression annulée')
+              })}
+              className="text-red-600 hover:text-red-800"
+            >
+              <i className="tabler-trash"/>
+            </CustomIconButton>
+          </div>
         ),
+        enableHiding: true, // Permet de cacher cette colonne
       }),
     ],
-    [],
+    [DeleteMutation],
   );
-
 
   return (
     <>
-      <TableGeneric tabledata={data?.content} columns={columns} isError={isError} isLoading={isLoading} visibleColumns={true}
-                    page={pageIndex} pageSize={pageSize} SetPageSize={setPageSize} SetPage={setPageIndex}/>
+      <TableGeneric
+        tabledata={data?.content}
+        columns={columns}
+        isError={isError}
+        isLoading={isLoading}
+        visibleColumns={true}
+        page={pageIndex}
+        pageSize={pageSize}
+        SetPageSize={setPageSize}
+        SetPage={setPageIndex}
+        globalFilter={filter}
+        setGlobalFilter={setFilter}
+        totalElements={data?.totalElements}
+      />
     </>
   );
 }

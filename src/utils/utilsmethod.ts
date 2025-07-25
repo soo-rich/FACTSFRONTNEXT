@@ -1,7 +1,8 @@
-import { SweetconfirmProps } from '@/types/sweetAlertProps';
+
 import { format as formatter } from 'date-fns'
 import Swal from 'sweetalert2';
 import { fr } from 'date-fns/locale';
+import {SweetconfirmProps} from "@/types/soosmart/sweetAlertProps";
 class UtiliMetod {
 
   static formatDevise = (value: number, format?: string) => {
@@ -30,10 +31,10 @@ class UtiliMetod {
       }
     })
   }
-  static SuppressionConfirmDialog = async ({  title, confirmAction, cancelAction }: SweetconfirmProps) => {
+  static SuppressionConfirmDialog = async ({data, confirmAction, cancelAction }: SweetconfirmProps&{data:string}) => {
     await Swal.fire({
       title:  `Suppression ?`,
-      text: `Vous aller supprimer cette information ${title} ?`,
+      text: `Vous aller supprimer cette information ${data} ?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui',

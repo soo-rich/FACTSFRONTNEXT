@@ -93,6 +93,7 @@ const MenuItem = styled(MuiMenuItem)<MenuItemProps>({
     }
   }
 })
+
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value)
@@ -133,12 +134,10 @@ const TableGeneric = <T, >({
     children: 'Enregistrer'
   }
 
-
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
-  // @ts-ignore
-  const handleClick = (event: MouseEvent<HTMLElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
 
@@ -152,6 +151,14 @@ const TableGeneric = <T, >({
 
   const handlePageSizeChange = (event: any) => {
     SetPageSize?.(parseInt(event.target.value, 10))
+  }
+
+  // Fonction pour gérer la visibilité des colonnes
+  const handleColumnVisibilityChange = (columnId: string, isVisible: boolean) => {
+    setColumnVisibility(prev => ({
+      ...prev,
+      [columnId]: isVisible
+    }));
   }
 
   const table = useReactTable({
@@ -168,15 +175,15 @@ const TableGeneric = <T, >({
         pageSize: pageSize ?? 10
       }
     },
+    onColumnVisibilityChange: setColumnVisibility, // Important: ajouter cette ligne
     initialState: {
       pagination: {
         pageSize: pageSize ?? 10
       }
     },
-    enableRowSelection: true, //enable row selection for all rows
-    // enableRowSelection: row => row.original.age > 18, // or enable row selection conditionally per row
+    enableRowSelection: true,
     globalFilterFn: fuzzyFilter,
-    manualPagination: !!totalElements, // Active la pagination manuelle si count est fourni
+    manualPagination: !!totalElements,
     pageCount: totalElements ? Math.ceil(totalElements / (pageSize ?? 10)) : -1,
     getCoreRowModel: getCoreRowModel(),
     onGlobalFilterChange: setGlobalFilter,
@@ -213,7 +220,7 @@ const TableGeneric = <T, >({
               {visibleColumns && (
                 <>
                   <Button variant='outlined' aria-haspopup='true' onClick={handleClick} aria-controls='customized-menu'>
-                    Columns
+                    Colonnes
                   </Button>
                   <Menu
                     keepMounted
@@ -231,29 +238,39 @@ const TableGeneric = <T, >({
                       horizontal: 'center'
                     }}
                   >
+                    {table
+                      .getAllColumns()
+                      .filter((column) => column.getCanHide())
+                      .map((column) => {
+                        // Obtenir le titre de la colonne de manière plus robuste
+                        const columnTitle = typeof column.columnDef.header === 'string'
+                          ? column.columnDef.header
+                          : column.id;
 
-                    {
-                      table
-                        .getAllColumns()
-                        .filter((col) => typeof col.accessorFn !== "undefined" && col.getCanHide())
-                        .map((col => (
+                        return (
                           <MenuItem
-                            key={col.id}
-                            onClick={() => col.toggleVisibility(!col.getIsVisible())}
+                            key={column.id}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              column.toggleVisibility();
+                            }}
                             className='flex items-center gap-2'
                           >
-
-                            <Checkbox checked={col.getIsVisible()}/>
-                            <Typography>{col.columnDef.header as string}</Typography>
-
+                            <Checkbox
+                              checked={column.getIsVisible()}
+                              onChange={(e) => {
+                                e.stopPropagation();
+                                column.toggleVisibility();
+                              }}
+                            />
+                            <Typography>{columnTitle}</Typography>
                           </MenuItem>
-                        )))
-                    }
-
+                        );
+                      })}
                   </Menu>
                 </>
               )}
-              {globalFilter && (
+              {globalFilter !== undefined && (
                 <DebouncedInput
                   value={globalFilter ?? ''}
                   onChange={value => setGlobalFilter && setGlobalFilter(String(value))}
@@ -267,7 +284,6 @@ const TableGeneric = <T, >({
                   elementProps={buttonadd.elementProps ? buttonadd.elementProps : buttonProps}
                   dialog={buttonadd.dialog}
                 />)}
-
             </div>
           </div>
         )}
