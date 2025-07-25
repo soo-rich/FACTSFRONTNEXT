@@ -34,7 +34,7 @@ const Logo = (props: SVGAttributes<SVGElement>) => {
     </svg>
   )*/
 
-  return <Avatar src={'/identity_redim.ico'} alt={'SOOSMART'} />
+  return <></>
 }
 
 export default Logo

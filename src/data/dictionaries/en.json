@@ -1,6 +1,9 @@
 {
   "navigation": {
     "dashboards": "Dashboards",
+    "dossier": "Cases",
+    "article": "Articles",
+    "cl_pr": "Customers-Project",
     "crm": "CRM",
     "analytics": "Analytics",
     "eCommerce": "eCommerce",

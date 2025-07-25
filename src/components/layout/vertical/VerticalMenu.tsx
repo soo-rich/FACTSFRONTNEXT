@@ -15,7 +15,7 @@ import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Me
 import { Menu, SubMenu, MenuItem, MenuSection } from '@menu/vertical-menu'
 import CustomChip from '@core/components/mui/Chip'
 
-// import { GenerateVerticalMenu } from '@components/GenerateMenu'
+import { GenerateVerticalMenu } from '@components/GenerateMenu'
 
 // Hook Imports
 import useVerticalNav from '@menu/hooks/useVerticalNav'
@@ -28,7 +28,7 @@ import menuItemStyles from '@core/styles/vertical/menuItemStyles'
 import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
 
 // Menu Data Imports
-// import menuData from '@/data/navigation/verticalMenuData'
+import menuData from '@/data/navigation/verticalMenuData'
 
 type RenderExpandIconProps = {
   open?: boolean
@@ -74,7 +74,7 @@ const VerticalMenu = ({ dictionary, scrollMenu }: Props) => {
     >
       {/* Incase you also want to scroll NavHeader to scroll with Vertical Menu, remove NavHeader from above and paste it below this comment */}
       {/* Vertical Menu */}
-      <Menu
+{/*      <Menu
         popoutMenuOffset={{ mainAxis: 23 }}
         menuItemStyles={menuItemStyles(verticalNavOptions, theme)}
         renderExpandIcon={({ open }) => <RenderExpandIcon open={open} transitionDuration={transitionDuration} />}
@@ -386,8 +386,8 @@ const VerticalMenu = ({ dictionary, scrollMenu }: Props) => {
             <MenuItem disabled>{dictionary['navigation'].disabledMenu}</MenuItem>
           </SubMenu>
         </MenuSection>
-      </Menu>
-      {/* <Menu
+      </Menu>*/}
+       <Menu
         popoutMenuOffset={{ mainAxis: 23 }}
         menuItemStyles={menuItemStyles(verticalNavOptions, theme)}
         renderExpandIcon={({ open }) => <RenderExpandIcon open={open} transitionDuration={transitionDuration} />}
@@ -395,7 +395,7 @@ const VerticalMenu = ({ dictionary, scrollMenu }: Props) => {
         menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
       >
         <GenerateVerticalMenu menuData={menuData(dictionary)} />
-      </Menu> */}
+      </Menu>
     </ScrollWrapper>
   )
 }

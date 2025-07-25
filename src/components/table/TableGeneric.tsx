@@ -1,25 +1,27 @@
+'use client'
 // Style Imports
-import type { ReactNode } from 'react'
+import {ComponentType, type ReactNode, useState} from 'react'
 
 import classnames from 'classnames'
 
-import { rankItem } from '@tanstack/match-sorter-utils'
+import type {RankingInfo} from '@tanstack/match-sorter-utils'
+import {rankItem} from '@tanstack/match-sorter-utils'
+import type {ColumnDef, FilterFn, Header} from '@tanstack/react-table'
 import {
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable,
+  VisibilityState
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn, Header } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
-import type { CardProps } from '@mui/material'
-import { Button, Card, CardHeader, MenuItem, TablePagination } from '@mui/material'
+import type {CardProps} from '@mui/material'
+import {Card, CardHeader, TablePagination} from '@mui/material'
 
 import tableStyles from '@core/styles/table.module.css'
 
@@ -30,10 +32,21 @@ import TableManualPaginationComponent from './TableManualPaginationComponent'
 import ErrorView from '../ErrorView'
 import LoadingWithoutModal from '../LoadingWithoutModal'
 
+import Button, {type ButtonProps} from '@mui/material/Button'
+import {styled} from '@mui/material/styles'
+import type {MenuProps} from '@mui/material/Menu'
+import MuiMenu from '@mui/material/Menu'
+import type {MenuItemProps} from '@mui/material/MenuItem'
+import MuiMenuItem from '@mui/material/MenuItem'
+import OpenDialogOnElementClick from "@components/dialogs/OpenDialogOnElementClick";
+import Checkbox from "@mui/material/Checkbox";
+import Typography from "@mui/material/Typography";
+
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -42,7 +55,7 @@ declare module '@tanstack/table-core' {
 type TableProps<T> = {
   tabledata: T[] | undefined
   columns: ColumnDef<T, any>[]
-  count?: number
+  totalElements?: number
   title?: string
   page?: number
   SetPage?: React.Dispatch<React.SetStateAction<number>>
@@ -50,23 +63,36 @@ type TableProps<T> = {
   SetPageSize?: React.Dispatch<React.SetStateAction<number>>
   globalFilter?: string
   setGlobalFilter?: React.Dispatch<React.SetStateAction<string>>
-  onExport?: () => void
-  i18n?: {
-    searchPlaceholder?: string
-    addButton?: string
-    exportButton?: string
-    noData?: string
-  }
-  searchInput?: boolean
   pagination?: boolean
   FilterComponent?: ReactNode
   isLoading?: boolean
   isError?: boolean
+  visibleColumns?: boolean
   renderHeaderCell?: (header: Header<T, unknown>) => React.ReactNode
   displayTableHeaderSession?: boolean
-  cardProps?: CardProps
+  cardProps?: CardProps,
+  buttonadd?: {
+    element: ComponentType<any>
+    elementProps?: any,
+    dialog: ComponentType<any>
+  }
 }
 
+const Menu = styled(MuiMenu)<MenuProps>({
+  '& .MuiMenu-paper': {
+    border: '1px solid var(--mui-palette-divider)'
+  }
+})
+
+// Styled MenuItem component
+const MenuItem = styled(MuiMenuItem)<MenuItemProps>({
+  '&:focus': {
+    backgroundColor: 'var(--mui-palette-primary-main)',
+    '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+      color: 'var(--mui-palette-common-white)'
+    }
+  }
+})
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value)
@@ -80,28 +106,46 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
-const TableGeneric = <T,>({
-  tabledata: table_data,
-  columns,
-  title,
-  page,
-  count,
-  pageSize,
-  SetPage,
-  SetPageSize,
-  onExport,
-  globalFilter,
-  setGlobalFilter,
-  i18n,
-  FilterComponent,
-  isError,
-  isLoading,
-  searchInput = false,
-  pagination = true,
-  renderHeaderCell,
-  displayTableHeaderSession = true,
-  cardProps
-}: TableProps<T>) => {
+const TableGeneric = <T, >({
+                             tabledata: table_data,
+                             columns,
+                             title,
+                             page,
+                             totalElements,
+                             pageSize,
+                             SetPage,
+                             SetPageSize,
+                             globalFilter,
+                             setGlobalFilter,
+                             FilterComponent,
+                             isError,
+                             isLoading,
+                             pagination = true,
+                             renderHeaderCell,
+                             displayTableHeaderSession = true,
+                             cardProps,
+                             visibleColumns,
+                             buttonadd
+                           }: TableProps<T>) => {
+
+  const buttonProps: ButtonProps = {
+    variant: 'contained',
+    children: 'Enregistrer'
+  }
+
+
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+
+  // @ts-ignore
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
   const handlePageChange = (newPage: number) => {
     SetPage?.(newPage)
   }
@@ -118,6 +162,7 @@ const TableGeneric = <T,>({
     },
     state: {
       globalFilter,
+      columnVisibility,
       pagination: {
         pageIndex: page ?? 0,
         pageSize: pageSize ?? 10
@@ -131,8 +176,8 @@ const TableGeneric = <T,>({
     enableRowSelection: true, //enable row selection for all rows
     // enableRowSelection: row => row.original.age > 18, // or enable row selection conditionally per row
     globalFilterFn: fuzzyFilter,
-    manualPagination: !!count, // Active la pagination manuelle si count est fourni
-    pageCount: count ? Math.ceil(count / (pageSize ?? 10)) : -1,
+    manualPagination: !!totalElements, // Active la pagination manuelle si count est fourni
+    pageCount: totalElements ? Math.ceil(totalElements / (pageSize ?? 10)) : -1,
     getCoreRowModel: getCoreRowModel(),
     onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
@@ -146,7 +191,7 @@ const TableGeneric = <T,>({
   return (
     <>
       <Card {...cardProps}>
-        {title && <CardHeader title={title ?? 'Table'} className='pbe-4' />}
+        {title && <CardHeader title={title ?? 'Table'} className='pbe-4'/>}
 
         {displayTableHeaderSession && (
           <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
@@ -164,7 +209,51 @@ const TableGeneric = <T,>({
               </CustomTextField>
             )}
             <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
-              {searchInput && (
+              {FilterComponent}
+              {visibleColumns && (
+                <>
+                  <Button variant='outlined' aria-haspopup='true' onClick={handleClick} aria-controls='customized-menu'>
+                    Columns
+                  </Button>
+                  <Menu
+                    keepMounted
+                    elevation={0}
+                    anchorEl={anchorEl}
+                    id='customized-menu'
+                    onClose={handleClose}
+                    open={Boolean(anchorEl)}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'center'
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center'
+                    }}
+                  >
+
+                    {
+                      table
+                        .getAllColumns()
+                        .filter((col) => typeof col.accessorFn !== "undefined" && col.getCanHide())
+                        .map((col => (
+                          <MenuItem
+                            key={col.id}
+                            onClick={() => col.toggleVisibility(!col.getIsVisible())}
+                            className='flex items-center gap-2'
+                          >
+
+                            <Checkbox checked={col.getIsVisible()}/>
+                            <Typography>{col.columnDef.header as string}</Typography>
+
+                          </MenuItem>
+                        )))
+                    }
+
+                  </Menu>
+                </>
+              )}
+              {globalFilter && (
                 <DebouncedInput
                   value={globalFilter ?? ''}
                   onChange={value => setGlobalFilter && setGlobalFilter(String(value))}
@@ -172,69 +261,78 @@ const TableGeneric = <T,>({
                   className='max-sm:is-full'
                 />
               )}
-              {onExport && (
-                <Button onClick={onExport} startIcon={<i className='tabler-upload' />}>
-                  {i18n?.exportButton || 'Export'}
-                </Button>
-              )}
-              {FilterComponent}
+              {buttonadd && (
+                <OpenDialogOnElementClick
+                  element={buttonadd.element ? buttonadd.element : Button}
+                  elementProps={buttonadd.elementProps ? buttonadd.elementProps : buttonProps}
+                  dialog={buttonadd.dialog}
+                />)}
+
             </div>
           </div>
         )}
         <div className='overflow-x-auto'>
           <table className={tableStyles.table}>
             <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : renderHeaderCell ? (
-                        renderHeaderCell(header)
-                      ) : (
-                        <div
-                          className={classnames({
-                            'flex items-center': header.column.getIsSorted(),
-                            'cursor-pointer select-none': header.column.getCanSort()
-                          })}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: <i className='tabler-chevron-up text-xl' />,
-                            desc: <i className='tabler-chevron-down text-xl' />
-                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                        </div>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : renderHeaderCell ? (
+                      renderHeaderCell(header)
+                    ) : (
+                      <div
+                        className={classnames({
+                          'flex items-center': header.column.getIsSorted(),
+                          'cursor-pointer select-none': header.column.getCanSort()
+                        })}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: <i className='tabler-chevron-up text-xl'/>,
+                          desc: <i className='tabler-chevron-down text-xl'/>
+                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                      </div>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
             </thead>
-            {table.getFilteredRowModel().rows.length === 0 ? (
+            {isLoading ? (<tbody>
+            <tr>
+              <td colSpan={table.getVisibleFlatColumns().length} className='text-center'><LoadingWithoutModal
+                padding='p-4'/></td>
+            </tr>
+            </tbody>) : isError ? (<tbody>
+            <tr>
+              <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                <ErrorView/>
+              </td>
+            </tr>
+            </tbody>) : table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    Aucune Données à afficher
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                  Aucune Données à afficher
+                </td>
+              </tr>
               </tbody>
             ) : (
               <tbody>
-                {table.getRowModel().rows.map(row => {
-                  return (
-                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                      {row.getVisibleCells().map(cell => (
-                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                      ))}
-                    </tr>
-                  )
-                })}
+              {table.getRowModel().rows.map(row => {
+                return (
+                  <tr key={row.id} className={classnames({selected: row.getIsSelected()})}>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                    ))}
+                  </tr>
+                )
+              })}
               </tbody>
             )}
           </table>
-          {isLoading && <LoadingWithoutModal padding='p-4' />}
-
-          {isError && <ErrorView />}
         </div>
         {pagination && (
           <TablePagination
@@ -242,11 +340,11 @@ const TableGeneric = <T,>({
               <TableManualPaginationComponent
                 pageIndex={page ?? 0}
                 pageSize={pageSize ?? 10}
-                rowCount={count ?? 0}
+                rowCount={totalElements ?? 0}
                 currentPage={handlePageChange}
               />
             )}
-            count={count ?? 0}
+            count={totalElements ?? 0}
             rowsPerPage={pageSize ?? 10}
             page={page ?? 1}
             onPageChange={(_, page) => {

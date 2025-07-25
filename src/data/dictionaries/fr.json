@@ -1,6 +1,9 @@
 {
   "navigation": {
     "dashboards": "Tableaux de bord",
+    "dossier": "Dossiers",
+    "article": "Articles",
+    "cl_pr": "Client-Projet",
     "crm": "GRC",
     "analytics": "Analytique",
     "eCommerce": "commerce électronique",
@@ -32,7 +35,7 @@
     "chat": "chatte",
     "calendar": "Calendrier",
     "kanban": "Kanban",
-    "invoice": "Facture d'achat",
+    "invoice": "Factures",
     "preview": "Aperçu",
     "edit": "Éditer",
     "user": "Utilisateur",

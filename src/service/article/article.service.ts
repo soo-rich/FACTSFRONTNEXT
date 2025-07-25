@@ -1,7 +1,7 @@
-import { ParamRequests } from "@/types/pagination/paramrequestion.type";
-import { ArticleType, SaveArticleType } from "@/types/article.type";
-import { CustomresponseType } from "@/types/customresponse.type";
 import instance from "@/service/axios-manager/instance";
+import { ArticleType, SaveArticleType } from "@/types/soosmart/article.type";
+import { CustomresponseType } from "@/types/soosmart/customresponse.type";
+import { ParamRequests } from "@/types/soosmart/pagination/paramrequestion.type";
 
 const url = "article";
 

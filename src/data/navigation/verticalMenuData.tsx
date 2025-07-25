@@ -1,45 +1,72 @@
 // Type Imports
-import type { VerticalMenuDataType } from '@/types/menuTypes'
-import type { getDictionary } from '@/utils/getDictionary'
+import type {VerticalMenuDataType} from '@/types/menuTypes'
+import type {getDictionary} from '@/utils/getDictionary'
 
 const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>): VerticalMenuDataType[] => [
   // This is how you will normally render submenu
   {
-    label: dictionary['navigation'].dashboards,
-    suffix: {
-      label: '5',
-      color: 'error'
-    },
+    label: dictionary['navigation'].dashboard,
+    href: '/dashboard',
     icon: 'tabler-smart-home',
+
+  },
+  {
+    label: dictionary['navigation'].dossier,
+    isSection: true,
     children: [
-      // This is how you will normally render menu item
       {
-        label: dictionary['navigation'].crm,
-        icon: 'tabler-circle',
-        href: '/dashboards/crm'
+        label: dictionary['navigation'].invoice,
+        href: '/dossier',
+        icon: 'tabler-file-description'
       },
-      {
-        label: dictionary['navigation'].analytics,
-        icon: 'tabler-circle',
-        href: '/dashboards/analytics'
-      },
-      {
-        label: dictionary['navigation'].eCommerce,
-        icon: 'tabler-circle',
-        href: '/dashboards/ecommerce'
-      },
-      {
-        label: dictionary['navigation'].academy,
-        icon: 'tabler-circle',
-        href: '/dashboards/academy'
-      },
-      {
-        label: dictionary['navigation'].logistics,
-        icon: 'tabler-circle',
-        href: '/dashboards/logistics'
-      }
     ]
   },
+  {
+    label: dictionary['navigation'].cl_pr,
+    isSection:true,
+    children:[
+      {
+        label: "Projet",
+        href: "/projet",
+        icon: 'tabler-clipboard-list',
+      },
+      {
+        label: "Client",
+        href: "/client",
+        icon: 'tabler-users',
+      },
+    ]
+  },
+  {
+    label: dictionary['navigation'].others,
+    isSection: true,
+    children: [
+      {
+        label: dictionary['navigation'].article,
+        href: '/article',
+        icon: 'tabler-tags'
+      },
+      {
+        label: dictionary['navigation'].user,
+        icon: 'tabler-user',
+        href: '/user',
+
+      },
+      {
+        label: dictionary['navigation'].settings,
+        icon: 'tabler-settings',
+        href: '/profile',
+
+      },
+    ]
+  },
+
+
+
+
+
+  // a supprimer apres
+
   {
     label: dictionary['navigation'].frontPages,
     icon: 'tabler-files',
@@ -527,7 +554,7 @@ const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>)
       {
         label: dictionary['navigation'].formELements,
         icon: 'tabler-checkbox',
-        suffix: <i className='tabler-external-link text-xl' />,
+        suffix: <i className='tabler-external-link text-xl'/>,
         href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs/user-interface/form-elements`,
         target: '_blank'
       },
@@ -535,7 +562,7 @@ const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>)
         label: dictionary['navigation'].muiTables,
         icon: 'tabler-layout-board-split',
         href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs/user-interface/mui-table`,
-        suffix: <i className='tabler-external-link text-xl' />,
+        suffix: <i className='tabler-external-link text-xl'/>,
         target: '_blank'
       }
     ]
@@ -565,34 +592,34 @@ const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>)
         label: dictionary['navigation'].foundation,
         icon: 'tabler-cards',
         href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs/user-interface/foundation`,
-        suffix: <i className='tabler-external-link text-xl' />,
+        suffix: <i className='tabler-external-link text-xl'/>,
         target: '_blank'
       },
       {
         label: dictionary['navigation'].components,
         icon: 'tabler-atom',
         href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs/user-interface/components`,
-        suffix: <i className='tabler-external-link text-xl' />,
+        suffix: <i className='tabler-external-link text-xl'/>,
         target: '_blank'
       },
       {
         label: dictionary['navigation'].menuExamples,
         icon: 'tabler-list-search',
         href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs/menu-examples/overview`,
-        suffix: <i className='tabler-external-link text-xl' />,
+        suffix: <i className='tabler-external-link text-xl'/>,
         target: '_blank'
       },
       {
         label: dictionary['navigation'].raiseSupport,
         icon: 'tabler-lifebuoy',
-        suffix: <i className='tabler-external-link text-xl' />,
+        suffix: <i className='tabler-external-link text-xl'/>,
         target: '_blank',
         href: 'https://pixinvent.ticksy.com'
       },
       {
         label: dictionary['navigation'].documentation,
         icon: 'tabler-book-2',
-        suffix: <i className='tabler-external-link text-xl' />,
+        suffix: <i className='tabler-external-link text-xl'/>,
         target: '_blank',
         href: `${process.env.NEXT_PUBLIC_DOCS_URL}`
       },
@@ -613,7 +640,7 @@ const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>)
             icon: 'tabler-circle',
             href: 'https://pixinvent.com',
             target: '_blank',
-            suffix: <i className='tabler-external-link text-xl' />
+            suffix: <i className='tabler-external-link text-xl'/>
           },
           {
             label: dictionary['navigation'].menuLevels,
