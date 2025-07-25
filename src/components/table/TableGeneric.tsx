@@ -72,7 +72,7 @@ type TableProps<T> = {
   displayTableHeaderSession?: boolean
   cardProps?: CardProps,
   buttonadd?: {
-    element: ComponentType<any>
+    element?: ComponentType<any>
     elementProps?: any,
     dialog: ComponentType<any>
   }
@@ -130,6 +130,7 @@ const TableGeneric = <T, >({
                            }: TableProps<T>) => {
 
   const buttonProps: ButtonProps = {
+    startIcon: <i className='tabler-plus'/>,
     variant: 'contained',
     children: 'Enregistrer'
   }
@@ -284,6 +285,7 @@ const TableGeneric = <T, >({
                   elementProps={buttonadd.elementProps ? buttonadd.elementProps : buttonProps}
                   dialog={buttonadd.dialog}
                 />)}
+
             </div>
           </div>
         )}

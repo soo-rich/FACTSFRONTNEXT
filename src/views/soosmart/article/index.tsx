@@ -8,6 +8,8 @@ import {ArticleType} from "@/types/soosmart/article.type";
 import UtiliMetod from "@/utils/utilsmethod";
 import TableGeneric from "@components/table/TableGeneric";
 import CustomIconButton from "@core/components/mui/IconButton";
+import AddEditArticle from "@views/soosmart/article/add-edit-article";
+import DefaultDialog from "@components/dialogs/unique-modal/DefaultDialog";
 
 const columnHelper = createColumnHelper<ArticleType>();
 
@@ -93,6 +95,9 @@ const ArticleIndex = () => {
         globalFilter={filter}
         setGlobalFilter={setFilter}
         totalElements={data?.totalElements}
+        buttonadd={{
+          dialog:DefaultDialog
+        }}
       />
     </>
   );
