@@ -1,7 +1,7 @@
 import instance from "@/service/axios-manager/instance";
-import { CustomresponseType } from "@/types/customresponse.type";
-import { ParamRequests } from "@/types/pagination/paramrequestion.type";
-import { UtilisateurDto, UtilisateurUpdate, UtilsateurRegister } from '@/types/utilisateur.type';
+import {UtilisateurDto, UtilisateurUpdate, UtilsateurRegister} from "@/types/soosmart/utilisateur.type";
+import {ParamRequests} from "@/types/soosmart/pagination/paramrequestion.type";
+import {CustomresponseType} from "@/types/soosmart/customresponse.type";
 
 const url = `user`;
 
