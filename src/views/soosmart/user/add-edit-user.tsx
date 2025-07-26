@@ -32,7 +32,7 @@ const AddEditUser = ({data: user, onSuccess, onCancel}: AddEditFormType<Utilisat
     defaultValues: {
       email: user?.email ?? '',
       nom: user?.nom ?? '',
-      numero: String(user?.telephone)??'',
+      numero: String(user?.telephone??0)??'',
       username: user?.username ?? '',
       prenom: user?.prenom ?? '',
       password: 'user1234',
