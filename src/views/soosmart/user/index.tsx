@@ -164,7 +164,7 @@ const UserIndex = () => {
               options={[
                 {
                   text: 'Details',
-                  icon: 'tabler-download',
+                  icon: 'tabler-eye',
                   menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
                 },
                 {
