@@ -3,10 +3,17 @@ import {AddEditModalType} from "@/types/soosmart/add-edit-modal.type";
 import DialogCloseButton from "@components/dialogs/DialogCloseButton";
 import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
+import DialogContent from "@mui/material/DialogContent";
 
-const DefaultDialog = ({open, setOpen, title, subtitle, children}: AddEditModalType) => {
+const DefaultDialog = ({open, setOpen, title, subtitle, children, OnSuccess}: AddEditModalType) => {
   const handleClose = () => {
     setOpen(false)
+  }
+
+  const handleSuccess = () => {
+    OnSuccess?.();
+    handleClose()
+
   }
   return (
     <Dialog
@@ -27,8 +34,9 @@ const DefaultDialog = ({open, setOpen, title, subtitle, children}: AddEditModalT
           {subtitle}
         </Typography>
       </DialogTitle>
-
+      <DialogContent className="sm:pbs-0 sm:pbe-6 sm:pli-16">
       {children}
+      </DialogContent>
     </Dialog>
   );
 }

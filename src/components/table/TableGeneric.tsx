@@ -1,6 +1,6 @@
 'use client'
 // Style Imports
-import {ComponentType, type ReactNode, useState} from 'react'
+import {type ReactNode, useState} from 'react'
 
 import classnames from 'classnames'
 
@@ -38,7 +38,6 @@ import type {MenuProps} from '@mui/material/Menu'
 import MuiMenu from '@mui/material/Menu'
 import type {MenuItemProps} from '@mui/material/MenuItem'
 import MuiMenuItem from '@mui/material/MenuItem'
-import OpenDialogOnElementClick from "@components/dialogs/OpenDialogOnElementClick";
 import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";
 
@@ -72,9 +71,9 @@ type TableProps<T> = {
   displayTableHeaderSession?: boolean
   cardProps?: CardProps,
   buttonadd?: {
-    element?: ComponentType<any>
     elementProps?: any,
-    dialog: ComponentType<any>
+    text?: string
+    action?: () => void
   }
 }
 
@@ -128,6 +127,7 @@ const TableGeneric = <T, >({
                              visibleColumns,
                              buttonadd
                            }: TableProps<T>) => {
+
 
   const buttonProps: ButtonProps = {
     startIcon: <i className='tabler-plus'/>,
@@ -279,12 +279,19 @@ const TableGeneric = <T, >({
                   className='max-sm:is-full'
                 />
               )}
-              {buttonadd && (
-                <OpenDialogOnElementClick
-                  element={buttonadd.element ? buttonadd.element : Button}
-                  elementProps={buttonadd.elementProps ? buttonadd.elementProps : buttonProps}
-                  dialog={buttonadd.dialog}
-                />)}
+
+
+              {
+                buttonadd ? buttonadd.elementProps ? (
+                      <Button {...buttonadd.elementProps} onClick={buttonadd.action}>{
+                        buttonadd.text ?? buttonProps.children
+                      }</Button>
+                    ) :
+                    <Button {...buttonProps} onClick={buttonadd.action}>
+                      {buttonProps.children}
+                    </Button>
+                  : null
+              }
 
             </div>
           </div>

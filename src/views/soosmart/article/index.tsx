@@ -19,6 +19,10 @@ const ArticleIndex = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [filter, setFilter] = useState('');
+  // États pour le modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState<ArticleType | undefined>(undefined);
+
 
   const {data, isLoading, isError} = useQuery({
     queryKey: [ArticleService.ARTICLE_KEY, pageIndex, pageSize],
@@ -63,6 +67,16 @@ const ArticleIndex = () => {
           <div className="flex gap-2">
 
             <CustomIconButton
+              onClick={() => {
+                setSelectedArticle(row.original);
+                setIsModalOpen(true);
+              }}
+              className="text-yellow-600 hover:text-yellow-800"
+            >
+              <i className="tabler-alert-square-rounded-filled"/>
+            </CustomIconButton>
+
+            <CustomIconButton
               onClick={() => UtiliMetod.SuppressionConfirmDialog({
                 data: row.original.libelle,
                 confirmAction: () => DeleteMutation.mutate(row.original.id),
@@ -96,9 +110,21 @@ const ArticleIndex = () => {
         setGlobalFilter={setFilter}
         totalElements={data?.totalElements}
         buttonadd={{
-          dialog:DefaultDialog
+          action: () => setIsModalOpen(true),
         }}
       />
+
+      <DefaultDialog open={isModalOpen} setOpen={setIsModalOpen}
+                     title={selectedArticle ? `Mettre a jour ${selectedArticle.libelle}` : 'Ajouter un article'}
+                     children={<AddEditArticle data={selectedArticle}
+                                               onSuccess={() => {
+                                                 setSelectedArticle(undefined)
+                                                 setIsModalOpen(false)
+                                               }}
+                                               onCancel={() => {
+                                                 setSelectedArticle(undefined)
+                                                 setIsModalOpen(false)
+                                               }}/>}/>
     </>
   );
 }

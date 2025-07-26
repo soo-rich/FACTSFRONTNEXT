@@ -1,4 +1,4 @@
-import { z } from "zod";
+import {InferInput, object, minLength, string, number, pipe} from "valibot";
 
 export type ArticleType = {
   id: string;
@@ -6,9 +6,8 @@ export type ArticleType = {
   prix_unitaire: number;
 };
 
-export const articleSchema = z.object({
-  libelle: z.string().min(1, "le libelle est requis"),
-  prix_unitaire: z.number(),
+export const articleSchema = object({
+  libelle: pipe(string(),minLength(1, "le libelle est requis")),
+  prix_unitaire: number(),
 });
-
-export type SaveArticleType = z.infer<typeof articleSchema>;
+export type SaveArticleType = InferInput<typeof articleSchema>;
