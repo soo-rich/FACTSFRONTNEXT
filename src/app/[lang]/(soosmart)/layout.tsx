@@ -26,6 +26,7 @@ import AuthGuard from '@/hocs/AuthGuard'
 import {getDictionary} from '@/utils/getDictionary'
 import {getMode, getSystemMode} from '@core/utils/serverHelpers'
 import ProviderTokenCheker from '@/components/token/TokenChecker'
+import PathGenerate from "@components/pathbreadcrumbs/PathGenerate";
 
 const Layout = async (props: ChildrenType & { params: Promise<{ lang: Locale }> }) => {
   const params = await props.params
@@ -50,12 +51,13 @@ const Layout = async (props: ChildrenType & { params: Promise<{ lang: Locale }> 
                 navbar={<Navbar/>}
                 footer={<VerticalFooter/>}
               >
+                <PathGenerate dictionary={dictionary}/>
                 {children}
               </VerticalLayout>
             }
             horizontalLayout={
               <HorizontalLayout header={<Header dictionary={dictionary}/>} footer={<HorizontalFooter/>}>
-                {children}
+                <PathGenerate dictionary={dictionary}/>  {children}
               </HorizontalLayout>
             }
           />
