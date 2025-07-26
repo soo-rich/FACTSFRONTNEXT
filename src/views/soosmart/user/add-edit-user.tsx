@@ -32,7 +32,7 @@ const AddEditUser = ({data: user, onSuccess, onCancel}: AddEditFormType<Utilisat
     defaultValues: {
       email: user?.email ?? '',
       nom: user?.nom ?? '',
-      numero: String(user?.telephone??0)??'',
+      numero: String(user?.telephone ?? 0) ?? '',
       username: user?.username ?? '',
       prenom: user?.prenom ?? '',
       password: 'user1234',
@@ -173,12 +173,12 @@ const AddEditUser = ({data: user, onSuccess, onCancel}: AddEditFormType<Utilisat
           )
         } name={'numero'} control={control}/>
 
-        <Grid2  size={12} direction={'row'} container spacing={2} sx={{
+        <Grid2 size={12} direction={'row'} container spacing={2} sx={{
           justifyContent: 'space-evenly',
           alignItems: 'center'
         }}>
 
-          <Grid2 hidden={!!user} size={6} >
+          <Grid2 hidden={!!user} size={6}>
 
             <Controller render={
               ({field}) => (

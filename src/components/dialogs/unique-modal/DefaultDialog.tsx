@@ -5,7 +5,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
 import DialogContent from "@mui/material/DialogContent";
 
-const DefaultDialog = ({open, setOpen, title, subtitle, children, OnSuccess}: AddEditModalType) => {
+const DefaultDialog = ({open, setOpen, title, subtitle, children, OnSuccess , dialogMaxWidth}: AddEditModalType) => {
   const handleClose = () => {
     setOpen(false)
   }
@@ -20,7 +20,7 @@ const DefaultDialog = ({open, setOpen, title, subtitle, children, OnSuccess}: Ad
       fullWidth
       open={open}
       onClose={handleClose}
-      maxWidth='md'
+      maxWidth={dialogMaxWidth??'sm'}
       scroll='body'
       closeAfterTransition={false}
       sx={{'& .MuiDialog-paper': {overflow: 'visible'}}}

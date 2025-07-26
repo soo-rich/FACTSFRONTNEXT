@@ -13,6 +13,7 @@ import CustomIconButton from "@core/components/mui/IconButton";
 import UtiliMetod from "@/utils/utilsmethod";
 import OptionMenu from "@core/components/option-menu";
 import DefaultDialog from "@/components/dialogs/unique-modal/DefaultDialog";
+import AddEditClient from "@views/soosmart/client/add-edit-client";
 
 const columnHelper = createColumnHelper<ClientType>();
 
@@ -134,7 +135,7 @@ const ClientIndex = () => {
               },
               {
                 text: row.original.potentiel ? 'Nom' : 'Oui',
-                icon: row.original.potentiel ? 'tabler-check' : 'tabler-lock',
+                icon: row.original.potentiel ? 'tabler-x' : 'tabler-check',
                 menuItemProps: {
                   className: 'flex items-center gap-2 text-textSecondary',
                   onClick: () => ChangePotentielMutation.mutate(row.original.id)
@@ -172,7 +173,13 @@ const ClientIndex = () => {
         setOpen={setIsModalOpen}
         title={clientSelect ? ` Mettre a jour ${clientSelect?.nom}` : 'Ajouter un Client'}
       >
-        <></>
+        <AddEditClient data={clientSelect} onSuccess={() => {
+          setIsModalOpen(false);
+          setClientSelect(undefined);
+        }} onCancel={() => {
+          setIsModalOpen(false);
+          setClientSelect(undefined);
+        }}/>
       </DefaultDialog>
     </>
   )

@@ -1,6 +1,6 @@
 import {ChildrenType} from "@/types/soosmart/types";
 import { ReactNode } from "react";
-import {ArticleType} from "@/types/soosmart/article.type";
+import {Breakpoint} from "@mui/material/styles";
 
 export type AddEditModalType = ChildrenType & {
   open: boolean
@@ -8,6 +8,7 @@ export type AddEditModalType = ChildrenType & {
   title?: ReactNode
   subtitle?: ReactNode
   OnSuccess?: () => void
+  dialogMaxWidth?: false | Breakpoint | undefined
 }
 
 
