@@ -17,13 +17,25 @@ const PathGenerate = ({dictionary}: ComponentDictonaryParamsType) => {
     <Breadcrumbs>
       {table?.map((item, index) => {
         if (item === '') return null; // Skip empty segments
-        if (item === 'fr' || item === 'en') {
-          return (
-            <Typography component={Link} underline={'hover'} color={'primary'} key={index} href={`/`}>
-              {dictionary['navigation'].dashboard}
-            </Typography>
+        if (item === 'dashboard') return null;
 
-          )
+
+        if (item === 'fr' || item === 'en' || item === 'dashboard') {
+          if (table[2] === 'dashboard') {
+            return (
+              <Typography key={index}>
+                {dictionary['navigation'].dashboard}
+              </Typography>
+
+            )
+          } else {
+            return (
+              <Typography component={Link} underline={'hover'} color={'primary'} key={index} href={`/`}>
+                {dictionary['navigation'].dashboard}
+              </Typography>
+
+            )
+          }
         }
         if (index === table.length - 1) {
           return (
@@ -33,7 +45,7 @@ const PathGenerate = ({dictionary}: ComponentDictonaryParamsType) => {
           );
         }
         return (
-          <Typography key={index}>
+          <Typography key={index} component={Link} underline={'hover'} color={'secondary'} href={`/${item}`}>
             {item.charAt(0).toUpperCase() + item.slice(1)} {/* Capitalize first letter */}
           </Typography>
         );

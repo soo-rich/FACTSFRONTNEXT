@@ -1,9 +1,11 @@
+'use client'
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {useMemo, useState} from "react";
 import TableGeneric from "@components/table/TableGeneric";
 import {createColumnHelper} from "@tanstack/react-table";
 import {UtilisateurDto} from "@/types/soosmart/utilisateur.type";
 import {UserService} from "@/service/user/user.service";
+import DefaultDialog from "@components/dialogs/unique-modal/DefaultDialog";
 
 const columnHelper = createColumnHelper<UtilisateurDto>();
 
@@ -14,6 +16,7 @@ const UserIndex = () => {
   const [filter, setFilter] = useState('');
   // États pour le modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userselect, setUserSelect] = useState<UtilisateurDto | undefined>(undefined)
 
 
   const {data, isLoading, isError} = useQuery({
@@ -55,7 +58,7 @@ const UserIndex = () => {
   );
 
 
-  return <TableGeneric
+  return <><TableGeneric
     tabledata={data?.content}
     columns={columns}
     isLoading={isLoading}
@@ -71,6 +74,16 @@ const UserIndex = () => {
       action: () => setIsModalOpen(true)
     }}
   />
+
+    <DefaultDialog
+      open={isModalOpen}
+      setOpen={setIsModalOpen}
+      title={userselect ? ` Mettre a jour ${userselect.username}` : 'Ajouter un Utilisateur'}
+    >
+      <></>
+    </DefaultDialog>
+
+  </>
 }
 
 
