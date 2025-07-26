@@ -25,7 +25,6 @@ const AddEditArticle = ({data: article, onSuccess, onCancel}: AddEditFormType<Ar
         libelle: article?.libelle ?? '',
         prix_unitaire: article?.prix_unitaire ?? 0,
       },
-      mode: 'onChange',
     }
   )
 

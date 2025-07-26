@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { object, string, pipe, minLength, maxLength, email, regex, custom, InferInput } from 'valibot';
 
 export type UtilisateurDto = {
   id: string;
@@ -12,57 +12,49 @@ export type UtilisateurDto = {
   actif: boolean;
 };
 
-export const userCreateSchema = z.object({
-  nom: z.string().min(1, { message: "Le nom est requis" }),
-  prenom: z.string().min(1, { message: "Le prénom est requis" }),
-  email: z
-    .string()
-    .min(1, { message: "L'email est requis" })
-    .email({ message: "Email invalide" }),
-  numero: z
-    .string()
-    .min(1, { message: "Le numéro est requis" })
-    .regex(/^[0-9]*$/, {
-      message: "Le numéro doit contenir uniquement des chiffres",
-    }),
-  username: z
-    .string()
-    .min(4, {
-      message: "Le nom d'utilisateur doit contenir au moins 4 caractères",
-    })
-    .max(9, {
-      message: "Le nom d'utilisateur doit contenir au maximum 9 caractères",
-    }),
-  password: z.string().min(1, { message: "Le mot de passe est requis" }),
+export const userCreateSchema = object({
+  nom: pipe(string(), minLength(1, "Le nom est requis")),
+  prenom: pipe(string(), minLength(1, "Le prénom est requis")),
+  email: pipe(
+    string(),
+    minLength(1, "L'email est requis"),
+    email("Email invalide")
+  ),
+  numero: pipe(
+    string(),
+    minLength(1, "Le numéro est requis"),
+    regex(/^[0-9]*$/, "Le numéro doit contenir uniquement des chiffres")
+  ),
+  username: pipe(
+    string(),
+    minLength(4, "Le nom d'utilisateur doit contenir au moins 4 caractères"),
+    maxLength(9, "Le nom d'utilisateur doit contenir au maximum 9 caractères")
+  ),
+  password: pipe(string(), minLength(1, "Le mot de passe est requis")),
 });
 
-export const userUpdateSchema = z.object({
-  id: z.string().min(1, { message: "L'id est requis" }),
-  nom: z.string().min(1, { message: "Le nom est requis" }),
-  prenom: z.string().min(1, { message: "Le prénom est requis" }),
-  email: z.string().min(1, { message: "L'email est requis" }),
-  numero: z.string().min(1, { message: "Le numéro est requis" }),
+export const userUpdateSchema = object({
+  id: pipe(string(), minLength(1, "L'id est requis")),
+  nom: pipe(string(), minLength(1, "Le nom est requis")),
+  prenom: pipe(string(), minLength(1, "Le prénom est requis")),
+  email: pipe(string(), minLength(1, "L'email est requis")),
+  numero: pipe(string(), minLength(1, "Le numéro est requis")),
 });
 
-export const changePasswordSchema = z
-  .object({
-    password: z
-      .string()
-      .min(1, { message: "Le mot de passe actuel est requis" }),
-    newpassword: z
-      .string()
-      .min(1, { message: "Le nouveau mot de passe est requis" }),
-    confirmpassword: z
-      .string()
-      .min(1, { message: "La confirmation du mot de passe est requise" }),
-  })
-  .refine((data) => data.newpassword === data.confirmpassword, {
-    message: "Les mots de passe ne correspondent pas",
-    path: ["confirmpassword"],
-  });
+export const changePasswordSchema = pipe(
+  object({
+    password: pipe(string(), minLength(1, "Le mot de passe actuel est requis")),
+    newpassword: pipe(string(), minLength(1, "Le nouveau mot de passe est requis")),
+    confirmpassword: pipe(string(), minLength(1, "La confirmation du mot de passe est requise")),
+  }),
+  custom((data) => {
+    return (data as any).newpassword === (data as any).confirmpassword;
 
-export type UtilisateurUpdate = z.infer<typeof userUpdateSchema>;
+  }, "Les mots de passe ne correspondent pas")
+);
 
-export type UtilsateurRegister = z.infer<typeof userCreateSchema>;
+export type UtilisateurUpdate = InferInput<typeof userUpdateSchema>;
 
-export type ChangePassword = z.infer<typeof changePasswordSchema>;
+export type UtilsateurRegister = InferInput<typeof userCreateSchema>;
+
+export type ChangePassword = InferInput<typeof changePasswordSchema>;
