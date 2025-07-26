@@ -1,8 +1,8 @@
-import type { ClientSave, ClientType } from "@/types/client.type";
-import type { CustomresponseType } from "@/types/customresponse.type";
 
-import { ParamRequests } from "@/types/pagination/paramrequestion.type";
 import instance from "@/service/axios-manager/instance";
+import {ParamRequests} from "@/types/soosmart/pagination/paramrequestion.type";
+import {CustomresponseType} from "@/types/soosmart/customresponse.type";
+import {ClientSave, ClientType} from "@/types/soosmart/client.type";
 
 const api = "client";
 
