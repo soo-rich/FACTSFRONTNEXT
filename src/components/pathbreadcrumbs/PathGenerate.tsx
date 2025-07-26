@@ -1,3 +1,4 @@
+'use client';
 import {useLocation} from "react-use";
 import {Grid2} from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -12,24 +13,27 @@ const PathGenerate = ({dictionary}: ComponentDictonaryParamsType) => {
 
   const table = pathname?.split('/');
 
-  return <Grid2 size={12}>
+  return <Grid2 size={12} className={'mbe-4'}>
     <Breadcrumbs>
       {table?.map((item, index) => {
         if (item === '') return null; // Skip empty segments
         if (item === 'fr' || item === 'en') {
-          return (<Link underline="hover" color="inherit" key={index} href={`/${item}`}>
-            {dictionary['navigation'].dashboard}
-          </Link>)
+          return (
+            <Typography component={Link} underline={'hover'} color={'primary'} key={index} href={`/`}>
+              {dictionary['navigation'].dashboard}
+            </Typography>
+
+          )
         }
         if (index === table.length - 1) {
           return (
-            <Typography key={index} color="text.primary">
+            <Typography key={index}>
               {item}
             </Typography>
           );
         }
         return (
-          <Typography key={index} color="text.primary">
+          <Typography key={index}>
             {item.charAt(0).toUpperCase() + item.slice(1)} {/* Capitalize first letter */}
           </Typography>
         );
