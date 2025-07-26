@@ -173,12 +173,12 @@ const AddEditUser = ({data: user, onSuccess, onCancel}: AddEditFormType<Utilisat
           )
         } name={'numero'} control={control}/>
 
-        <Grid2 size={12} direction={'row'} container spacing={2} sx={{
+        <Grid2 hidden={!!user} size={12} direction={'row'} container spacing={2} sx={{
           justifyContent: 'space-evenly',
           alignItems: 'center'
         }}>
 
-          <Grid2 size={6}>
+          <Grid2 size={6} >
 
             <Controller render={
               ({field}) => (
