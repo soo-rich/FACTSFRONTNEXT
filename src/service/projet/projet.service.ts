@@ -1,7 +1,8 @@
-import { CustomresponseType } from "@/types/customresponse.type";
-import { ProjetType, SaveProjet, UpdateProjet } from "@/types/projet.type";
 import instance from "@/service/axios-manager/instance";
-import { ParamRequests } from "@/types/pagination/paramrequestion.type";
+import {ProjetType, SaveProjet, UpdateProjet} from "@/types/soosmart/projet.type";
+import {ParamRequests} from "@/types/soosmart/pagination/paramrequestion.type";
+import {CustomresponseType} from "@/types/soosmart/customresponse.type";
+
 
 const url = `projet`;
 
@@ -15,7 +16,7 @@ export class ProjetService {
   static async getAllProjet(params?: ParamRequests) {
     return (
       await instance.get<CustomresponseType<ProjetType>>(url, {
-        params: params,
+        params,
       })
     ).data;
   }

@@ -16,10 +16,12 @@ export class ClientService {
       })
     ).data;
   }
-  static async getClientsByNom(params?: ParamRequests) {
+  static async getClientsByNom(search?: string) {
     return (
       await instance.get<ClientType[]>(`${api}/search`, {
-        params: params,
+        params:{
+          search: search ?? "",
+        }
       })
     ).data;
   }

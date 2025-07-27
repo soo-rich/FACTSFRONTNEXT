@@ -45,7 +45,16 @@ const AddEditUser = ({data: user, onSuccess, onCancel}: AddEditFormType<Utilisat
     },
     onSuccess: () => {
       toast.success('Ajout OK');
-      reset();
+      reset(
+        {
+          email: '',
+          nom: '',
+          prenom: '',
+          password: '',
+          username: '',
+          numero: ''
+        }
+      );
       // Invalider le cache pour rafraîchir la liste
       queryClient.invalidateQueries({
         queryKey: [UserService.USER_KEY],

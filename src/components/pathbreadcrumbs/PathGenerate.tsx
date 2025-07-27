@@ -40,7 +40,7 @@ const PathGenerate = ({dictionary}: ComponentDictonaryParamsType) => {
         if (index === table.length - 1) {
           return (
             <Typography key={index}>
-              {item}
+              {item.charAt(0).toUpperCase() + item.slice(1)}
             </Typography>
           );
         }
