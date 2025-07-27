@@ -12,6 +12,7 @@ import CustomIconButton from "@core/components/mui/IconButton";
 import OptionMenu from "@core/components/option-menu";
 import DefaultDialog from "@components/dialogs/unique-modal/DefaultDialog";
 import AddEditProjet from "@views/soosmart/projet/add-edit-projet";
+import Chip from "@mui/material/Chip";
 
 const ProjetIndex = () => {
 
@@ -20,7 +21,7 @@ const ProjetIndex = () => {
   const [pageSize, setPageSize] = useState(10);
   const [filter, setFilter] = useState('');
   // États pour le modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [projetSelect, setProjetSelect] = useState<ProjetType | undefined>(undefined);
 
   const columnHelper = createColumnHelper<ProjetType>();
@@ -69,6 +70,10 @@ const ProjetIndex = () => {
     columnHelper.accessor('createdat', {
       header: 'Créé le',
       cell: ({row}) => (<Typography>{UtiliMetod.formatDate(row.original.createdat)}</Typography>),
+    }),
+    columnHelper.accessor('offre', {
+      header: 'Offre',
+      cell: ({row}) => (<Chip  color={row.original.offre?'primary': 'secondary'} label={row.original.offre?'Oui': 'Nom'}/>),
     }),
     columnHelper.accessor('update_at', {
       header: 'Mis à jour le',

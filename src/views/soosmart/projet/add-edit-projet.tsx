@@ -19,7 +19,7 @@ import CustomAutocomplete from "@core/components/mui/Autocomplete";
 const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<ProjetType>) => {
 
   const queryClient = useQueryClient();
-  const [clientName, setClientName] = useState<string | null>(null);
+  const [clientName, setClientName] = useState<string>('');
 
   const {
     control,
@@ -39,7 +39,6 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
   const {data, isLoading, isError} = useQuery({
     queryKey: querykey,
     queryFn: async () => {
-      if (!clientName) return [];
       return await ClientService.getClientsByNom(
         clientName,
       );
@@ -107,12 +106,11 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
 
   const onSubmit = (data: SaveProjet) => {
     if (projet) {
-      delete data.client_id
       UpdateMutation.mutate({
         ...data,
-        id: projet.id
       });
     } else {
+      console.log(data)
       AddMutation.mutate(data);
     }
   }
@@ -144,7 +142,7 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
                   fullWidth
                   label={'Nom'}
                   error={!!errors.projet_type}
-                  {...(errors.nom && {
+                  {...(errors.projet_type && {
                     error: true,
                     helperText: errors?.projet_type?.message
                   })}
@@ -153,7 +151,7 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
             } name={'projet_type'} control={control}/>
           </Grid2>
 
-          {projet ? null : (<Grid2 size={2} container sx={{
+          <Grid2 size={2} container sx={{
             alignItems: 'flex-end',
             justifyContent: 'center'
           }}>
@@ -165,17 +163,21 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
                 </div>
               )
             } name={'offre'} control={control}/>
-          </Grid2>)}
+          </Grid2>
         </Grid2>
         <Controller render={
           ({field}) => (
             <CustomAutocomplete
-              {...field}
               options={data || []}
               hidden={!!projet}
               fullWidth
-              onChange={event => {
-                console.log(event)
+              onChange={(event, newvalue) => {
+                field.onChange(event);
+                if (newvalue) {
+                  field.onChange(newvalue.id);
+                } else {
+                  field.onChange('');
+                }
               }}
               getOptionKey={option => option.id}
               getOptionLabel={option => {
@@ -190,7 +192,6 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
                     onChange={event => {
                       const value = event.target.value;
                       setClientName(value);
-                      console.log(value);
                     }}
                     error={!!errors.client_id}
                     {...(errors.client_id && {
@@ -203,20 +204,30 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
             />
           )
         } name={'client_id'} control={control}/>
-        <Controller render={
-          ({field}) => (
-            <TextareaAutosize
-              {...field}
-              fullWidth
-              label={'Client'}
-              error={!!errors.description}
-              {...(errors.description && {
-                error: true,
-                helperText: errors?.description?.message
-              })}
-            />
-          )
-        } name={'description'} control={control}/>
+        <Grid2 size={12} container
+               direction={'column'}
+               sx={{
+                 justifyContent: "flex-start",
+                 alignItems: "flex-start",
+               }}>
+          <Typography>Description</Typography>
+          <Controller render={
+            ({field}) => (<TextareaAutosize
+                {...field}
+                style={{height: '20%'}}
+                className={'border-2 border-gray-400 rounded-md p-2 w-full focus:outline-none focus:border-primary h-32'}
+                placeholder={'Description du projet'}
+                error={!!errors.description}
+                {...(errors.description && {
+                  error: true,
+                  helperText: errors?.description?.message
+                })}
+              />
+            )
+          } name={'description'} control={control}/>
+
+        </Grid2>
+
 
       </Grid2>
       <Grid2>
