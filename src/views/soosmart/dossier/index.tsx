@@ -1,39 +1,40 @@
-'use client';
+'use client'
 
-import type {SyntheticEvent} from 'react'
-import {ReactNode, useState} from "react";
+import type { SyntheticEvent, ReactElement } from 'react'
+import { useState } from 'react'
 
-// MUI Imports
 import Tab from '@mui/material/Tab'
 import TabPanel from '@mui/lab/TabPanel'
 import TabContext from '@mui/lab/TabContext'
 import Typography from '@mui/material/Typography'
 
 // Component Imports
+
 import CustomTabList from '@core/components/mui/TabList'
+import ProformaList from '@views/soosmart/dossier/proforma/proforma-list'
+import BordereauList from "@views/soosmart/dossier/bordereau/bordereau-list";
 
-const dossierDate: { id: string, label: string, icon: ReactNode, position?: "top" | "bottom" | "start" | "end" }[] = [
-  {
-    id: 'proforma',
-    label: 'Proforma',
-    icon: <i className={'tabler-file'} ></i>
-  },
-  {
-    id: 'bordereau',
-    label: 'Bordereau',
-    icon: <i className={'tabler-file'} ></i>
-  },
-  {
-    id: 'facture',
-    label: 'Facture',
-    icon: <i className={'tabler-file'}></i>
-  }
-]
-
+const dossierDate: { id: string; label: string; icon: ReactElement; position?: 'top' | 'bottom' | 'start' | 'end' }[] =
+  [
+    {
+      id: 'proforma',
+      label: 'Proforma',
+      icon: <i className={'tabler-file'}></i>
+    },
+    {
+      id: 'bordereau',
+      label: 'Bordereau',
+      icon: <i className={'tabler-file'}></i>
+    },
+    {
+      id: 'facture',
+      label: 'Facture',
+      icon: <i className={'tabler-file'}></i>
+    }
+  ]
 
 const DossierIndex = () => {
-
-// States
+  // States
   const [value, setValue] = useState<string>('proforma')
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
@@ -43,30 +44,21 @@ const DossierIndex = () => {
   return (
     <TabContext value={value}>
       <CustomTabList pill='true' onChange={handleChange}>
-
-        {
-          dossierDate.map(item=>(
-            <Tab
-              key={item.id}
-              value={item.id}
-              label={item.label}
-              icon={item.icon}
-              iconPosition={item.position??'end'}
-            />
-          ))
-        }
+        {dossierDate.map(item => (
+          <Tab
+            key={item.id}
+            value={item.id}
+            label={item.label}
+            icon={item.icon}
+            iconPosition={item.position ?? 'end'}
+          />
+        ))}
       </CustomTabList>
       <TabPanel value='proforma'>
-        <Typography>
-          Cake apple pie chupa chups biscuit liquorice tootsie roll liquorice sugar plum. Cotton candy wafer wafer jelly
-          cake caramels brownie gummies.
-        </Typography>
+        <ProformaList />
       </TabPanel>
       <TabPanel value='bordereau'>
-        <Typography>
-          Chocolate bar carrot cake candy canes sesame snaps. Cupcake pie gummi bears jujubes candy canes. Chupa chups
-          sesame snaps halvah.
-        </Typography>
+       <BordereauList/>
       </TabPanel>
       <TabPanel value='facture'>
         <Typography>
@@ -75,7 +67,7 @@ const DossierIndex = () => {
         </Typography>
       </TabPanel>
     </TabContext>
-  );
+  )
 }
 
-export default DossierIndex;
+export default DossierIndex

@@ -156,7 +156,7 @@ const UserIndex = () => {
               })}
               className='cursor-pointer text-red-600 hover:text-red-800'
             >
-              <i className='tabler-trash-filled'/>
+              <i className='tabler-trash'/>
             </CustomIconButton>
             <OptionMenu
               iconButtonProps={{size: 'medium'}}
