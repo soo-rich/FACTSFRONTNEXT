@@ -11,11 +11,9 @@ import {createColumnHelper} from '@tanstack/react-table'
 import {toast} from 'react-toastify'
 
 // MUI Imports
-
 import UtiliMetod from '@/utils/utilsmethod'
 import CustomIconButton from '@core/components/mui/IconButton'
 import OptionMenu from '@core/components/option-menu'
-// import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
 import TableGeneric from '@/components/table/TableGeneric'
 import {BorderauService} from '@/service/dossier/borderau.service'
 import {ProformaService} from '@/service/dossier/proforma.service'
@@ -85,7 +83,7 @@ const ProformaList = () => {
       toast.success('Proforma adoptée avec succès')
     },
     onError: (error) => {
-      toast.error((error as any).reponse.data.message||"Erreur lors de l'adoption de la proforma")
+      toast.error((error as any).reponse.data.message || "Erreur lors de l'adoption de la proforma")
       console.error("Erreur lors de l'adoption de la proforma")
     }
   })
