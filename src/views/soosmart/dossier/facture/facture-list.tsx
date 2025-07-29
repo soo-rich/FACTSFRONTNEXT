@@ -12,39 +12,27 @@ import {toast} from 'react-toastify'
 
 // MUI Imports
 import UtiliMetod from '@/utils/utilsmethod'
-import CustomIconButton from '@core/components/mui/IconButton'
 import OptionMenu from '@core/components/option-menu'
 import TableGeneric from '@/components/table/TableGeneric'
-import {BorderauService} from '@/service/dossier/borderau.service'
-import {BorderauType} from "@/types/soosmart/dossier/borderau.type";
 import {FactureService} from "@/service/dossier/facture.service";
-import AdoptedSwitchComponent from "@views/soosmart/dossier/AdopteComponent";
-import Checkbox from "@mui/material/Checkbox";
+import {FactureType} from "@/types/soosmart/dossier/facture.type";
 
 
-const columnHelper = createColumnHelper<BorderauType>()
+const columnHelper = createColumnHelper<FactureType>()
 
-const BordereauList = () => {
+const FactureList = () => {
   const queryClient = useQueryClient()
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize, setPageSize] = useState(10)
-  const [notadopted, setNotadopte] = useState<boolean>(false)
   const [filter, setFilter] = useState('')
 
-  // États pour le modal
-
   const {data, isLoading, isError} = useQuery({
-    queryKey: [BorderauService.BORDERAU_KEY, pageIndex, pageSize, notadopted],
+    queryKey: [FactureService.FACTURE_KEY, pageIndex, pageSize],
     queryFn: async () => {
-      return notadopted
-        ? await BorderauService.getAllWhoNoUseTocreateFacture({
-          page: pageIndex,
-          pagesize: pageSize
-        })
-        : await BorderauService.getAll({
-          page: pageIndex,
-          pagesize: pageSize
-        })
+      return await FactureService.getAll({
+        page: pageIndex,
+        pagesize: pageSize
+      })
     },
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5 // 5 minutes
@@ -52,12 +40,12 @@ const BordereauList = () => {
 
   const DeleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      return await BorderauService.DeleteDAta(id)
+      return await FactureService.DeleteDAta(id)
     },
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey: [BorderauService.BORDERAU_KEY, pageIndex, pageSize]
+          queryKey: [FactureService.FACTURE_KEY, pageIndex, pageSize]
         })
         .then(r => r)
       toast.success('Bordereau supprimée avec succès')
@@ -68,29 +56,11 @@ const BordereauList = () => {
     }
   })
 
-  const AdoptMutation = useMutation({
-    mutationFn: async (id: string) => {
-      return await FactureService.PostData(id)
-    },
-    onSuccess: () => {
-      queryClient
-        .invalidateQueries({
-          queryKey: [BorderauService.BORDERAU_KEY, pageIndex, pageSize]
-        })
-        .then(r => r)
-      toast.success('Bordereau adoptée avec succès')
-    },
-    onError: (error) => {
-      toast.error((error as any).response.data.message || 'Erreur lors de l\'adoption de la Bordereau')
-    }
-  })
+
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('adopte', {
-        header: 'Adoptée',
-        cell: ({row}) => <Checkbox checked={row.original.adopte}/>
-      }),
+
       columnHelper.accessor('reference', {
         header: 'Reference',
         cell: info => info.getValue()
@@ -135,19 +105,7 @@ const BordereauList = () => {
                   icon: 'tabler-eye',
                   menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
                 },
-                {
-                  text: 'Adapter',
-                  icon: 'tabler-check',
-                  menuItemProps: {
-                    disabled: row.original.adopte,
-                    className: row.original.adopte ? 'flex items-center gap-2 text-text Secondary line-through' :
-                      'flex items-center gap-2 text-textSecondary',
 
-                    onClick: () => {
-                      AdoptMutation.mutate(row.original.id)
-                    }
-                  }
-                },
                 {
                   text: 'Supprimer',
                   icon: 'tabler-trash text-red-600',
@@ -178,7 +136,6 @@ const BordereauList = () => {
         columns={columns}
         isLoading={isLoading}
         isError={isError}
-        ComponentOther={<AdoptedSwitchComponent checked={notadopted} handleChange={setNotadopte}/>}
         page={pageIndex}
         visibleColumns={true}
         SetPage={setPageIndex}
@@ -194,4 +151,4 @@ const BordereauList = () => {
 }
 
 
-export default BordereauList
+export default FactureList

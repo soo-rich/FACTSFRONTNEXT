@@ -84,8 +84,8 @@ const ProformaList = () => {
         .then(r => r)
       toast.success('Proforma adoptée avec succès')
     },
-    onError: () => {
-      toast.error("Erreur lors de l'adoption de la proforma")
+    onError: (error) => {
+      toast.error((error as any).reponse.data.message||"Erreur lors de l'adoption de la proforma")
       console.error("Erreur lors de l'adoption de la proforma")
     }
   })

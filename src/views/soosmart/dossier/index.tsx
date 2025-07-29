@@ -1,18 +1,17 @@
 'use client'
 
-import type { SyntheticEvent, ReactElement } from 'react'
-import { useState } from 'react'
+import type {ReactElement, SyntheticEvent} from 'react'
+import {useState} from 'react'
 
 import Tab from '@mui/material/Tab'
 import TabPanel from '@mui/lab/TabPanel'
 import TabContext from '@mui/lab/TabContext'
-import Typography from '@mui/material/Typography'
 
 // Component Imports
-
 import CustomTabList from '@core/components/mui/TabList'
 import ProformaList from '@views/soosmart/dossier/proforma/proforma-list'
 import BordereauList from "@views/soosmart/dossier/bordereau/bordereau-list";
+import FactureList from "@views/soosmart/dossier/facture/facture-list";
 
 const dossierDate: { id: string; label: string; icon: ReactElement; position?: 'top' | 'bottom' | 'start' | 'end' }[] =
   [
@@ -55,16 +54,13 @@ const DossierIndex = () => {
         ))}
       </CustomTabList>
       <TabPanel value='proforma'>
-        <ProformaList />
+        <ProformaList/>
       </TabPanel>
       <TabPanel value='bordereau'>
-       <BordereauList/>
+        <BordereauList/>
       </TabPanel>
       <TabPanel value='facture'>
-        <Typography>
-          Danish tiramisu jujubes cupcake chocolate bar cake cheesecake chupa chups. Macaroon ice cream tootsie roll
-          carrot cake gummi bears.
-        </Typography>
+        <FactureList/>
       </TabPanel>
     </TabContext>
   )
