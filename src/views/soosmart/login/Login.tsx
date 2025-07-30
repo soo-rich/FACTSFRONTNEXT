@@ -37,6 +37,7 @@ import zod from 'zod'
 import {schemaLogin} from "@/service/auth/auth-service";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {signIn} from "next-auth/react";
+import {toast} from "react-toastify";
 
 
 type formdata = zod.infer<typeof schemaLogin>
@@ -54,7 +55,7 @@ const Login = () => {
   const {
     control,
     handleSubmit,
-    formState: {errors, isSubmitting, isValidating, isSubmitSuccessful}
+    formState: {errors, isSubmitting}
 
   } = useForm<formdata>(
     {
@@ -78,6 +79,10 @@ const Login = () => {
       password: data.password,
       redirect: false
     })
+    if (res?.status===401) {
+      toast.error('Mot de passe ou nom d\'utilisateur incorrect')
+      return
+    }
 
     if (res && res.ok && res.error === null) {
       // Vars
@@ -85,9 +90,8 @@ const Login = () => {
 
       router.replace(getLocalizedUrl(redirectURL, locale as Locale))
     } else {
-      if (res?.error) {
-        const error = JSON.parse(res.error)
-      }
+      toast.error('Une erreur s\'est produite lors de la connexion. Veuillez réessayer.')
+      console.error('Login error:', res?.error)
     }
   }
 

@@ -1,9 +1,7 @@
-import { z } from "zod";
+import * as v from 'valibot';
+import {Article_Quantite, schemaArticleQuantiteslist} from "./Article_Quantite";
 
-import {
-  Article_Quantite,
-  schemaArticleQuantiteslist,
-} from "@/types/dossier/Article_Quantite";
+
 
 export type ProformaType = {
   id: string;
@@ -19,11 +17,11 @@ export type ProformaType = {
   adopted: boolean;
 };
 
-export const schemaProforma = z.object({
-  projet_id: z.string().nullable(),
-  client_id: z.string().nullable(),
-  reference: z.string().min(3, "entre au moin 3 carateres"),
-  articleQuantiteslist: z.array(schemaArticleQuantiteslist).nonempty(),
+export const schemaProforma = v.object({
+  projet_id: v.nullable(v.string()),
+  client_id: v.nullable(v.string()),
+  reference: v.pipe(v.string(), v.minLength(3, "entre au moin 3 carateres")),
+  articleQuantiteslist: v.pipe(v.array(schemaArticleQuantiteslist), v.minLength(1)),
 });
 
-export type ProformaSave = z.infer<typeof schemaProforma>;
+export type ProformaSave = v.InferInput<typeof schemaProforma>;

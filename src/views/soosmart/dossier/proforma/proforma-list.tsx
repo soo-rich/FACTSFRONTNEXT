@@ -20,6 +20,7 @@ import {ProformaService} from '@/service/dossier/proforma.service'
 import type {ProformaType} from '@/types/soosmart/dossier/proforma.type'
 import Checkbox from "@mui/material/Checkbox";
 import AdoptedSwitchComponent from "@views/soosmart/dossier/AdopteComponent";
+import AddProforma from "@views/soosmart/dossier/proforma/add-proforma";
 
 
 const columnHelper = createColumnHelper<ProformaType>()
@@ -201,6 +202,13 @@ const ProformaList = () => {
           action: () => setIsModalOpen(true)
         }}
       />
+      <AddProforma open={isModalOpen} handleClose={() => setIsModalOpen(false)} onSucces={() => {
+        queryClient
+          .invalidateQueries({
+            queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize]
+          })
+          .then(r => r)
+      }}/>
     </>
   )
 }

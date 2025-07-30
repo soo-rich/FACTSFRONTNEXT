@@ -16,6 +16,16 @@ export class ArticleService {
     ).data;
   };
 
+  static searchArticles = async (search?: string) => {
+    return (
+      await instance.get<ArticleType[]>(`${url}/search`, {
+        params: {
+          search: search,
+        },
+      })
+    ).data;
+  };
+
   static updateArticle = async (id: string, article: SaveArticleType) => {
     return (await instance.put<ArticleType>(`${url}/${id}`, article)).data;
   };
