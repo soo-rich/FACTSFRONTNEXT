@@ -5,7 +5,6 @@ import { type ReactNode, useState } from 'react'
 
 import classnames from 'classnames'
 
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import type { ColumnDef, FilterFn, Header, VisibilityState } from '@tanstack/react-table'
 import {
@@ -24,7 +23,6 @@ import type { CardProps } from '@mui/material'
 import { Card, CardHeader, TablePagination } from '@mui/material'
 
 // Type Imports
-
 import Button, { type ButtonProps } from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import type { MenuProps } from '@mui/material/Menu'
@@ -40,16 +38,7 @@ import TableManualPaginationComponent from './TableManualPaginationComponent'
 import CustomTextField from '@/@core/components/mui/TextField'
 import DebouncedInput from '../CustomInput/DebounceInput'
 import tableStyles from '@core/styles/table.module.css'
-
-declare module '@tanstack/table-core' {
-  interface FilterFns {
-    fuzzy: FilterFn<unknown>
-  }
-
-  interface FilterMeta {
-    itemRank: RankingInfo
-  }
-}
+import TablePaginationComponent from '@components/TablePaginationComponent'
 
 type TableProps<T> = {
   tabledata: T[] | undefined
@@ -107,26 +96,26 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const TableGeneric = <T,>({
-  tabledata: table_data,
-  columns,
-  title,
-  page,
-  totalElements,
-  pageSize,
-  SetPage,
-  SetPageSize,
-  globalFilter,
-  setGlobalFilter,
-  ComponentOther: FilterComponent,
-  isError,
-  isLoading,
-  pagination = true,
-  renderHeaderCell,
-  displayTableHeaderSession = true,
-  cardProps,
-  visibleColumns,
-  buttonadd
-}: TableProps<T>) => {
+                            tabledata: table_data,
+                            columns,
+                            title,
+                            page,
+                            totalElements,
+                            pageSize,
+                            SetPage,
+                            SetPageSize,
+                            globalFilter,
+                            setGlobalFilter,
+                            ComponentOther: FilterComponent,
+                            isError,
+                            isLoading,
+                            pagination = true,
+                            renderHeaderCell,
+                            displayTableHeaderSession = true,
+                            cardProps,
+                            visibleColumns,
+                            buttonadd
+                          }: TableProps<T>) => {
   const buttonProps: ButtonProps = {
     startIcon: <i className='tabler-plus' />,
     variant: 'contained',
@@ -135,6 +124,35 @@ const TableGeneric = <T,>({
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+
+  const table = useReactTable({
+    data: table_data ?? [],
+    columns,
+    filterFns: {
+      fuzzy: fuzzyFilter
+    },
+    state: {
+      globalFilter,
+      columnVisibility
+    },
+    onColumnVisibilityChange: setColumnVisibility, // Important: ajouter cette ligne
+    initialState: {
+      pagination: {
+        pageSize: pageSize ?? 10
+      }
+    },
+    enableRowSelection: true,
+    globalFilterFn: fuzzyFilter,
+    manualPagination: !!totalElements,
+    getCoreRowModel: getCoreRowModel(),
+    onGlobalFilterChange: setGlobalFilter,
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: pagination ? undefined : getPaginationRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues()
+  })
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -149,50 +167,8 @@ const TableGeneric = <T,>({
   }
 
   const handlePageSizeChange = (event: any) => {
-    SetPageSize?.(parseInt(event.target.value, 10))
+    pagination ? SetPageSize?.(parseInt(event.target.value, 10)) : table.setPageSize(parseInt(event.target.value, 10))
   }
-
-  // Fonction pour gérer la visibilité des colonnes
-  // const handleColumnVisibilityChange = (columnId: string, isVisible: boolean) => {
-  //   setColumnVisibility(prev => ({
-  //     ...prev,
-  //     [columnId]: isVisible
-  //   }));
-  // }
-
-  const table = useReactTable({
-    data: table_data ?? [],
-    columns,
-    filterFns: {
-      fuzzy: fuzzyFilter
-    },
-    state: {
-      globalFilter,
-      columnVisibility,
-      pagination: {
-        pageIndex: page ?? 0,
-        pageSize: pageSize ?? 10
-      }
-    },
-    onColumnVisibilityChange: setColumnVisibility, // Important: ajouter cette ligne
-    initialState: {
-      pagination: {
-        pageSize: pageSize ?? 10
-      }
-    },
-    enableRowSelection: true,
-    globalFilterFn: fuzzyFilter,
-    manualPagination: !!totalElements,
-    pageCount: totalElements ? Math.ceil(totalElements / (pageSize ?? 10)) : -1,
-    getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFacetedMinMaxValues: getFacetedMinMaxValues()
-  })
 
   return (
     <>
@@ -201,10 +177,10 @@ const TableGeneric = <T,>({
 
         {displayTableHeaderSession && (
           <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
-            {pageSize && (
+            {!pagination || pageSize ? (
               <CustomTextField
                 select
-                value={pageSize ?? 10}
+                value={pagination ? (pageSize ?? 10) : table.getState().pagination.pageSize}
                 onChange={e => handlePageSizeChange(e)}
                 className='max-sm:is-full sm:is-[70px]'
               >
@@ -213,7 +189,7 @@ const TableGeneric = <T,>({
                 <MenuItem value='25'>25</MenuItem>
                 <MenuItem value='50'>50</MenuItem>
               </CustomTextField>
-            )}
+            ) : null}
             <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
               {FilterComponent}
               {visibleColumns && (
@@ -294,59 +270,74 @@ const TableGeneric = <T,>({
         <div className='overflow-x-auto'>
           <table className={tableStyles.table}>
             <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : renderHeaderCell ? (
-                        renderHeaderCell(header)
-                      ) : (
-                        <div
-                          className={classnames({
-                            'flex items-center': header.column.getIsSorted(),
-                            'cursor-pointer select-none': header.column.getCanSort()
-                          })}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: <i className='tabler-chevron-up text-xl' />,
-                            desc: <i className='tabler-chevron-down text-xl' />
-                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                        </div>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : renderHeaderCell ? (
+                      renderHeaderCell(header)
+                    ) : (
+                      <div
+                        className={classnames({
+                          'flex items-center': header.column.getIsSorted(),
+                          'cursor-pointer select-none': header.column.getCanSort()
+                        })}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: <i className='tabler-chevron-up text-xl' />,
+                          desc: <i className='tabler-chevron-down text-xl' />
+                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                      </div>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
             </thead>
             {isLoading ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    <LoadingWithoutModal padding='p-4' />
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                  <LoadingWithoutModal padding='p-4' />
+                </td>
+              </tr>
               </tbody>
             ) : isError ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    <ErrorView />
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                  <ErrorView />
+                </td>
+              </tr>
               </tbody>
             ) : table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    Aucune Données à afficher
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                  Aucune Données à afficher
+                </td>
+              </tr>
+              </tbody>
+            ) : pagination ? (
+              <tbody>
+              {table.getRowModel().rows.map(row => {
+                return (
+                  <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                    ))}
+                  </tr>
+                )
+              })}
               </tbody>
             ) : (
               <tbody>
-                {table.getRowModel().rows.map(row => {
+              {table
+                .getRowModel()
+                .rows.slice(0, table.getState().pagination.pageSize)
+                .map(row => {
                   return (
                     <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
                       {row.getVisibleCells().map(cell => (
@@ -359,7 +350,7 @@ const TableGeneric = <T,>({
             )}
           </table>
         </div>
-        {pagination && (
+        {pagination ? (
           <TablePagination
             component={() => (
               <TableManualPaginationComponent
@@ -374,6 +365,16 @@ const TableGeneric = <T,>({
             page={page ?? 1}
             onPageChange={(_, page) => {
               handlePageChange(page)
+            }}
+          />
+        ) : (
+          <TablePagination
+            component={() => <TablePaginationComponent table={table} />}
+            count={table.getFilteredRowModel().rows.length}
+            rowsPerPage={table.getState().pagination.pageSize}
+            page={table.getState().pagination.pageIndex}
+            onPageChange={(_, page) => {
+              table.setPageIndex(page)
             }}
           />
         )}

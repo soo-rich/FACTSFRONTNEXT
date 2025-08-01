@@ -23,7 +23,7 @@ import {toast} from "react-toastify";
 type Props = {
   open: boolean
   handleClose: () => void,
-  onSucces?:()=>void
+  onSucces?: () => void
 }
 
 const AddProforma = (
@@ -195,9 +195,13 @@ const AddProforma = (
 
           <div className='w-full flex flex-row justify-between align-middle items-center gap-4'>
             <Controller render={
-              ({field}) => (
-                <CustomAutocomplete
+              ({field}) => {
+
+                // const projetselect = projet?.find(item => item.projet_type.toLowerCase().includes(projetName.toLowerCase())) ?? null
+
+                return (<CustomAutocomplete
                   disabled={clientorprojet}
+                  // value={projetselect}
                   options={projet || []}
                   fullWidth
                   onChange={(event, newvalue) => {
@@ -229,16 +233,19 @@ const AddProforma = (
                       />
                     )
                   }}
-                />
-              )
+                />)
+              }
             } name={'projet_id'} control={control}/>
           </div>
           <div className='w-full flex flex-row justify-between align-middle items-center gap-4'>
             <Controller render={
-              ({field}) => (
-                <CustomAutocomplete
+              ({field}) => {
+                // Trouve le client sélectionné en fonction du nom
+                // const clientselect = client?.find(item => item.nom.toLowerCase().includes(clientName.toLowerCase())) ?? null
+                return (<CustomAutocomplete
                   disabled={!clientorprojet}
                   options={client || []}
+                  // value={clientselect}
                   fullWidth
                   onChange={(event, newvalue) => {
                     if (newvalue) {
@@ -266,11 +273,10 @@ const AddProforma = (
                           error: true,
                           helperText: errors?.client_id?.message
                         })}
-                      />
-                    )
+                      />)
                   }}
-                />
-              )
+                />)
+              }
             } name={'client_id'} control={control}/>
           </div>
           <Divider className='w-full'/>

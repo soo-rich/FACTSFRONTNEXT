@@ -19,6 +19,8 @@ import {BorderauType} from "@/types/soosmart/dossier/borderau.type";
 import {FactureService} from "@/service/dossier/facture.service";
 import AdoptedSwitchComponent from "@views/soosmart/dossier/AdopteComponent";
 import Checkbox from "@mui/material/Checkbox";
+import Tooltip from "@mui/material/Tooltip";
+import CustomIconButton from "@core/components/mui/IconButton";
 
 
 const columnHelper = createColumnHelper<BorderauType>()
@@ -88,7 +90,7 @@ const BordereauList = () => {
     () => [
       columnHelper.accessor('adopte', {
         header: 'Adoptée',
-        cell: ({row}) => <Checkbox checked={row.original.adopte}/>
+        cell: ({row}) => <Tooltip placement={'top'} title={row.original.adopte?'Adopter':'Nom Adopter'}><Checkbox checked={row.original.adopte}/></Tooltip>
       }),
       columnHelper.accessor('reference', {
         header: 'Reference',
@@ -124,7 +126,14 @@ const BordereauList = () => {
         cell: ({row}) => (
           <div className='flex gap-2'>
 
-
+            {!row.original.adopte?(<CustomIconButton
+              onClick={() => {
+                AdoptMutation.mutate(row.original.id)
+              }}
+              className='cursor-pointer text-primary'
+            >
+              <i className='tabler-check'/>
+            </CustomIconButton>):null}
             <OptionMenu
               iconButtonProps={{size: 'medium'}}
               iconClassName='text-textSecondary'

@@ -21,6 +21,7 @@ import type {ProformaType} from '@/types/soosmart/dossier/proforma.type'
 import Checkbox from "@mui/material/Checkbox";
 import AdoptedSwitchComponent from "@views/soosmart/dossier/AdopteComponent";
 import AddProforma from "@views/soosmart/dossier/proforma/add-proforma";
+import Tooltip from "@mui/material/Tooltip";
 
 
 const columnHelper = createColumnHelper<ProformaType>()
@@ -78,7 +79,7 @@ const ProformaList = () => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize]
+          queryKey: [[ProformaService.PROFORMA_KEY, pageIndex, pageSize], [BorderauService.BORDERAU_KEY]]
         })
         .then(r => r)
       toast.success('Proforma adoptée avec succès')
@@ -93,7 +94,8 @@ const ProformaList = () => {
     () => [
       columnHelper.accessor('adopted', {
         header: 'Adoptée',
-        cell: ({row}) => <Checkbox checked={row.original.adopted}/>
+        cell: ({row}) => <Tooltip placement={'top'} title={row.original.adopted ? 'Adopter' : 'Nom Adopter'}><Checkbox
+          checked={row.original.adopted}/></Tooltip>
       }),
       columnHelper.accessor('reference', {
         header: 'Reference',
@@ -137,6 +139,14 @@ const ProformaList = () => {
             >
               <i className='tabler-edit'/>
             </CustomIconButton>
+            {!row.original.adopted ? (<CustomIconButton
+              onClick={() => {
+                AdoptMutation.mutate(row.original.id)
+              }}
+              className='cursor-pointer text-primary'
+            >
+              <i className='tabler-check'/>
+            </CustomIconButton>) : null}
 
             <OptionMenu
               iconButtonProps={{size: 'medium'}}
@@ -146,18 +156,6 @@ const ProformaList = () => {
                   text: 'Details',
                   icon: 'tabler-eye',
                   menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
-                }, {
-                  text: 'Adapter',
-                  icon: 'tabler-check',
-                  menuItemProps: {
-                    disabled: row.original.adopted,
-                    className: row.original.adopted ? 'flex items-center gap-2 text-text Secondary line-through' :
-                      'flex items-center gap-2 text-textSecondary',
-
-                    onClick: () => {
-                      AdoptMutation.mutate(row.original.id)
-                    }
-                  }
                 },
                 {
                   text: 'Supprimer',
