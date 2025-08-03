@@ -18,8 +18,10 @@ export class FactureService {
       })
     ).data
   }
-  static async Updatedata(id: string, data: any) {
-    throw new Error('Method not implemented.')
+  static async paid(id: string) {
+    return (
+      await instance.get<boolean>(url+`/paid/${id}`)
+    ).data
   }
 
   static async DeleteDAta(id: string) {

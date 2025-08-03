@@ -2,16 +2,18 @@
 
 import {useParams} from "next/navigation";
 import Grid from "@mui/material/Grid2";
-import Typography from "@mui/material/Typography";
 import DocumentsActions from "@views/soosmart/dossier/file/DocumentsActions";
 import {useQuery} from "@tanstack/react-query";
 import {DocumentService} from "@/service/document/document.service";
 import {useMemo, useState} from "react";
 import LoadingWithoutModal from "@components/LoadingWithoutModal";
 import ErrorView from "@components/ErrorView";
+import DefaultDesignFact from "@views/soosmart/dossier/file/DefaultDesignFact";
 
 const DocumentViews = () => {
+
   const [signed, setSigned] = useState<string>('');
+  const [role, setRole] = useState<string>('Directeur');
 
   const {numero} = useParams();
   const querykey = useMemo(() => [DocumentService.REPORT_KEY, numero], [DocumentService.REPORT_KEY, numero]);
@@ -33,15 +35,13 @@ const DocumentViews = () => {
           isLoading ? (
             <LoadingWithoutModal/>
           ) : isError ? (
-              <ErrorView/>
-            ) :
-            (<>{JSON.stringify(data)}</>)
-
+            <ErrorView/>
+          ) : data ?
+            (<DefaultDesignFact docs={data} signe={signed} role={role}/>) : null
         }
-        <Typography>{numero}</Typography>
       </Grid>
       <Grid size={{xs: 12, md: 3}}>
-        <DocumentsActions id_facture={data?.id} UpdateSignature={setSigned}/>
+        <DocumentsActions id_facture={data?.id} UpdateSignature={setSigned} UpdateRole={setRole}/>
       </Grid>
     </Grid>
   )

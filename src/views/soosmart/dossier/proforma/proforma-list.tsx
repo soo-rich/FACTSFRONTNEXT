@@ -138,10 +138,6 @@ const ProformaList = () => {
           <div className='flex gap-2'>
             <CustomIconButton
               href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
-              onClick={() => {
-                setProformaSelect(row.original)
-                setIsModalOpen(true)
-              }}
               className='cursor-pointer text-green-600 hover:text-green-800'
             >
               <i className='tabler-file-type-pdf'/>

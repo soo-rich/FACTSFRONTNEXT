@@ -1,7 +1,9 @@
 import {ProformaType} from "@/types/soosmart/dossier/proforma.type";
+import { ClientType } from "../client.type";
 
 export type DocumentDTO = {
-  client: ClientTypes
+  client: ClientType,
+  total_letters:string,
 } & Omit<ProformaType, 'client' | 'adopted'>
 
 
