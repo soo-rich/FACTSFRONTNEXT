@@ -91,8 +91,8 @@ const notifications: NotificationsType[] = [
   },
   {
     avatarIcon: 'tabler-chart-bar',
-    title: 'Monthly report generated',
-    subtitle: 'July month financial report is generated',
+    title: 'Monthly document generated',
+    subtitle: 'July month financial document is generated',
     avatarColor: 'info',
     time: 'Apr 24, 10:30 AM',
     read: true

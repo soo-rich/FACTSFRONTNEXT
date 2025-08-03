@@ -22,6 +22,9 @@ import Checkbox from "@mui/material/Checkbox";
 import AdoptedSwitchComponent from "@views/soosmart/dossier/AdopteComponent";
 import AddProforma from "@views/soosmart/dossier/proforma/add-proforma";
 import Tooltip from "@mui/material/Tooltip";
+import {getLocalizedUrl} from "@/utils/i18n";
+import {useParams} from "next/navigation";
+import {Locale} from "@configs/i18n";
 
 
 const columnHelper = createColumnHelper<ProformaType>()
@@ -36,6 +39,9 @@ const ProformaList = () => {
   // États pour le modal
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [proformaselect, setProformaSelect] = useState<ProformaType | undefined>(undefined)
+
+  // hooks
+  const {lang: locale}= useParams()
 
   const {data, isLoading, isError} = useQuery({
     queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize, notadopted],
@@ -130,6 +136,16 @@ const ProformaList = () => {
         header: 'Actions',
         cell: ({row}) => (
           <div className='flex gap-2'>
+            <CustomIconButton
+              href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
+              onClick={() => {
+                setProformaSelect(row.original)
+                setIsModalOpen(true)
+              }}
+              className='cursor-pointer text-green-600 hover:text-green-800'
+            >
+              <i className='tabler-file-type-pdf'/>
+            </CustomIconButton>
             <CustomIconButton
               onClick={() => {
                 setProformaSelect(row.original)

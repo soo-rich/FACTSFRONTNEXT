@@ -16,6 +16,10 @@ import OptionMenu from '@core/components/option-menu'
 import TableGeneric from '@/components/table/TableGeneric'
 import {FactureService} from "@/service/dossier/facture.service";
 import {FactureType} from "@/types/soosmart/dossier/facture.type";
+import {getLocalizedUrl} from "@/utils/i18n";
+import {Locale} from "@configs/i18n";
+import CustomIconButton from "@core/components/mui/IconButton";
+import {useParams} from "next/navigation";
 
 
 const columnHelper = createColumnHelper<FactureType>()
@@ -25,6 +29,9 @@ const FactureList = () => {
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize, setPageSize] = useState(10)
   const [filter, setFilter] = useState('')
+
+  // hooks
+  const {lang: locale}= useParams()
 
   const {data, isLoading, isError} = useQuery({
     queryKey: [FactureService.FACTURE_KEY, pageIndex, pageSize],
@@ -93,7 +100,12 @@ const FactureList = () => {
         header: 'Actions',
         cell: ({row}) => (
           <div className='flex gap-2'>
-
+            <CustomIconButton
+              href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
+              className='cursor-pointer text-green-600 hover:text-green-800'
+            >
+              <i className='tabler-file-type-pdf'/>
+            </CustomIconButton>
 
             <OptionMenu
               iconButtonProps={{size: 'medium'}}

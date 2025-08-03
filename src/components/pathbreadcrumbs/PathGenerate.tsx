@@ -21,8 +21,8 @@ const PathGenerate = ({ dictionary }: ComponentDictonaryParamsType) => {
 
   const handlesignOut = async () => {
     const session = (await getSession()) as any
-
-    const decoded: any = jwtDecode(session?.access_token || '')
+console.log(session)
+    const decoded: any = jwtDecode(session?.bearer || '')
 
     // Vérifiez si le token est expiré
     const isValid = decoded.exp * 1000 > Date.now()

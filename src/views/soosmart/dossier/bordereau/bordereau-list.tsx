@@ -21,6 +21,9 @@ import AdoptedSwitchComponent from "@views/soosmart/dossier/AdopteComponent";
 import Checkbox from "@mui/material/Checkbox";
 import Tooltip from "@mui/material/Tooltip";
 import CustomIconButton from "@core/components/mui/IconButton";
+import {getLocalizedUrl} from "@/utils/i18n";
+import {Locale} from "@configs/i18n";
+import {useParams} from "next/navigation";
 
 
 const columnHelper = createColumnHelper<BorderauType>()
@@ -32,7 +35,8 @@ const BordereauList = () => {
   const [notadopted, setNotadopte] = useState<boolean>(false)
   const [filter, setFilter] = useState('')
 
-  // États pour le modal
+  // hooks
+  const {lang: locale}= useParams()
 
   const {data, isLoading, isError} = useQuery({
     queryKey: [BorderauService.BORDERAU_KEY, pageIndex, pageSize, notadopted],
@@ -125,7 +129,12 @@ const BordereauList = () => {
         header: 'Actions',
         cell: ({row}) => (
           <div className='flex gap-2'>
-
+            <CustomIconButton
+              href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
+              className='cursor-pointer text-green-600 hover:text-green-800'
+            >
+              <i className='tabler-file-type-pdf'/>
+            </CustomIconButton>
             {!row.original.adopte?(<CustomIconButton
               onClick={() => {
                 AdoptMutation.mutate(row.original.id)
