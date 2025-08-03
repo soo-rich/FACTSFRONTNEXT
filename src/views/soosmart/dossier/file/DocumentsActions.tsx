@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import {useMemo, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 
 // Next Imports
 import Link from 'next/link'
@@ -21,6 +21,9 @@ import type {Locale} from '@configs/i18n'
 import {getLocalizedUrl} from '@/utils/i18n'
 import DebounceInput from "@components/CustomInput/DebounceInput";
 import {DocumentTypes} from "@/types/soosmart/dossier/DocumentDTO";
+import {DocumentService} from "@/service/document/document.service";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {toast} from "react-toastify";
 
 type DocumentsActionsType = {
   id_facture?: string,
@@ -33,6 +36,7 @@ const DocumentsActions = ({id_facture, UpdateSignature}: DocumentsActionsType) =
 
   // Hooks
   const {lang: locale, numero} = useParams()
+  const queryClient  = useQueryClient()
 
   const documenttype = useMemo(() => {
     const nu = (numero as string).substring(0, 2).toUpperCase()
@@ -48,6 +52,41 @@ const DocumentsActions = ({id_facture, UpdateSignature}: DocumentsActionsType) =
         return null
     }
   }, [numero])
+
+  const SignatureMutation = useMutation({
+    mutationFn: async (signature: string) => {
+      if (signature.length>0) {
+        return null
+      }
+      return await DocumentService.signDocument(numero as string, signature)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [DocumentService.REPORT_KEY, numero]
+      })
+      if (data) {
+        toast('Document signé avec succès', {
+          type: 'success',
+          autoClose: 3000,
+          hideProgressBar: false
+        })
+      }
+      console.log('Document signed successfully', data)
+    },
+    onError: () => {
+      toast('Erreur lors de la signature du document', {
+        type: 'error',
+        autoClose: 3000,
+        hideProgressBar: false
+      })
+      console.error('Error signing document')
+    }
+  })
+
+
+  useEffect(() => {
+   SignatureMutation.mutate(signature)
+  }, [signature]);
 
   return (
     <Grid container spacing={6}>
@@ -86,15 +125,17 @@ const DocumentsActions = ({id_facture, UpdateSignature}: DocumentsActionsType) =
       </Grid>
 
       <Grid size={{xs: 12}}>
-
-        <DebounceInput fullWidth label={`Signer par ${signature} `} value={signature} onChange={(value) => {
-          setSignature(value as string)
-          if (value && typeof value !== "number" && value?.length > 0) {
-            if (UpdateSignature) {
-              UpdateSignature(value)
+        {
+          documenttype !== DocumentTypes.BORDERAU ? ( <DebounceInput fullWidth label={`Signer par ${signature} `} value={signature} onChange={(value) => {
+            setSignature(value as string)
+            if (value && typeof value !== "number" && value?.length > 0) {
+              if (UpdateSignature) {
+                UpdateSignature(value)
+              }
             }
-          }
-        }} debounce={2000}/>
+          }} debounce={2000}/>) : null
+        }
+
 
       </Grid>
     </Grid>
