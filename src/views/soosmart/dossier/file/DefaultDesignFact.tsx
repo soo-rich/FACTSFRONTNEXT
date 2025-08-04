@@ -10,7 +10,15 @@ import UtiliMetod from "@/utils/utilsmethod";
 import themeConfig from "@configs/themeConfig";
 // import CustomIconButton from "@core/components/mui/IconButton";
 
-const DefaultDesignFact = forwardRef<HTMLDivElement, {docs: DocumentDTO, signe:string, role:string }>(({docs, signe, role}: { docs: DocumentDTO, signe:string, role:string }, ref) => {
+const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe: string, role: string }>(({
+                                                                                                            docs,
+                                                                                                            signe,
+                                                                                                            role
+                                                                                                          }: {
+  docs: DocumentDTO,
+  signe: string,
+  role: string
+}, ref) => {
 
   const {numero} = useParams()
 
@@ -30,7 +38,7 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, {docs: DocumentDTO, signe:s
   }, [numero])
 
   return (
-    <Card sx={{ position: 'relative', overflow: 'hidden' }} ref={ref} className={'!border-none !shadow-none'}>
+    <Card sx={{position: 'relative', overflow: 'hidden'}} ref={ref} className={'!border-none !shadow-none'}>
       <div
         style={{
           position: 'absolute',
@@ -45,7 +53,7 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, {docs: DocumentDTO, signe:s
           userSelect: 'none',
         }}
       >
-        <SoosmartLogo width="100%" height="100%" />
+        <SoosmartLogo width="100%" height="100%"/>
       </div>
 
       {/*<div
@@ -118,7 +126,8 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, {docs: DocumentDTO, signe:s
               documenttype === DocumentTypes.PROFORMA || documenttype === DocumentTypes.FACTURE ? (
                 <Grid size={12} gap={0} spacing={0} container direction={'row'}
                       sx={{justifyContent: 'flex-start', alignItems: 'flex-start'}}>
-                  <Typography className={'font-bold text-start text-xl uppercase'}>FACTURE {documenttype===DocumentTypes.PROFORMA??''}</Typography>
+                  <Typography
+                    className={'font-bold text-start text-xl uppercase'}>FACTURE {documenttype === DocumentTypes.PROFORMA ?? ''}</Typography>
                 </Grid>
               ) : null
             }
@@ -252,15 +261,15 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, {docs: DocumentDTO, signe:s
 
           ) : null
         }
-        <Grid container spacing={0} direction={'column'} gap={0} sx={{
+        {documenttype !== DocumentTypes.BORDERAU ? (<Grid container spacing={0} direction={'column'} gap={0} sx={{
           justifyContent: 'flex-end',
           alignItems: 'flex-end',
           marginTop: '2rem',
           marginRight: '5rem',
         }}>
-          <Typography className={'font-bold'} >{signe}</Typography>
-          <Typography className={'font-bold'} >{role}</Typography>
-        </Grid>
+          <Typography className={'font-bold'}>{signe}</Typography>
+          <Typography className={'font-bold'}>{role}</Typography>
+        </Grid>) : null}
 
 
         <Grid container spacing={0} direction={'column'} gap={0} sx={{
