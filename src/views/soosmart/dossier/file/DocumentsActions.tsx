@@ -39,6 +39,29 @@ const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole, paied}: Docu
   const {lang: locale, numero} = useParams()
   const queryClient = useQueryClient()
 
+
+  const  imprimerSection=(elementId:string)=> {
+    console.log("imprimerSection", elementId)
+    var contenu = document.getElementById(elementId);
+    var fenetreImpression = window.open('', '', 'height=600,width=800');
+
+    fenetreImpression?.document.write('<html><head><title>Impression - ' + elementId + '</title>');
+    fenetreImpression?.document.write('<style>');
+    // fenetreImpression.document.write('body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }');
+    // fenetreImpression.document.write('table { border-collapse: collapse; width: 100%; }');
+    // fenetreImpression.document.write('th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }');
+    // fenetreImpression.document.write('th { background-color: #f2f2f2; }');
+    fenetreImpression?.document.write('</style>');
+    fenetreImpression?.document.write('</head><body>');
+    fenetreImpression?.document.write(contenu?.innerHTML as string);
+    fenetreImpression?.document.write('</body></html>');
+
+    fenetreImpression?.document.close();
+    fenetreImpression?.focus();
+    fenetreImpression?.print();
+    fenetreImpression?.close();
+  }
+
   const documenttype = useMemo(() => {
     const nu = (numero as string).substring(0, 2).toUpperCase()
     if (!nu) return null
@@ -138,6 +161,10 @@ const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole, paied}: Docu
               color='secondary'
               variant='tonal'
               className='capitalize'
+              onClick={()=> {
+                console.log("implmenterSection")
+                imprimerSection('document-content')
+              }}
             >
               Imprimer
             </Button>

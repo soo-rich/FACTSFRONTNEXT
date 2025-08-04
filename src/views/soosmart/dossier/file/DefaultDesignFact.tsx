@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import SoosmartLogo from "@components/layout/shared/SoosmartLogo";
 import UtiliMetod from "@/utils/utilsmethod";
 import themeConfig from "@configs/themeConfig";
+import CustomIconButton from "@core/components/mui/IconButton";
 
 const DefaultDesignFact = ({docs, signe, role}: { docs: DocumentDTO, signe:string, role:string }) => {
 
@@ -28,8 +29,49 @@ const DefaultDesignFact = ({docs, signe, role}: { docs: DocumentDTO, signe:strin
     }
   }, [numero])
   return (
-    <Card>
+    <Card sx={{ position: 'relative', overflow: 'hidden' }} id={'document-content'}>
+      <div
+        style={{
+          position: 'absolute',
+          top: '35%',
+          bottom: '35%',
+          right: '10%',
+          left: '10%',
+          transform: 'rotate(-0deg) scale(1.5)',
+          opacity: 0.05,
+          zIndex: 0,
+          pointerEvents: 'none',
+          userSelect: 'none',
+        }}
+      >
+        <SoosmartLogo width="100%" height="100%" />
+      </div>
+
+      {/*<div
+        style={{
+          position: 'absolute',
+          bottom: '20%',
+          left: '15%',
+          transform: 'rotate(35deg) scale(1.2)',
+          opacity: 0.03,
+          zIndex: 1,
+          pointerEvents: 'none',
+          userSelect: 'none',
+        }}
+      >
+        <SoosmartLogo width="6rem" height="6rem" />
+      </div>*/}
       <CardContent className='sm:!p-12'>
+        <Grid className={'no-print'} container direction={'row'} spacing={0} gap={0} sx={{
+          justifyContent: 'flex-end',
+          alignItems: 'flex-end',
+          marginBottom: '1rem',
+          marginRight: '1rem',
+        }}>
+          <CustomIconButton onClick={()=>window.print()}>
+            <i className={'tabler-printer'}/>
+          </CustomIconButton>
+        </Grid>
         <Grid container spacing={0} direction={'column'} gap={0}>
           <Grid size={12} gap={0} spacing={0} container direction={'row'} sx={{
             justifyContent: 'flex-start',
