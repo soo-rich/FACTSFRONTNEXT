@@ -124,7 +124,7 @@ const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole, paied, print
             {
               documenttype === DocumentTypes.FACTURE && id_facture ? (<Button
                 fullWidth
-                disabled={!paied}
+                disabled={paied}
                 variant='contained'
                 className='capitalize'
                 startIcon={<i className='tabler-send'/>}
