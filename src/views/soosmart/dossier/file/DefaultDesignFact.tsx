@@ -2,15 +2,15 @@ import CardContent from "@mui/material/CardContent";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid2";
 import {useParams} from "next/navigation";
-import {useMemo} from "react";
+import {forwardRef, useMemo} from "react";
 import {DocumentDTO, DocumentTypes} from "@/types/soosmart/dossier/DocumentDTO";
 import Typography from "@mui/material/Typography";
 import SoosmartLogo from "@components/layout/shared/SoosmartLogo";
 import UtiliMetod from "@/utils/utilsmethod";
 import themeConfig from "@configs/themeConfig";
-import CustomIconButton from "@core/components/mui/IconButton";
+// import CustomIconButton from "@core/components/mui/IconButton";
 
-const DefaultDesignFact = ({docs, signe, role}: { docs: DocumentDTO, signe:string, role:string }) => {
+const DefaultDesignFact = forwardRef<HTMLDivElement, {docs: DocumentDTO, signe:string, role:string }>(({docs, signe, role}: { docs: DocumentDTO, signe:string, role:string }, ref) => {
 
   const {numero} = useParams()
 
@@ -28,8 +28,9 @@ const DefaultDesignFact = ({docs, signe, role}: { docs: DocumentDTO, signe:strin
         return null
     }
   }, [numero])
+
   return (
-    <Card sx={{ position: 'relative', overflow: 'hidden' }} id={'document-content'}>
+    <Card sx={{ position: 'relative', overflow: 'hidden' }} ref={ref} className={'!border-none !shadow-none'}>
       <div
         style={{
           position: 'absolute',
@@ -62,16 +63,7 @@ const DefaultDesignFact = ({docs, signe, role}: { docs: DocumentDTO, signe:strin
         <SoosmartLogo width="6rem" height="6rem" />
       </div>*/}
       <CardContent className='sm:!p-12'>
-        <Grid className={'no-print'} container direction={'row'} spacing={0} gap={0} sx={{
-          justifyContent: 'flex-end',
-          alignItems: 'flex-end',
-          marginBottom: '1rem',
-          marginRight: '1rem',
-        }}>
-          <CustomIconButton onClick={()=>window.print()}>
-            <i className={'tabler-printer'}/>
-          </CustomIconButton>
-        </Grid>
+
         <Grid container spacing={0} direction={'column'} gap={0}>
           <Grid size={12} gap={0} spacing={0} container direction={'row'} sx={{
             justifyContent: 'flex-start',
@@ -123,10 +115,10 @@ const DefaultDesignFact = ({docs, signe, role}: { docs: DocumentDTO, signe:strin
             alignItems: 'center',
           }}>
             {
-              documenttype !== DocumentTypes.BORDERAU ? (
+              documenttype === DocumentTypes.PROFORMA || documenttype === DocumentTypes.FACTURE ? (
                 <Grid size={12} gap={0} spacing={0} container direction={'row'}
                       sx={{justifyContent: 'flex-start', alignItems: 'flex-start'}}>
-                  <Typography className={'font-bold text-start text-xl uppercase'}>FACTURE {documenttype}</Typography>
+                  <Typography className={'font-bold text-start text-xl uppercase'}>FACTURE {documenttype===DocumentTypes.PROFORMA??''}</Typography>
                 </Grid>
               ) : null
             }
@@ -135,8 +127,8 @@ const DefaultDesignFact = ({docs, signe, role}: { docs: DocumentDTO, signe:strin
             <table className="w-[70%] border border-gray-500 border-collapse text-sm mb-4">
               <thead>
               <tr className="bg-gray-300 text-center font-semibold">
-                <th className="border border-gray-500 px-2 py-1">Numéro</th>
-                <th className="border border-gray-500 px-2 py-1">Date</th>
+                <th className="border border-gray-500 px-2 py-1 w-12">Numéro</th>
+                <th className="border border-gray-500 px-2 py-1 w-12">Date</th>
                 <th className="border border-gray-500 px-2 py-1">Références</th>
               </tr>
               </thead>
@@ -293,7 +285,7 @@ const DefaultDesignFact = ({docs, signe, role}: { docs: DocumentDTO, signe:strin
       </CardContent>
     </Card>
   )
-}
+})
 
 
 export default DefaultDesignFact
