@@ -4,6 +4,7 @@ import { ClientType } from "../client.type";
 export type DocumentDTO = {
   client: ClientType,
   total_letters:string,
+  paied?: boolean,
 } & Omit<ProformaType, 'client' | 'adopted'>
 
 

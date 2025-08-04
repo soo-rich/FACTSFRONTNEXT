@@ -4,7 +4,6 @@
 import {useMemo, useState} from 'react'
 
 // Next Imports
-import Link from 'next/link'
 import {useParams} from 'next/navigation'
 
 // MUI Imports
@@ -14,11 +13,9 @@ import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid2'
 
 // Type Imports
-import type {Locale} from '@configs/i18n'
 
 // Component Imports
 // Util Imports
-import {getLocalizedUrl} from '@/utils/i18n'
 import DebounceInput from "@components/CustomInput/DebounceInput";
 import {DocumentTypes} from "@/types/soosmart/dossier/DocumentDTO";
 import {DocumentService} from "@/service/document/document.service";
@@ -28,11 +25,12 @@ import {FactureService} from "@/service/dossier/facture.service";
 
 type DocumentsActionsType = {
   id_facture?: string,
+  paied?: boolean,
   UpdateSignature?: (signature: string) => void
   UpdateRole?: (role: string) => void
 }
 
-const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole}: DocumentsActionsType) => {
+const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole, paied}: DocumentsActionsType) => {
   // States
   const [signature, setSignature] = useState<string>('')
   const [signaturerole, setSignatureRole] = useState<string>('')
@@ -125,7 +123,7 @@ const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole}: DocumentsAc
             {
               documenttype === DocumentTypes.FACTURE && id_facture ? (<Button
                 fullWidth
-                disabled={!documenttype}
+                disabled={!paied}
                 variant='contained'
                 className='capitalize'
                 startIcon={<i className='tabler-send'/>}
@@ -137,16 +135,11 @@ const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole}: DocumentsAc
 
             <Button
               fullWidth
-              component={Link}
               color='secondary'
               variant='tonal'
               className='capitalize'
-              href={getLocalizedUrl('/apps/invoice/preview/4987', locale as Locale)}
             >
-              Preview
-            </Button>
-            <Button fullWidth color='secondary' variant='tonal' className='capitalize'>
-              Save
+              Imprimer
             </Button>
           </CardContent>
         </Card>

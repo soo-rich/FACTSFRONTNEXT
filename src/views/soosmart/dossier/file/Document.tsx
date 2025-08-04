@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid2";
 import DocumentsActions from "@views/soosmart/dossier/file/DocumentsActions";
 import {useQuery} from "@tanstack/react-query";
 import {DocumentService} from "@/service/document/document.service";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import LoadingWithoutModal from "@components/LoadingWithoutModal";
 import ErrorView from "@components/ErrorView";
 import DefaultDesignFact from "@views/soosmart/dossier/file/DefaultDesignFact";
@@ -28,6 +28,12 @@ const DocumentViews = () => {
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
+  useEffect(() => {
+    if (data) {
+      setSigned(data.signby || '');
+    }
+  }, [data]);
+
   return (
     <Grid container spacing={6}>
       <Grid size={{xs: 12, md: 9}}>
@@ -41,7 +47,7 @@ const DocumentViews = () => {
         }
       </Grid>
       <Grid size={{xs: 12, md: 3}}>
-        <DocumentsActions id_facture={data?.id} UpdateSignature={setSigned} UpdateRole={setRole}/>
+        <DocumentsActions id_facture={data?.id} UpdateSignature={setSigned} UpdateRole={setRole} paied={data?.paied}/>
       </Grid>
     </Grid>
   )
