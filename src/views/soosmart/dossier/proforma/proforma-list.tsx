@@ -41,7 +41,7 @@ const ProformaList = () => {
   const [proformaselect, setProformaSelect] = useState<ProformaType | undefined>(undefined)
 
   // hooks
-  const {lang: locale}= useParams()
+  const {lang: locale} = useParams()
 
   const {data, isLoading, isError} = useQuery({
     queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize, notadopted],
@@ -85,7 +85,12 @@ const ProformaList = () => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey: [[ProformaService.PROFORMA_KEY, pageIndex, pageSize], [BorderauService.BORDERAU_KEY]]
+          queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize, notadopted],
+        })
+        .then(r => r)
+      queryClient
+        .invalidateQueries({
+          queryKey: [BorderauService.BORDERAU_KEY],
         })
         .then(r => r)
       toast.success('Proforma adoptée avec succès')
