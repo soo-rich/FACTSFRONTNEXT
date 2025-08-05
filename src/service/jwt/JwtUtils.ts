@@ -1,6 +1,6 @@
 import { jwtDecode } from 'jwt-decode'
 
-import type { JwtType } from '@/types/jwt.type'
+import type { JwtType } from '@/types/soosmart/jwt.type'
 
 export class JwtUtils {
   static decode = (token: string) => {
