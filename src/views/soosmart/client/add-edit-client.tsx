@@ -1,24 +1,26 @@
-import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
-
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+
 import { Controller, useForm } from 'react-hook-form'
-
-
 import { valibotResolver } from '@hookform/resolvers/valibot'
 
-import { toast } from 'react-toastify'
-import { Grid2 } from '@mui/material'
 
+import { toast } from 'react-toastify'
+
+import { Grid2 } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
+
 import Typography from '@mui/material/Typography'
 import 'react-international-phone/style.css'
 import { PhoneInput } from 'react-international-phone'
 import Button from '@mui/material/Button'
 
 import CustomTextField from '@core/components/mui/TextField'
+
 import type { ClientSave, ClientType } from '@/types/soosmart/client.type'
 import { schemaClient } from '@/types/soosmart/client.type'
 import { ClientService } from '@/service/client/client.service'
+
+import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 
 const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<ClientType>) => {
   const queryclient = useQueryClient()
