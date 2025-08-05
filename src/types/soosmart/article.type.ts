@@ -1,4 +1,5 @@
-import {InferInput, object, minLength, string, number, pipe} from "valibot";
+import type { InferInput } from 'valibot'
+import { minLength, number, object, pipe, string } from 'valibot'
 
 export type ArticleType = {
   id: string;
@@ -7,7 +8,7 @@ export type ArticleType = {
 };
 
 export const articleSchema = object({
-  libelle: pipe(string(),minLength(1, "le libelle est requis")),
-  prix_unitaire: number(),
-});
+  libelle: pipe(string(), minLength(1, 'le libelle est requis')),
+  prix_unitaire: number()
+})
 export type SaveArticleType = InferInput<typeof articleSchema>;

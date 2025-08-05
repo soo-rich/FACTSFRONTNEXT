@@ -12,9 +12,9 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import { useTheme } from '@mui/material/styles'
 
-// Component Imports
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from '@/libs/Recharts'
 import type { TooltipProps } from '@/libs/Recharts'
+// Component Imports
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from '@/libs/Recharts'
 
 // Styled Component Imports
 const AppRecharts = dynamic(() => import('@/libs/styles/AppRecharts'))
@@ -107,16 +107,16 @@ const CustomTooltip = (props: TooltipProps<any, any>) => {
 
   if (active && payload) {
     return (
-      <div className='recharts-custom-tooltip'>
-        <Typography color='text.primary'>{props.label}</Typography>
+      <div className="recharts-custom-tooltip">
+        <Typography color="text.primary">{props.label}</Typography>
         <Divider />
         {props &&
           props.payload &&
           props.payload.map((i: any) => {
             return (
-              <Box key={i.dataKey} className='flex items-center gap-2.5' sx={{ '& i': { color: i.fill } }}>
-                <i className='tabler-circle-filled text-[10px]' />
-                <Typography variant='body2'>{`${i.dataKey} : ${i.payload[i.dataKey]}`}</Typography>
+              <Box key={i.dataKey} className="flex items-center gap-2.5" sx={{ '& i': { color: i.fill } }}>
+                <i className="tabler-circle-filled text-[10px]" />
+                <Typography variant="body2">{`${i.dataKey} : ${i.payload[i.dataKey]}`}</Typography>
               </Box>
             )
           })}
@@ -134,7 +134,7 @@ const RechartsAreaChart = () => {
   return (
     <Card>
       <CardHeader
-        title='Website Data'
+        title="Website Data"
         sx={{
           flexDirection: ['column', 'row'],
           alignItems: ['flex-start', 'center'],
@@ -143,31 +143,31 @@ const RechartsAreaChart = () => {
         }}
       />
       <CardContent>
-        <div className='flex mbe-4 gap-6'>
-          <Box className='flex items-center gap-1.5' sx={{ '& i': { color: 'rgb(115, 103, 240)' } }}>
-            <i className='tabler-circle-filled text-xs' />
-            <Typography variant='body2'>Click</Typography>
+        <div className="flex mbe-4 gap-6">
+          <Box className="flex items-center gap-1.5" sx={{ '& i': { color: 'rgb(115, 103, 240)' } }}>
+            <i className="tabler-circle-filled text-xs" />
+            <Typography variant="body2">Click</Typography>
           </Box>
-          <Box className='flex items-center gap-1.5' sx={{ '& i': { color: 'rgba(115, 103, 240, .5)' } }}>
-            <i className='tabler-circle-filled text-xs' />
-            <Typography variant='body2'>Sales</Typography>
+          <Box className="flex items-center gap-1.5" sx={{ '& i': { color: 'rgba(115, 103, 240, .5)' } }}>
+            <i className="tabler-circle-filled text-xs" />
+            <Typography variant="body2">Sales</Typography>
           </Box>
-          <Box className='flex items-center gap-1.5' sx={{ '& i': { color: 'rgba(115, 103, 240, .2)' } }}>
-            <i className='tabler-circle-filled text-xs' />
-            <Typography variant='body2'>Visits</Typography>
+          <Box className="flex items-center gap-1.5" sx={{ '& i': { color: 'rgba(115, 103, 240, .2)' } }}>
+            <i className="tabler-circle-filled text-xs" />
+            <Typography variant="body2">Visits</Typography>
           </Box>
         </div>
         <AppRecharts>
-          <div className='bs-[350px]'>
+          <div className="bs-[350px]">
             <ResponsiveContainer>
               <AreaChart height={350} data={data} style={{ direction: theme.direction }} margin={{ left: -20 }}>
                 <CartesianGrid />
-                <XAxis dataKey='name' reversed={theme.direction === 'rtl'} />
+                <XAxis dataKey="name" reversed={theme.direction === 'rtl'} />
                 <YAxis orientation={theme.direction === 'rtl' ? 'right' : 'left'} />
                 <Tooltip content={CustomTooltip} />
-                <Area dataKey='Clicks' stackId='Clicks' stroke='0' fill='rgb(115, 103, 240)' />
-                <Area dataKey='Sales' stackId='Sales' stroke='0' fill='rgba(115, 103, 240, .5)' />
-                <Area dataKey='Visits' stackId='Visits' stroke='0' fill='rgba(115, 103, 240, .2)' />
+                <Area dataKey="Clicks" stackId="Clicks" stroke="0" fill="rgb(115, 103, 240)" />
+                <Area dataKey="Sales" stackId="Sales" stroke="0" fill="rgba(115, 103, 240, .5)" />
+                <Area dataKey="Visits" stackId="Visits" stroke="0" fill="rgba(115, 103, 240, .2)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

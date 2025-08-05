@@ -31,44 +31,44 @@ const keepLearning: keepLearningType[] = [
   {
     slug: 'blogging',
     title: 'Blogging',
-    svg: <Laptop color='var(--mui-palette-text-secondary)' />,
+    svg: <Laptop color="var(--mui-palette-text-secondary)" />,
     subtitle: 'Expert tips & tools to improve your website or online store using blog.'
   },
   {
     slug: 'inspiration-center',
     title: 'Inspiration Center',
-    svg: <Bulb color='var(--mui-palette-text-secondary)' />,
+    svg: <Bulb color="var(--mui-palette-text-secondary)" />,
     subtitle: 'Inspiration from experts to help you start and grow your big ideas.'
   },
   {
     slug: 'community',
     title: 'Community',
-    svg: <Discord color='var(--mui-palette-text-secondary)' />,
+    svg: <Discord color="var(--mui-palette-text-secondary)" />,
     subtitle: 'A group of people living in the same place or having a particular.'
   }
 ]
 
 const KeepLearning = () => {
   return (
-    <section className='flex flex-col md:plb-[100px] plb-[50px] bg-backgroundPaper'>
+    <section className="flex flex-col md:plb-[100px] plb-[50px] bg-backgroundPaper">
       <div className={frontCommonStyles.layoutSpacing}>
-        <Typography variant='h4' className='text-center mbe-6'>
+        <Typography variant="h4" className="text-center mbe-6">
           Keep Learning
         </Typography>
         <Grid container spacing={6}>
           {keepLearning.map((article, index) => {
             return (
               <Grid size={{ xs: 12, lg: 4 }} key={index}>
-                <Card variant='outlined'>
-                  <CardContent className='flex flex-col items-center justify-center gap-3 text-center'>
+                <Card variant="outlined">
+                  <CardContent className="flex flex-col items-center justify-center gap-3 text-center">
                     {article.svg}
-                    <Typography variant='h5'>{article.title}</Typography>
+                    <Typography variant="h5">{article.title}</Typography>
                     <Typography>{article.subtitle}</Typography>
                     <Button
                       component={Link}
-                      href='/front-pages/help-center/article/how-to-add-product-in-cart'
-                      variant='tonal'
-                      size='small'
+                      href="/front-pages/help-center/article/how-to-add-product-in-cart"
+                      variant="tonal"
+                      size="small"
                     >
                       Read More
                     </Button>

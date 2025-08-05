@@ -1,6 +1,6 @@
 // React Imports
-import { useState } from 'react'
 import type { FormEvent } from 'react'
+import { useState } from 'react'
 
 // MUI Imports
 import Drawer from '@mui/material/Drawer'
@@ -57,64 +57,64 @@ const SendInvoiceDrawer = ({ open, handleClose }: Props) => {
   return (
     <Drawer
       open={open}
-      anchor='right'
-      variant='temporary'
+      anchor="right"
+      variant="temporary"
       onClose={handleReset}
       ModalProps={{ keepMounted: true }}
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
-      <div className='flex items-center justify-between plb-5 pli-6'>
-        <Typography variant='h5'>Send Invoice</Typography>
-        <IconButton size='small' onClick={handleReset}>
-          <i className='tabler-x text-2xl text-textPrimary' />
+      <div className="flex items-center justify-between plb-5 pli-6">
+        <Typography variant="h5">Send Invoice</Typography>
+        <IconButton size="small" onClick={handleReset}>
+          <i className="tabler-x text-2xl text-textPrimary" />
         </IconButton>
       </div>
       <Divider />
-      <div className='p-6'>
-        <form onSubmit={handleSubmit} className='flex flex-col items-start gap-6'>
+      <div className="p-6">
+        <form onSubmit={handleSubmit} className="flex flex-col items-start gap-6">
           <CustomTextField
             fullWidth
-            label='From'
-            variant='outlined'
+            label="From"
+            variant="outlined"
             value={formData.from}
             onChange={e => setFormData({ ...formData, from: e.target.value })}
           />
           <CustomTextField
             fullWidth
-            label='To'
-            variant='outlined'
+            label="To"
+            variant="outlined"
             value={formData.to}
             onChange={e => setFormData({ ...formData, to: e.target.value })}
           />
           <CustomTextField
             fullWidth
-            label='Subject'
-            variant='outlined'
+            label="Subject"
+            variant="outlined"
             value={formData.subject}
             onChange={e => setFormData({ ...formData, subject: e.target.value })}
           />
           <CustomTextField
             fullWidth
-            label='Message'
-            variant='outlined'
+            label="Message"
+            variant="outlined"
             multiline
             rows={10}
             value={formData.message}
             onChange={e => setFormData({ ...formData, message: e.target.value })}
           />
           <Chip
-            size='small'
-            color='primary'
-            variant='tonal'
-            className='rounded'
-            label='Invoice Attached'
-            icon={<i className='tabler-link' />}
+            size="small"
+            color="primary"
+            variant="tonal"
+            className="rounded"
+            label="Invoice Attached"
+            icon={<i className="tabler-link" />}
           />
-          <div className='flex items-center gap-4'>
-            <Button variant='contained' color='primary' type='submit'>
+          <div className="flex items-center gap-4">
+            <Button variant="contained" color="primary" type="submit">
               Send
             </Button>
-            <Button variant='tonal' color='error' type='reset' onClick={handleReset}>
+            <Button variant="tonal" color="error" type="reset" onClick={handleReset}>
               Cancel
             </Button>
           </div>

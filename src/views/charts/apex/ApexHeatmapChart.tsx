@@ -129,9 +129,9 @@ const ApexHeatmapChart = () => {
 
   return (
     <Card>
-      <CardHeader title='Daily Sales States' />
+      <CardHeader title="Daily Sales States" />
       <CardContent>
-        <AppReactApexCharts type='heatmap' width='100%' height={400} options={options} series={series} />
+        <AppReactApexCharts type="heatmap" width="100%" height={400} options={options} series={series} />
       </CardContent>
     </Card>
   )

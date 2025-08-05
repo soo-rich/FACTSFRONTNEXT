@@ -12,8 +12,8 @@ import { useTheme } from '@mui/material/styles'
 
 // Third-party Components
 import classnames from 'classnames'
-import { useKeenSlider } from 'keen-slider/react'
 import type { KeenSliderPlugin } from 'keen-slider/react'
+import { useKeenSlider } from 'keen-slider/react'
 
 // Components Imports
 import CustomAvatar from '@core/components/mui/Avatar'
@@ -66,29 +66,29 @@ const Slides = () => {
       {data.map((slide: DataType, index: number) => {
         return (
           <div key={index} className={classnames('keen-slider__slide p-6 pbe-3 is-full')}>
-            <Typography variant='h5' className='mbe-0.5 text-[var(--mui-palette-common-white)]'>
+            <Typography variant="h5" className="mbe-0.5 text-[var(--mui-palette-common-white)]">
               Website Analytics
             </Typography>
-            <Typography variant='subtitle2' className='mbe-3 text-[var(--mui-palette-common-white)]'>
+            <Typography variant="subtitle2" className="mbe-3 text-[var(--mui-palette-common-white)]">
               Total 28.5% Conversion Rate
             </Typography>
-            <Grid container spacing={4} className='relative'>
-              <Grid size={{ xs: 12, sm: 8 }} className='order-2 sm:order-1'>
-                <div className='flex flex-col gap-4 pbs-5 sm:plb-6'>
-                  <Typography className='font-medium text-[var(--mui-palette-common-white)]'>{slide.title}</Typography>
+            <Grid container spacing={4} className="relative">
+              <Grid size={{ xs: 12, sm: 8 }} className="order-2 sm:order-1">
+                <div className="flex flex-col gap-4 pbs-5 sm:plb-6">
+                  <Typography className="font-medium text-[var(--mui-palette-common-white)]">{slide.title}</Typography>
                   <Grid container spacing={4}>
                     {Object.keys(slide.details).map((key: string, index: number) => {
                       return (
                         <Grid key={index} size={{ xs: 6 }}>
-                          <div className='flex items-center gap-0.5'>
+                          <div className="flex items-center gap-0.5">
                             <CustomAvatar
-                              color='primary'
-                              variant='rounded'
-                              className='font-medium mie-2 text-white bg-[var(--mui-palette-primary-dark)] bs-[30px] is-12'
+                              color="primary"
+                              variant="rounded"
+                              className="font-medium mie-2 text-white bg-[var(--mui-palette-primary-dark)] bs-[30px] is-12"
                             >
                               {slide.details[key]}
                             </CustomAvatar>
-                            <Typography noWrap className='text-[var(--mui-palette-common-white)]'>
+                            <Typography noWrap className="text-[var(--mui-palette-common-white)]">
                               {key}
                             </Typography>
                           </div>
@@ -98,11 +98,11 @@ const Slides = () => {
                   </Grid>
                 </div>
               </Grid>
-              <Grid size={{ xs: 12, sm: 4 }} className='flex justify-center order-1 sm:order-2'>
+              <Grid size={{ xs: 12, sm: 4 }} className="flex justify-center order-1 sm:order-2">
                 <img
                   src={slide.img}
                   height={150}
-                  className='max-bs-[150px] md:bs-[120px] xl:bs-[150px] drop-shadow-[0_4px_60px_rgba(0,0,0,0.5)] sm:absolute bottom-3 end-0'
+                  className="max-bs-[150px] md:bs-[120px] xl:bs-[150px] drop-shadow-[0_4px_60px_rgba(0,0,0,0.5)] sm:absolute bottom-3 end-0"
                 />
               </Grid>
             </Grid>
@@ -122,7 +122,7 @@ const WebsiteAnalyticsSlider = () => {
   const theme = useTheme()
 
   const ResizePlugin: KeenSliderPlugin = slider => {
-    const observer = new ResizeObserver(function () {
+    const observer = new ResizeObserver(function() {
       slider.update()
     })
 
@@ -150,16 +150,16 @@ const WebsiteAnalyticsSlider = () => {
 
   return (
     <AppKeenSlider>
-      <Card className='bg-primary'>
-        <div ref={sliderRef} className='keen-slider relative'>
+      <Card className="bg-primary">
+        <div ref={sliderRef} className="keen-slider relative">
           {loaded && instanceRef.current && (
-            <div className='swiper-dots absolute top-1 inline-end-6'>
+            <div className="swiper-dots absolute top-1 inline-end-6">
               {[...Array(instanceRef.current.track.details.slides.length).keys()].map(idx => {
                 return (
                   <Badge
                     key={idx}
-                    variant='dot'
-                    component='div'
+                    variant="dot"
+                    component="div"
                     className={classnames({
                       active: currentSlide === idx
                     })}

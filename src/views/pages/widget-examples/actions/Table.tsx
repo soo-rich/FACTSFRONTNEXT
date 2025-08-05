@@ -15,8 +15,8 @@ import tableStyles from '@core/styles/table.module.css'
 const CardActionsTable = () => {
   return (
     <Card>
-      <CardHeader title='Card Actions' />
-      <CardContent className='p-0'>
+      <CardHeader title="Card Actions" />
+      <CardContent className="p-0">
         <TableContainer>
           <Table className={tableStyles.table}>
             <TableHead>
@@ -30,23 +30,23 @@ const CardActionsTable = () => {
               <TableRow>
                 <TableCell>Collapse</TableCell>
                 <TableCell>
-                  <i className='tabler-chevron-up text-xl' />
+                  <i className="tabler-chevron-up text-xl" />
                 </TableCell>
                 <TableCell>Collapse card content using collapse action</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Refresh Content</TableCell>
                 <TableCell>
-                  <i className='tabler-refresh text-xl' />
+                  <i className="tabler-refresh text-xl" />
                 </TableCell>
                 <TableCell>Refresh your card content using refresh action</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className='border-be-0'>Remove Card</TableCell>
-                <TableCell className='border-be-0'>
-                  <i className='tabler-x text-xl' />
+                <TableCell className="border-be-0">Remove Card</TableCell>
+                <TableCell className="border-be-0">
+                  <i className="tabler-x text-xl" />
                 </TableCell>
-                <TableCell className='border-be-0'>Remove card from page using remove card action</TableCell>
+                <TableCell className="border-be-0">Remove card from page using remove card action</TableCell>
               </TableRow>
             </TableBody>
           </Table>

@@ -68,29 +68,29 @@ const ActiveProjects = () => {
   return (
     <Card>
       <CardHeader
-        title='Active Projects'
-        subheader='Average 72% completed'
+        title="Active Projects"
+        subheader="Average 72% completed"
         action={<OptionMenu options={['Refresh', 'Update', 'Share']} />}
       />
-      <CardContent className='flex flex-col gap-4'>
+      <CardContent className="flex flex-col gap-4">
         {data.map((item, index) => (
-          <div key={index} className='flex items-center gap-4'>
+          <div key={index} className="flex items-center gap-4">
             <img src={item.imgSrc} alt={item.title} width={32} />
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
+            <div className="flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full">
+              <div className="flex flex-col">
+                <Typography className="font-medium" color="text.primary">
                   {item.title}
                 </Typography>
-                <Typography variant='body2'>{item.subtitle}</Typography>
+                <Typography variant="body2">{item.subtitle}</Typography>
               </div>
-              <div className='flex justify-between items-center is-32'>
+              <div className="flex justify-between items-center is-32">
                 <LinearProgress
                   value={item.progress}
-                  variant='determinate'
+                  variant="determinate"
                   color={item.progressColor}
-                  className='min-bs-2 is-20'
+                  className="min-bs-2 is-20"
                 />
-                <Typography color='text.disabled'>{`${item.progress}%`}</Typography>
+                <Typography color="text.disabled">{`${item.progress}%`}</Typography>
               </div>
             </div>
           </div>

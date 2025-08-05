@@ -51,8 +51,8 @@ const KanbanBoard = () => {
   }, [columns])
 
   return (
-    <div className='flex items-start gap-6'>
-      <div ref={boardRef as RefObject<HTMLDivElement>} className='flex gap-6'>
+    <div className="flex items-start gap-6">
+      <div ref={boardRef as RefObject<HTMLDivElement>} className="flex gap-6">
         {columns.map(column => (
           <KanbanList
             key={column.id}

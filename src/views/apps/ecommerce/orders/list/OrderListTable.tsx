@@ -1,5 +1,5 @@
 // React Imports
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
@@ -18,21 +18,21 @@ import MenuItem from '@mui/material/MenuItem'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -56,6 +56,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -103,11 +104,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -177,7 +178,7 @@ const OrderListTable = ({ orderData }: { orderData?: OrderType[] }) => {
           <Typography
             component={Link}
             href={getLocalizedUrl(`/apps/ecommerce/orders/details/${row.original.order}`, locale as Locale)}
-            color='primary.main'
+            color="primary.main"
           >{`#${row.original.order}`}</Typography>
         )
       }),
@@ -190,18 +191,18 @@ const OrderListTable = ({ orderData }: { orderData?: OrderType[] }) => {
       columnHelper.accessor('customer', {
         header: 'Customers',
         cell: ({ row }) => (
-          <div className='flex items-center gap-3'>
+          <div className="flex items-center gap-3">
             {getAvatar({ avatar: row.original.avatar, customer: row.original.customer })}
-            <div className='flex flex-col'>
+            <div className="flex flex-col">
               <Typography
                 component={Link}
                 href={getLocalizedUrl('/apps/ecommerce/customers/details/879861', locale as Locale)}
-                color='text.primary'
-                className='font-medium hover:text-primary'
+                color="text.primary"
+                className="font-medium hover:text-primary"
               >
                 {row.original.customer}
               </Typography>
-              <Typography variant='body2'>{row.original.email}</Typography>
+              <Typography variant="body2">{row.original.email}</Typography>
             </div>
           </div>
         )
@@ -209,14 +210,14 @@ const OrderListTable = ({ orderData }: { orderData?: OrderType[] }) => {
       columnHelper.accessor('payment', {
         header: 'Payment',
         cell: ({ row }) => (
-          <div className='flex items-center gap-1'>
+          <div className="flex items-center gap-1">
             <i
               className={classnames(
                 'tabler-circle-filled bs-2.5 is-2.5',
                 paymentStatus[row.original.payment].colorClassName
               )}
             />
-            <Typography color={`${paymentStatus[row.original.payment].color}.main`} className='font-medium'>
+            <Typography color={`${paymentStatus[row.original.payment].color}.main`} className="font-medium">
               {paymentStatus[row.original.payment].text}
             </Typography>
           </div>
@@ -228,16 +229,16 @@ const OrderListTable = ({ orderData }: { orderData?: OrderType[] }) => {
           <Chip
             label={row.original.status}
             color={statusChipColor[row.original.status].color}
-            variant='tonal'
-            size='small'
+            variant="tonal"
+            size="small"
           />
         )
       }),
       columnHelper.accessor('method', {
         header: 'Method',
         cell: ({ row }) => (
-          <div className='flex items-center'>
-            <div className='flex justify-center items-center bg-[#F6F8FA] rounded-sm is-[29px] bs-[18px]'>
+          <div className="flex items-center">
+            <div className="flex justify-center items-center bg-[#F6F8FA] rounded-sm is-[29px] bs-[18px]">
               <img
                 src={row.original.method === 'mastercard' ? mastercard : paypal}
                 height={row.original.method === 'mastercard' ? 11 : 14}
@@ -252,10 +253,10 @@ const OrderListTable = ({ orderData }: { orderData?: OrderType[] }) => {
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({ row }) => (
-          <div className='flex items-center'>
+          <div className="flex items-center">
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary'
+              iconClassName="text-textSecondary"
               options={[
                 {
                   text: 'View',
@@ -315,10 +316,10 @@ const OrderListTable = ({ orderData }: { orderData?: OrderType[] }) => {
     const { avatar, customer } = params
 
     if (avatar) {
-      return <CustomAvatar src={avatar} skin='light' size={34} />
+      return <CustomAvatar src={avatar} skin="light" size={34} />
     } else {
       return (
-        <CustomAvatar skin='light' size={34}>
+        <CustomAvatar skin="light" size={34}>
           {getInitials(customer as string)}
         </CustomAvatar>
       )
@@ -327,86 +328,86 @@ const OrderListTable = ({ orderData }: { orderData?: OrderType[] }) => {
 
   return (
     <Card>
-      <CardContent className='flex justify-between max-sm:flex-col sm:items-center gap-4'>
+      <CardContent className="flex justify-between max-sm:flex-col sm:items-center gap-4">
         <DebouncedInput
           value={globalFilter ?? ''}
           onChange={value => setGlobalFilter(String(value))}
-          placeholder='Search Order'
-          className='sm:is-auto'
+          placeholder="Search Order"
+          className="sm:is-auto"
         />
-        <div className='flex items-center max-sm:flex-col gap-4 max-sm:is-full is-auto'>
+        <div className="flex items-center max-sm:flex-col gap-4 max-sm:is-full is-auto">
           <CustomTextField
             select
             value={table.getState().pagination.pageSize}
             onChange={e => table.setPageSize(Number(e.target.value))}
-            className='is-[70px] max-sm:is-full'
+            className="is-[70px] max-sm:is-full"
           >
-            <MenuItem value='10'>10</MenuItem>
-            <MenuItem value='25'>25</MenuItem>
-            <MenuItem value='50'>50</MenuItem>
-            <MenuItem value='100'>100</MenuItem>
+            <MenuItem value="10">10</MenuItem>
+            <MenuItem value="25">25</MenuItem>
+            <MenuItem value="50">50</MenuItem>
+            <MenuItem value="100">100</MenuItem>
           </CustomTextField>
           <Button
-            variant='tonal'
-            color='secondary'
-            startIcon={<i className='tabler-upload' />}
-            className='max-sm:is-full is-auto'
+            variant="tonal"
+            color="secondary"
+            startIcon={<i className="tabler-upload" />}
+            className="max-sm:is-full is-auto"
           >
             Export
           </Button>
         </div>
       </CardContent>
-      <div className='overflow-x-auto'>
+      <div className="overflow-x-auto">
         <table className={tableStyles.table}>
           <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <div
-                          className={classnames({
-                            'flex items-center': header.column.getIsSorted(),
-                            'cursor-pointer select-none': header.column.getCanSort()
-                          })}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: <i className='tabler-chevron-up text-xl' />,
-                            desc: <i className='tabler-chevron-down text-xl' />
-                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                        </div>
-                      </>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id}>
+                  {header.isPlaceholder ? null : (
+                    <>
+                      <div
+                        className={classnames({
+                          'flex items-center': header.column.getIsSorted(),
+                          'cursor-pointer select-none': header.column.getCanSort()
+                        })}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: <i className="tabler-chevron-up text-xl" />,
+                          desc: <i className="tabler-chevron-down text-xl" />
+                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                      </div>
+                    </>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
           </thead>
           {table.getFilteredRowModel().rows.length === 0 ? (
             <tbody>
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                  No data available
-                </td>
-              </tr>
+            <tr>
+              <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                No data available
+              </td>
+            </tr>
             </tbody>
           ) : (
             <tbody>
-              {table
-                .getRowModel()
-                .rows.slice(0, table.getState().pagination.pageSize)
-                .map(row => {
-                  return (
-                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                      {row.getVisibleCells().map(cell => (
-                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                      ))}
-                    </tr>
-                  )
-                })}
+            {table
+              .getRowModel()
+              .rows.slice(0, table.getState().pagination.pageSize)
+              .map(row => {
+                return (
+                  <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                    ))}
+                  </tr>
+                )
+              })}
             </tbody>
           )}
         </table>

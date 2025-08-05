@@ -2,7 +2,9 @@
 import { format as formatter } from 'date-fns'
 import Swal from 'sweetalert2';
 import { fr } from 'date-fns/locale';
-import {SweetconfirmProps} from "@/types/soosmart/sweetAlertProps";
+
+import type {SweetconfirmProps} from "@/types/soosmart/sweetAlertProps";
+
 class UtiliMetod {
 
   static formatDevise = (value: number, format?: string) => {

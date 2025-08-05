@@ -39,31 +39,31 @@ const ComingSoon = ({ mode }: { mode: SystemMode }) => {
   const miscBackground = useImageVariant(mode, lightImg, darkImg)
 
   return (
-    <div className='flex items-center justify-center min-bs-[100dvh] relative p-6 overflow-x-hidden'>
-      <div className='flex items-center flex-col text-center'>
-        <div className='is-[90vw] sm:is-[unset]'>
-          <div className='flex flex-col gap-2 is-[90vw] sm:is-[unset] mbe-6'>
-            <Typography variant='h4'>We are launching soon 🚀</Typography>
+    <div className="flex items-center justify-center min-bs-[100dvh] relative p-6 overflow-x-hidden">
+      <div className="flex items-center flex-col text-center">
+        <div className="is-[90vw] sm:is-[unset]">
+          <div className="flex flex-col gap-2 is-[90vw] sm:is-[unset] mbe-6">
+            <Typography variant="h4">We are launching soon 🚀</Typography>
             <Typography>Our website is opening soon. Please register to get notified when it&#39;s ready!</Typography>
           </div>
-          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <div className='flex justify-center gap-4'>
-              <CustomTextField autoFocus type='email' placeholder='Enter your email or username' className='is-[70%]' />
-              <Button type='submit' variant='contained'>
+          <form noValidate autoComplete="off" onSubmit={e => e.preventDefault()}>
+            <div className="flex justify-center gap-4">
+              <CustomTextField autoFocus type="email" placeholder="Enter your email or username" className="is-[70%]" />
+              <Button type="submit" variant="contained">
                 Notify
               </Button>
             </div>
           </form>
         </div>
         <img
-          alt='coming-soon-illustration'
-          src='/images/illustrations/characters/2.png'
-          className='object-cover bs-[400px] md:bs-[450px] lg:bs-[500px] mbs-10 md:mbs-14 lg:mbs-20'
+          alt="coming-soon-illustration"
+          src="/images/illustrations/characters/2.png"
+          className="object-cover bs-[400px] md:bs-[450px] lg:bs-[500px] mbs-10 md:mbs-14 lg:mbs-20"
         />
       </div>
       {!hidden && (
         <MaskImg
-          alt='mask'
+          alt="mask"
           src={miscBackground}
           className={classnames({ 'scale-x-[-1]': theme.direction === 'rtl' })}
         />

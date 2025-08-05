@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
@@ -18,20 +18,20 @@ import Typography from '@mui/material/Typography'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -53,6 +53,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -122,15 +123,15 @@ const LogisticsOverviewTable = ({ vehicleData }: { vehicleData?: Vehicle[] }) =>
       columnHelper.accessor('location', {
         header: 'Location',
         cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <CustomAvatar skin='light' color='secondary'>
-              <i className='tabler-car text-[28px]' />
+          <div className="flex items-center gap-4">
+            <CustomAvatar skin="light" color="secondary">
+              <i className="tabler-car text-[28px]" />
             </CustomAvatar>
             <Typography
               component={Link}
               href={getLocalizedUrl('/apps/logistics/fleet', locale as Locale)}
-              className='font-medium hover:text-primary'
-              color='text.primary'
+              className="font-medium hover:text-primary"
+              color="text.primary"
             >
               VOL-{row.original.location}
             </Typography>
@@ -149,9 +150,9 @@ const LogisticsOverviewTable = ({ vehicleData }: { vehicleData?: Vehicle[] }) =>
         header: 'Warnings',
         cell: ({ row }) => (
           <Chip
-            variant='tonal'
+            variant="tonal"
             label={row.original.warnings}
-            size='small'
+            size="small"
             color={chipColor[row.original.warnings].color}
           />
         )
@@ -159,12 +160,12 @@ const LogisticsOverviewTable = ({ vehicleData }: { vehicleData?: Vehicle[] }) =>
       columnHelper.accessor('progress', {
         header: 'Progress',
         cell: ({ row }) => (
-          <div className='flex items-center gap-2 min-is-48'>
+          <div className="flex items-center gap-2 min-is-48">
             <LinearProgress
-              color='primary'
+              color="primary"
               value={row.original.progress}
-              variant='determinate'
-              className='bs-2 is-full'
+              variant="determinate"
+              className="bs-2 is-full"
             />
             <Typography>{`${row.original.progress}%`}</Typography>
           </div>
@@ -202,58 +203,58 @@ const LogisticsOverviewTable = ({ vehicleData }: { vehicleData?: Vehicle[] }) =>
 
   return (
     <Card>
-      <CardHeader title='Course you are taking' action={<OptionMenu options={['Refresh', 'Update', 'Share']} />} />
-      <div className='overflow-x-auto'>
+      <CardHeader title="Course you are taking" action={<OptionMenu options={['Refresh', 'Update', 'Share']} />} />
+      <div className="overflow-x-auto">
         <table className={tableStyles.table}>
           <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <div
-                          className={classnames({
-                            'flex items-center': header.column.getIsSorted(),
-                            'cursor-pointer select-none': header.column.getCanSort()
-                          })}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: <i className='tabler-chevron-up text-xl' />,
-                            desc: <i className='tabler-chevron-down text-xl' />
-                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                        </div>
-                      </>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id}>
+                  {header.isPlaceholder ? null : (
+                    <>
+                      <div
+                        className={classnames({
+                          'flex items-center': header.column.getIsSorted(),
+                          'cursor-pointer select-none': header.column.getCanSort()
+                        })}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: <i className="tabler-chevron-up text-xl" />,
+                          desc: <i className="tabler-chevron-down text-xl" />
+                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                      </div>
+                    </>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
           </thead>
           {table.getFilteredRowModel().rows.length === 0 ? (
             <tbody>
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                  No data available
-                </td>
-              </tr>
+            <tr>
+              <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                No data available
+              </td>
+            </tr>
             </tbody>
           ) : (
             <tbody>
-              {table
-                .getRowModel()
-                .rows.slice(0, table.getState().pagination.pageSize)
-                .map(row => {
-                  return (
-                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                      {row.getVisibleCells().map(cell => (
-                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                      ))}
-                    </tr>
-                  )
-                })}
+            {table
+              .getRowModel()
+              .rows.slice(0, table.getState().pagination.pageSize)
+              .map(row => {
+                return (
+                  <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                    ))}
+                  </tr>
+                )
+              })}
             </tbody>
           )}
         </table>

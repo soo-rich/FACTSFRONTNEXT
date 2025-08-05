@@ -16,8 +16,8 @@ import IconButton from '@mui/material/IconButton'
 import { toast } from 'react-toastify'
 import { Controller, useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { email, object, minLength, string, pipe, nonEmpty } from 'valibot'
 import type { InferInput } from 'valibot'
+import { email, minLength, nonEmpty, object, pipe, string } from 'valibot'
 
 // Components Imports
 import CustomTextField from '@core/components/mui/TextField'
@@ -69,21 +69,21 @@ const FormValidationOnScheme = () => {
 
   return (
     <Card>
-      <CardHeader title='Validation Schema With OnChange' />
+      <CardHeader title="Validation Schema With OnChange" />
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={6}>
             <Grid size={{ xs: 12 }}>
               <Controller
-                name='firstName'
+                name="firstName"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    label='First Name'
-                    placeholder='John'
+                    label="First Name"
+                    placeholder="John"
                     {...(errors.firstName && { error: true, helperText: errors.firstName.message })}
                   />
                 )}
@@ -91,15 +91,15 @@ const FormValidationOnScheme = () => {
             </Grid>
             <Grid size={{ xs: 12 }}>
               <Controller
-                name='lastName'
+                name="lastName"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    label='Last Name'
-                    placeholder='Doe'
+                    label="Last Name"
+                    placeholder="Doe"
                     {...(errors.lastName && { error: true, helperText: errors.lastName.message })}
                   />
                 )}
@@ -107,16 +107,16 @@ const FormValidationOnScheme = () => {
             </Grid>
             <Grid size={{ xs: 12 }}>
               <Controller
-                name='email'
+                name="email"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    type='email'
-                    label='Email'
-                    placeholder='johndoe@gmail.com'
+                    type="email"
+                    label="Email"
+                    placeholder="johndoe@gmail.com"
                     {...(errors.email && { error: true, helperText: errors.email.message })}
                   />
                 )}
@@ -124,26 +124,26 @@ const FormValidationOnScheme = () => {
             </Grid>
             <Grid size={{ xs: 12 }}>
               <Controller
-                name='password'
+                name="password"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    label='Password'
-                    placeholder='············'
-                    id='form-validation-scheme-password'
+                    label="Password"
+                    placeholder="············"
+                    id="form-validation-scheme-password"
                     type={isPasswordShown ? 'text' : 'password'}
                     slotProps={{
                       input: {
                         endAdornment: (
-                          <InputAdornment position='end'>
+                          <InputAdornment position="end">
                             <IconButton
-                              edge='end'
+                              edge="end"
                               onClick={handleClickShowPassword}
                               onMouseDown={e => e.preventDefault()}
-                              aria-label='toggle password visibility'
+                              aria-label="toggle password visibility"
                             >
                               <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                             </IconButton>
@@ -156,11 +156,11 @@ const FormValidationOnScheme = () => {
                 )}
               />
             </Grid>
-            <Grid size={{ xs: 12 }} className='flex gap-4'>
-              <Button variant='contained' type='submit'>
+            <Grid size={{ xs: 12 }} className="flex gap-4">
+              <Button variant="contained" type="submit">
                 Submit
               </Button>
-              <Button variant='tonal' color='secondary' type='reset' onClick={() => reset()}>
+              <Button variant="tonal" color="secondary" type="reset" onClick={() => reset()}>
                 Reset
               </Button>
             </Grid>

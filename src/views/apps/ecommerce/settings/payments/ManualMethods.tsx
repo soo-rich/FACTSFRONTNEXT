@@ -1,8 +1,8 @@
 'use client'
 
+import type { SyntheticEvent } from 'react'
 // React Imports
 import { useRef, useState } from 'react'
-import type { SyntheticEvent } from 'react'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -48,20 +48,20 @@ const PaymentMethodButton = () => {
 
   return (
     <>
-      <ButtonGroup variant='tonal' ref={anchorRef} aria-label='split button'>
+      <ButtonGroup variant="tonal" ref={anchorRef} aria-label="split button">
         <Button>Add Manual Payment Method</Button>
         <Button
-          className='pli-0'
-          aria-haspopup='menu'
+          className="pli-0"
+          aria-haspopup="menu"
           onClick={handleToggle}
-          aria-label='select merge strategy'
+          aria-label="select merge strategy"
           aria-expanded={open ? 'true' : undefined}
           aria-controls={open ? 'split-button-menu' : undefined}
         >
-          <i className='tabler-chevron-down' />
+          <i className="tabler-chevron-down" />
         </Button>
       </ButtonGroup>
-      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition placement='top-end'>
+      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition placement="top-end">
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}
@@ -76,9 +76,9 @@ const PaymentMethodButton = () => {
                     : 'right bottom'
             }}
           >
-            <Paper className='shadow-lg'>
+            <Paper className="shadow-lg">
               <ClickAwayListener onClickAway={handleClose}>
-                <MenuList id='split-button-menu'>
+                <MenuList id="split-button-menu">
                   {options.map((option, index) => (
                     <MenuItem
                       key={option}
@@ -101,9 +101,9 @@ const PaymentMethodButton = () => {
 const ManualMethods = () => {
   return (
     <Card>
-      <CardHeader title='Manual payment methods' />
+      <CardHeader title="Manual payment methods" />
       <CardContent>
-        <Typography className='mbe-5'>
+        <Typography className="mbe-5">
           Payments that are made outside your online store. When a customer selects a manual payment method such as cash
           on delivery, you&apos;ll need to approve their order before it can be fulfilled.
         </Typography>

@@ -150,34 +150,34 @@ const InterestedTopics = () => {
   return (
     <Card>
       <CardHeader
-        title='Topic you are interested in'
+        title="Topic you are interested in"
         action={<OptionMenu options={['Refresh', 'Update', 'Share']} />}
       />
       <CardContent>
         <Grid container>
-          <Grid size={{ xs: 12, sm: 6 }} className='max-sm:mbe-6'>
-            <AppReactApexCharts type='bar' height={296} width='100%' series={series} options={options} />
+          <Grid size={{ xs: 12, sm: 6 }} className="max-sm:mbe-6">
+            <AppReactApexCharts type="bar" height={296} width="100%" series={series} options={options} />
           </Grid>
-          <Grid size={{ xs: 12, sm: 6 }} alignSelf='center'>
-            <div className='flex justify-around items-start'>
-              <div className='flex flex-col gap-y-12'>
+          <Grid size={{ xs: 12, sm: 6 }} alignSelf="center">
+            <div className="flex justify-around items-start">
+              <div className="flex flex-col gap-y-12">
                 {data1.map((item, i) => (
-                  <div key={i} className='flex gap-2'>
+                  <div key={i} className="flex gap-2">
                     <i className={classnames('tabler-circle-filled text-xs m-[5px]', item.colorClass)} />
                     <div>
                       <Typography>{item.title}</Typography>
-                      <Typography variant='h5'>{`${item.value}%`}</Typography>
+                      <Typography variant="h5">{`${item.value}%`}</Typography>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className='flex flex-col gap-y-12'>
+              <div className="flex flex-col gap-y-12">
                 {data2.map((item, i) => (
-                  <div key={i} className='flex gap-2'>
+                  <div key={i} className="flex gap-2">
                     <i className={classnames('tabler-circle-filled text-xs m-[5px]', item.colorClass)} />
                     <div>
                       <Typography>{item.title}</Typography>
-                      <Typography variant='h5'>{`${item.value}%`}</Typography>
+                      <Typography variant="h5">{`${item.value}%`}</Typography>
                     </div>
                   </div>
                 ))}

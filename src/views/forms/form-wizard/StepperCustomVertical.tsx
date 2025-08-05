@@ -17,11 +17,11 @@ import StepLabel from '@mui/material/StepLabel'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
-import CardContent from '@mui/material/CardContent'
-import MuiStep from '@mui/material/Step'
-import type { StepProps } from '@mui/material/Step'
-import type { SelectChangeEvent } from '@mui/material/Select'
 import type { CardContentProps } from '@mui/material/CardContent'
+import CardContent from '@mui/material/CardContent'
+import type { StepProps } from '@mui/material/Step'
+import MuiStep from '@mui/material/Step'
+import type { SelectChangeEvent } from '@mui/material/Select'
 
 // Third Party Imports
 import { toast } from 'react-toastify'
@@ -169,40 +169,40 @@ const StepperCustomVertical = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Username'
+                label="Username"
                 value={username}
-                placeholder='JohnDoe'
+                placeholder="JohnDoe"
                 onChange={e => setUsername(e.target.value)}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                type='email'
-                label='Email'
+                type="email"
+                label="Email"
                 value={email}
-                placeholder='johndoe@gmail.com'
+                placeholder="johndoe@gmail.com"
                 onChange={e => setEmail(e.target.value)}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Password'
-                placeholder='············'
+                label="Password"
+                placeholder="············"
                 value={state.password}
-                id='stepper-custom-vertical-account-password'
+                id="stepper-custom-vertical-account-password"
                 onChange={handlePasswordChange('password')}
                 type={state.showPassword ? 'text' : 'password'}
                 slotProps={{
                   input: {
                     endAdornment: (
-                      <InputAdornment position='end'>
+                      <InputAdornment position="end">
                         <IconButton
-                          edge='end'
+                          edge="end"
                           onClick={handleClickShowPassword}
                           onMouseDown={e => e.preventDefault()}
-                          aria-label='toggle password visibility'
+                          aria-label="toggle password visibility"
                         >
                           <i className={state.showPassword ? 'tabler-eye' : 'tabler-eye-off'} />
                         </IconButton>
@@ -216,19 +216,19 @@ const StepperCustomVertical = () => {
               <CustomTextField
                 fullWidth
                 value={state.password2}
-                label='Confirm Password'
-                placeholder='············'
-                id='stepper-custom-vertical-account-password-2'
+                label="Confirm Password"
+                placeholder="············"
+                id="stepper-custom-vertical-account-password-2"
                 onChange={handleConfirmChange('password2')}
                 type={state.showPassword2 ? 'text' : 'password'}
                 slotProps={{
                   input: {
                     endAdornment: (
-                      <InputAdornment position='end'>
+                      <InputAdornment position="end">
                         <IconButton
-                          edge='end'
+                          edge="end"
                           onMouseDown={e => e.preventDefault()}
-                          aria-label='toggle password visibility'
+                          aria-label="toggle password visibility"
                           onClick={handleClickShowConfirmPassword}
                         >
                           <i className={state.showPassword2 ? 'tabler-eye' : 'tabler-eye-off'} />
@@ -248,8 +248,8 @@ const StepperCustomVertical = () => {
               <CustomTextField
                 fullWidth
                 value={firstName}
-                label='First Name'
-                placeholder='John'
+                label="First Name"
+                placeholder="John"
                 onChange={e => setFirstName(e.target.value)}
               />
             </Grid>
@@ -257,8 +257,8 @@ const StepperCustomVertical = () => {
               <CustomTextField
                 fullWidth
                 value={lastName}
-                label='Last Name'
-                placeholder='Doe'
+                label="Last Name"
+                placeholder="Doe"
                 onChange={e => setLastName(e.target.value)}
               />
             </Grid>
@@ -266,24 +266,24 @@ const StepperCustomVertical = () => {
               <CustomTextField
                 select
                 fullWidth
-                label='Country'
+                label="Country"
                 value={country}
                 onChange={e => setCountry(e.target.value)}
-                id='stepper-custom-vertical-personal-select'
+                id="stepper-custom-vertical-personal-select"
               >
-                <MenuItem value=''>Select Country</MenuItem>
-                <MenuItem value='UK'>UK</MenuItem>
-                <MenuItem value='USA'>USA</MenuItem>
-                <MenuItem value='Australia'>Australia</MenuItem>
-                <MenuItem value='Germany'>Germany</MenuItem>
+                <MenuItem value="">Select Country</MenuItem>
+                <MenuItem value="UK">UK</MenuItem>
+                <MenuItem value="USA">USA</MenuItem>
+                <MenuItem value="Australia">Australia</MenuItem>
+                <MenuItem value="Germany">Germany</MenuItem>
               </CustomTextField>
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 select
                 fullWidth
-                label='Language'
-                id='stepper-custom-vertical-personal-multiple-select'
+                label="Language"
+                id="stepper-custom-vertical-personal-multiple-select"
                 slotProps={{
                   select: {
                     multiple: true,
@@ -292,13 +292,13 @@ const StepperCustomVertical = () => {
                   }
                 }}
               >
-                <MenuItem value='English'>English</MenuItem>
-                <MenuItem value='French'>French</MenuItem>
-                <MenuItem value='Spanish'>Spanish</MenuItem>
-                <MenuItem value='Portuguese'>Portuguese</MenuItem>
-                <MenuItem value='Italian'>Italian</MenuItem>
-                <MenuItem value='German'>German</MenuItem>
-                <MenuItem value='Arabic'>Arabic</MenuItem>
+                <MenuItem value="English">English</MenuItem>
+                <MenuItem value="French">French</MenuItem>
+                <MenuItem value="Spanish">Spanish</MenuItem>
+                <MenuItem value="Portuguese">Portuguese</MenuItem>
+                <MenuItem value="Italian">Italian</MenuItem>
+                <MenuItem value="German">German</MenuItem>
+                <MenuItem value="Arabic">Arabic</MenuItem>
               </CustomTextField>
             </Grid>
           </Fragment>
@@ -309,37 +309,37 @@ const StepperCustomVertical = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Twitter'
+                label="Twitter"
                 value={twitter}
                 onChange={e => setTwitter(e.target.value)}
-                placeholder='https://twitter.com/johndoe'
+                placeholder="https://twitter.com/johndoe"
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Facebook'
+                label="Facebook"
                 value={facebook}
                 onChange={e => setFacebook(e.target.value)}
-                placeholder='https://facebook.com/johndoe'
+                placeholder="https://facebook.com/johndoe"
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Google+'
+                label="Google+"
                 value={google}
                 onChange={e => setGoogle(e.target.value)}
-                placeholder='https://plus.google.com/johndoe'
+                placeholder="https://plus.google.com/johndoe"
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='LinkedIn'
+                label="LinkedIn"
                 value={linkedIn}
                 onChange={e => setLinkedIn(e.target.value)}
-                placeholder='https://linkedin.com/johndoe'
+                placeholder="https://linkedin.com/johndoe"
               />
             </Grid>
           </Fragment>
@@ -355,7 +355,7 @@ const StepperCustomVertical = () => {
         <>
           <Typography>All steps are completed!</Typography>
           <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button variant='contained' onClick={handleReset}>
+            <Button variant="contained" onClick={handleReset}>
               Reset
             </Button>
           </Box>
@@ -366,32 +366,32 @@ const StepperCustomVertical = () => {
         <form onSubmit={e => e.preventDefault()}>
           <Grid container spacing={5}>
             <Grid size={{ xs: 12 }}>
-              <Typography variant='body2' sx={{ fontWeight: 600, color: 'text.primary' }}>
+              <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary' }}>
                 {steps[activeStep].title}
               </Typography>
-              <Typography variant='caption' component='p'>
+              <Typography variant="caption" component="p">
                 {steps[activeStep].subtitle}
               </Typography>
             </Grid>
             {getStepContent(activeStep)}
             <Grid size={{ xs: 12 }} sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <Button
-                variant='tonal'
-                color='secondary'
+                variant="tonal"
+                color="secondary"
                 disabled={activeStep === 0}
                 onClick={handleBack}
-                startIcon={<DirectionalIcon ltrIconClass='tabler-arrow-left' rtlIconClass='tabler-arrow-right' />}
+                startIcon={<DirectionalIcon ltrIconClass="tabler-arrow-left" rtlIconClass="tabler-arrow-right" />}
               >
                 Back
               </Button>
               <Button
-                variant='contained'
+                variant="contained"
                 onClick={handleNext}
                 endIcon={
                   activeStep === steps.length - 1 ? (
-                    <i className='tabler-check' />
+                    <i className="tabler-check" />
                   ) : (
-                    <DirectionalIcon ltrIconClass='tabler-arrow-right' rtlIconClass='tabler-arrow-left' />
+                    <DirectionalIcon ltrIconClass="tabler-arrow-right" rtlIconClass="tabler-arrow-left" />
                   )
                 }
               >
@@ -410,7 +410,7 @@ const StepperCustomVertical = () => {
         <StepperWrapper sx={{ height: '100%' }}>
           <Stepper
             activeStep={activeStep}
-            orientation='vertical'
+            orientation="vertical"
             connector={<></>}
             sx={{ height: '100%', minWidth: '15rem' }}
           >
@@ -420,9 +420,9 @@ const StepperCustomVertical = () => {
               return (
                 <Step key={index}>
                   <StepLabel>
-                    <div className='step-label'>
+                    <div className="step-label">
                       <CustomAvatar
-                        variant='rounded'
+                        variant="rounded"
                         skin={activeStep === index ? 'filled' : 'light'}
                         {...(activeStep >= index && { color: 'primary' })}
                         {...(activeStep === index && { className: 'shadow-primarySm' })}
@@ -431,8 +431,8 @@ const StepperCustomVertical = () => {
                         <i className={classnames(step.icon)} />
                       </CustomAvatar>
                       <div>
-                        <Typography className='step-title'>{step.title}</Typography>
-                        <Typography className='step-subtitle'>{step.subtitle}</Typography>
+                        <Typography className="step-title">{step.title}</Typography>
+                        <Typography className="step-subtitle">{step.subtitle}</Typography>
                       </div>
                     </div>
                   </StepLabel>

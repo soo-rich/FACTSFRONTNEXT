@@ -1,26 +1,33 @@
-import {AddEditFormType} from "@/types/soosmart/add-edit-modal.type";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {Controller, useForm} from "react-hook-form";
-import {ClientSave, ClientType, schemaClient} from "@/types/soosmart/client.type";
-import {valibotResolver} from "@hookform/resolvers/valibot";
-import {ClientService} from "@/service/client/client.service";
-import {toast} from "react-toastify";
-import {Grid2} from "@mui/material";
-import CustomTextField from "@core/components/mui/TextField";
-import Checkbox from "@mui/material/Checkbox";
-import Typography from "@mui/material/Typography";
-import 'react-international-phone/style.css';
-import {PhoneInput} from "react-international-phone";
-import Button from "@mui/material/Button";
+import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 
-const AddEditClient = ({data: client, onCancel, onSuccess}: AddEditFormType<ClientType>) => {
-  const queryclient = useQueryClient();
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Controller, useForm } from 'react-hook-form'
+
+
+import { valibotResolver } from '@hookform/resolvers/valibot'
+
+import { toast } from 'react-toastify'
+import { Grid2 } from '@mui/material'
+
+import Checkbox from '@mui/material/Checkbox'
+import Typography from '@mui/material/Typography'
+import 'react-international-phone/style.css'
+import { PhoneInput } from 'react-international-phone'
+import Button from '@mui/material/Button'
+
+import CustomTextField from '@core/components/mui/TextField'
+import type { ClientSave, ClientType } from '@/types/soosmart/client.type'
+import { schemaClient } from '@/types/soosmart/client.type'
+import { ClientService } from '@/service/client/client.service'
+
+const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<ClientType>) => {
+  const queryclient = useQueryClient()
 
 
   const {
     control,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
     reset
   } = useForm<ClientSave>({
     resolver: valibotResolver(schemaClient),
@@ -29,27 +36,28 @@ const AddEditClient = ({data: client, onCancel, onSuccess}: AddEditFormType<Clie
       lieu: client?.lieu ?? '',
       telephone: client?.telephone ?? '',
       sigle: client?.sigle ?? '',
-      potentiel: client?.potentiel ?? false,
+      potentiel: client?.potentiel ?? false
     }
   })
 
 
   const addMutation = useMutation({
     mutationFn: async (data: ClientSave) => {
-      return await ClientService.saveClient(data);
+      return await ClientService.saveClient(data)
     },
     onSuccess: () => {
-      toast.success('Client ajouté avec succès');
-      reset();
+      toast.success('Client ajouté avec succès')
+      reset()
       queryclient.invalidateQueries({
-        queryKey: [ClientService.CLIENT_KEY],
-      });
+        queryKey: [ClientService.CLIENT_KEY]
+      })
+
       if (onSuccess) {
-        onSuccess();
+        onSuccess()
       }
     },
     onError: () => {
-      toast.error('Erreur lors de l\'ajout du client');
+      toast.error('Erreur lors de l\'ajout du client')
     }
   })
 
@@ -57,31 +65,34 @@ const AddEditClient = ({data: client, onCancel, onSuccess}: AddEditFormType<Clie
   const updateMutation = useMutation({
     mutationFn: async (data: ClientSave) => {
       if (!client?.id) {
-        throw new Error('l\'ID du client est requis pour la mise à jour');
+        throw new Error('l\'ID du client est requis pour la mise à jour')
       }
-      return await ClientService.updateClient(client.id, data);
+
+
+      return await ClientService.updateClient(client.id, data)
     },
     onSuccess: () => {
-      toast.success('Client mis à jour avec succès');
-      reset();
+      toast.success('Client mis à jour avec succès')
+      reset()
       queryclient.invalidateQueries({
-        queryKey: [ClientService.CLIENT_KEY],
-      });
+        queryKey: [ClientService.CLIENT_KEY]
+      })
+
       if (onSuccess) {
-        onSuccess();
+        onSuccess()
       }
     },
     onError: () => {
-      toast.error('Erreur lors de la mise à jour du client');
+      toast.error('Erreur lors de la mise à jour du client')
     }
   })
 
 
   const onSubmit = (data: ClientSave) => {
     if (client) {
-      updateMutation.mutate(data);
+      updateMutation.mutate(data)
     } else {
-      addMutation.mutate(data);
+      addMutation.mutate(data)
     }
   }
 
@@ -92,11 +103,12 @@ const AddEditClient = ({data: client, onCancel, onSuccess}: AddEditFormType<Clie
         lieu: '',
         telephone: '',
         sigle: '',
-        potentiel: false,
+        potentiel: false
       }
-    );
+    )
+
     if (onCancel) {
-      onCancel();
+      onCancel()
     }
   }
 
@@ -105,8 +117,8 @@ const AddEditClient = ({data: client, onCancel, onSuccess}: AddEditFormType<Clie
       <Grid2 container direction={'column'} spacing={3}>
         <Grid2 container direction={'row'} spacing={3}>
           <Grid2 size={client ? 12 : 10}>
-            <Controller rules={{required: true}} render={
-              ({field}) => (
+            <Controller rules={{ required: true }} render={
+              ({ field }) => (
                 <CustomTextField
                   {...field}
                   fullWidth
@@ -118,15 +130,16 @@ const AddEditClient = ({data: client, onCancel, onSuccess}: AddEditFormType<Clie
                   })}
                 />
               )
-            } name={'nom'} control={control}/>
+            } name={'nom'} control={control} />
           </Grid2>
 
-          {client?null:(<Grid2 size={2} container sx={{
+          {client ? null : (<Grid2 size={2} container sx={{
             alignItems: 'flex-end',
             justifyContent: 'center'
           }}>
             <Controller render={
-              ({field}) => (
+              ({ field }) => (
+
                 // <CustomTextField
                 //   {...field}
                 //
@@ -140,16 +153,16 @@ const AddEditClient = ({data: client, onCancel, onSuccess}: AddEditFormType<Clie
                 // />
                 <div className={'flex items-center gap-2 sm:flex-col'}>
                   <Typography>Potentiel</Typography>
-                  <Checkbox  {...field} checked={field.value}/>
+                  <Checkbox  {...field} checked={field.value} />
                 </div>
 
 
               )
-            } name={'potentiel'} control={control}/>
+            } name={'potentiel'} control={control} />
           </Grid2>)}
         </Grid2>
         <Controller render={
-          ({field}) => (
+          ({ field }) => (
             <CustomTextField
               {...field}
               fullWidth
@@ -161,20 +174,20 @@ const AddEditClient = ({data: client, onCancel, onSuccess}: AddEditFormType<Clie
               })}
             />
           )
-        } name={'sigle'} control={control}/>
+        } name={'sigle'} control={control} />
 
         <Controller render={
-          ({field}) => (
+          ({ field }) => (
             <div className={'w-full flex flex-col gap-2 focus:text-primary'}>
               <Typography variant={'body2'}> Telephone </Typography>
-              <PhoneInput className={'w-full'} inputClassName={'w-full'} {...field} defaultCountry={'tg'}/>
+              <PhoneInput className={'w-full'} inputClassName={'w-full'} {...field} defaultCountry={'tg'} />
 
             </div>
           )
-        } name={'telephone'} control={control}/>
+        } name={'telephone'} control={control} />
 
         <Controller render={
-          ({field}) => (
+          ({ field }) => (
             <CustomTextField
               {...field}
               fullWidth
@@ -186,7 +199,7 @@ const AddEditClient = ({data: client, onCancel, onSuccess}: AddEditFormType<Clie
               })}
             />
           )
-        } name={'lieu'} control={control}/>
+        } name={'lieu'} control={control} />
       </Grid2>
       <Grid2>
         <div className="flex justify-center gap-4 mt-6">
@@ -213,6 +226,7 @@ const AddEditClient = ({data: client, onCancel, onSuccess}: AddEditFormType<Clie
       </Grid2>
 
     </form>
-  );
+  )
 }
-export default AddEditClient;
+
+export default AddEditClient

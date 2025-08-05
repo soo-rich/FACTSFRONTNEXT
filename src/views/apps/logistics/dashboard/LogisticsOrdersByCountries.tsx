@@ -1,8 +1,8 @@
 'use client'
 
+import type { SyntheticEvent } from 'react'
 // React Imports
 import { Fragment, useState } from 'react'
-import type { SyntheticEvent } from 'react'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -20,8 +20,8 @@ import TimelineItem from '@mui/lab/TimelineItem'
 import TimelineContent from '@mui/lab/TimelineContent'
 import TimelineSeparator from '@mui/lab/TimelineSeparator'
 import TimelineConnector from '@mui/lab/TimelineConnector'
-import MuiTimeline from '@mui/lab/Timeline'
 import type { TimelineProps } from '@mui/lab/Timeline'
+import MuiTimeline from '@mui/lab/Timeline'
 
 // Components Imports
 import OptionMenu from '@core/components/option-menu'
@@ -132,18 +132,18 @@ const LogisticsOrdersByCountries = () => {
   return (
     <Card>
       <CardHeader
-        title='Orders by Countries'
-        subheader='62 deliveries in progress'
+        title="Orders by Countries"
+        subheader="62 deliveries in progress"
         action={<OptionMenu options={['Show all orders', 'Share', 'Refresh']} />}
-        className='pbe-4'
+        className="pbe-4"
       />
       <TabContext value={value}>
-        <TabList variant='fullWidth' onChange={handleChange} aria-label='full width tabs example'>
-          <Tab value='new' label='New' />
-          <Tab value='preparing' label='Preparing' />
-          <Tab value='shipping' label='Shipping' />
+        <TabList variant="fullWidth" onChange={handleChange} aria-label="full width tabs example">
+          <Tab value="new" label="New" />
+          <Tab value="preparing" label="Preparing" />
+          <Tab value="shipping" label="Shipping" />
         </TabList>
-        <TabPanel value={value} className='pbs-0'>
+        <TabPanel value={value} className="pbs-0">
           <CardContent>
             {data[value as keyof Data].map((item: TimelineData, index: number) => {
               return (
@@ -151,39 +151,39 @@ const LogisticsOrdersByCountries = () => {
                   <Timeline>
                     <TimelineItem>
                       <TimelineSeparator>
-                        <TimelineDot variant='outlined' className='mlb-0'>
-                          <i className='tabler-circle-check text-xl text-success' />
+                        <TimelineDot variant="outlined" className="mlb-0">
+                          <i className="tabler-circle-check text-xl text-success" />
                         </TimelineDot>
                         <TimelineConnector />
                       </TimelineSeparator>
-                      <TimelineContent className='flex flex-col gap-0.5 pbs-0 pis-5 pbe-5'>
-                        <Typography variant='body2' className='uppercase' color='success.main'>
+                      <TimelineContent className="flex flex-col gap-0.5 pbs-0 pis-5 pbe-5">
+                        <Typography variant="body2" className="uppercase" color="success.main">
                           Sender
                         </Typography>
-                        <Typography color='text.primary' className='font-medium'>
+                        <Typography color="text.primary" className="font-medium">
                           {item.sender.name}
                         </Typography>
-                        <Typography className='line-clamp-1'>{item.sender.address}</Typography>
+                        <Typography className="line-clamp-1">{item.sender.address}</Typography>
                       </TimelineContent>
                     </TimelineItem>
                     <TimelineItem>
                       <TimelineSeparator>
-                        <TimelineDot variant='outlined' className='mlb-0'>
-                          <i className='tabler-map-pin text-xl text-primary' />
+                        <TimelineDot variant="outlined" className="mlb-0">
+                          <i className="tabler-map-pin text-xl text-primary" />
                         </TimelineDot>
                       </TimelineSeparator>
-                      <TimelineContent className='flex flex-col pbe-0 gap-0.5 pbs-0 pis-5'>
-                        <Typography variant='body2' className='uppercase' color='primary.main'>
+                      <TimelineContent className="flex flex-col pbe-0 gap-0.5 pbs-0 pis-5">
+                        <Typography variant="body2" className="uppercase" color="primary.main">
                           Receiver
                         </Typography>
-                        <Typography color='text.primary' className='font-medium'>
+                        <Typography color="text.primary" className="font-medium">
                           {item.receiver.name}
                         </Typography>
-                        <Typography className='line-clamp-1'>{item.receiver.address}</Typography>
+                        <Typography className="line-clamp-1">{item.receiver.address}</Typography>
                       </TimelineContent>
                     </TimelineItem>
                   </Timeline>
-                  {index !== data[value as keyof Data].length - 1 && <Divider className='mlb-4 border-dashed' />}
+                  {index !== data[value as keyof Data].length - 1 && <Divider className="mlb-4 border-dashed" />}
                 </Fragment>
               )
             })}

@@ -28,22 +28,22 @@ const ChangePasswordCard = () => {
 
   return (
     <Card>
-      <CardHeader title='Change Password' />
+      <CardHeader title="Change Password" />
       <CardContent>
         <form>
           <Grid container spacing={6}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Current Password'
+                label="Current Password"
                 type={isCurrentPasswordShown ? 'text' : 'password'}
-                placeholder='············'
+                placeholder="············"
                 slotProps={{
                   input: {
                     endAdornment: (
-                      <InputAdornment position='end'>
+                      <InputAdornment position="end">
                         <IconButton
-                          edge='end'
+                          edge="end"
                           onClick={handleClickShowCurrentPassword}
                           onMouseDown={e => e.preventDefault()}
                         >
@@ -56,19 +56,19 @@ const ChangePasswordCard = () => {
               />
             </Grid>
           </Grid>
-          <Grid container className='mbs-0' spacing={6}>
+          <Grid container className="mbs-0" spacing={6}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='New Password'
+                label="New Password"
                 type={isNewPasswordShown ? 'text' : 'password'}
-                placeholder='············'
+                placeholder="············"
                 slotProps={{
                   input: {
                     endAdornment: (
-                      <InputAdornment position='end'>
+                      <InputAdornment position="end">
                         <IconButton
-                          edge='end'
+                          edge="end"
                           onClick={() => setIsNewPasswordShown(!isNewPasswordShown)}
                           onMouseDown={e => e.preventDefault()}
                         >
@@ -83,15 +83,15 @@ const ChangePasswordCard = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Confirm New Password'
+                label="Confirm New Password"
                 type={isConfirmPasswordShown ? 'text' : 'password'}
-                placeholder='············'
+                placeholder="············"
                 slotProps={{
                   input: {
                     endAdornment: (
-                      <InputAdornment position='end'>
+                      <InputAdornment position="end">
                         <IconButton
-                          edge='end'
+                          edge="end"
                           onClick={() => setIsConfirmPasswordShown(!isConfirmPasswordShown)}
                           onMouseDown={e => e.preventDefault()}
                         >
@@ -103,26 +103,26 @@ const ChangePasswordCard = () => {
                 }}
               />
             </Grid>
-            <Grid size={{ xs: 12 }} className='flex flex-col gap-4'>
-              <Typography variant='h6'>Password Requirements:</Typography>
-              <div className='flex flex-col gap-4'>
-                <div className='flex items-center gap-2.5'>
-                  <i className='tabler-circle-filled text-[8px]' />
+            <Grid size={{ xs: 12 }} className="flex flex-col gap-4">
+              <Typography variant="h6">Password Requirements:</Typography>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-2.5">
+                  <i className="tabler-circle-filled text-[8px]" />
                   Minimum 8 characters long - the more, the better
                 </div>
-                <div className='flex items-center gap-2.5'>
-                  <i className='tabler-circle-filled text-[8px]' />
+                <div className="flex items-center gap-2.5">
+                  <i className="tabler-circle-filled text-[8px]" />
                   At least one lowercase & one uppercase character
                 </div>
-                <div className='flex items-center gap-2.5'>
-                  <i className='tabler-circle-filled text-[8px]' />
+                <div className="flex items-center gap-2.5">
+                  <i className="tabler-circle-filled text-[8px]" />
                   At least one number, symbol, or whitespace character
                 </div>
               </div>
             </Grid>
-            <Grid size={{ xs: 12 }} className='flex gap-4'>
-              <Button variant='contained'>Save Changes</Button>
-              <Button variant='tonal' type='reset' color='secondary'>
+            <Grid size={{ xs: 12 }} className="flex gap-4">
+              <Button variant="contained">Save Changes</Button>
+              <Button variant="tonal" type="reset" color="secondary">
                 Reset
               </Button>
             </Grid>

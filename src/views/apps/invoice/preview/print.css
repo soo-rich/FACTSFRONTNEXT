@@ -2,9 +2,11 @@
   body * {
     visibility: hidden;
   }
+
   #__next :is(.sm\:\!p-12) {
     padding: 0rem !important;
   }
+
   [data-dark] {
     --mui-palette-text-primary: rgba(47, 43, 61, 0.9);
     --mui-palette-action-hover: rgba(47, 43, 61, 0.06);
@@ -16,6 +18,7 @@
   .previewCard * {
     visibility: visible;
   }
+
   .previewCard {
     inline-size: 100%;
     block-size: 100%;
@@ -23,6 +26,7 @@
     inset: 0;
     box-sizing: border-box;
   }
+
   @media (max-width: 600px) {
     .previewCard {
       position: relative !important;

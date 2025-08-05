@@ -30,39 +30,39 @@ const FormLayoutsBasic = () => {
 
   return (
     <Card>
-      <CardHeader title='Basic' />
+      <CardHeader title="Basic" />
       <CardContent>
         <form onSubmit={e => e.preventDefault()}>
           <Grid container spacing={6}>
             <Grid size={{ xs: 12 }}>
-              <CustomTextField fullWidth label='Name' placeholder='John Doe' />
+              <CustomTextField fullWidth label="Name" placeholder="John Doe" />
             </Grid>
             <Grid size={{ xs: 12 }}>
               <CustomTextField
                 fullWidth
-                type='email'
-                label='Email'
-                placeholder='johndoe@gmail.com'
-                helperText='You can use letters, numbers & periods'
+                type="email"
+                label="Email"
+                placeholder="johndoe@gmail.com"
+                helperText="You can use letters, numbers & periods"
               />
             </Grid>
             <Grid size={{ xs: 12 }}>
               <CustomTextField
                 fullWidth
-                label='Password'
-                placeholder='············'
-                id='form-layout-basic-password'
+                label="Password"
+                placeholder="············"
+                id="form-layout-basic-password"
                 type={isPasswordShown ? 'text' : 'password'}
-                helperText='Use 8 or more characters with a mix of letters, numbers & symbols'
+                helperText="Use 8 or more characters with a mix of letters, numbers & symbols"
                 slotProps={{
                   input: {
                     endAdornment: (
-                      <InputAdornment position='end'>
+                      <InputAdornment position="end">
                         <IconButton
-                          edge='end'
+                          edge="end"
                           onClick={handleClickShowPassword}
                           onMouseDown={e => e.preventDefault()}
-                          aria-label='toggle password visibility'
+                          aria-label="toggle password visibility"
                         >
                           <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                         </IconButton>
@@ -75,20 +75,20 @@ const FormLayoutsBasic = () => {
             <Grid size={{ xs: 12 }}>
               <CustomTextField
                 fullWidth
-                label='Confirm Password'
-                placeholder='············'
-                id='form-layout-basic-confirm-password'
+                label="Confirm Password"
+                placeholder="············"
+                id="form-layout-basic-confirm-password"
                 type={isConfirmPasswordShown ? 'text' : 'password'}
-                helperText='Make sure to type the same password as above'
+                helperText="Make sure to type the same password as above"
                 slotProps={{
                   input: {
                     endAdornment: (
-                      <InputAdornment position='end'>
+                      <InputAdornment position="end">
                         <IconButton
-                          edge='end'
+                          edge="end"
                           onClick={handleClickShowConfirmPassword}
                           onMouseDown={e => e.preventDefault()}
-                          aria-label='toggle confirm password visibility'
+                          aria-label="toggle confirm password visibility"
                         >
                           <i className={isConfirmPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                         </IconButton>
@@ -99,13 +99,13 @@ const FormLayoutsBasic = () => {
               />
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <div className='flex items-center justify-between flex-wrap gap-5'>
-                <Button variant='contained' type='submit'>
+              <div className="flex items-center justify-between flex-wrap gap-5">
+                <Button variant="contained" type="submit">
                   Get Started!
                 </Button>
-                <div className='flex items-center justify-center gap-2'>
+                <div className="flex items-center justify-center gap-2">
                   <Typography>Already have an account?</Typography>
-                  <Link href='/' onClick={e => e.preventDefault()} className='text-primary'>
+                  <Link href="/" onClick={e => e.preventDefault()} className="text-primary">
                     Log In
                   </Link>
                 </div>

@@ -1,6 +1,6 @@
 // React Imports
-import { useState } from 'react'
 import type { FormEvent } from 'react'
+import { useState } from 'react'
 
 // MUI Imports
 import Drawer from '@mui/material/Drawer'
@@ -59,39 +59,39 @@ const AddCustomerDrawer = ({ open, setOpen, onFormSubmit }: Props) => {
   return (
     <Drawer
       open={open}
-      anchor='right'
-      variant='temporary'
+      anchor="right"
+      variant="temporary"
       onClose={handleReset}
       ModalProps={{ keepMounted: true }}
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
-      <div className='flex items-center justify-between plb-5 pli-6'>
-        <Typography variant='h5'>Add New Customer</Typography>
-        <IconButton size='small' onClick={handleReset}>
-          <i className='tabler-x text-2xl text-textPrimary' />
+      <div className="flex items-center justify-between plb-5 pli-6">
+        <Typography variant="h5">Add New Customer</Typography>
+        <IconButton size="small" onClick={handleReset}>
+          <i className="tabler-x text-2xl text-textPrimary" />
         </IconButton>
       </div>
       <Divider />
-      <div className='p-6'>
-        <form onSubmit={e => handleSubmit(e)} className='flex flex-col gap-5'>
+      <div className="p-6">
+        <form onSubmit={e => handleSubmit(e)} className="flex flex-col gap-5">
           <CustomTextField
             fullWidth
-            id='name'
-            label='Name'
+            id="name"
+            label="Name"
             value={data.name}
             onChange={e => setData({ ...data, name: e.target.value })}
           />
           <CustomTextField
             fullWidth
-            id='company'
-            label='Company'
+            id="company"
+            label="Company"
             value={data.company}
             onChange={e => setData({ ...data, company: e.target.value })}
           />
           <CustomTextField
             fullWidth
-            id='email'
-            label='Email'
+            id="email"
+            label="Email"
             value={data.email}
             onChange={e => setData({ ...data, email: e.target.value })}
           />
@@ -99,17 +99,17 @@ const AddCustomerDrawer = ({ open, setOpen, onFormSubmit }: Props) => {
             rows={6}
             multiline
             fullWidth
-            id='address'
-            label='Address'
+            id="address"
+            label="Address"
             value={data.address}
             onChange={e => setData({ ...data, address: e.target.value })}
           />
           <CustomTextField
             select
-            id='country'
-            label='Country'
-            name='country'
-            variant='outlined'
+            id="country"
+            label="Country"
+            name="country"
+            variant="outlined"
             value={data?.country?.toLowerCase().replace(/\s+/g, '-') || ''}
             onChange={e => setData({ ...data, country: e.target.value })}
           >
@@ -121,17 +121,17 @@ const AddCustomerDrawer = ({ open, setOpen, onFormSubmit }: Props) => {
           </CustomTextField>
           <CustomTextField
             fullWidth
-            id='contact'
-            type='number'
-            label='Contact Number'
+            id="contact"
+            type="number"
+            label="Contact Number"
             value={data.contactNumber}
             onChange={e => setData({ ...data, contactNumber: e.target.value })}
           />
-          <div className='flex items-center gap-4'>
-            <Button variant='contained' type='submit'>
+          <div className="flex items-center gap-4">
+            <Button variant="contained" type="submit">
               Add
             </Button>
-            <Button variant='tonal' color='error' type='reset' onClick={handleReset}>
+            <Button variant="tonal" color="error" type="reset" onClick={handleReset}>
               Cancel
             </Button>
           </div>

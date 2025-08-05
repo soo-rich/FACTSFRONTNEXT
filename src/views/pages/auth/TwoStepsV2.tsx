@@ -12,9 +12,9 @@ import { styled, useTheme } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 
+import type { SlotProps } from 'input-otp'
 // Third-party Imports
 import { OTPInput } from 'input-otp'
-import type { SlotProps } from 'input-otp'
 import classnames from 'classnames'
 
 // Type Imports
@@ -72,7 +72,7 @@ const Slot = (props: SlotProps) => {
 const FakeCaret = () => {
   return (
     <div className={styles.fakeCaret}>
-      <div className='w-px h-5 bg-textPrimary' />
+      <div className="w-px h-5 bg-textPrimary" />
     </div>
   )
 }
@@ -97,7 +97,7 @@ const TwoStepsV2 = ({ mode }: { mode: SystemMode }) => {
   const characterIllustration = useImageVariant(mode, lightIllustration, darkIllustration)
 
   return (
-    <div className='flex bs-full justify-center'>
+    <div className="flex bs-full justify-center">
       <div
         className={classnames(
           'flex bs-full items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden',
@@ -106,42 +106,44 @@ const TwoStepsV2 = ({ mode }: { mode: SystemMode }) => {
           }
         )}
       >
-        <TwoStepsIllustration src={characterIllustration} alt='character-illustration' />
+        <TwoStepsIllustration src={characterIllustration} alt="character-illustration" />
         {!hidden && (
           <MaskImg
-            alt='mask'
+            alt="mask"
             src={authBackground}
             className={classnames({ 'scale-x-[-1]': theme.direction === 'rtl' })}
           />
         )}
       </div>
-      <div className='flex justify-center items-center bs-full bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]'>
+      <div
+        className="flex justify-center items-center bs-full bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]">
         <Link
           href={getLocalizedUrl('/', locale as Locale)}
-          className='absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]'
+          className="absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]"
         >
           <Logo />
         </Link>
-        <div className='flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0'>
-          <div className='flex flex-col gap-1'>
-            <Typography variant='h4'>Two Step Verification 💬</Typography>
+        <div
+          className="flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0">
+          <div className="flex flex-col gap-1">
+            <Typography variant="h4">Two Step Verification 💬</Typography>
             <Typography>
               We sent a verification code to your mobile. Enter the code from the mobile in the field below.
             </Typography>
-            <Typography className='font-medium' color='text.primary'>
+            <Typography className="font-medium" color="text.primary">
               ******1234
             </Typography>
           </div>
-          <Form noValidate autoComplete='off' className='flex flex-col gap-6'>
-            <div className='flex flex-col gap-2'>
+          <Form noValidate autoComplete="off" className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
               <Typography>Type your 6 digit security code</Typography>
               <OTPInput
                 onChange={setOtp}
                 value={otp ?? ''}
                 maxLength={6}
-                containerClassName='group flex items-center'
+                containerClassName="group flex items-center"
                 render={({ slots }) => (
-                  <div className='flex items-center justify-between w-full gap-4'>
+                  <div className="flex items-center justify-between w-full gap-4">
                     {slots.slice(0, 6).map((slot, idx) => (
                       <Slot key={idx} {...slot} />
                     ))}
@@ -149,12 +151,12 @@ const TwoStepsV2 = ({ mode }: { mode: SystemMode }) => {
                 )}
               />
             </div>
-            <Button fullWidth variant='contained' type='submit'>
+            <Button fullWidth variant="contained" type="submit">
               Verify my account
             </Button>
-            <div className='flex justify-center items-center flex-wrap gap-2'>
+            <div className="flex justify-center items-center flex-wrap gap-2">
               <Typography>Didn&#39;t get the code?</Typography>
-              <Typography color='primary.main' component={Link} href='/' onClick={e => e.preventDefault()}>
+              <Typography color="primary.main" component={Link} href="/" onClick={e => e.preventDefault()}>
                 Resend
               </Typography>
             </div>

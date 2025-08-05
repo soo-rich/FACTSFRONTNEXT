@@ -73,23 +73,23 @@ const ProductCard = () => {
                 '[&:not(:last-child)>div]:pie-6 [&:not(:last-child)>div]:border-ie': !isBelowMdScreen
               })}
             >
-              <div className='flex flex-col gap-1'>
-                <div className='flex justify-between'>
-                  <div className='flex flex-col gap-1'>
+              <div className="flex flex-col gap-1">
+                <div className="flex justify-between">
+                  <div className="flex flex-col gap-1">
                     <Typography>{item.title}</Typography>
-                    <Typography variant='h4'>{item.value}</Typography>
+                    <Typography variant="h4">{item.value}</Typography>
                   </div>
-                  <CustomAvatar variant='rounded' size={44}>
+                  <CustomAvatar variant="rounded" size={44}>
                     <i className={classnames(item.icon, 'text-[28px]')} />
                   </CustomAvatar>
                 </div>
                 {item.change ? (
-                  <div className='flex items-center gap-2'>
+                  <div className="flex items-center gap-2">
                     <Typography>{`${item.desc} orders`}</Typography>
                     <Chip
-                      variant='tonal'
+                      variant="tonal"
                       label={`${item.change}%`}
-                      size='small'
+                      size="small"
                       color={item.change > 0 ? 'success' : 'error'}
                     />
                   </div>
@@ -104,7 +104,7 @@ const ProductCard = () => {
                   })}
                 />
               )}
-              {isSmallScreen && index < data.length - 1 && <Divider className='mbs-6' />}
+              {isSmallScreen && index < data.length - 1 && <Divider className="mbs-6" />}
             </Grid>
           ))}
         </Grid>

@@ -1,20 +1,20 @@
 // React Imports
-import { useState } from 'react'
 import type { ChangeEvent } from 'react'
+import { useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
 
 // MUI Imports
 import Grid from '@mui/material/Grid2'
+import type { TypographyProps } from '@mui/material/Typography'
 import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
 import Divider from '@mui/material/Divider'
+import type { ButtonProps } from '@mui/material/Button'
 import Button from '@mui/material/Button'
 import CardContent from '@mui/material/CardContent'
 import { styled } from '@mui/material/styles'
-import type { TypographyProps } from '@mui/material/Typography'
-import type { ButtonProps } from '@mui/material/Button'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -45,22 +45,22 @@ const VerticalContent = styled(Typography, {
 const data: CustomInputHorizontalData[] = [
   {
     title: 'John Doe (Default)',
-    meta: <Chip variant='tonal' size='small' label='Home' color='primary' />,
+    meta: <Chip variant="tonal" size="small" label="Home" color="primary" />,
     value: 'home',
     isSelected: true,
     content: (
-      <HorizontalContent component='div' className='flex flex-col gap-3 mbs-2 bs-full'>
-        <Typography variant='body2'>
+      <HorizontalContent component="div" className="flex flex-col gap-3 mbs-2 bs-full">
+        <Typography variant="body2">
           4135 Parkway Street, Los Angeles, CA, 90017.
           <br />
           Mobile : 1234567890 Cash / Card on delivery available
         </Typography>
         <Divider />
-        <div className='flex items-center gap-4 mbs-0.5 pbe-[6px]'>
-          <Typography href='/' component={Link} onClick={e => e.preventDefault()} color='primary.main'>
+        <div className="flex items-center gap-4 mbs-0.5 pbe-[6px]">
+          <Typography href="/" component={Link} onClick={e => e.preventDefault()} color="primary.main">
             Edit
           </Typography>
-          <Typography href='/' component={Link} onClick={e => e.preventDefault()} color='primary.main'>
+          <Typography href="/" component={Link} onClick={e => e.preventDefault()} color="primary.main">
             Remove
           </Typography>
         </div>
@@ -69,21 +69,21 @@ const data: CustomInputHorizontalData[] = [
   },
   {
     title: 'ACME Inc.',
-    meta: <Chip variant='tonal' size='small' label='Office' color='success' />,
+    meta: <Chip variant="tonal" size="small" label="Office" color="success" />,
     value: 'office',
     content: (
-      <HorizontalContent component='div' className='flex flex-col gap-3 mbs-2 bs-full'>
-        <Typography variant='body2'>
+      <HorizontalContent component="div" className="flex flex-col gap-3 mbs-2 bs-full">
+        <Typography variant="body2">
           87 Hoffman Avenue, New York, NY, 10016.
           <br />
           Mobile : 1234567890 Cash / Card on delivery available
         </Typography>
         <Divider />
-        <div className='flex items-center gap-4 mbs-0.5 pbe-[6px]'>
-          <Typography href='/' component={Link} onClick={e => e.preventDefault()} color='primary.main'>
+        <div className="flex items-center gap-4 mbs-0.5 pbe-[6px]">
+          <Typography href="/" component={Link} onClick={e => e.preventDefault()} color="primary.main">
             Edit
           </Typography>
-          <Typography href='/' component={Link} onClick={e => e.preventDefault()} color='primary.main'>
+          <Typography href="/" component={Link} onClick={e => e.preventDefault()} color="primary.main">
             Remove
           </Typography>
         </div>
@@ -100,8 +100,8 @@ const dataIcons: CustomInputVerticalData[] = [
     asset: 'tabler-user',
     content: (
       <>
-        <Chip variant='tonal' size='small' label='Free' color='success' className='absolute inline-end-4' />
-        <VerticalContent variant='body2' className='my-auto'>
+        <Chip variant="tonal" size="small" label="Free" color="success" className="absolute inline-end-4" />
+        <VerticalContent variant="body2" className="my-auto">
           Get your product in 1 Week.
         </VerticalContent>
       </>
@@ -113,8 +113,8 @@ const dataIcons: CustomInputVerticalData[] = [
     asset: 'tabler-star',
     content: (
       <>
-        <Chip variant='tonal' label='$10' size='small' color='secondary' className='absolute inline-end-4' />
-        <VerticalContent variant='body2' className='my-auto'>
+        <Chip variant="tonal" label="$10" size="small" color="secondary" className="absolute inline-end-4" />
+        <VerticalContent variant="body2" className="my-auto">
           Get your product in 3-4 days.
         </VerticalContent>
       </>
@@ -126,8 +126,8 @@ const dataIcons: CustomInputVerticalData[] = [
     asset: 'tabler-crown',
     content: (
       <>
-        <Chip variant='tonal' label='$15' size='small' color='secondary' className='absolute inline-end-4' />
-        <VerticalContent variant='body2' className='my-auto'>
+        <Chip variant="tonal" label="$15" size="small" color="secondary" className="absolute inline-end-4" />
+        <VerticalContent variant="body2" className="my-auto">
           Get your product in 1 day.
         </VerticalContent>
       </>
@@ -138,8 +138,8 @@ const dataIcons: CustomInputVerticalData[] = [
 const StepAddress = ({ handleNext }: { handleNext: () => void }) => {
   // Vars
   const initialSelectedOption: string = data.filter(item => item.isSelected)[
-    data.filter(item => item.isSelected).length - 1
-  ].value
+  data.filter(item => item.isSelected).length - 1
+    ].value
 
   const buttonProps: ButtonProps = {
     variant: 'tonal',
@@ -169,15 +169,15 @@ const StepAddress = ({ handleNext }: { handleNext: () => void }) => {
 
   return (
     <Grid container spacing={6}>
-      <Grid size={{ xs: 12, lg: 8 }} className='flex flex-col gap-6'>
-        <div className='flex flex-col gap-4'>
-          <Typography color='text.primary' className='font-medium self-start'>
+      <Grid size={{ xs: 12, lg: 8 }} className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
+          <Typography color="text.primary" className="font-medium self-start">
             Select your preferable address
           </Typography>
           <Grid container spacing={6}>
             {data.map((item, index) => (
               <CustomInputHorizontal
-                type='radio'
+                type="radio"
                 key={index}
                 data={item}
                 gridProps={{
@@ -187,15 +187,15 @@ const StepAddress = ({ handleNext }: { handleNext: () => void }) => {
                   }
                 }}
                 selected={selectedOption}
-                name='custom-radios-basic'
+                name="custom-radios-basic"
                 handleChange={handleOptionChange}
               />
             ))}
           </Grid>
           <OpenDialogOnElementClick element={Button} elementProps={buttonProps} dialog={AddEditAddress} />
         </div>
-        <div className='flex flex-col gap-4'>
-          <Typography color='text.primary' className='font-medium self-start'>
+        <div className="flex flex-col gap-4">
+          <Typography color="text.primary" className="font-medium self-start">
             Choose Delivery Speed
           </Typography>
           <Grid container spacing={6}>
@@ -208,7 +208,7 @@ const StepAddress = ({ handleNext }: { handleNext: () => void }) => {
 
               return (
                 <CustomInputVertical
-                  type='radio'
+                  type="radio"
                   key={index}
                   gridProps={{
                     size: {
@@ -217,7 +217,7 @@ const StepAddress = ({ handleNext }: { handleNext: () => void }) => {
                     }
                   }}
                   selected={selectedSpeed}
-                  name='custom-radios-basic'
+                  name="custom-radios-basic"
                   handleChange={handleSpeedChange}
                   data={typeof item.asset === 'string' ? { ...item, asset } : item}
                 />
@@ -226,60 +226,60 @@ const StepAddress = ({ handleNext }: { handleNext: () => void }) => {
           </Grid>
         </div>
       </Grid>
-      <Grid size={{ xs: 12, lg: 4 }} className='flex flex-col gap-4'>
-        <div className='border rounded'>
-          <CardContent className='flex flex-col gap-4'>
-            <Typography color='text.primary' className='font-medium'>
+      <Grid size={{ xs: 12, lg: 4 }} className="flex flex-col gap-4">
+        <div className="border rounded">
+          <CardContent className="flex flex-col gap-4">
+            <Typography color="text.primary" className="font-medium">
               Estimated Delivery Date
             </Typography>
-            <div className='flex items-center gap-4'>
-              <img width={60} height={60} src='/images/pages/google-home.png' alt='Google Home' />
+            <div className="flex items-center gap-4">
+              <img width={60} height={60} src="/images/pages/google-home.png" alt="Google Home" />
               <div>
                 <Typography>Google - Google Home - White</Typography>
-                <Typography className='font-medium'>18th Nov 2021</Typography>
+                <Typography className="font-medium">18th Nov 2021</Typography>
               </div>
             </div>
-            <div className='flex items-center gap-4'>
-              <img width={60} height={60} src='/images/pages/iPhone-11.png' alt='iphone 11' />
+            <div className="flex items-center gap-4">
+              <img width={60} height={60} src="/images/pages/iPhone-11.png" alt="iphone 11" />
               <div>
                 <Typography>Apple iPhone 11 (64GB, Black)</Typography>
-                <Typography className='font-medium'>20th Nov 2021</Typography>
+                <Typography className="font-medium">20th Nov 2021</Typography>
               </div>
             </div>
           </CardContent>
           <Divider />
-          <CardContent className='flex flex-col gap-4'>
-            <Typography color='text.primary' className='font-medium'>
+          <CardContent className="flex flex-col gap-4">
+            <Typography color="text.primary" className="font-medium">
               Price Details
             </Typography>
-            <div className='flex flex-col gap-2'>
-              <div className='flex gap-2 justify-between items-center flex-wrap'>
-                <Typography color='text.primary'>Order Total</Typography>
-                <Typography color='text.primary'>$1198.00</Typography>
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2 justify-between items-center flex-wrap">
+                <Typography color="text.primary">Order Total</Typography>
+                <Typography color="text.primary">$1198.00</Typography>
               </div>
-              <div className='flex justify-between flex-wrap'>
-                <Typography color='text.primary'>Delivery Charges</Typography>
-                <div className='flex gap-2'>
-                  <Typography color='text.disabled' className='line-through'>
+              <div className="flex justify-between flex-wrap">
+                <Typography color="text.primary">Delivery Charges</Typography>
+                <div className="flex gap-2">
+                  <Typography color="text.disabled" className="line-through">
                     $5.00
                   </Typography>
-                  <Chip variant='tonal' size='small' color='success' label='Free' />
+                  <Chip variant="tonal" size="small" color="success" label="Free" />
                 </div>
               </div>
             </div>
           </CardContent>
           <Divider />
-          <CardContent className='flex items-center justify-between flex-wrap'>
-            <Typography color='text.primary' className='font-medium'>
+          <CardContent className="flex items-center justify-between flex-wrap">
+            <Typography color="text.primary" className="font-medium">
               Total
             </Typography>
-            <Typography color='text.primary' className='font-medium'>
+            <Typography color="text.primary" className="font-medium">
               $1198.00
             </Typography>
           </CardContent>
         </div>
-        <div className='flex justify-end'>
-          <Button className='max-sm:is-full lg:is-full' variant='contained' onClick={handleNext}>
+        <div className="flex justify-end">
+          <Button className="max-sm:is-full lg:is-full" variant="contained" onClick={handleNext}>
             Place Order
           </Button>
         </div>

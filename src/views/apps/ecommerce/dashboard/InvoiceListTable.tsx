@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
@@ -21,21 +21,21 @@ import type { TextFieldProps } from '@mui/material/TextField'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -58,6 +58,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -88,11 +89,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -170,7 +171,7 @@ const InvoiceListTable = ({ invoiceData }: { invoiceData: InvoiceType[] }) => {
           <Typography
             component={Link}
             href={getLocalizedUrl(`apps/invoice/preview/${row.original.id}`, locale as Locale)}
-            color='primary.main'
+            color="primary.main"
           >{`#${row.original.id}`}</Typography>
         )
       }),
@@ -180,23 +181,23 @@ const InvoiceListTable = ({ invoiceData }: { invoiceData: InvoiceType[] }) => {
           <Tooltip
             title={
               <div>
-                <Typography variant='body2' component='span' className='text-inherit'>
+                <Typography variant="body2" component="span" className="text-inherit">
                   {row.original.invoiceStatus}
                 </Typography>
                 <br />
-                <Typography variant='body2' component='span' className='text-inherit'>
+                <Typography variant="body2" component="span" className="text-inherit">
                   Balance:
                 </Typography>{' '}
                 {row.original.balance}
                 <br />
-                <Typography variant='body2' component='span' className='text-inherit'>
+                <Typography variant="body2" component="span" className="text-inherit">
                   Due Date:
                 </Typography>{' '}
                 {row.original.dueDate}
               </div>
             }
           >
-            <CustomAvatar skin='light' color={invoiceStatusObj[row.original.invoiceStatus].color} size={28}>
+            <CustomAvatar skin="light" color={invoiceStatusObj[row.original.invoiceStatus].color} size={28}>
               <i className={classnames('bs-4 is-4', invoiceStatusObj[row.original.invoiceStatus].icon)} />
             </CustomAvatar>
           </Tooltip>
@@ -213,21 +214,21 @@ const InvoiceListTable = ({ invoiceData }: { invoiceData: InvoiceType[] }) => {
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({ row }) => (
-          <div className='flex items-center'>
+          <div className="flex items-center">
             <IconButton>
-              <i className='tabler-trash text-textSecondary' />
+              <i className="tabler-trash text-textSecondary" />
             </IconButton>
             <IconButton>
               <Link
                 href={getLocalizedUrl(`apps/invoice/preview/${row.original.id}`, locale as Locale)}
-                className='flex'
+                className="flex"
               >
-                <i className='tabler-eye text-textSecondary' />
+                <i className="tabler-eye text-textSecondary" />
               </Link>
             </IconButton>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary'
+              iconClassName="text-textSecondary"
               options={[
                 {
                   text: 'Download',
@@ -299,109 +300,109 @@ const InvoiceListTable = ({ invoiceData }: { invoiceData: InvoiceType[] }) => {
 
   return (
     <Card>
-      <CardContent className='flex justify-between flex-wrap items-start gap-4'>
-        <div className='flex items-center justify-between gap-4'>
-          <div className='flex items-center gap-2'>
-            <Typography className='hidden sm:block'>Show</Typography>
+      <CardContent className="flex justify-between flex-wrap items-start gap-4">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <Typography className="hidden sm:block">Show</Typography>
             <CustomTextField
               select
               value={table.getState().pagination.pageSize}
               onChange={e => table.setPageSize(Number(e.target.value))}
-              className='is-[70px]'
+              className="is-[70px]"
             >
-              <MenuItem value='6'>6</MenuItem>
-              <MenuItem value='24'>24</MenuItem>
-              <MenuItem value='50'>50</MenuItem>
+              <MenuItem value="6">6</MenuItem>
+              <MenuItem value="24">24</MenuItem>
+              <MenuItem value="50">50</MenuItem>
             </CustomTextField>
           </div>
           <Button
-            variant='contained'
+            variant="contained"
             component={Link}
-            startIcon={<i className='tabler-plus' />}
+            startIcon={<i className="tabler-plus" />}
             href={getLocalizedUrl('apps/invoice/add', locale as Locale)}
-            className='max-sm:is-full'
+            className="max-sm:is-full"
           >
             Create Invoice
           </Button>
         </div>
-        <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
+        <div className="flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4">
           <DebouncedInput
             value={globalFilter ?? ''}
             onChange={value => setGlobalFilter(String(value))}
-            placeholder='Search Invoice'
-            className='max-sm:is-full sm:is-[250px]'
+            placeholder="Search Invoice"
+            className="max-sm:is-full sm:is-[250px]"
           />
           <CustomTextField
             select
-            id='select-status'
+            id="select-status"
             value={status}
             onChange={e => setStatus(e.target.value)}
-            className='max-sm:is-full sm:is-[160px]'
+            className="max-sm:is-full sm:is-[160px]"
             slotProps={{
               select: { displayEmpty: true }
             }}
           >
-            <MenuItem value=''>Invoice Status</MenuItem>
-            <MenuItem value='downloaded'>Downloaded</MenuItem>
-            <MenuItem value='draft'>Draft</MenuItem>
-            <MenuItem value='paid'>Paid</MenuItem>
-            <MenuItem value='partial-payment'>Partial Payment</MenuItem>
-            <MenuItem value='past-due'>Past Due</MenuItem>
-            <MenuItem value='sent'>Sent</MenuItem>
+            <MenuItem value="">Invoice Status</MenuItem>
+            <MenuItem value="downloaded">Downloaded</MenuItem>
+            <MenuItem value="draft">Draft</MenuItem>
+            <MenuItem value="paid">Paid</MenuItem>
+            <MenuItem value="partial-payment">Partial Payment</MenuItem>
+            <MenuItem value="past-due">Past Due</MenuItem>
+            <MenuItem value="sent">Sent</MenuItem>
           </CustomTextField>
         </div>
       </CardContent>
-      <div className='overflow-x-auto'>
+      <div className="overflow-x-auto">
         <table className={tableStyles.table}>
           <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <div
-                          className={classnames({
-                            'flex items-center': header.column.getIsSorted(),
-                            'cursor-pointer select-none': header.column.getCanSort()
-                          })}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: <i className='tabler-chevron-up text-xl' />,
-                            desc: <i className='tabler-chevron-down text-xl' />
-                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                        </div>
-                      </>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id}>
+                  {header.isPlaceholder ? null : (
+                    <>
+                      <div
+                        className={classnames({
+                          'flex items-center': header.column.getIsSorted(),
+                          'cursor-pointer select-none': header.column.getCanSort()
+                        })}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: <i className="tabler-chevron-up text-xl" />,
+                          desc: <i className="tabler-chevron-down text-xl" />
+                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                      </div>
+                    </>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
           </thead>
           {table.getFilteredRowModel().rows.length === 0 ? (
             <tbody>
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                  No data available
-                </td>
-              </tr>
+            <tr>
+              <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                No data available
+              </td>
+            </tr>
             </tbody>
           ) : (
             <tbody>
-              {table
-                .getRowModel()
-                .rows.slice(0, table.getState().pagination.pageSize)
-                .map(row => {
-                  return (
-                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                      {row.getVisibleCells().map(cell => (
-                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                      ))}
-                    </tr>
-                  )
-                })}
+            {table
+              .getRowModel()
+              .rows.slice(0, table.getState().pagination.pageSize)
+              .map(row => {
+                return (
+                  <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                    ))}
+                  </tr>
+                )
+              })}
             </tbody>
           )}
         </table>

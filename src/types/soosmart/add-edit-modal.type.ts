@@ -1,6 +1,8 @@
-import {ChildrenType} from "@/types/soosmart/types";
-import { ReactNode } from "react";
-import {Breakpoint} from "@mui/material/styles";
+import type { ReactNode } from 'react'
+
+import type { Breakpoint } from '@mui/material/styles'
+
+import type { ChildrenType } from '@/types/soosmart/types'
 
 export type AddEditModalType = ChildrenType & {
   open: boolean

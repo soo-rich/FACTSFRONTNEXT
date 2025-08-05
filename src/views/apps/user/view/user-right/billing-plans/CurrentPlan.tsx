@@ -6,12 +6,12 @@ import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid2'
 import Typography from '@mui/material/Typography'
+import type { ButtonProps } from '@mui/material/Button'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/material/AlertTitle'
 import LinearProgress from '@mui/material/LinearProgress'
-import type { ButtonProps } from '@mui/material/Button'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -31,47 +31,47 @@ const CurrentPlan = ({ data }: { data?: PricingPlanType[] }) => {
 
   return (
     <Card>
-      <CardHeader title='Current Plan' />
+      <CardHeader title="Current Plan" />
       <CardContent>
         <Grid container spacing={6}>
-          <Grid size={{ xs: 12, md: 6 }} className='flex flex-col gap-4'>
+          <Grid size={{ xs: 12, md: 6 }} className="flex flex-col gap-4">
             <div>
-              <Typography className='font-medium text-textPrimary'>Your Current Plan is Basic</Typography>
+              <Typography className="font-medium text-textPrimary">Your Current Plan is Basic</Typography>
               <Typography>A simple start for everyone</Typography>
             </div>
             <div>
-              <Typography className='font-medium' color='text.primary'>
+              <Typography className="font-medium" color="text.primary">
                 Active until Dec 09, 2021
               </Typography>
               <Typography>We will send you a notification upon Subscription expiration</Typography>
             </div>
-            <div className='flex flex-col gap-1'>
-              <div className='flex items-center gap-2'>
-                <Typography className='font-medium' color='text.primary'>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <Typography className="font-medium" color="text.primary">
                   $99 Per Month
                 </Typography>
-                <Chip color='primary' label='Popular' size='small' variant='tonal' />
+                <Chip color="primary" label="Popular" size="small" variant="tonal" />
               </div>
               <Typography>Standard plan for small to medium businesses</Typography>
             </div>
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <Alert icon={false} severity='warning' className='mbe-4'>
+            <Alert icon={false} severity="warning" className="mbe-4">
               <AlertTitle>We need your attention!</AlertTitle>
               Your plan requires update
             </Alert>
-            <div className='flex items-center justify-between'>
-              <Typography className='font-medium' color='text.primary'>
+            <div className="flex items-center justify-between">
+              <Typography className="font-medium" color="text.primary">
                 Days
               </Typography>
-              <Typography className='font-medium' color='text.primary'>
+              <Typography className="font-medium" color="text.primary">
                 26 of 30 Days
               </Typography>
             </div>
-            <LinearProgress variant='determinate' value={80} className='mlb-1 bs-2.5' />
-            <Typography variant='body2'>Your plan requires update</Typography>
+            <LinearProgress variant="determinate" value={80} className="mlb-1 bs-2.5" />
+            <Typography variant="body2">Your plan requires update</Typography>
           </Grid>
-          <Grid size={{ xs: 12 }} className='flex gap-4 flex-wrap'>
+          <Grid size={{ xs: 12 }} className="flex gap-4 flex-wrap">
             <OpenDialogOnElementClick
               element={Button}
               elementProps={buttonProps('Upgrade plan', 'contained', 'primary')}

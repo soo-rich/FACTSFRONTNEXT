@@ -16,18 +16,18 @@ const CustomerContact = () => {
 
   return (
     <Card>
-      <CardHeader title='Customer contact method' subheader='Select what contact method customers use to check out.' />
+      <CardHeader title="Customer contact method" subheader="Select what contact method customers use to check out." />
       <CardContent>
         <RadioGroup
           value={method}
           onChange={e => setMethod(e.target.value)}
-          aria-labelledby='method-radio-buttons-group'
-          className='items-start mbe-4'
+          aria-labelledby="method-radio-buttons-group"
+          className="items-start mbe-4"
         >
-          <FormControlLabel value='phone' control={<Radio />} label='Phone number' />
-          <FormControlLabel value='email' control={<Radio />} label='Email' />
+          <FormControlLabel value="phone" control={<Radio />} label="Phone number" />
+          <FormControlLabel value="email" control={<Radio />} label="Email" />
         </RadioGroup>
-        <Alert severity='info' icon={<i className='tabler-info-circle' />} className='font-medium text-lg'>
+        <Alert severity="info" icon={<i className="tabler-info-circle" />} className="font-medium text-lg">
           To send SMS updates, you need to install an SMS App.
         </Alert>
       </CardContent>

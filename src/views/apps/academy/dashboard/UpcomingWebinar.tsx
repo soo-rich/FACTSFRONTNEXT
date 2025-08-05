@@ -25,34 +25,34 @@ const data: DataType[] = [
 const UpcomingWebinar = () => {
   return (
     <Card>
-      <CardContent className='flex flex-col gap-4'>
-        <div className='flex justify-center pli-2.5 pbs-4 rounded bg-primaryLight'>
-          <img src='/images/illustrations/characters/4.png' className='bs-[146px]' />
+      <CardContent className="flex flex-col gap-4">
+        <div className="flex justify-center pli-2.5 pbs-4 rounded bg-primaryLight">
+          <img src="/images/illustrations/characters/4.png" className="bs-[146px]" />
         </div>
         <div>
-          <Typography variant='h5' className='mbe-2'>
+          <Typography variant="h5" className="mbe-2">
             Upcoming Webinar
           </Typography>
-          <Typography variant='body2'>
+          <Typography variant="body2">
             Next Generation Frontend Architecture Using Layout Engine And React Native Web.
           </Typography>
         </div>
-        <div className='flex flex-wrap justify-between gap-4'>
+        <div className="flex flex-wrap justify-between gap-4">
           {data.map((item, i) => (
-            <div key={i} className='flex items-center gap-3'>
-              <CustomAvatar variant='rounded' skin='light' color='primary'>
+            <div key={i} className="flex items-center gap-3">
+              <CustomAvatar variant="rounded" skin="light" color="primary">
                 <i className={classnames('text-[28px]', item.icon)} />
               </CustomAvatar>
               <div>
-                <Typography color='text.primary' className='font-medium'>
+                <Typography color="text.primary" className="font-medium">
                   {item.title}
                 </Typography>
-                <Typography variant='body2'>{item.value}</Typography>
+                <Typography variant="body2">{item.value}</Typography>
               </div>
             </div>
           ))}
         </div>
-        <Button variant='contained'>Join the event</Button>
+        <Button variant="contained">Join the event</Button>
       </CardContent>
     </Card>
   )

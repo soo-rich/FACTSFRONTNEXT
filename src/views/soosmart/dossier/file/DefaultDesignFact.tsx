@@ -1,13 +1,21 @@
-import CardContent from "@mui/material/CardContent";
-import Card from "@mui/material/Card";
-import Grid from "@mui/material/Grid2";
-import {useParams} from "next/navigation";
-import {forwardRef, useMemo} from "react";
-import {DocumentDTO, DocumentTypes} from "@/types/soosmart/dossier/DocumentDTO";
-import Typography from "@mui/material/Typography";
-import SoosmartLogo from "@components/layout/shared/SoosmartLogo";
-import UtiliMetod from "@/utils/utilsmethod";
-import themeConfig from "@configs/themeConfig";
+import { forwardRef, useMemo } from 'react'
+
+import { useParams } from 'next/navigation'
+
+import CardContent from '@mui/material/CardContent'
+import Card from '@mui/material/Card'
+import Grid from '@mui/material/Grid2'
+
+import Typography from '@mui/material/Typography'
+
+import type { DocumentDTO } from '@/types/soosmart/dossier/DocumentDTO'
+import { DocumentTypes } from '@/types/soosmart/dossier/DocumentDTO'
+
+
+import SoosmartLogo from '@components/layout/shared/SoosmartLogo'
+import UtiliMetod from '@/utils/utilsmethod'
+import themeConfig from '@configs/themeConfig'
+
 // import CustomIconButton from "@core/components/mui/IconButton";
 
 const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe: string, role: string }>(({
@@ -20,11 +28,13 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe:
   role: string
 }, ref) => {
 
-  const {numero} = useParams()
+  const { numero } = useParams()
 
   const documenttype = useMemo(() => {
     const nu = (numero as string).substring(0, 2).toUpperCase()
+
     if (!nu) return null
+
     switch (nu) {
       case 'FA':
         return DocumentTypes.FACTURE
@@ -38,7 +48,7 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe:
   }, [numero])
 
   return (
-    <Card sx={{position: 'relative', overflow: 'hidden'}} ref={ref} className={'!border-none !shadow-none'}>
+    <Card sx={{ position: 'relative', overflow: 'hidden' }} ref={ref} className={'!border-none !shadow-none'}>
       <div
         style={{
           position: 'absolute',
@@ -50,10 +60,10 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe:
           opacity: 0.05,
           zIndex: 0,
           pointerEvents: 'none',
-          userSelect: 'none',
+          userSelect: 'none'
         }}
       >
-        <SoosmartLogo width="100%" height="100%"/>
+        <SoosmartLogo width="100%" height="100%" />
       </div>
 
       {/*<div
@@ -70,15 +80,15 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe:
       >
         <SoosmartLogo width="6rem" height="6rem" />
       </div>*/}
-      <CardContent className='sm:!p-12'>
+      <CardContent className="sm:!p-12">
 
         <Grid container spacing={0} direction={'column'} gap={0}>
           <Grid size={12} gap={0} spacing={0} container direction={'row'} sx={{
             justifyContent: 'flex-start',
-            alignItems: 'center',
+            alignItems: 'center'
           }}>
             <Typography className={'text-[#0573c1] text-[0.50in] font-bold'}>S</Typography>
-            <SoosmartLogo width={'0.43in'} height={'0.42in'}/>
+            <SoosmartLogo width={'0.43in'} height={'0.42in'} />
             <Typography className={'text-[#0573c1] text-[0.50in] font-bold'}>SMART</Typography>
           </Grid>
           <Grid size={12}>
@@ -88,18 +98,18 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe:
         {
           documenttype === DocumentTypes.BORDERAU ? (
             <Grid size={12} gap={0} spacing={0} container direction={'row'}
-                  sx={{justifyContent: 'center', alignItems: 'center'}}>
+                  sx={{ justifyContent: 'center', alignItems: 'center' }}>
               <Typography className={'font-bold text-center text-2xl'}>BORDEREAU DE LIVRAISON</Typography>
             </Grid>
           ) : null
         }
         <Grid container spacing={0} direction={'column'} gap={0} sx={{
           justifyContent: 'flex-end',
-          alignItems: 'flex-end',
+          alignItems: 'flex-end'
         }}> <Grid container spacing={0} direction={'column'} gap={0} sx={{
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
-          marginRight: '10rem',
+          marginRight: '10rem'
         }}>
           {
             documenttype === DocumentTypes.BORDERAU ? (
@@ -120,12 +130,12 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe:
         <Grid container spacing={0} direction={'column'} gap={0}>
           <Grid size={12} gap={0} spacing={0} container direction={'row'} sx={{
             justifyContent: 'flex-start',
-            alignItems: 'center',
+            alignItems: 'center'
           }}>
             {
               documenttype === DocumentTypes.PROFORMA || documenttype === DocumentTypes.FACTURE ? (
                 <Grid size={12} gap={0} spacing={0} container direction={'row'}
-                      sx={{justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+                      sx={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
                   <Typography
                     className={'font-bold text-start text-xl uppercase'}>FACTURE {documenttype === DocumentTypes.PROFORMA ?? ''}</Typography>
                 </Grid>
@@ -265,7 +275,7 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe:
           justifyContent: 'flex-end',
           alignItems: 'flex-end',
           marginTop: '2rem',
-          marginRight: '5rem',
+          marginRight: '5rem'
         }}>
           <Typography className={'font-bold'}>{signe}</Typography>
           <Typography className={'font-bold'}>{role}</Typography>
@@ -275,10 +285,10 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe:
         <Grid container spacing={0} direction={'column'} gap={0} sx={{
           justifyContent: 'flex-end',
           alignItems: 'flex-end',
-          marginTop: '10rem',
+          marginTop: '10rem'
         }}> <Grid container spacing={0} direction={'column'} gap={0} sx={{
           justifyContent: 'flex-end',
-          alignItems: 'flex-end',
+          alignItems: 'flex-end'
         }}>
 
           <Typography className={'border-t-2 border-gray-950 text-primary'}>AGOE LEGBASSITO, QTE AHONKPOE, 50M DU MARCHE

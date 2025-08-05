@@ -8,18 +8,18 @@ import Button from '@mui/material/Button'
 const CardSupport = () => {
   return (
     <Card>
-      <CardContent className='flex flex-col items-center text-center'>
-        <Avatar className='mbe-2 is-[56px] bs-[56px]'>
-          <i className='tabler-help-circle text-[32px]' />
+      <CardContent className="flex flex-col items-center text-center">
+        <Avatar className="mbe-2 is-[56px] bs-[56px]">
+          <i className="tabler-help-circle text-[32px]" />
         </Avatar>
-        <Typography variant='h5' className='mbe-2'>
+        <Typography variant="h5" className="mbe-2">
           Support
         </Typography>
-        <Typography color='text.secondary' className='mbe-4'>
+        <Typography color="text.secondary" className="mbe-4">
           According to us blisters are a very common thing and we come across them very often in our daily lives. It is
           a very common occurrence like cold or fever depending upon your lifestyle.
         </Typography>
-        <Button variant='contained'>Contact Now</Button>
+        <Button variant="contained">Contact Now</Button>
       </CardContent>
     </Card>
   )

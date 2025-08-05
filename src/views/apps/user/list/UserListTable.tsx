@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
@@ -22,21 +22,21 @@ import MenuItem from '@mui/material/MenuItem'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -62,6 +62,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -96,11 +97,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -180,13 +181,13 @@ const UserListTable = ({ tableData }: { tableData?: UsersType[] }) => {
       columnHelper.accessor('fullName', {
         header: 'User',
         cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
+          <div className="flex items-center gap-4">
             {getAvatar({ avatar: row.original.avatar, fullName: row.original.fullName })}
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
+            <div className="flex flex-col">
+              <Typography color="text.primary" className="font-medium">
                 {row.original.fullName}
               </Typography>
-              <Typography variant='body2'>{row.original.username}</Typography>
+              <Typography variant="body2">{row.original.username}</Typography>
             </div>
           </div>
         )
@@ -194,12 +195,12 @@ const UserListTable = ({ tableData }: { tableData?: UsersType[] }) => {
       columnHelper.accessor('role', {
         header: 'Role',
         cell: ({ row }) => (
-          <div className='flex items-center gap-2'>
+          <div className="flex items-center gap-2">
             <Icon
               className={userRoleObj[row.original.role].icon}
               sx={{ color: `var(--mui-palette-${userRoleObj[row.original.role].color}-main)` }}
             />
-            <Typography className='capitalize' color='text.primary'>
+            <Typography className="capitalize" color="text.primary">
               {row.original.role}
             </Typography>
           </div>
@@ -208,7 +209,7 @@ const UserListTable = ({ tableData }: { tableData?: UsersType[] }) => {
       columnHelper.accessor('currentPlan', {
         header: 'Plan',
         cell: ({ row }) => (
-          <Typography className='capitalize' color='text.primary'>
+          <Typography className="capitalize" color="text.primary">
             {row.original.currentPlan}
           </Typography>
         )
@@ -220,13 +221,13 @@ const UserListTable = ({ tableData }: { tableData?: UsersType[] }) => {
       columnHelper.accessor('status', {
         header: 'Status',
         cell: ({ row }) => (
-          <div className='flex items-center gap-3'>
+          <div className="flex items-center gap-3">
             <Chip
-              variant='tonal'
+              variant="tonal"
               label={row.original.status}
-              size='small'
+              size="small"
               color={userStatusObj[row.original.status]}
-              className='capitalize'
+              className="capitalize"
             />
           </div>
         )
@@ -234,18 +235,18 @@ const UserListTable = ({ tableData }: { tableData?: UsersType[] }) => {
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({ row }) => (
-          <div className='flex items-center'>
+          <div className="flex items-center">
             <IconButton onClick={() => setData(data?.filter(product => product.id !== row.original.id))}>
-              <i className='tabler-trash text-textSecondary' />
+              <i className="tabler-trash text-textSecondary" />
             </IconButton>
             <IconButton>
-              <Link href={getLocalizedUrl('/apps/user/view', locale as Locale)} className='flex'>
-                <i className='tabler-eye text-textSecondary' />
+              <Link href={getLocalizedUrl('/apps/user/view', locale as Locale)} className="flex">
+                <i className="tabler-eye text-textSecondary" />
               </Link>
             </IconButton>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary'
+              iconClassName="text-textSecondary"
               options={[
                 {
                   text: 'Download',
@@ -310,95 +311,95 @@ const UserListTable = ({ tableData }: { tableData?: UsersType[] }) => {
   return (
     <>
       <Card>
-        <CardHeader title='Filters' className='pbe-4' />
+        <CardHeader title="Filters" className="pbe-4" />
         <TableFilters setData={setFilteredData} tableData={data} />
-        <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
+        <div className="flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4">
           <CustomTextField
             select
             value={table.getState().pagination.pageSize}
             onChange={e => table.setPageSize(Number(e.target.value))}
-            className='max-sm:is-full sm:is-[70px]'
+            className="max-sm:is-full sm:is-[70px]"
           >
-            <MenuItem value='10'>10</MenuItem>
-            <MenuItem value='25'>25</MenuItem>
-            <MenuItem value='50'>50</MenuItem>
+            <MenuItem value="10">10</MenuItem>
+            <MenuItem value="25">25</MenuItem>
+            <MenuItem value="50">50</MenuItem>
           </CustomTextField>
-          <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
+          <div className="flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4">
             <DebouncedInput
               value={globalFilter ?? ''}
               onChange={value => setGlobalFilter(String(value))}
-              placeholder='Search User'
-              className='max-sm:is-full'
+              placeholder="Search User"
+              className="max-sm:is-full"
             />
             <Button
-              color='secondary'
-              variant='tonal'
-              startIcon={<i className='tabler-upload' />}
-              className='max-sm:is-full'
+              color="secondary"
+              variant="tonal"
+              startIcon={<i className="tabler-upload" />}
+              className="max-sm:is-full"
             >
               Export
             </Button>
             <Button
-              variant='contained'
-              startIcon={<i className='tabler-plus' />}
+              variant="contained"
+              startIcon={<i className="tabler-plus" />}
               onClick={() => setAddUserOpen(!addUserOpen)}
-              className='max-sm:is-full'
+              className="max-sm:is-full"
             >
               Add New User
             </Button>
           </div>
         </div>
-        <div className='overflow-x-auto'>
+        <div className="overflow-x-auto">
           <table className={tableStyles.table}>
             <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            className={classnames({
-                              'flex items-center': header.column.getIsSorted(),
-                              'cursor-pointer select-none': header.column.getCanSort()
-                            })}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {{
-                              asc: <i className='tabler-chevron-up text-xl' />,
-                              desc: <i className='tabler-chevron-down text-xl' />
-                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                          </div>
-                        </>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div
+                          className={classnames({
+                            'flex items-center': header.column.getIsSorted(),
+                            'cursor-pointer select-none': header.column.getCanSort()
+                          })}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {{
+                            asc: <i className="tabler-chevron-up text-xl" />,
+                            desc: <i className="tabler-chevron-down text-xl" />
+                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                        </div>
+                      </>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
             </thead>
             {table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    No data available
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                  No data available
+                </td>
+              </tr>
               </tbody>
             ) : (
               <tbody>
-                {table
-                  .getRowModel()
-                  .rows.slice(0, table.getState().pagination.pageSize)
-                  .map(row => {
-                    return (
-                      <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                        {row.getVisibleCells().map(cell => (
-                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                        ))}
-                      </tr>
-                    )
-                  })}
+              {table
+                .getRowModel()
+                .rows.slice(0, table.getState().pagination.pageSize)
+                .map(row => {
+                  return (
+                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                      {row.getVisibleCells().map(cell => (
+                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                      ))}
+                    </tr>
+                  )
+                })}
               </tbody>
             )}
           </table>

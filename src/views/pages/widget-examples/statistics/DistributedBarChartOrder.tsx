@@ -124,14 +124,14 @@ const DistributedBarChartOrder = () => {
 
   return (
     <Card>
-      <CardHeader title='Order' subheader='Last Week' className='pbe-0' />
-      <CardContent className='flex flex-col'>
-        <AppReactApexCharts type='bar' height={98} width='100%' options={options} series={series} />
-        <div className='flex items-center justify-between flex-wrap gap-x-4 gap-y-0.5'>
-          <Typography variant='h4' color='text.primary'>
+      <CardHeader title="Order" subheader="Last Week" className="pbe-0" />
+      <CardContent className="flex flex-col">
+        <AppReactApexCharts type="bar" height={98} width="100%" options={options} series={series} />
+        <div className="flex items-center justify-between flex-wrap gap-x-4 gap-y-0.5">
+          <Typography variant="h4" color="text.primary">
             124k
           </Typography>
-          <Typography variant='body2' color='success.main'>
+          <Typography variant="body2" color="success.main">
             +12.6%
           </Typography>
         </div>

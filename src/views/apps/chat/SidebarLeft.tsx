@@ -1,6 +1,6 @@
 // React Imports
-import { useState } from 'react'
 import type { ReactNode, RefObject } from 'react'
+import { useState } from 'react'
 
 // MUI Imports
 import Avatar from '@mui/material/Avatar'
@@ -92,29 +92,29 @@ const renderChat = (props: RenderChatType) => {
           badgeColor={statusObj[contact.status]}
           color={contact.avatarColor}
         />
-        <div className='min-is-0 flex-auto'>
-          <Typography color='inherit'>{contact?.fullName}</Typography>
+        <div className="min-is-0 flex-auto">
+          <Typography color="inherit">{contact?.fullName}</Typography>
           {chat.chat.length ? (
-            <Typography variant='body2' color={isChatActive ? 'inherit' : 'text.secondary'} className='truncate'>
+            <Typography variant="body2" color={isChatActive ? 'inherit' : 'text.secondary'} className="truncate">
               {chat.chat[chat.chat.length - 1].message}
             </Typography>
           ) : (
-            <Typography variant='body2' color={isChatActive ? 'inherit' : 'text.secondary'} className='truncate'>
+            <Typography variant="body2" color={isChatActive ? 'inherit' : 'text.secondary'} className="truncate">
               {contact.role}
             </Typography>
           )}
         </div>
-        <div className='flex flex-col items-end justify-start'>
+        <div className="flex flex-col items-end justify-start">
           <Typography
-            variant='body2'
-            color='inherit'
+            variant="body2"
+            color="inherit"
             className={classnames('truncate', {
               'text-textDisabled': !isChatActive
             })}
           >
             {chat.chat.length ? formatDateToMonthShort(chat.chat[chat.chat.length - 1].time) : null}
           </Typography>
-          {chat.unseenMsgs > 0 ? <CustomChip round='true' label={chat.unseenMsgs} color='error' size='small' /> : null}
+          {chat.unseenMsgs > 0 ? <CustomChip round="true" label={chat.unseenMsgs} color="error" size="small" /> : null}
         </div>
       </li>
     )
@@ -124,7 +124,7 @@ const renderChat = (props: RenderChatType) => {
 // Scroll wrapper for chat list
 const ScrollWrapper = ({ children, isBelowLgScreen }: { children: ReactNode; isBelowLgScreen: boolean }) => {
   if (isBelowLgScreen) {
-    return <div className='bs-full overflow-y-auto overflow-x-hidden'>{children}</div>
+    return <div className="bs-full overflow-y-auto overflow-x-hidden">{children}</div>
   } else {
     return <PerfectScrollbar options={{ wheelPropagation: false }}>{children}</PerfectScrollbar>
   }
@@ -167,7 +167,7 @@ const SidebarLeft = (props: Props) => {
       <Drawer
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
-        className='bs-full'
+        className="bs-full"
         variant={!isBelowMdScreen ? 'permanent' : 'persistent'}
         ModalProps={{
           disablePortal: true,
@@ -185,7 +185,7 @@ const SidebarLeft = (props: Props) => {
           }
         }}
       >
-        <div className='flex items-center plb-[18px] pli-6 gap-4 border-be'>
+        <div className="flex items-center plb-[18px] pli-6 gap-4 border-be">
           <AvatarWithBadge
             alt={chatStore.profileUser.fullName}
             src={chatStore.profileUser.avatar}
@@ -194,25 +194,25 @@ const SidebarLeft = (props: Props) => {
               setUserSidebar(true)
             }}
           />
-          <div className='flex is-full items-center flex-auto sm:gap-x-3'>
+          <div className="flex is-full items-center flex-auto sm:gap-x-3">
             <Autocomplete
               fullWidth
-              size='small'
-              id='select-contact'
+              size="small"
+              id="select-contact"
               options={chatStore.contacts.map(contact => contact.fullName) || []}
               value={searchValue || null}
               onChange={handleChange}
               renderInput={params => (
                 <CustomTextField
                   {...params}
-                  variant='outlined'
-                  placeholder='Search Contacts'
+                  variant="outlined"
+                  placeholder="Search Contacts"
                   slotProps={{
                     input: {
                       ...params.InputProps,
                       startAdornment: (
-                        <InputAdornment position='start'>
-                          <i className='tabler-search' />
+                        <InputAdornment position="start">
+                          <i className="tabler-search" />
                         </InputAdornment>
                       )
                     }
@@ -238,7 +238,7 @@ const SidebarLeft = (props: Props) => {
                       ) : (
                         <CustomAvatar
                           color={contact.avatarColor as ThemeColor}
-                          skin='light'
+                          skin="light"
                           key={option.toLowerCase().replace(/\s+/g, '-')}
                         >
                           {getInitials(contact.fullName)}
@@ -252,20 +252,20 @@ const SidebarLeft = (props: Props) => {
             />
             {isBelowMdScreen ? (
               <IconButton
-                className='mis-2'
-                size='small'
+                className="mis-2"
+                size="small"
                 onClick={() => {
                   setSidebarOpen(false)
                   setBackdropOpen(false)
                 }}
               >
-                <i className='tabler-x text-2xl' />
+                <i className="tabler-x text-2xl" />
               </IconButton>
             ) : null}
           </div>
         </div>
         <ScrollWrapper isBelowLgScreen={isBelowLgScreen}>
-          <ul className='p-3 pbs-4'>
+          <ul className="p-3 pbs-4">
             {renderChat({
               chatStore,
               getActiveUserData,

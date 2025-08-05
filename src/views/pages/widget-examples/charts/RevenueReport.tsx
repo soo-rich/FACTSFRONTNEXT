@@ -1,8 +1,8 @@
 'use client'
 
+import type { MouseEvent } from 'react'
 // React Imports
 import { useState } from 'react'
-import type { MouseEvent } from 'react'
 
 // Next Imports
 import dynamic from 'next/dynamic'
@@ -238,19 +238,19 @@ const RevenueReport = () => {
   return (
     <Card>
       <Grid container>
-        <Grid size={{ xs: 12, sm: 8 }} className='border-r'>
-          <CardHeader title='Revenue Report' />
+        <Grid size={{ xs: 12, sm: 8 }} className="border-r">
+          <CardHeader title="Revenue Report" />
           <CardContent>
-            <AppReactApexCharts type='bar' height={319} width='100%' series={barSeries} options={barOptions} />
+            <AppReactApexCharts type="bar" height={319} width="100%" series={barSeries} options={barOptions} />
           </CardContent>
         </Grid>
         <Grid size={{ xs: 12, sm: 4 }}>
-          <CardContent className='flex flex-col items-center justify-center min-bs-full gap-8'>
+          <CardContent className="flex flex-col items-center justify-center min-bs-full gap-8">
             <Button
-              size='small'
-              variant='tonal'
+              size="small"
+              variant="tonal"
               onClick={handleClick}
-              endIcon={<i className='tabler-chevron-down text-xl' />}
+              endIcon={<i className="tabler-chevron-down text-xl" />}
             >
               {new Date().getFullYear()}
             </Button>
@@ -268,14 +268,14 @@ const RevenueReport = () => {
                 </MenuItem>
               ))}
             </Menu>
-            <div className='flex flex-col items-center'>
-              <Typography variant='h3'>$25,825</Typography>
+            <div className="flex flex-col items-center">
+              <Typography variant="h3">$25,825</Typography>
               <Typography>
-                <span className='font-medium text-textPrimary'>Budget: </span>56,800
+                <span className="font-medium text-textPrimary">Budget: </span>56,800
               </Typography>
             </div>
-            <AppReactApexCharts type='line' height={80} width='100%' series={lineSeries} options={lineOptions} />
-            <Button variant='contained'>Increase Budget</Button>
+            <AppReactApexCharts type="line" height={80} width="100%" series={lineSeries} options={lineOptions} />
+            <Button variant="contained">Increase Budget</Button>
           </CardContent>
         </Grid>
       </Grid>

@@ -109,9 +109,9 @@ const ApexRadarChart = () => {
 
   return (
     <Card>
-      <CardHeader title='Mobile Comparison' />
+      <CardHeader title="Mobile Comparison" />
       <CardContent>
-        <AppReactApexCharts type='radar' width='100%' height={400} options={options} series={series} />
+        <AppReactApexCharts type="radar" width="100%" height={400} options={options} series={series} />
       </CardContent>
     </Card>
   )

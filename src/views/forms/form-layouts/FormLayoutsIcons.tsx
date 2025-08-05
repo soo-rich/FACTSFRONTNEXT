@@ -13,20 +13,20 @@ import Form from '@components/Form'
 const FormLayoutsWithIcon = () => {
   return (
     <Card>
-      <CardHeader title='Basic with Icons' />
+      <CardHeader title="Basic with Icons" />
       <CardContent>
         <Form>
           <Grid container spacing={6}>
             <Grid size={{ xs: 12 }}>
               <CustomTextField
                 fullWidth
-                label='Name'
-                placeholder='John Doe'
+                label="Name"
+                placeholder="John Doe"
                 slotProps={{
                   input: {
                     startAdornment: (
-                      <InputAdornment position='start'>
-                        <i className='tabler-user' />
+                      <InputAdornment position="start">
+                        <i className="tabler-user" />
                       </InputAdornment>
                     )
                   }
@@ -36,14 +36,14 @@ const FormLayoutsWithIcon = () => {
             <Grid size={{ xs: 12 }}>
               <CustomTextField
                 fullWidth
-                type='email'
-                label='Email'
-                placeholder='johndoe@gmail.com'
+                type="email"
+                label="Email"
+                placeholder="johndoe@gmail.com"
                 slotProps={{
                   input: {
                     startAdornment: (
-                      <InputAdornment position='start'>
-                        <i className='tabler-mail' />
+                      <InputAdornment position="start">
+                        <i className="tabler-mail" />
                       </InputAdornment>
                     )
                   }
@@ -53,13 +53,13 @@ const FormLayoutsWithIcon = () => {
             <Grid size={{ xs: 12 }}>
               <CustomTextField
                 fullWidth
-                label='Phone No.'
-                placeholder='123-456-7890'
+                label="Phone No."
+                placeholder="123-456-7890"
                 slotProps={{
                   input: {
                     startAdornment: (
-                      <InputAdornment position='start'>
-                        <i className='tabler-phone' />
+                      <InputAdornment position="start">
+                        <i className="tabler-phone" />
                       </InputAdornment>
                     )
                   }
@@ -71,14 +71,14 @@ const FormLayoutsWithIcon = () => {
                 fullWidth
                 rows={4}
                 multiline
-                label='Message'
-                placeholder='Bio...'
+                label="Message"
+                placeholder="Bio..."
                 sx={{ '& .MuiInputBase-root.MuiFilledInput-root': { alignItems: 'baseline' } }}
                 slotProps={{
                   input: {
                     startAdornment: (
-                      <InputAdornment position='start'>
-                        <i className='tabler-message' />
+                      <InputAdornment position="start">
+                        <i className="tabler-message" />
                       </InputAdornment>
                     )
                   }
@@ -86,7 +86,7 @@ const FormLayoutsWithIcon = () => {
               />
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <Button variant='contained' type='submit'>
+              <Button variant="contained" type="submit">
                 Submit
               </Button>
             </Grid>

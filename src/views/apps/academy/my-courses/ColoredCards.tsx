@@ -56,12 +56,12 @@ const ColoredCards = () => {
               item.bgColorClass
             )}
           >
-            <div className='flex flex-col items-center sm:items-start max-sm:text-center'>
-              <Typography variant='h5' color={`${item.color}.main`} className='mbe-2'>
+            <div className="flex flex-col items-center sm:items-start max-sm:text-center">
+              <Typography variant="h5" color={`${item.color}.main`} className="mbe-2">
                 {item.title}
               </Typography>
-              <Typography className='mbe-4'>{item.description}</Typography>
-              <Button variant='contained' size='small' color={item.color}>{`View ${item.type}`}</Button>
+              <Typography className="mbe-4">{item.description}</Typography>
+              <Button variant="contained" size="small" color={item.color}>{`View ${item.type}`}</Button>
             </div>
             <div
               className={classnames(

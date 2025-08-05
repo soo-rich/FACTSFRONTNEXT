@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid2'
 import Chip from '@mui/material/Chip'
 
 // Type Imports
-import type { ProfileTeamsTechType, ProfileConnectionsType } from '@/types/pages/profileTypes'
+import type { ProfileConnectionsType, ProfileTeamsTechType } from '@/types/pages/profileTypes'
 
 // Component Imports
 import OptionMenu from '@core/components/option-menu'
@@ -30,30 +30,30 @@ const ConnectionsTeams = (props: Props) => {
       <Grid size={{ xs: 12, md: 6 }}>
         <Card>
           <CardHeader
-            title='Connections'
+            title="Connections"
             action={<OptionMenu options={['Share Connections', 'Suggest Edits', { divider: true }, 'Report Bug']} />}
           />
-          <CardContent className='flex flex-col gap-4'>
+          <CardContent className="flex flex-col gap-4">
             {connections &&
               connections.map((connection, index) => (
-                <div key={index} className='flex items-center gap-2'>
-                  <div className='flex items-center flex-grow gap-2'>
+                <div key={index} className="flex items-center gap-2">
+                  <div className="flex items-center flex-grow gap-2">
                     <CustomAvatar src={connection.avatar} size={38} />
-                    <div className='flex flex-grow flex-col'>
-                      <Typography className='font-medium' color='text.primary'>
+                    <div className="flex flex-grow flex-col">
+                      <Typography className="font-medium" color="text.primary">
                         {connection.name}
                       </Typography>
-                      <Typography variant='body2'>{connection.connections} Connections</Typography>
+                      <Typography variant="body2">{connection.connections} Connections</Typography>
                     </div>
                   </div>
-                  <CustomIconButton color='primary' variant={connection.isFriend ? 'tonal' : 'contained'}>
+                  <CustomIconButton color="primary" variant={connection.isFriend ? 'tonal' : 'contained'}>
                     <i className={connection.isFriend ? 'tabler-user-check' : 'tabler-user-x'} />
                   </CustomIconButton>
                 </div>
               ))}
           </CardContent>
-          <CardActions className='flex justify-center'>
-            <Typography component={Link} color='primary.main'>
+          <CardActions className="flex justify-center">
+            <Typography component={Link} color="primary.main">
               View all connections
             </Typography>
           </CardActions>
@@ -62,28 +62,28 @@ const ConnectionsTeams = (props: Props) => {
       <Grid size={{ xs: 12, md: 6 }}>
         <Card>
           <CardHeader
-            title='Teams'
+            title="Teams"
             action={<OptionMenu options={['Share Teams', 'Suggest Edits', { divider: true }, 'Report Bug']} />}
           />
-          <CardContent className='flex flex-col gap-4'>
+          <CardContent className="flex flex-col gap-4">
             {teamsTech &&
               teamsTech.map((team: ProfileTeamsTechType, index) => (
-                <div key={index} className='flex'>
-                  <div className='flex flex-grow  items-center gap-2'>
+                <div key={index} className="flex">
+                  <div className="flex flex-grow  items-center gap-2">
                     <CustomAvatar src={team.avatar} size={38} />
-                    <div className='flex flex-grow flex-col'>
-                      <Typography className='font-medium' color='text.primary'>
+                    <div className="flex flex-grow flex-col">
+                      <Typography className="font-medium" color="text.primary">
                         {team.title}
                       </Typography>
-                      <Typography variant='body2'>{team.members} Members</Typography>
+                      <Typography variant="body2">{team.members} Members</Typography>
                     </div>
                   </div>
-                  <Chip color={team.ChipColor} label={team.chipText} size='small' variant='tonal' />
+                  <Chip color={team.ChipColor} label={team.chipText} size="small" variant="tonal" />
                 </div>
               ))}
           </CardContent>
-          <CardActions className='flex justify-center'>
-            <Typography component={Link} color='primary.main'>
+          <CardActions className="flex justify-center">
+            <Typography component={Link} color="primary.main">
               View all teams
             </Typography>
           </CardActions>

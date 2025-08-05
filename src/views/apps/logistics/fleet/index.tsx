@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 // MUI Imports
 import Backdrop from '@mui/material/Backdrop'
@@ -111,15 +111,15 @@ const Fleet = ({ mapboxAccessToken }: { mapboxAccessToken: string }) => {
     >
       {isBelowMdScreen ? (
         <CustomIconButton
-          variant='contained'
-          color='primary'
-          className='absolute top-4 left-4 z-10 bg-backgroundPaper text-textPrimary shadow-xs shadow-gray-500 hover:bg-backgroundPaper focus:bg-backgroundPaper active:bg-backgroundPaper'
+          variant="contained"
+          color="primary"
+          className="absolute top-4 left-4 z-10 bg-backgroundPaper text-textPrimary shadow-xs shadow-gray-500 hover:bg-backgroundPaper focus:bg-backgroundPaper active:bg-backgroundPaper"
           onClick={() => {
             setSidebarOpen(true)
             setBackdropOpen(true)
           }}
         >
-          <i className='tabler-menu-2' />
+          <i className="tabler-menu-2" />
         </CustomIconButton>
       ) : null}
       <FleetSidebar
@@ -136,7 +136,7 @@ const Fleet = ({ mapboxAccessToken }: { mapboxAccessToken: string }) => {
         geojson={geojson}
       />
       <FleetMap carIndex={expanded} viewState={viewState} geojson={geojson} mapboxAccessToken={mapboxAccessToken} />
-      <Backdrop open={backdropOpen} onClick={() => setBackdropOpen(false)} className='absolute z-10' />
+      <Backdrop open={backdropOpen} onClick={() => setBackdropOpen(false)} className="absolute z-10" />
     </div>
   )
 }

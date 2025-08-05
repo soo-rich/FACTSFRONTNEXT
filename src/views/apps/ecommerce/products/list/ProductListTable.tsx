@@ -23,21 +23,21 @@ import type { TextFieldProps } from '@mui/material/TextField'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -61,6 +61,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -98,11 +99,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -182,13 +183,13 @@ const ProductListTable = ({ productData }: { productData?: ProductType[] }) => {
       columnHelper.accessor('productName', {
         header: 'Product',
         cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <img src={row.original.image} width={38} height={38} className='rounded bg-actionHover' />
-            <div className='flex flex-col'>
-              <Typography className='font-medium' color='text.primary'>
+          <div className="flex items-center gap-4">
+            <img src={row.original.image} width={38} height={38} className="rounded bg-actionHover" />
+            <div className="flex flex-col">
+              <Typography className="font-medium" color="text.primary">
                 {row.original.productName}
               </Typography>
-              <Typography variant='body2'>{row.original.productBrand}</Typography>
+              <Typography variant="body2">{row.original.productBrand}</Typography>
             </div>
           </div>
         )
@@ -196,11 +197,11 @@ const ProductListTable = ({ productData }: { productData?: ProductType[] }) => {
       columnHelper.accessor('category', {
         header: 'Category',
         cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <CustomAvatar skin='light' color={productCategoryObj[row.original.category].color} size={30}>
+          <div className="flex items-center gap-4">
+            <CustomAvatar skin="light" color={productCategoryObj[row.original.category].color} size={30}>
               <i className={classnames(productCategoryObj[row.original.category].icon, 'text-lg')} />
             </CustomAvatar>
-            <Typography color='text.primary'>{row.original.category}</Typography>
+            <Typography color="text.primary">{row.original.category}</Typography>
           </div>
         )
       }),
@@ -226,22 +227,22 @@ const ProductListTable = ({ productData }: { productData?: ProductType[] }) => {
         cell: ({ row }) => (
           <Chip
             label={productStatusObj[row.original.status].title}
-            variant='tonal'
+            variant="tonal"
             color={productStatusObj[row.original.status].color}
-            size='small'
+            size="small"
           />
         )
       }),
       columnHelper.accessor('actions', {
         header: 'Actions',
         cell: ({ row }) => (
-          <div className='flex items-center'>
+          <div className="flex items-center">
             <IconButton>
-              <i className='tabler-edit text-textSecondary' />
+              <i className="tabler-edit text-textSecondary" />
             </IconButton>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary'
+              iconClassName="text-textSecondary"
               options={[
                 { text: 'Download', icon: 'tabler-download' },
                 {
@@ -293,97 +294,97 @@ const ProductListTable = ({ productData }: { productData?: ProductType[] }) => {
   return (
     <>
       <Card>
-        <CardHeader title='Filters' />
+        <CardHeader title="Filters" />
         <TableFilters setData={setFilteredData} productData={data} />
         <Divider />
-        <div className='flex flex-wrap justify-between gap-4 p-6'>
+        <div className="flex flex-wrap justify-between gap-4 p-6">
           <DebouncedInput
             value={globalFilter ?? ''}
             onChange={value => setGlobalFilter(String(value))}
-            placeholder='Search Product'
-            className='max-sm:is-full'
+            placeholder="Search Product"
+            className="max-sm:is-full"
           />
-          <div className='flex flex-wrap items-center max-sm:flex-col gap-4 max-sm:is-full is-auto'>
+          <div className="flex flex-wrap items-center max-sm:flex-col gap-4 max-sm:is-full is-auto">
             <CustomTextField
               select
               value={table.getState().pagination.pageSize}
               onChange={e => table.setPageSize(Number(e.target.value))}
-              className='flex-auto is-[70px] max-sm:is-full'
+              className="flex-auto is-[70px] max-sm:is-full"
             >
-              <MenuItem value='10'>10</MenuItem>
-              <MenuItem value='25'>25</MenuItem>
-              <MenuItem value='50'>50</MenuItem>
+              <MenuItem value="10">10</MenuItem>
+              <MenuItem value="25">25</MenuItem>
+              <MenuItem value="50">50</MenuItem>
             </CustomTextField>
             <Button
-              color='secondary'
-              variant='tonal'
-              className='max-sm:is-full is-auto'
-              startIcon={<i className='tabler-upload' />}
+              color="secondary"
+              variant="tonal"
+              className="max-sm:is-full is-auto"
+              startIcon={<i className="tabler-upload" />}
             >
               Export
             </Button>
             <Button
-              variant='contained'
+              variant="contained"
               component={Link}
-              className='max-sm:is-full is-auto'
+              className="max-sm:is-full is-auto"
               href={getLocalizedUrl('/apps/ecommerce/products/add', locale as Locale)}
-              startIcon={<i className='tabler-plus' />}
+              startIcon={<i className="tabler-plus" />}
             >
               Add Product
             </Button>
           </div>
         </div>
-        <div className='overflow-x-auto'>
+        <div className="overflow-x-auto">
           <table className={tableStyles.table}>
             <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            className={classnames({
-                              'flex items-center': header.column.getIsSorted(),
-                              'cursor-pointer select-none': header.column.getCanSort()
-                            })}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {{
-                              asc: <i className='tabler-chevron-up text-xl' />,
-                              desc: <i className='tabler-chevron-down text-xl' />
-                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                          </div>
-                        </>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div
+                          className={classnames({
+                            'flex items-center': header.column.getIsSorted(),
+                            'cursor-pointer select-none': header.column.getCanSort()
+                          })}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {{
+                            asc: <i className="tabler-chevron-up text-xl" />,
+                            desc: <i className="tabler-chevron-down text-xl" />
+                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                        </div>
+                      </>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
             </thead>
             {table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    No data available
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                  No data available
+                </td>
+              </tr>
               </tbody>
             ) : (
               <tbody>
-                {table
-                  .getRowModel()
-                  .rows.slice(0, table.getState().pagination.pageSize)
-                  .map(row => {
-                    return (
-                      <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                        {row.getVisibleCells().map(cell => (
-                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                        ))}
-                      </tr>
-                    )
-                  })}
+              {table
+                .getRowModel()
+                .rows.slice(0, table.getState().pagination.pageSize)
+                .map(row => {
+                  return (
+                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                      {row.getVisibleCells().map(cell => (
+                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                      ))}
+                    </tr>
+                  )
+                })}
               </tbody>
             )}
           </table>

@@ -20,7 +20,7 @@
   background-color: white;
 }
 
-.table-reference{
+.table-reference {
   inline-size: 100%;
   border-collapse: collapse;
   font-size: 0.8125rem;
@@ -29,6 +29,7 @@
   [align='right'] > * {
     text-align: end;
   }
+
   [align='center'] > * {
     text-align: center;
   }
@@ -44,19 +45,23 @@
       line-height: 1.8462;
       text-align: center;
       block-size: 56px;
+
       &:not(:first-of-type):not(:last-of-type) {
         padding-block: 0.5rem;
         padding-inline: 1rem;
       }
+
       &:first-of-type {
         &:not(:has(input[type='checkbox'])) {
           padding-block: 0.5rem;
           padding-inline: 1.5rem 1rem;
         }
+
         &:has(input[type='checkbox']) {
           padding-inline-start: 0.9375rem;
         }
       }
+
       &:last-of-type {
         padding-block: 0.5rem;
         padding-inline: 1rem 1.5rem;
@@ -72,20 +77,24 @@
       font-size: 0.9375rem;
       line-height: 1.4667;
       block-size: 50px;
+
       &:not(:first-of-type):not(:last-of-type) {
         padding-block: 0.5rem;
         padding-inline: 1rem;
       }
+
       &:first-of-type {
         &:not(:has(input[type='checkbox'])) {
           padding-block: 0.5rem;
           padding-inline: 1.5rem 1rem;
         }
+
         &:has(input[type='checkbox']) {
           inline-size: 51px;
           padding-inline-start: 0.9375rem;
         }
       }
+
       &:last-of-type {
         padding-block: 0.5rem;
         padding-inline: 1rem 1.5rem;
@@ -95,6 +104,7 @@
     tr:not(:last-child) {
       border-block-end: 1px solid var(--border-color);
     }
+
     tr {
       border-block-start: 1px solid var(--border-color);
     }

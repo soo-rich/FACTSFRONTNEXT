@@ -56,12 +56,12 @@ const InvoiceCard = () => {
                 '[&:not(:last-child)>div]:pie-6 [&:not(:last-child)>div]:border-ie': !isBelowMdScreen
               })}
             >
-              <div className='flex justify-between items-center'>
-                <div className='flex flex-col'>
-                  <Typography variant='h4'>{item.title}</Typography>
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col">
+                  <Typography variant="h4">{item.title}</Typography>
                   <Typography>{item.subtitle}</Typography>
                 </div>
-                <Avatar variant='rounded' className='is-[42px] bs-[42px]'>
+                <Avatar variant="rounded" className="is-[42px] bs-[42px]">
                   <i className={classnames(item.icon, 'text-[26px]')} />
                 </Avatar>
               </div>
@@ -72,7 +72,7 @@ const InvoiceCard = () => {
                   })}
                 />
               )}
-              {isBelowSmScreen && index < data.length - 1 && <Divider className='mbs-6' />}
+              {isBelowSmScreen && index < data.length - 1 && <Divider className="mbs-6" />}
             </Grid>
           ))}
         </Grid>

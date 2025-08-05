@@ -27,33 +27,33 @@ const StepAccountDetails = ({ handleNext }: { handleNext: () => void }) => {
 
   return (
     <>
-      <div className='mbe-5'>
-        <Typography variant='h4'>Account Information</Typography>
+      <div className="mbe-5">
+        <Typography variant="h4">Account Information</Typography>
         <Typography>Enter Your Account Details</Typography>
       </div>
       <Grid container spacing={6}>
         <Grid size={{ xs: 12, sm: 6 }}>
-          <CustomTextField fullWidth label='Username' placeholder='johnDoe' />
+          <CustomTextField fullWidth label="Username" placeholder="johnDoe" />
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
-          <CustomTextField fullWidth type='email' label='Email' placeholder='john.deo@gmail.com' />
+          <CustomTextField fullWidth type="email" label="Email" placeholder="john.deo@gmail.com" />
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
           <CustomTextField
             fullWidth
-            label='Password'
-            placeholder='············'
-            id='outlined-adornment-password'
+            label="Password"
+            placeholder="············"
+            id="outlined-adornment-password"
             type={isPasswordShown ? 'text' : 'password'}
             slotProps={{
               input: {
                 endAdornment: (
-                  <InputAdornment position='end'>
+                  <InputAdornment position="end">
                     <IconButton
-                      edge='end'
+                      edge="end"
                       onClick={handleClickShowPassword}
                       onMouseDown={e => e.preventDefault()}
-                      aria-label='toggle password visibility'
+                      aria-label="toggle password visibility"
                     >
                       <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                     </IconButton>
@@ -66,19 +66,19 @@ const StepAccountDetails = ({ handleNext }: { handleNext: () => void }) => {
         <Grid size={{ xs: 12, sm: 6 }}>
           <CustomTextField
             fullWidth
-            label='Confirm Password'
-            placeholder='············'
-            id='outlined-confirm-password'
+            label="Confirm Password"
+            placeholder="············"
+            id="outlined-confirm-password"
             type={isConfirmPasswordShown ? 'text' : 'password'}
             slotProps={{
               input: {
                 endAdornment: (
-                  <InputAdornment position='end'>
+                  <InputAdornment position="end">
                     <IconButton
-                      edge='end'
+                      edge="end"
                       onClick={handleClickShowConfirmPassword}
                       onMouseDown={e => e.preventDefault()}
-                      aria-label='toggle confirm password visibility'
+                      aria-label="toggle confirm password visibility"
                     >
                       <i className={isConfirmPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                     </IconButton>
@@ -89,21 +89,21 @@ const StepAccountDetails = ({ handleNext }: { handleNext: () => void }) => {
           />
         </Grid>
         <Grid size={{ xs: 12 }}>
-          <CustomTextField fullWidth label='Profile Link' placeholder='johndoe/profile' />
+          <CustomTextField fullWidth label="Profile Link" placeholder="johndoe/profile" />
         </Grid>
-        <Grid size={{ xs: 12 }} className='flex justify-between'>
+        <Grid size={{ xs: 12 }} className="flex justify-between">
           <Button
             disabled
-            variant='tonal'
-            color='secondary'
-            startIcon={<DirectionalIcon ltrIconClass='tabler-arrow-left' rtlIconClass='tabler-arrow-right' />}
+            variant="tonal"
+            color="secondary"
+            startIcon={<DirectionalIcon ltrIconClass="tabler-arrow-left" rtlIconClass="tabler-arrow-right" />}
           >
             Previous
           </Button>
           <Button
-            variant='contained'
+            variant="contained"
             onClick={handleNext}
-            endIcon={<DirectionalIcon ltrIconClass='tabler-arrow-right' rtlIconClass='tabler-arrow-left' />}
+            endIcon={<DirectionalIcon ltrIconClass="tabler-arrow-right" rtlIconClass="tabler-arrow-left" />}
           >
             Next
           </Button>

@@ -1,6 +1,6 @@
 // React Imports
-import { useEffect, useState } from 'react'
 import type { FormEvent, RefObject } from 'react'
+import { useEffect, useState } from 'react'
 
 // MUI Imports
 import Typography from '@mui/material/Typography'
@@ -13,11 +13,11 @@ import { animations } from '@formkit/drag-and-drop'
 import classnames from 'classnames'
 
 // Type Imports
-import type { TaskType, ColumnType, KanbanType } from '@/types/apps/kanbanTypes'
+import type { ColumnType, KanbanType, TaskType } from '@/types/apps/kanbanTypes'
 import type { AppDispatch } from '@/redux-store'
 
 // Slice Imports
-import { addTask, editColumn, deleteColumn, updateColumnTaskIds } from '@/redux-store/slices/kanban'
+import { addTask, deleteColumn, editColumn, updateColumnTaskIds } from '@/redux-store/slices/kanban'
 
 // Component Imports
 import OptionMenu from '@core/components/option-menu'
@@ -138,10 +138,10 @@ const KanbanList = (props: KanbanListProps) => {
   }, [columns])
 
   return (
-    <div ref={tasksListRef as RefObject<HTMLDivElement>} className='flex flex-col is-[16.5rem]'>
+    <div ref={tasksListRef as RefObject<HTMLDivElement>} className="flex flex-col is-[16.5rem]">
       {editDisplay ? (
         <form
-          className='flex items-center mbe-4'
+          className="flex items-center mbe-4"
           onSubmit={handleSubmitEdit}
           onKeyDown={e => {
             if (e.key === 'Escape') {
@@ -149,29 +149,29 @@ const KanbanList = (props: KanbanListProps) => {
             }
           }}
         >
-          <InputBase value={title} autoFocus onChange={e => setTitle(e.target.value)} required className='flex-auto' />
-          <IconButton color='success' size='small' type='submit'>
-            <i className='tabler-check' />
+          <InputBase value={title} autoFocus onChange={e => setTitle(e.target.value)} required className="flex-auto" />
+          <IconButton color="success" size="small" type="submit">
+            <i className="tabler-check" />
           </IconButton>
-          <IconButton color='error' size='small' type='reset' onClick={cancelEdit}>
-            <i className='tabler-x' />
+          <IconButton color="error" size="small" type="reset" onClick={cancelEdit}>
+            <i className="tabler-x" />
           </IconButton>
         </form>
       ) : (
         <div
-          id='no-drag'
+          id="no-drag"
           className={classnames(
             'flex items-center justify-between is-[16.5rem] bs-[2.125rem] mbe-4',
             styles.kanbanColumn
           )}
         >
-          <Typography variant='h5' noWrap className='max-is-[80%]'>
+          <Typography variant="h5" noWrap className="max-is-[80%]">
             {column.title}
           </Typography>
-          <div className='flex items-center'>
+          <div className="flex items-center">
             <i className={classnames('tabler-arrows-move text-textSecondary list-handle', styles.drag)} />
             <OptionMenu
-              iconClassName='text-xl text-textPrimary'
+              iconClassName="text-xl text-textPrimary"
               options={[
                 {
                   text: 'Edit',

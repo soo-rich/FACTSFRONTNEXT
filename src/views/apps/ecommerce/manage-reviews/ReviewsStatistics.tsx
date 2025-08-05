@@ -99,24 +99,24 @@ const ReviewsStatistics = () => {
       <CardContent>
         <Grid container spacing={6}>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <div className='bs-full flex flex-col items-start justify-between gap-6'>
-              <div className='flex flex-col items-start gap-2'>
-                <Typography variant='h5'>Reviews statistics</Typography>
-                <div className='flex items-center gap-2'>
+            <div className="bs-full flex flex-col items-start justify-between gap-6">
+              <div className="flex flex-col items-start gap-2">
+                <Typography variant="h5">Reviews statistics</Typography>
+                <div className="flex items-center gap-2">
                   <Typography>12 New reviews</Typography>
-                  <Chip label='+8.4%' variant='tonal' size='small' color='success' />
+                  <Chip label="+8.4%" variant="tonal" size="small" color="success" />
                 </div>
               </div>
-              <div className='flex flex-col items-start gap-2'>
-                <Typography color='text.primary'>
-                  <span className='text-success'>87%</span> Positive reviews
+              <div className="flex flex-col items-start gap-2">
+                <Typography color="text.primary">
+                  <span className="text-success">87%</span> Positive reviews
                 </Typography>
-                <Typography variant='body2'>Weekly Report</Typography>
+                <Typography variant="body2">Weekly Report</Typography>
               </div>
             </div>
           </Grid>
-          <Grid size={{ xs: 12, sm: 6 }} className='flex justify-center'>
-            <AppReactApexCharts type='bar' width='100%' height={156} series={series} options={options} />
+          <Grid size={{ xs: 12, sm: 6 }} className="flex justify-center">
+            <AppReactApexCharts type="bar" width="100%" height={156} series={series} options={options} />
           </Grid>
         </Grid>
       </CardContent>

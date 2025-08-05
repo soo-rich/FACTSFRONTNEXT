@@ -12,7 +12,7 @@ import frontCommonStyles from '@views/front-pages/styles.module.css'
 
 const PricingSection = ({ data }: { data: PricingPlanType[] }) => {
   return (
-    <section className='plb-[100px] pbs-[70px] -mbs-[70px]'>
+    <section className="plb-[100px] pbs-[70px] -mbs-[70px]">
       <div className={classnames('pbs-[50px] md:pbs-[100px]', frontCommonStyles.layoutSpacing)}>
         <Pricing data={data} />
       </div>

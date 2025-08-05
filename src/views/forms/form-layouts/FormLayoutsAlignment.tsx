@@ -26,32 +26,32 @@ const FormLayoutsAlignment = () => {
 
   return (
     <Card>
-      <CardHeader title='Form Alignment' />
-      <CardContent className='flex flex-col items-center justify-center bs-[500px]'>
-        <form onSubmit={e => e.preventDefault()} className='p-12 max-is-[400px] border rounded'>
+      <CardHeader title="Form Alignment" />
+      <CardContent className="flex flex-col items-center justify-center bs-[500px]">
+        <form onSubmit={e => e.preventDefault()} className="p-12 max-is-[400px] border rounded">
           <Grid container spacing={6}>
             <Grid size={{ xs: 12 }}>
-              <Typography variant='h5'>Sign In</Typography>
+              <Typography variant="h5">Sign In</Typography>
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <CustomTextField fullWidth label='Username' placeholder='johnDoe ' />
+              <CustomTextField fullWidth label="Username" placeholder="johnDoe " />
             </Grid>
             <Grid size={{ xs: 12 }}>
               <CustomTextField
                 fullWidth
-                label='Password'
-                placeholder='············'
-                id='form-layout-alignment-password'
+                label="Password"
+                placeholder="············"
+                id="form-layout-alignment-password"
                 type={isPasswordShown ? 'text' : 'password'}
                 slotProps={{
                   input: {
                     endAdornment: (
-                      <InputAdornment position='end'>
+                      <InputAdornment position="end">
                         <IconButton
-                          edge='end'
+                          edge="end"
                           onClick={handleClickShowPassword}
                           onMouseDown={e => e.preventDefault()}
-                          aria-label='toggle password visibility'
+                          aria-label="toggle password visibility"
                         >
                           <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                         </IconButton>
@@ -61,11 +61,11 @@ const FormLayoutsAlignment = () => {
                 }}
               />
             </Grid>
-            <Grid size={{ xs: 12 }} className='pbs-2'>
-              <FormControlLabel control={<Checkbox />} label='Remember me' />
+            <Grid size={{ xs: 12 }} className="pbs-2">
+              <FormControlLabel control={<Checkbox />} label="Remember me" />
             </Grid>
-            <Grid size={{ xs: 12 }} className='pbs-2'>
-              <Button variant='contained' type='submit' fullWidth>
+            <Grid size={{ xs: 12 }} className="pbs-2">
+              <Button variant="contained" type="submit" fullWidth>
                 Log In
               </Button>
             </Grid>

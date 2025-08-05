@@ -17,41 +17,41 @@ const BillingInformation = () => {
 
   return (
     <Card>
-      <CardHeader title='Billing Information' />
+      <CardHeader title="Billing Information" />
       <CardContent>
         <Grid container spacing={6}>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField fullWidth label='Legal business name' placeholder='Pixinvent' />
+            <CustomTextField fullWidth label="Legal business name" placeholder="Pixinvent" />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
               select
               fullWidth
-              label='Country/Region'
+              label="Country/Region"
               value={country}
               onChange={e => setCountry(e.target.value)}
             >
-              <MenuItem value=''>Select Country</MenuItem>
-              <MenuItem value='India'>India</MenuItem>
-              <MenuItem value='Canada'>Canada</MenuItem>
-              <MenuItem value='UK'>UK</MenuItem>
-              <MenuItem value='United States'>United States</MenuItem>
+              <MenuItem value="">Select Country</MenuItem>
+              <MenuItem value="India">India</MenuItem>
+              <MenuItem value="Canada">Canada</MenuItem>
+              <MenuItem value="UK">UK</MenuItem>
+              <MenuItem value="United States">United States</MenuItem>
             </CustomTextField>
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField fullWidth label='Address' placeholder='126, New Street' />
+            <CustomTextField fullWidth label="Address" placeholder="126, New Street" />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField fullWidth label='Apartment,suit, etc.' placeholder='Empire Heights' />
+            <CustomTextField fullWidth label="Apartment,suit, etc." placeholder="Empire Heights" />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField fullWidth label='City' placeholder='New York' />
+            <CustomTextField fullWidth label="City" placeholder="New York" />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField fullWidth label='State' placeholder='New York' />
+            <CustomTextField fullWidth label="State" placeholder="New York" />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
-            <CustomTextField fullWidth type='number' label='PIN Code' placeholder='111011' />
+            <CustomTextField fullWidth type="number" label="PIN Code" placeholder="111011" />
           </Grid>
         </Grid>
       </CardContent>

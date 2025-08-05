@@ -80,13 +80,13 @@ const LineAreaDailySalesChart = () => {
   }
 
   return (
-    <Card className='pbe-6'>
-      <CardHeader title='Average Daily Sales' className='pbe-3' />
+    <Card className="pbe-6">
+      <CardHeader title="Average Daily Sales" className="pbe-3" />
       <CardContent>
         <Typography>Total Sales This Month</Typography>
-        <Typography variant='h4'>$28,450</Typography>
+        <Typography variant="h4">$28,450</Typography>
       </CardContent>
-      <AppReactApexCharts type='area' height={88} width='100%' series={series} options={options} />
+      <AppReactApexCharts type="area" height={88} width="100%" series={series} options={options} />
     </Card>
   )
 }

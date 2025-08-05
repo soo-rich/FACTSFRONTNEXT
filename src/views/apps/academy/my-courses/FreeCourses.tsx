@@ -18,39 +18,39 @@ const FreeCourses = () => {
       <CardContent>
         <Grid container spacing={6}>
           <Grid size={{ xs: 12, md: 4 }}>
-            <div className='flex flex-col items-center justify-center gap-y-4 bs-full text-center'>
-              <CustomAvatar variant='rounded' skin='light' color='primary' size={52}>
-                <i className='tabler-gift text-4xl' />
+            <div className="flex flex-col items-center justify-center gap-y-4 bs-full text-center">
+              <CustomAvatar variant="rounded" skin="light" color="primary" size={52}>
+                <i className="tabler-gift text-4xl" />
               </CustomAvatar>
-              <Typography variant='h4'>Today&apos;s Free Courses</Typography>
+              <Typography variant="h4">Today&apos;s Free Courses</Typography>
               <Typography>
                 We offers 284 Free Online courses from top tutors and companies to help you start or advance your career
                 skills. Learn online for free and fast today!
               </Typography>
-              <Button variant='contained'>Get Premium Courses</Button>
+              <Button variant="contained">Get Premium Courses</Button>
             </div>
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-            <div className='border rounded bs-full'>
-              <div className='mli-2 mbs-2 overflow-hidden rounded'>
+            <div className="border rounded bs-full">
+              <div className="mli-2 mbs-2 overflow-hidden rounded">
                 <ReactPlayer
                   playing
                   controls
-                  url='https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4'
+                  url="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4"
                   height={200}
-                  className='bg-black !is-full'
+                  className="bg-black !is-full"
                   light={
-                    <img src='/images/apps/academy/7.png' alt='Thumbnail' className='is-full bs-full object-cover' />
+                    <img src="/images/apps/academy/7.png" alt="Thumbnail" className="is-full bs-full object-cover" />
                   }
                   playIcon={
-                    <CustomIconButton variant='contained' color='error' className='absolute rounded-full'>
-                      <i className='tabler-player-play' />
+                    <CustomIconButton variant="contained" color="error" className="absolute rounded-full">
+                      <i className="tabler-player-play" />
                     </CustomIconButton>
                   }
                 />
               </div>
-              <div className='flex flex-col gap-2 p-6'>
-                <Typography variant='h5'>Your First Singing Lesson</Typography>
+              <div className="flex flex-col gap-2 p-6">
+                <Typography variant="h5">Your First Singing Lesson</Typography>
                 <Typography>
                   In the same way as any other artistic domain, singing lends itself perfectly to self-teaching.
                 </Typography>
@@ -58,26 +58,26 @@ const FreeCourses = () => {
             </div>
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-            <div className='border rounded bs-full'>
-              <div className='mli-2 mbs-2 overflow-hidden rounded'>
+            <div className="border rounded bs-full">
+              <div className="mli-2 mbs-2 overflow-hidden rounded">
                 <ReactPlayer
                   playing
                   controls
-                  url='https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4'
+                  url="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4"
                   height={200}
-                  className='bg-black !is-full'
+                  className="bg-black !is-full"
                   light={
-                    <img src='/images/apps/academy/8.png' alt='Thumbnail' className='is-full bs-full object-cover' />
+                    <img src="/images/apps/academy/8.png" alt="Thumbnail" className="is-full bs-full object-cover" />
                   }
                   playIcon={
-                    <CustomIconButton variant='contained' color='error' className='absolute rounded-full'>
-                      <i className='tabler-player-play' />
+                    <CustomIconButton variant="contained" color="error" className="absolute rounded-full">
+                      <i className="tabler-player-play" />
                     </CustomIconButton>
                   }
                 />
               </div>
-              <div className='flex flex-col gap-2 p-6'>
-                <Typography variant='h5'>Guitar for Beginners</Typography>
+              <div className="flex flex-col gap-2 p-6">
+                <Typography variant="h5">Guitar for Beginners</Typography>
                 <Typography>
                   The Fender Acoustic Guitar is the best choice for both beginners and professionals offering a great
                   sound.

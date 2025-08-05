@@ -60,8 +60,8 @@ const ApexBarChart = () => {
   return (
     <Card>
       <CardHeader
-        title='Data Science'
-        subheader='$74,382.72'
+        title="Data Science"
+        subheader="$74,382.72"
         sx={{
           flexDirection: ['column', 'row'],
           alignItems: ['flex-start', 'center'],
@@ -71,8 +71,8 @@ const ApexBarChart = () => {
       />
       <CardContent>
         <AppReactApexCharts
-          type='bar'
-          width='100%'
+          type="bar"
+          width="100%"
           height={400}
           options={options}
           series={[{ data: [700, 350, 480, 600, 210, 550, 150] }]}

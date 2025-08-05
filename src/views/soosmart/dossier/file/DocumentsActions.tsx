@@ -1,10 +1,10 @@
 'use client'
 
 // React Imports
-import {useMemo, useState} from 'react'
+import { useMemo, useState } from 'react'
 
 // Next Imports
-import {useParams} from 'next/navigation'
+import { useParams } from 'next/navigation'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -13,15 +13,17 @@ import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid2'
 
 // Type Imports
-
 // Component Imports
 // Util Imports
-import DebounceInput from "@components/CustomInput/DebounceInput";
-import {DocumentTypes} from "@/types/soosmart/dossier/DocumentDTO";
-import {DocumentService} from "@/service/document/document.service";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {toast} from "react-toastify";
-import {FactureService} from "@/service/dossier/facture.service";
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
+import { toast } from 'react-toastify'
+
+import DebounceInput from '@components/CustomInput/DebounceInput'
+import { DocumentTypes } from '@/types/soosmart/dossier/DocumentDTO'
+import { DocumentService } from '@/service/document/document.service'
+
+import { FactureService } from '@/service/dossier/facture.service'
 
 type DocumentsActionsType = {
   id_facture?: string,
@@ -31,18 +33,20 @@ type DocumentsActionsType = {
   printFonction?: () => void
 }
 
-const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole, paied, printFonction}: DocumentsActionsType) => {
+const DocumentsActions = ({ id_facture, UpdateSignature, UpdateRole, paied, printFonction }: DocumentsActionsType) => {
   // States
   const [signature, setSignature] = useState<string>('')
   const [signaturerole, setSignatureRole] = useState<string>('')
 
   // Hooks
-  const {numero} = useParams()
+  const { numero } = useParams()
   const queryClient = useQueryClient()
 
   const documenttype = useMemo(() => {
     const nu = (numero as string).substring(0, 2).toUpperCase()
+
     if (!nu) return null
+
     switch (nu) {
       case 'FA':
         return DocumentTypes.FACTURE
@@ -63,6 +67,7 @@ const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole, paied, print
       queryClient.invalidateQueries({
         queryKey: [DocumentService.REPORT_KEY, numero]
       })
+
       if (data) {
         toast('Document signé avec succès', {
           type: 'success',
@@ -70,6 +75,7 @@ const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole, paied, print
           hideProgressBar: false
         })
       }
+
       console.log('Document signed successfully', data)
     },
     onError: () => {
@@ -85,6 +91,7 @@ const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole, paied, print
   const PayMutation = useMutation({
     mutationFn: async () => {
       if (!id_facture) throw new Error('ID Facture is required')
+
       return await FactureService.paid(id_facture)
     },
     onSuccess: (data) => {
@@ -94,8 +101,10 @@ const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole, paied, print
           autoClose: 3000,
           hideProgressBar: false
         })
+
         return
       }
+
       queryClient.invalidateQueries({
         queryKey: [DocumentService.REPORT_KEY, numero]
       })
@@ -118,16 +127,16 @@ const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole, paied, print
 
   return (
     <Grid container spacing={6}>
-      <Grid size={{xs: 12}}>
+      <Grid size={{ xs: 12 }}>
         <Card>
-          <CardContent className='flex flex-col gap-4'>
+          <CardContent className="flex flex-col gap-4">
             {
               documenttype === DocumentTypes.FACTURE && id_facture ? (<Button
                 fullWidth
                 disabled={paied}
-                variant='contained'
-                className='capitalize'
-                startIcon={<i className='tabler-send'/>}
+                variant="contained"
+                className="capitalize"
+                startIcon={<i className="tabler-send" />}
                 onClick={() => PayMutation.mutate()}
               >
                 {documenttype ? `Payée ${documenttype}  ${numero}` : 'Document non Reconnu '}
@@ -136,11 +145,11 @@ const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole, paied, print
 
             <Button
               fullWidth
-              color='secondary'
-              variant='tonal'
-              className='capitalize'
-              onClick={()=> {
-                if(printFonction) {
+              color="secondary"
+              variant="tonal"
+              className="capitalize"
+              onClick={() => {
+                if (printFonction) {
                   printFonction()
                 }
               }}
@@ -151,26 +160,28 @@ const DocumentsActions = ({id_facture, UpdateSignature, UpdateRole, paied, print
         </Card>
       </Grid>
 
-      <Grid size={{xs: 12}}>
+      <Grid size={{ xs: 12 }}>
         {
           documenttype !== DocumentTypes.BORDERAU ? (<Grid container spacing={6}>
               <DebounceInput fullWidth label={`Signer par ${signature} `} value={signature} onChange={(value) => {
-                if (value && typeof value !== "number" && value?.length > 0) {
+                if (value && typeof value !== 'number' && value?.length > 0) {
                   setSignature(value as string)
+
                   if (UpdateSignature) {
                     SignatureMutation.mutate(value as string)
                     UpdateSignature(value)
                   }
                 }
-              }} debounce={2000}/>
+              }} debounce={2000} />
               <DebounceInput fullWidth label={`Role`} value={signaturerole} onChange={(value) => {
-                if (value && typeof value !== "number" && value?.length > 0) {
+                if (value && typeof value !== 'number' && value?.length > 0) {
                   setSignatureRole(value as string)
+
                   if (UpdateRole) {
                     UpdateRole(value)
                   }
                 }
-              }}/>
+              }} />
             </Grid>
           ) : null
         }

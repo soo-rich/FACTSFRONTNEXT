@@ -10,10 +10,10 @@ import Collapse from '@mui/material/Collapse'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
-import IconButton from '@mui/material/IconButton'
-import Button from '@mui/material/Button'
-import type { ButtonProps } from '@mui/material/Button'
 import type { IconButtonProps } from '@mui/material/IconButton'
+import IconButton from '@mui/material/IconButton'
+import type { ButtonProps } from '@mui/material/Button'
+import Button from '@mui/material/Button'
 
 // Component Imports
 import OptionMenu from '@core/components/option-menu'
@@ -82,7 +82,7 @@ const CustomerAddress = (props: propsType) => {
 
   // Vars
   const iconButtonProps: IconButtonProps = {
-    children: <i className='tabler-edit' />,
+    children: <i className="tabler-edit" />,
     className: 'text-textSecondary'
   }
 
@@ -91,10 +91,10 @@ const CustomerAddress = (props: propsType) => {
 
   return (
     <>
-      <div className='flex flex-wrap justify-between items-center mlb-3 gap-y-2'>
-        <div className='flex items-center gap-2'>
+      <div className="flex flex-wrap justify-between items-center mlb-3 gap-y-2">
+        <div className="flex items-center gap-2">
           <IconButton
-            size='large'
+            size="large"
             sx={{
               '& i': {
                 transition: 'transform 0.3s',
@@ -103,19 +103,19 @@ const CustomerAddress = (props: propsType) => {
             }}
             onClick={() => setExpanded(!expanded)}
           >
-            <i className='tabler-chevron-down text-textPrimary' />
+            <i className="tabler-chevron-down text-textPrimary" />
           </IconButton>
-          <div className='flex flex-col items-start gap-1'>
-            <div className='flex items-center gap-2'>
-              <Typography color='text.primary' className='font-medium'>
+          <div className="flex flex-col items-start gap-1">
+            <div className="flex items-center gap-2">
+              <Typography color="text.primary" className="font-medium">
                 {typeOfAddress}
               </Typography>
-              {isDefaultAddress && <Chip variant='tonal' color='success' label='Default Address' size='small' />}
+              {isDefaultAddress && <Chip variant="tonal" color="success" label="Default Address" size="small" />}
             </div>
             <Typography>{streetAddress}</Typography>
           </div>
         </div>
-        <div className='mis-10'>
+        <div className="mis-10">
           <OpenDialogOnElementClick
             element={IconButton}
             elementProps={iconButtonProps}
@@ -123,18 +123,18 @@ const CustomerAddress = (props: propsType) => {
             dialogProps={{ data }}
           />
           <IconButton>
-            <i className='tabler-trash text-textSecondary' />
+            <i className="tabler-trash text-textSecondary" />
           </IconButton>
           <OptionMenu
-            iconClassName='text-textSecondary'
+            iconClassName="text-textSecondary"
             iconButtonProps={{ size: 'medium' }}
             options={['Set as Default Address']}
           />
         </div>
       </div>
       <Collapse in={expanded} timeout={300}>
-        <div className='flex flex-col gap-1 pb-3 pis-14'>
-          <Typography color='text.primary' className='font-medium'>
+        <div className="flex flex-col gap-1 pb-3 pis-14">
+          <Typography color="text.primary" className="font-medium">
             {name}
           </Typography>
           <div>
@@ -159,7 +159,7 @@ const AddressBook = () => {
   return (
     <Card>
       <CardHeader
-        title='Address Book'
+        title="Address Book"
         action={<OpenDialogOnElementClick element={Button} elementProps={buttonProps} dialog={AddNewAddress} />}
       />
       <CardContent>

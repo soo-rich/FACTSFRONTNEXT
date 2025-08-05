@@ -8,10 +8,10 @@ import { styled } from '@mui/material/styles'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Stepper from '@mui/material/Stepper'
+import type { StepProps } from '@mui/material/Step'
 import MuiStep from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import Typography from '@mui/material/Typography'
-import type { StepProps } from '@mui/material/Step'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -81,22 +81,22 @@ const CreateDeal = () => {
   }
 
   return (
-    <Card className='flex flex-col md:flex-row'>
-      <CardContent className='max-md:border-be md:border-ie md:min-is-[300px]'>
+    <Card className="flex flex-col md:flex-row">
+      <CardContent className="max-md:border-be md:border-ie md:min-is-[300px]">
         <StepperWrapper>
           <Stepper
             activeStep={activeStep}
-            orientation='vertical'
+            orientation="vertical"
             connector={<></>}
-            className='flex flex-col gap-4 min-is-[220px]'
+            className="flex flex-col gap-4 min-is-[220px]"
           >
             {steps.map((label, index) => {
               return (
                 <Step key={index} onClick={() => setActiveStep(index)}>
-                  <StepLabel icon={<></>} className='p-1 cursor-pointer'>
-                    <div className='step-label'>
+                  <StepLabel icon={<></>} className="p-1 cursor-pointer">
+                    <div className="step-label">
                       <CustomAvatar
-                        variant='rounded'
+                        variant="rounded"
                         skin={activeStep === index ? 'filled' : 'light'}
                         {...(activeStep >= index && { color: 'primary' })}
                         {...(activeStep === index && { className: 'shadow-primarySm' })}
@@ -104,11 +104,11 @@ const CreateDeal = () => {
                       >
                         <i className={classnames(label.icon as string, '!text-[22px]')} />
                       </CustomAvatar>
-                      <div className='flex flex-col'>
-                        <Typography color='text.primary' className='step-title'>
+                      <div className="flex flex-col">
+                        <Typography color="text.primary" className="step-title">
                           {label.title}
                         </Typography>
-                        <Typography className='step-subtitle'>{label.subtitle}</Typography>
+                        <Typography className="step-subtitle">{label.subtitle}</Typography>
                       </div>
                     </div>
                   </StepLabel>
@@ -119,7 +119,7 @@ const CreateDeal = () => {
         </StepperWrapper>
       </CardContent>
 
-      <CardContent className='flex-1 pbs-6'>{getStepContent(activeStep, handleNext, handlePrev)}</CardContent>
+      <CardContent className="flex-1 pbs-6">{getStepContent(activeStep, handleNext, handlePrev)}</CardContent>
     </Card>
   )
 }

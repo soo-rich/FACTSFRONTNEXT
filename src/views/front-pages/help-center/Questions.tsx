@@ -28,24 +28,25 @@ const articleList = [
 
 const Questions = () => {
   return (
-    <section className='flex flex-col justify-center items-center gap-4 md:plb-[100px] plb-[50px] pbs-[70px] -mbs-[70px] bg-backgroundPaper'>
+    <section
+      className="flex flex-col justify-center items-center gap-4 md:plb-[100px] plb-[50px] pbs-[70px] -mbs-[70px] bg-backgroundPaper">
       <div className={classnames('pbs-10 md:pbs-16', frontCommonStyles.layoutSpacing)}>
         <Grid container spacing={6}>
           <Grid size={{ xs: 12, lg: 8 }}>
-            <div className='flex flex-col gap-2'>
-              <Breadcrumbs aria-label='breadcrumb'>
-                <Link className='hover:text-primary' href='/front-pages/help-center'>
+            <div className="flex flex-col gap-2">
+              <Breadcrumbs aria-label="breadcrumb">
+                <Link className="hover:text-primary" href="/front-pages/help-center">
                   Help Center
                 </Link>
-                <Typography className='text-textPrimary'>How to add product in cart</Typography>
+                <Typography className="text-textPrimary">How to add product in cart</Typography>
               </Breadcrumbs>
-              <Typography variant='h4'>How to add product in cart?</Typography>
+              <Typography variant="h4">How to add product in cart?</Typography>
               <Typography>1 month ago - Updated</Typography>
             </div>
-            <Divider className='mlb-6' />
-            <div className='flex flex-col gap-6'>
+            <Divider className="mlb-6" />
+            <div className="flex flex-col gap-6">
               <div>
-                <Typography className='mbe-4'>
+                <Typography className="mbe-4">
                   If you&apos;re after only one item, simply choose the &apos;Buy Now&apos; option on the item page.
                   This will take you directly to Checkout.
                 </Typography>
@@ -54,43 +55,43 @@ const Questions = () => {
                   Browsing&apos; to continue shopping or &apos;Checkout&apos; to finalize your purchase.
                 </Typography>
               </div>
-              <img src='/images/front-pages/product.png' alt='product image' className='rounded is-full max-is-auto' />
+              <img src="/images/front-pages/product.png" alt="product image" className="rounded is-full max-is-auto" />
               <Typography>
                 You can go back to your cart at any time by clicking on the shopping cart icon at the top right side of
                 the page.
               </Typography>
               <img
-                src='/images/front-pages/checkout.png'
-                alt='checkout image'
-                className='rounded is-full max-is-auto'
+                src="/images/front-pages/checkout.png"
+                alt="checkout image"
+                className="rounded is-full max-is-auto"
               />
             </div>
           </Grid>
-          <Grid size={{ xs: 12, lg: 4 }} className='flex flex-col gap-6'>
+          <Grid size={{ xs: 12, lg: 4 }} className="flex flex-col gap-6">
             <CustomTextField
-              placeholder='Search...'
+              placeholder="Search..."
               slotProps={{
                 input: {
                   startAdornment: (
-                    <InputAdornment position='start'>
-                      <i className='tabler-search' />
+                    <InputAdornment position="start">
+                      <i className="tabler-search" />
                     </InputAdornment>
                   )
                 }
               }}
             />
-            <div className='flex flex-col gap-4'>
-              <div className='pli-5 plb-2 bg-actionHover rounded'>
-                <Typography variant='h5'>Articles in this section</Typography>
+            <div className="flex flex-col gap-4">
+              <div className="pli-5 plb-2 bg-actionHover rounded">
+                <Typography variant="h5">Articles in this section</Typography>
               </div>
-              <div className='flex flex-col gap-4'>
+              <div className="flex flex-col gap-4">
                 {articleList.map((article, index) => (
-                  <Typography key={index} component={Link} className='flex gap-2 justify-between hover:text-primary'>
-                    <Typography color='inherit'>{article}</Typography>
+                  <Typography key={index} component={Link} className="flex gap-2 justify-between hover:text-primary">
+                    <Typography color="inherit">{article}</Typography>
                     <DirectionalIcon
-                      ltrIconClass='tabler-chevron-right text-textDisabled text-xl'
-                      rtlIconClass='tabler-chevron-left text-textDisabled text-xl'
-                      className='text-textDisabled'
+                      ltrIconClass="tabler-chevron-right text-textDisabled text-xl"
+                      rtlIconClass="tabler-chevron-left text-textDisabled text-xl"
+                      className="text-textDisabled"
                     />
                   </Typography>
                 ))}

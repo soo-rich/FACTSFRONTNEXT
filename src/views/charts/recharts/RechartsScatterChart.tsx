@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 
 // Component Imports
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from '@/libs/Recharts'
+import { CartesianGrid, ResponsiveContainer, Scatter, ScatterChart, XAxis, YAxis } from '@/libs/Recharts'
 
 // Styled Component Imports
 const AppRecharts = dynamic(() => import('@/libs/styles/AppRecharts'))
@@ -72,7 +72,7 @@ const RechartsScatterChart = () => {
   return (
     <Card>
       <CardHeader
-        title='Framework Usage'
+        title="Framework Usage"
         sx={{
           flexDirection: ['column', 'row'],
           alignItems: ['flex-start', 'center'],
@@ -81,30 +81,30 @@ const RechartsScatterChart = () => {
         }}
       />
       <CardContent>
-        <div className='flex mbe-4 gap-6'>
-          <div className='flex items-center gap-1.5'>
-            <i className='tabler-circle-filled text-xs text-primary' />
-            <Typography variant='body2'>React</Typography>
+        <div className="flex mbe-4 gap-6">
+          <div className="flex items-center gap-1.5">
+            <i className="tabler-circle-filled text-xs text-primary" />
+            <Typography variant="body2">React</Typography>
           </div>
-          <div className='flex items-center gap-1.5'>
-            <i className='tabler-circle-filled text-xs text-success' />
-            <Typography variant='body2'>Vue</Typography>
+          <div className="flex items-center gap-1.5">
+            <i className="tabler-circle-filled text-xs text-success" />
+            <Typography variant="body2">Vue</Typography>
           </div>
-          <div className='flex items-center gap-1.5'>
-            <i className='tabler-circle-filled text-xs text-error' />
-            <Typography variant='body2'>Angular</Typography>
+          <div className="flex items-center gap-1.5">
+            <i className="tabler-circle-filled text-xs text-error" />
+            <Typography variant="body2">Angular</Typography>
           </div>
         </div>
         <AppRecharts>
-          <div className='bs-[350px]'>
+          <div className="bs-[350px]">
             <ResponsiveContainer>
               <ScatterChart height={350} style={{ direction: theme.direction }} margin={{ left: -20 }}>
                 <CartesianGrid />
-                <XAxis type='number' dataKey='x' reversed={theme.direction === 'rtl'} />
-                <YAxis type='number' dataKey='y' orientation={theme.direction === 'rtl' ? 'right' : 'left'} />
-                <Scatter name='Angular' data={angularData} fill='var(--mui-palette-error-main)' />
-                <Scatter name='Vue' data={vueData} fill='var(--mui-palette-success-main)' />
-                <Scatter name='React' data={reactData} fill='var(--mui-palette-primary-main)' />
+                <XAxis type="number" dataKey="x" reversed={theme.direction === 'rtl'} />
+                <YAxis type="number" dataKey="y" orientation={theme.direction === 'rtl' ? 'right' : 'left'} />
+                <Scatter name="Angular" data={angularData} fill="var(--mui-palette-error-main)" />
+                <Scatter name="Vue" data={vueData} fill="var(--mui-palette-success-main)" />
+                <Scatter name="React" data={reactData} fill="var(--mui-palette-primary-main)" />
               </ScatterChart>
             </ResponsiveContainer>
           </div>

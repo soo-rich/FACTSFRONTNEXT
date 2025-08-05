@@ -1,24 +1,41 @@
 'use client'
 
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import {Controller, useFieldArray, useForm} from "react-hook-form";
-import {ProformaSave, schemaProforma} from "@/types/soosmart/dossier/proforma.type";
-import {valibotResolver} from "@hookform/resolvers/valibot";
-import {useMutation, useQuery} from "@tanstack/react-query";
-import {ProformaService} from "@/service/dossier/proforma.service";
-import {ArticleService} from "@/service/article/article.service";
-import {FormControlLabel, Grid2, RadioGroup} from "@mui/material";
-import CustomTextField from "@core/components/mui/TextField";
-import {ChangeEvent, useMemo, useState} from "react";
-import Button from "@mui/material/Button";
-import {ClientService} from "@/service/client/client.service";
-import CustomAutocomplete from "@core/components/mui/Autocomplete";
-import {ProjetService} from "@/service/projet/projet.service";
-import Radio from "@mui/material/Radio";
-import {toast} from "react-toastify";
+import type { ChangeEvent } from 'react'
+import { useMemo, useState } from 'react'
+
+import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
+import Divider from '@mui/material/Divider'
+import Drawer from '@mui/material/Drawer'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
+
+import { valibotResolver } from '@hookform/resolvers/valibot'
+
+import { useMutation, useQuery } from '@tanstack/react-query'
+
+import { FormControlLabel, Grid2, RadioGroup } from '@mui/material'
+
+import Button from '@mui/material/Button'
+
+import Radio from '@mui/material/Radio'
+
+import { toast } from 'react-toastify'
+
+import type { ProformaSave } from '@/types/soosmart/dossier/proforma.type'
+import { schemaProforma } from '@/types/soosmart/dossier/proforma.type'
+
+
+import { ProformaService } from '@/service/dossier/proforma.service'
+import { ArticleService } from '@/service/article/article.service'
+
+
+import CustomTextField from '@core/components/mui/TextField'
+
+
+import { ClientService } from '@/service/client/client.service'
+import CustomAutocomplete from '@core/components/mui/Autocomplete'
+import { ProjetService } from '@/service/projet/projet.service'
+
 
 type Props = {
   open: boolean
@@ -27,7 +44,7 @@ type Props = {
 }
 
 const AddProforma = (
-  {open, handleClose, onSucces}: Props
+  { open, handleClose, onSucces }: Props
 ) => {
 
   const [value, setValue] = useState<string>('projet')
@@ -35,6 +52,7 @@ const AddProforma = (
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value)
     const v = (event.target as HTMLInputElement).value
+
     if (v === 'projet') {
       setClientOrProjet(false)
     } else {
@@ -51,7 +69,7 @@ const AddProforma = (
     handleSubmit,
     control,
     reset,
-    formState: {errors}
+    formState: { errors }
   } = useForm<ProformaSave>({
     resolver: valibotResolver(schemaProforma),
     defaultValues: {
@@ -68,12 +86,12 @@ const AddProforma = (
     }
   })
 
-  const {fields, append, remove} = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'articleQuantiteslist'
   })
 
-  const {data: articleList} = useQuery({
+  const { data: articleList } = useQuery({
     queryKey: ['articlelist'],
     queryFn: async () => {
       return await ArticleService.searchArticles()
@@ -81,7 +99,8 @@ const AddProforma = (
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
-  const {data: client} = useQuery({
+
+  const { data: client } = useQuery({
     queryKey: ['clientlist', clientName],
     queryFn: async () => {
       return await ClientService.getClientsByNom(clientName)
@@ -89,7 +108,8 @@ const AddProforma = (
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
-  const {data: projet} = useQuery({
+
+  const { data: projet } = useQuery({
     queryKey: ['projetlist', projetName],
     queryFn: async () => {
       return await ProjetService.searchProjet(projetName)
@@ -110,7 +130,7 @@ const AddProforma = (
         return await ProformaService.PostData(data)
       },
       onSuccess: () => {
-        toast.success("Proforma cree")
+        toast.success('Proforma cree')
         onSucces?.()
         reset(
           {
@@ -130,7 +150,7 @@ const AddProforma = (
 
       },
       onError: (error) => {
-        toast.error("Erreur d'ajout de la proforma")
+        toast.error('Erreur d\'ajout de la proforma')
         console.error('Error adding proforma:', error)
       }
     }
@@ -149,66 +169,67 @@ const AddProforma = (
   return (
     <Drawer
       open={open}
-      anchor='right'
+      anchor="right"
       variant={'temporary'}
       onClose={handleReset}
-      ModalProps={{keepMounted: true}}
-      sx={{'& .MuiDrawer-paper': {width: {xs: 350, sm: 550}}}}
+      ModalProps={{ keepMounted: true }}
+      sx={{ '& .MuiDrawer-paper': { width: { xs: 350, sm: 550 } } }}
     >
-      <div className='flex items-center justify-between plb-5 pli-6'>
-        <Typography variant='h5'>Construire un Proforma</Typography>
-        <IconButton size='small' onClick={handleReset}>
-          <i className='tabler-x text-2xl text-textPrimary'/>
+      <div className="flex items-center justify-between plb-5 pli-6">
+        <Typography variant="h5">Construire un Proforma</Typography>
+        <IconButton size="small" onClick={handleReset}>
+          <i className="tabler-x text-2xl text-textPrimary" />
         </IconButton>
       </div>
-      <Divider/>
-      <div className='p-6'>
+      <Divider />
+      <div className="p-6">
 
-        <form noValidate onSubmit={handleSubmit(SubmitData)} className='flex flex-col items-start gap-6'>
+        <form noValidate onSubmit={handleSubmit(SubmitData)} className="flex flex-col items-start gap-6">
           <Typography variant={'h5'}>Information de la Proforma</Typography>
           <Controller
             render={
-              ({field}) => (
+              ({ field }) => (
                 <CustomTextField
                   {...field}
-                  label={"Reference"}
+                  label={'Reference'}
                   fullWidth
                   error={!!errors.reference}
                   {...(errors.reference && {
                     error: true,
                     helperText: errors?.reference?.message
-                  })}  />
+                  })} />
               )
-            } name={'reference'} control={control}/>
+            } name={'reference'} control={control} />
           <Grid2 container size={12} direction={'row'} spacing={3} sx={{
             justifyContent: 'flex-end',
             alignItems: 'center'
           }}>
 
 
-            <RadioGroup row aria-label='controlled' name='controlled' value={value} onChange={handleChange}>
-              <FormControlLabel value='projet' control={<Radio/>} label='Projet'/>
-              <FormControlLabel value='client' control={<Radio/>} label='Client'/>
+            <RadioGroup row aria-label="controlled" name="controlled" value={value} onChange={handleChange}>
+              <FormControlLabel value="projet" control={<Radio />} label="Projet" />
+              <FormControlLabel value="client" control={<Radio />} label="Client" />
             </RadioGroup>
           </Grid2>
 
 
-          <div className='w-full flex flex-row justify-between align-middle items-center gap-4'>
+          <div className="w-full flex flex-row justify-between align-middle items-center gap-4">
             <Controller render={
-              ({field}) => {
+              ({ field }) => {
 
                 // const projetselect = projet?.find(item => item.projet_type.toLowerCase().includes(projetName.toLowerCase())) ?? null
 
                 return (<CustomAutocomplete
                   disabled={clientorprojet}
+
                   // value={projetselect}
                   options={projet || []}
                   fullWidth
                   onChange={(event, newvalue) => {
                     if (newvalue) {
-                      field.onChange(newvalue.id);
+                      field.onChange(newvalue.id)
                     } else {
-                      field.onChange('');
+                      field.onChange('')
                     }
                   }}
                   getOptionKey={option => option.id}
@@ -222,8 +243,9 @@ const AddProforma = (
                         label={'Projet'}
                         fullWidth
                         onChange={event => {
-                          const value = event.target.value;
-                          setProjetName(value);
+                          const value = event.target.value
+
+                          setProjetName(value)
                         }}
                         error={!!errors.projet_id}
                         {...(errors.projet_id && {
@@ -235,23 +257,24 @@ const AddProforma = (
                   }}
                 />)
               }
-            } name={'projet_id'} control={control}/>
+            } name={'projet_id'} control={control} />
           </div>
-          <div className='w-full flex flex-row justify-between align-middle items-center gap-4'>
+          <div className="w-full flex flex-row justify-between align-middle items-center gap-4">
             <Controller render={
-              ({field}) => {
+              ({ field }) => {
                 // Trouve le client sélectionné en fonction du nom
                 // const clientselect = client?.find(item => item.nom.toLowerCase().includes(clientName.toLowerCase())) ?? null
                 return (<CustomAutocomplete
                   disabled={!clientorprojet}
                   options={client || []}
+
                   // value={clientselect}
                   fullWidth
                   onChange={(event, newvalue) => {
                     if (newvalue) {
-                      field.onChange(newvalue.id);
+                      field.onChange(newvalue.id)
                     } else {
-                      field.onChange('');
+                      field.onChange('')
                     }
                   }}
                   getOptionKey={option => option.id}
@@ -265,8 +288,9 @@ const AddProforma = (
                         label={'Client'}
                         fullWidth
                         onChange={event => {
-                          const value = event.target.value;
-                          setClientName(value);
+                          const value = event.target.value
+
+                          setClientName(value)
                         }}
                         error={!!errors.client_id}
                         {...(errors.client_id && {
@@ -277,31 +301,33 @@ const AddProforma = (
                   }}
                 />)
               }
-            } name={'client_id'} control={control}/>
+            } name={'client_id'} control={control} />
           </div>
-          <Divider className='w-full'/>
+          <Divider className="w-full" />
           <Typography variant={'h5'}>Article-Quantite</Typography>
 
-          <div className='w-full flex flex-col gap-4'>
+          <div className="w-full flex flex-col gap-4">
             {fields.map((item, index) => (
-                <Grid2 container key={item.id} spacing={2} alignItems='center'>
-                  <Grid2 size={{xs: 4, sm: 4}}>
+                <Grid2 container key={item.id} spacing={2} alignItems="center">
+                  <Grid2 size={{ xs: 4, sm: 4 }}>
                     <Controller
                       render={
-                        ({field}) => (
+                        ({ field }) => (
                           <CustomAutocomplete
                             options={article || []}
                             fullWidth
                             onChange={(event, newvalue) => {
                               if (newvalue) {
-                                field.onChange(newvalue.id);
+                                field.onChange(newvalue.id)
                                 setArticleSelect(prev => {
-                                  const newSelect = [...prev];
-                                  newSelect[index] = newvalue.id;
-                                  return newSelect;
-                                });
+                                  const newSelect = [...prev]
+
+                                  newSelect[index] = newvalue.id
+
+                                  return newSelect
+                                })
                               } else {
-                                field.onChange('');
+                                field.onChange('')
                               }
                             }}
                             getOptionKey={option => option.id}
@@ -320,20 +346,21 @@ const AddProforma = (
                             )}
                           />
                         )
-                      } name={`articleQuantiteslist.${index}.article_id`} control={control}/>
+                      } name={`articleQuantiteslist.${index}.article_id`} control={control} />
                   </Grid2>
-                  <Grid2 size={{xs: 3, sm: 3}}>
+                  <Grid2 size={{ xs: 3, sm: 3 }}>
                     <Controller
                       render={
-                        ({field}) => (
+                        ({ field }) => (
                           <CustomTextField
                             {...field}
                             label={'Quantité'}
                             fullWidth
                             onChange={
                               (event) => {
-                                const value = parseFloat(event.target.value);
-                                field.onChange(isNaN(value) ? 0 : value);
+                                const value = parseFloat(event.target.value)
+
+                                field.onChange(isNaN(value) ? 0 : value)
                               }
                             }
                             error={!!errors.articleQuantiteslist?.[index]?.quantite}
@@ -343,24 +370,25 @@ const AddProforma = (
                             })}
                           />
                         )
-                      } name={`articleQuantiteslist.${index}.quantite`} control={control}/>
+                      } name={`articleQuantiteslist.${index}.quantite`} control={control} />
                   </Grid2>
-                  <Grid2 size={{xs: 3, sm: 4}}>
+                  <Grid2 size={{ xs: 3, sm: 4 }}>
                     <Controller
                       render={
-                        ({field}) => (
+                        ({ field }) => (
                           <CustomTextField
                             {...field}
-                            type='number'
+                            type="number"
                             label={'Prix Article'}
                             fullWidth
                             onChange={
                               (event) => {
-                                const value = parseFloat(event.target.value);
-                                field.onChange(isNaN(value) ? 0 : value);
+                                const value = parseFloat(event.target.value)
+
+                                field.onChange(isNaN(value) ? 0 : value)
                               }
                             }
-                            inputProps={{step: 0.01, min: 0}}
+
                             error={!!errors.articleQuantiteslist?.[index]?.prix_article}
                             {...(errors.articleQuantiteslist?.[index]?.prix_article && {
                               error: true,
@@ -368,13 +396,14 @@ const AddProforma = (
                             })}
                           />
                         )
-                      } name={`articleQuantiteslist.${index}.prix_article`} control={control}/>
+                      } name={`articleQuantiteslist.${index}.prix_article`} control={control} />
                   </Grid2>
-                  <Grid2 size={{xs: 1, sm: 1}} container justifyContent='center' alignItems='center'>
+                  <Grid2 size={{ xs: 1, sm: 1 }} container justifyContent="center" alignItems="center">
                     <IconButton
-                      color='error'
+                      color="error"
                       onClick={() => {
                         remove(index)
+
                         // Retire l'article de la liste des articles sélectionnés
                         setArticleSelect(prev => {
 
@@ -383,15 +412,15 @@ const AddProforma = (
                       }}
                       disabled={AddMutation.isPending}
                     >
-                      <i className='tabler-trash text-2xl'/>
+                      <i className="tabler-trash text-2xl" />
                     </IconButton>
                   </Grid2>
                 </Grid2>
               )
             )}
             <Button
-              variant='outlined'
-              color='primary'
+              variant="outlined"
+              color="primary"
               onClick={() => append({
                 article_id: '', quantite: 0, prix_article: 0
               })}
@@ -401,7 +430,7 @@ const AddProforma = (
           </div>
 
 
-          <div className='w-full flex items-center gap-4'>
+          <div className="w-full flex items-center gap-4">
 
             <Button
               variant="contained"

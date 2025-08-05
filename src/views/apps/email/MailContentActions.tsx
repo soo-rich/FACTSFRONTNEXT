@@ -127,8 +127,8 @@ const MailContentActions = (props: Props) => {
   }
 
   return (
-    <div className='flex items-center justify-between gap-4 max-sm:gap-0.5 is-full pli-4 plb-2 border-be'>
-      <div className='flex items-center gap-1 max-sm:gap-0.5'>
+    <div className="flex items-center justify-between gap-4 max-sm:gap-0.5 is-full pli-4 plb-2 border-be">
+      <div className="flex items-center gap-1 max-sm:gap-0.5">
         <Checkbox
           indeterminate={isIndeterminate}
           checked={areAllSelected}
@@ -137,9 +137,9 @@ const MailContentActions = (props: Props) => {
         />
         {(isIndeterminate || areAllSelected) && (
           <>
-            <Tooltip title={folder === 'trash' ? 'Delete' : 'Move to trash'} placement='top'>
+            <Tooltip title={folder === 'trash' ? 'Delete' : 'Move to trash'} placement="top">
               <IconButton onClick={handleEmailDelete}>
-                <i className='tabler-trash text-textSecondary' />
+                <i className="tabler-trash text-textSecondary" />
               </IconButton>
             </Tooltip>
             <Tooltip
@@ -149,14 +149,14 @@ const MailContentActions = (props: Props) => {
                   ? 'Mark as unread'
                   : 'Mark as read'
               }
-              placement='top'
+              placement="top"
             >
               <IconButton onClick={handleToggleAllReadEmails}>
                 <i
                   className={classnames(
                     'text-textSecondary',
                     selectedEmails.size > 0 &&
-                      emails.filter(email => selectedEmails.has(email.id)).every(email => email.isRead)
+                    emails.filter(email => selectedEmails.has(email.id)).every(email => email.isRead)
                       ? 'tabler-mail'
                       : 'tabler-mail-opened'
                   )}
@@ -164,33 +164,33 @@ const MailContentActions = (props: Props) => {
               </IconButton>
             </Tooltip>
             {folder === 'inbox' && (
-              <Tooltip title='Move to spam' placement='top'>
+              <Tooltip title="Move to spam" placement="top">
                 <IconButton onClick={handleMoveAllToSpam}>
-                  <i className='tabler-info-circle text-textSecondary' />
+                  <i className="tabler-info-circle text-textSecondary" />
                 </IconButton>
               </Tooltip>
             )}
             {folder === 'spam' && (
-              <Tooltip title='Move to inbox' placement='top'>
+              <Tooltip title="Move to inbox" placement="top">
                 <IconButton onClick={handleMoveAllToInbox}>
-                  <i className='tabler-inbox text-textSecondary' />
+                  <i className="tabler-inbox text-textSecondary" />
                 </IconButton>
               </Tooltip>
             )}
             {folder === 'trash' && (
               <OptionMenu
                 tooltipProps={{ title: 'Move to folder', placement: 'top' }}
-                icon={<i className='tabler-folder text-textSecondary' />}
+                icon={<i className="tabler-folder text-textSecondary" />}
                 iconButtonProps={{ size: 'medium' }}
                 options={[
                   {
                     text: 'Spam',
-                    icon: <i className='tabler-info-circle' />,
+                    icon: <i className="tabler-info-circle" />,
                     menuItemProps: { onClick: handleMoveAllToSpam }
                   },
                   {
                     text: 'Inbox',
-                    icon: <i className='tabler-inbox' />,
+                    icon: <i className="tabler-inbox" />,
                     menuItemProps: { onClick: handleMoveAllToInbox }
                   }
                 ]}
@@ -198,7 +198,7 @@ const MailContentActions = (props: Props) => {
             )}
             <OptionMenu
               tooltipProps={{ title: 'Toggle label', placement: 'top' }}
-              icon={<i className='tabler-tag text-textSecondary' />}
+              icon={<i className="tabler-tag text-textSecondary" />}
               iconButtonProps={{ size: 'medium' }}
               options={Object.entries(labelColors).map(([key, value]) => ({
                 text: key.charAt(0).toUpperCase() + key.slice(1),
@@ -209,14 +209,14 @@ const MailContentActions = (props: Props) => {
           </>
         )}
       </div>
-      <div className='flex gap-1 max-sm:gap-0.5'>
-        <Tooltip title='Refresh' placement='top'>
+      <div className="flex gap-1 max-sm:gap-0.5">
+        <Tooltip title="Refresh" placement="top">
           <IconButton onClick={handleReload}>
-            <i className='tabler-refresh text-textSecondary' />
+            <i className="tabler-refresh text-textSecondary" />
           </IconButton>
         </Tooltip>
         <IconButton>
-          <i className='tabler-dots-vertical text-textSecondary' />
+          <i className="tabler-dots-vertical text-textSecondary" />
         </IconButton>
       </div>
     </div>

@@ -1,12 +1,12 @@
 // React Imports
-import { useState } from 'react'
 import type { ChangeEvent } from 'react'
+import { useState } from 'react'
 
 // MUI Imports
 import Grid from '@mui/material/Grid2'
 import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
 import type { TypographyProps } from '@mui/material/Typography'
+import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
 
 // Component Imports
@@ -30,16 +30,16 @@ const customInputData: CustomInputVerticalData[] = [
     title: 'Basic',
     value: 'basic',
     content: (
-      <Content component='div' className='flex flex-col justify-center items-center bs-full gap-2'>
+      <Content component="div" className="flex flex-col justify-center items-center bs-full gap-2">
         <Typography>A simple start for start ups & Students</Typography>
-        <div className='flex items-baseline'>
-          <Typography component='sup' className='self-start' color='primary.main'>
+        <div className="flex items-baseline">
+          <Typography component="sup" className="self-start" color="primary.main">
             $
           </Typography>
-          <Typography component='span' variant='h3' color='primary.main'>
+          <Typography component="span" variant="h3" color="primary.main">
             0
           </Typography>
-          <Typography component='sub' className='self-baseline text-textDisabled'>
+          <Typography component="sub" className="self-baseline text-textDisabled">
             /month
           </Typography>
         </div>
@@ -50,16 +50,16 @@ const customInputData: CustomInputVerticalData[] = [
     title: 'Standard',
     value: 'standard',
     content: (
-      <Content component='div' className='flex flex-col justify-center items-center bs-full gap-2'>
+      <Content component="div" className="flex flex-col justify-center items-center bs-full gap-2">
         <Typography>For small to medium businesses</Typography>
-        <div className='flex items-baseline'>
-          <Typography component='sup' className='self-start' color='primary.main'>
+        <div className="flex items-baseline">
+          <Typography component="sup" className="self-start" color="primary.main">
             $
           </Typography>
-          <Typography component='span' variant='h3' color='primary.main'>
+          <Typography component="span" variant="h3" color="primary.main">
             99
           </Typography>
-          <Typography component='sub' className='self-baseline text-textDisabled'>
+          <Typography component="sub" className="self-baseline text-textDisabled">
             /month
           </Typography>
         </div>
@@ -71,16 +71,16 @@ const customInputData: CustomInputVerticalData[] = [
     title: 'Enterprise',
     value: 'enterprise',
     content: (
-      <Content component='div' className='flex flex-col justify-center items-center bs-full gap-2'>
+      <Content component="div" className="flex flex-col justify-center items-center bs-full gap-2">
         <Typography>Solution for enterprise & organizations</Typography>
-        <div className='flex items-baseline'>
-          <Typography component='sup' className='self-start' color='primary.main'>
+        <div className="flex items-baseline">
+          <Typography component="sup" className="self-start" color="primary.main">
             $
           </Typography>
-          <Typography component='span' variant='h3' color='primary.main'>
+          <Typography component="span" variant="h3" color="primary.main">
             499
           </Typography>
-          <Typography component='sub' className='self-baseline text-textDisabled'>
+          <Typography component="sub" className="self-baseline text-textDisabled">
             /month
           </Typography>
         </div>
@@ -91,8 +91,8 @@ const customInputData: CustomInputVerticalData[] = [
 
 const StepBillingDetails = ({ handlePrev }: { handlePrev: () => void }) => {
   const initialSelectedOption: string = customInputData.filter(item => item.isSelected)[
-    customInputData.filter(item => item.isSelected).length - 1
-  ].value
+  customInputData.filter(item => item.isSelected).length - 1
+    ].value
 
   // States
   const [selectedOption, setSelectedOption] = useState<string>(initialSelectedOption)
@@ -107,50 +107,50 @@ const StepBillingDetails = ({ handlePrev }: { handlePrev: () => void }) => {
 
   return (
     <>
-      <div className='mbe-5'>
-        <Typography variant='h4'>Select Plan</Typography>
+      <div className="mbe-5">
+        <Typography variant="h4">Select Plan</Typography>
         <Typography>Select plan as per your requirement</Typography>
       </div>
       <Grid container spacing={5}>
         {customInputData.map((item, index) => (
           <CustomInputVertical
-            type='radio'
+            type="radio"
             key={index}
             data={item}
             gridProps={{ size: { xs: 12, sm: 4 } }}
             selected={selectedOption}
-            name='custom-radios-basic'
+            name="custom-radios-basic"
             handleChange={handleOptionChange}
           />
         ))}
       </Grid>
-      <div className='mbs-6 md:mbs-12 mbe-6'>
-        <Typography variant='h4'>Payment Information</Typography>
+      <div className="mbs-6 md:mbs-12 mbe-6">
+        <Typography variant="h4">Payment Information</Typography>
         <Typography>Enter your card information</Typography>
       </div>
       <Grid container spacing={6}>
         <Grid size={{ xs: 12 }}>
-          <CustomTextField fullWidth label='Card Number' placeholder='1356 3215 6548 7898' />
+          <CustomTextField fullWidth label="Card Number" placeholder="1356 3215 6548 7898" />
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
-          <CustomTextField fullWidth label='Name On Card' placeholder='John Doe' />
+          <CustomTextField fullWidth label="Name On Card" placeholder="John Doe" />
         </Grid>
         <Grid size={{ xs: 12, sm: 3 }}>
-          <CustomTextField fullWidth label='Expiry Date' placeholder='MM/YY' />
+          <CustomTextField fullWidth label="Expiry Date" placeholder="MM/YY" />
         </Grid>
         <Grid size={{ xs: 12, sm: 3 }}>
-          <CustomTextField fullWidth label='CVV Code' placeholder='654' />
+          <CustomTextField fullWidth label="CVV Code" placeholder="654" />
         </Grid>
-        <Grid size={{ xs: 12 }} className='flex justify-between'>
+        <Grid size={{ xs: 12 }} className="flex justify-between">
           <Button
-            variant='tonal'
-            color='secondary'
+            variant="tonal"
+            color="secondary"
             onClick={handlePrev}
-            startIcon={<DirectionalIcon ltrIconClass='tabler-arrow-left' rtlIconClass='tabler-arrow-right' />}
+            startIcon={<DirectionalIcon ltrIconClass="tabler-arrow-left" rtlIconClass="tabler-arrow-right" />}
           >
             Previous
           </Button>
-          <Button variant='contained' color='success' onClick={() => alert('Submitted..!!')}>
+          <Button variant="contained" color="success" onClick={() => alert('Submitted..!!')}>
             Submit
           </Button>
         </Grid>

@@ -1,6 +1,6 @@
 // React Imports
-import { useState } from 'react'
 import type { ChangeEvent } from 'react'
+import { useState } from 'react'
 
 // MUI Imports
 import Grid from '@mui/material/Grid2'
@@ -74,8 +74,8 @@ const regionArray = ['Select Region', 'Asia', 'Europe', 'Africa', 'Australia', '
 
 const StepDealType = ({ activeStep, handleNext, handlePrev, steps }: Props) => {
   const initialSelectedOption: string = data.filter(item => item.isSelected)[
-    data.filter(item => item.isSelected).length - 1
-  ].value
+  data.filter(item => item.isSelected).length - 1
+    ].value
 
   // States
   const [selectedOption, setSelectedOption] = useState<string>(initialSelectedOption)
@@ -96,7 +96,7 @@ const StepDealType = ({ activeStep, handleNext, handlePrev, steps }: Props) => {
     <Grid container spacing={6}>
       <Grid size={{ xs: 12 }}>
         <ImgWrapper>
-          <img width={650} alt='illustration' src={`/images/pages/create-deal-type-${theme.palette.mode}.png`} />
+          <img width={650} alt="illustration" src={`/images/pages/create-deal-type-${theme.palette.mode}.png`} />
         </ImgWrapper>
       </Grid>
       {data.map((item, index) => {
@@ -108,11 +108,11 @@ const StepDealType = ({ activeStep, handleNext, handlePrev, steps }: Props) => {
 
         return (
           <CustomInputVertical
-            type='radio'
+            type="radio"
             key={index}
             gridProps={{ size: { xs: 12, sm: 4 } }}
             selected={selectedOption}
-            name='custom-radios-basic'
+            name="custom-radios-basic"
             handleChange={handleOptionChange}
             data={typeof item.asset === 'string' ? { ...item, asset } : item}
           />
@@ -121,10 +121,10 @@ const StepDealType = ({ activeStep, handleNext, handlePrev, steps }: Props) => {
       <Grid size={{ xs: 12, sm: 6 }}>
         <CustomTextField
           fullWidth
-          type='number'
-          label='Discount'
-          placeholder='25'
-          helperText='Enter the discount percentage. 10 = 10%'
+          type="number"
+          label="Discount"
+          placeholder="25"
+          helperText="Enter the discount percentage. 10 = 10%"
         />
       </Grid>
       <Grid size={{ xs: 12, sm: 6 }}>
@@ -137,7 +137,7 @@ const StepDealType = ({ activeStep, handleNext, handlePrev, steps }: Props) => {
               onChange: e => setRegion(e.target.value as string)
             }
           }}
-          label='Region'
+          label="Region"
         >
           {regionArray.map((item, index) => (
             <MenuItem key={item} value={index === 0 ? '' : item}>
@@ -148,25 +148,25 @@ const StepDealType = ({ activeStep, handleNext, handlePrev, steps }: Props) => {
         <FormHelperText>Select applicable regions for the deal.</FormHelperText>
       </Grid>
       <Grid size={{ xs: 12 }}>
-        <div className='flex items-center justify-between'>
+        <div className="flex items-center justify-between">
           <Button
-            variant='tonal'
-            color='secondary'
+            variant="tonal"
+            color="secondary"
             disabled={activeStep === 0}
             onClick={handlePrev}
-            startIcon={<DirectionalIcon ltrIconClass='tabler-arrow-left' rtlIconClass='tabler-arrow-right' />}
+            startIcon={<DirectionalIcon ltrIconClass="tabler-arrow-left" rtlIconClass="tabler-arrow-right" />}
           >
             Previous
           </Button>
           <Button
-            variant='contained'
+            variant="contained"
             color={activeStep === steps.length - 1 ? 'success' : 'primary'}
             onClick={handleNext}
             endIcon={
               activeStep === steps.length - 1 ? (
-                <i className='tabler-check' />
+                <i className="tabler-check" />
               ) : (
-                <DirectionalIcon ltrIconClass='tabler-arrow-right' rtlIconClass='tabler-arrow-left' />
+                <DirectionalIcon ltrIconClass="tabler-arrow-right" rtlIconClass="tabler-arrow-left" />
               )
             }
           >

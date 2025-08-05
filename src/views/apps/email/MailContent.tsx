@@ -1,13 +1,13 @@
 // React Imports
-import { useState } from 'react'
 import type { MouseEvent } from 'react'
+import { useState } from 'react'
 
 // Types Imports
 import type { AppDispatch } from '@/redux-store'
 import type { EmailState } from '@/types/apps/emailTypes'
 
 // Slice Imports
-import { moveEmailsToFolder, deleteTrashEmails, toggleReadEmails, toggleStarEmail } from '@/redux-store/slices/email'
+import { deleteTrashEmails, moveEmailsToFolder, toggleReadEmails, toggleStarEmail } from '@/redux-store/slices/email'
 
 // Component Imports
 import MailContentSearch from './MailContentSearch'
@@ -94,7 +94,8 @@ const MailContent = (props: Props) => {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center is-full bs-full relative overflow-hidden bg-backgroundPaper'>
+    <div
+      className="flex flex-col items-center justify-center is-full bs-full relative overflow-hidden bg-backgroundPaper">
       <MailContentSearch
         isBelowScreen={isBelowMdScreen}
         searchTerm={searchTerm}

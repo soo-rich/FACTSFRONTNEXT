@@ -12,9 +12,9 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import { useTheme } from '@mui/material/styles'
 
-// Component Imports
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from '@/libs/Recharts'
 import type { TooltipProps } from '@/libs/Recharts'
+// Component Imports
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from '@/libs/Recharts'
 
 // Styled Component Imports
 const AppRecharts = dynamic(() => import('@/libs/styles/AppRecharts'))
@@ -99,16 +99,16 @@ const CustomTooltip = (props: TooltipProps<any, any>) => {
 
   if (active && payload) {
     return (
-      <div className='recharts-custom-tooltip'>
-        <Typography color='text.primary'>{props.label}</Typography>
+      <div className="recharts-custom-tooltip">
+        <Typography color="text.primary">{props.label}</Typography>
         <Divider />
         {props &&
           props.payload &&
           props.payload.map((i: any) => {
             return (
-              <Box key={i.dataKey} className='flex items-center gap-2.5' sx={{ '& i': { color: i.fill } }}>
-                <i className='tabler-circle-filled text-[10px]' />
-                <Typography variant='body2'>{`${i.dataKey} : ${i.payload[i.dataKey]}`}</Typography>
+              <Box key={i.dataKey} className="flex items-center gap-2.5" sx={{ '& i': { color: i.fill } }}>
+                <i className="tabler-circle-filled text-[10px]" />
+                <Typography variant="body2">{`${i.dataKey} : ${i.payload[i.dataKey]}`}</Typography>
               </Box>
             )
           })}
@@ -126,7 +126,7 @@ const RechartsBarChart = () => {
   return (
     <Card>
       <CardHeader
-        title='Brand Turnover'
+        title="Brand Turnover"
         sx={{
           flexDirection: ['column', 'row'],
           alignItems: ['flex-start', 'center'],
@@ -135,26 +135,26 @@ const RechartsBarChart = () => {
         }}
       />
       <CardContent>
-        <div className='flex flex-wrap mbe-4 gap-6'>
-          <Box className='flex items-center gap-1.5' sx={{ '& i': { color: '#826af9' } }}>
-            <i className='tabler-circle-filled text-xs' />
-            <Typography variant='body2'>Apple</Typography>
+        <div className="flex flex-wrap mbe-4 gap-6">
+          <Box className="flex items-center gap-1.5" sx={{ '& i': { color: '#826af9' } }}>
+            <i className="tabler-circle-filled text-xs" />
+            <Typography variant="body2">Apple</Typography>
           </Box>
-          <Box className='flex items-center gap-1.5' sx={{ '& i': { color: '#9f87ff' } }}>
-            <i className='tabler-circle-filled text-xs' />
-            <Typography variant='body2'>Samsung</Typography>
+          <Box className="flex items-center gap-1.5" sx={{ '& i': { color: '#9f87ff' } }}>
+            <i className="tabler-circle-filled text-xs" />
+            <Typography variant="body2">Samsung</Typography>
           </Box>
-          <Box className='flex items-center gap-1.5' sx={{ '& i': { color: '#d2b0ff' } }}>
-            <i className='tabler-circle-filled text-xs' />
-            <Typography variant='body2'>Oneplus</Typography>
+          <Box className="flex items-center gap-1.5" sx={{ '& i': { color: '#d2b0ff' } }}>
+            <i className="tabler-circle-filled text-xs" />
+            <Typography variant="body2">Oneplus</Typography>
           </Box>
-          <Box className='flex items-center gap-1.5' sx={{ '& i': { color: '#f8d3ff' } }}>
-            <i className='tabler-circle-filled text-xs' />
-            <Typography variant='body2'>Motorola</Typography>
+          <Box className="flex items-center gap-1.5" sx={{ '& i': { color: '#f8d3ff' } }}>
+            <i className="tabler-circle-filled text-xs" />
+            <Typography variant="body2">Motorola</Typography>
           </Box>
         </div>
         <AppRecharts>
-          <div className='bs-[350px]'>
+          <div className="bs-[350px]">
             <ResponsiveContainer>
               <BarChart
                 height={350}
@@ -163,14 +163,14 @@ const RechartsBarChart = () => {
                 style={{ direction: theme.direction }}
                 margin={{ left: -20 }}
               >
-                <CartesianGrid strokeDasharray='3 3' />
-                <XAxis dataKey='name' reversed={theme.direction === 'rtl'} />
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" reversed={theme.direction === 'rtl'} />
                 <YAxis orientation={theme.direction === 'rtl' ? 'right' : 'left'} />
                 <Tooltip content={CustomTooltip} />
-                <Bar dataKey='Apple' stackId='a' fill='#826af9' />
-                <Bar dataKey='Samsung' stackId='a' fill='#9f87ff' />
-                <Bar dataKey='Oneplus' stackId='a' fill='#d2b0ff' />
-                <Bar dataKey='Motorola' stackId='a' fill='#f8d3ff' radius={[15, 15, 0, 0]} />
+                <Bar dataKey="Apple" stackId="a" fill="#826af9" />
+                <Bar dataKey="Samsung" stackId="a" fill="#9f87ff" />
+                <Bar dataKey="Oneplus" stackId="a" fill="#d2b0ff" />
+                <Bar dataKey="Motorola" stackId="a" fill="#f8d3ff" radius={[15, 15, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -49,23 +49,23 @@ const StatisticsCard = () => {
   return (
     <Card>
       <CardHeader
-        title='Statistics'
+        title="Statistics"
         action={
-          <Typography variant='subtitle2' color='text.disabled'>
+          <Typography variant="subtitle2" color="text.disabled">
             Updated 1 month ago
           </Typography>
         }
       />
-      <CardContent className='flex justify-between flex-wrap gap-4'>
+      <CardContent className="flex justify-between flex-wrap gap-4">
         <Grid container spacing={4} flex={1}>
           {data.map((item, index) => (
-            <Grid size={{ xs: 6, md: 3 }} key={index} className='flex gap-4 items-center'>
-              <CustomAvatar color={item.color} variant='rounded' size={40} skin='light'>
+            <Grid size={{ xs: 6, md: 3 }} key={index} className="flex gap-4 items-center">
+              <CustomAvatar color={item.color} variant="rounded" size={40} skin="light">
                 <i className={item.icon}></i>
               </CustomAvatar>
               <div>
-                <Typography variant='h5'>{item.stats}</Typography>
-                <Typography variant='body2'>{item.title}</Typography>
+                <Typography variant="h5">{item.stats}</Typography>
+                <Typography variant="body2">{item.title}</Typography>
               </div>
             </Grid>
           ))}

@@ -27,14 +27,14 @@ const StepPriceDetails = ({ activeStep, handleNext, handlePrev, steps }: Props) 
       <Grid size={{ xs: 12, md: 6 }}>
         <CustomTextField
           fullWidth
-          type='number'
-          placeholder='25,000'
-          label='Expected Price'
+          type="number"
+          placeholder="25,000"
+          label="Expected Price"
           slotProps={{
             input: {
               endAdornment: (
-                <InputAdornment position='end'>
-                  <i className='tabler-currency-dollar' />
+                <InputAdornment position="end">
+                  <i className="tabler-currency-dollar" />
                 </InputAdornment>
               )
             }
@@ -44,14 +44,14 @@ const StepPriceDetails = ({ activeStep, handleNext, handlePrev, steps }: Props) 
       <Grid size={{ xs: 12, md: 6 }}>
         <CustomTextField
           fullWidth
-          type='number'
-          placeholder='500'
-          label='Price Per SQFT'
+          type="number"
+          placeholder="500"
+          label="Price Per SQFT"
           slotProps={{
             input: {
               endAdornment: (
-                <InputAdornment position='end'>
-                  <i className='tabler-currency-dollar' />
+                <InputAdornment position="end">
+                  <i className="tabler-currency-dollar" />
                 </InputAdornment>
               )
             }
@@ -61,14 +61,14 @@ const StepPriceDetails = ({ activeStep, handleNext, handlePrev, steps }: Props) 
       <Grid size={{ xs: 12, md: 6 }}>
         <CustomTextField
           fullWidth
-          type='number'
-          placeholder='50'
-          label='Maintenance Charge'
+          type="number"
+          placeholder="50"
+          label="Maintenance Charge"
           slotProps={{
             input: {
               endAdornment: (
-                <InputAdornment position='end'>
-                  <i className='tabler-currency-dollar' />
+                <InputAdornment position="end">
+                  <i className="tabler-currency-dollar" />
                 </InputAdornment>
               )
             }
@@ -76,26 +76,26 @@ const StepPriceDetails = ({ activeStep, handleNext, handlePrev, steps }: Props) 
         />
       </Grid>
       <Grid size={{ xs: 12, md: 6 }}>
-        <CustomTextField select fullWidth label='Maintenance Period' defaultValue=''>
-          <MenuItem value=''>Select Maintenance Period</MenuItem>
-          <MenuItem value='monthly'>Monthly</MenuItem>
-          <MenuItem value='quarterly'>Quarterly</MenuItem>
-          <MenuItem value='half-yearly'>Half Yearly</MenuItem>
-          <MenuItem value='yearly'>Yearly</MenuItem>
-          <MenuItem value='one-time'>One-time</MenuItem>
+        <CustomTextField select fullWidth label="Maintenance Period" defaultValue="">
+          <MenuItem value="">Select Maintenance Period</MenuItem>
+          <MenuItem value="monthly">Monthly</MenuItem>
+          <MenuItem value="quarterly">Quarterly</MenuItem>
+          <MenuItem value="half-yearly">Half Yearly</MenuItem>
+          <MenuItem value="yearly">Yearly</MenuItem>
+          <MenuItem value="one-time">One-time</MenuItem>
         </CustomTextField>
       </Grid>
       <Grid size={{ xs: 12, md: 6 }}>
         <CustomTextField
           fullWidth
-          type='number'
-          placeholder='250'
-          label='Booking/Token Amount'
+          type="number"
+          placeholder="250"
+          label="Booking/Token Amount"
           slotProps={{
             input: {
               endAdornment: (
-                <InputAdornment position='end'>
-                  <i className='tabler-currency-dollar' />
+                <InputAdornment position="end">
+                  <i className="tabler-currency-dollar" />
                 </InputAdornment>
               )
             }
@@ -105,14 +105,14 @@ const StepPriceDetails = ({ activeStep, handleNext, handlePrev, steps }: Props) 
       <Grid size={{ xs: 12, md: 6 }}>
         <CustomTextField
           fullWidth
-          type='number'
-          placeholder='500'
-          label='Other Amount'
+          type="number"
+          placeholder="500"
+          label="Other Amount"
           slotProps={{
             input: {
               endAdornment: (
-                <InputAdornment position='end'>
-                  <i className='tabler-currency-dollar' />
+                <InputAdornment position="end">
+                  <i className="tabler-currency-dollar" />
                 </InputAdornment>
               )
             }
@@ -121,40 +121,40 @@ const StepPriceDetails = ({ activeStep, handleNext, handlePrev, steps }: Props) 
       </Grid>
       <Grid size={{ xs: 12, md: 6 }}>
         <FormControl>
-          <FormLabel id='price-radio'>Show Price As</FormLabel>
-          <RadioGroup name='price-group' defaultValue='negotiable' aria-labelledby='price-radio'>
-            <FormControlLabel value='negotiable' control={<Radio />} label='Negotiable' />
-            <FormControlLabel value='call-for-price' control={<Radio />} label='Call For Price' />
+          <FormLabel id="price-radio">Show Price As</FormLabel>
+          <RadioGroup name="price-group" defaultValue="negotiable" aria-labelledby="price-radio">
+            <FormControlLabel value="negotiable" control={<Radio />} label="Negotiable" />
+            <FormControlLabel value="call-for-price" control={<Radio />} label="Call For Price" />
           </RadioGroup>
         </FormControl>
       </Grid>
       <Grid size={{ xs: 12, md: 6 }}>
         <FormControl>
           <FormLabel>Price Includes</FormLabel>
-          <FormControlLabel control={<Checkbox defaultChecked />} label='Car Parking' />
-          <FormControlLabel control={<Checkbox />} label='Club Membership' />
+          <FormControlLabel control={<Checkbox defaultChecked />} label="Car Parking" />
+          <FormControlLabel control={<Checkbox />} label="Club Membership" />
         </FormControl>
       </Grid>
       <Grid size={{ xs: 12 }}>
-        <div className='flex items-center justify-between'>
+        <div className="flex items-center justify-between">
           <Button
-            variant='tonal'
-            color='secondary'
+            variant="tonal"
+            color="secondary"
             disabled={activeStep === 0}
             onClick={handlePrev}
-            startIcon={<DirectionalIcon ltrIconClass='tabler-arrow-left' rtlIconClass='tabler-arrow-right' />}
+            startIcon={<DirectionalIcon ltrIconClass="tabler-arrow-left" rtlIconClass="tabler-arrow-right" />}
           >
             Previous
           </Button>
           <Button
-            variant='contained'
+            variant="contained"
             color={activeStep === steps.length - 1 ? 'success' : 'primary'}
             onClick={handleNext}
             endIcon={
               activeStep === steps.length - 1 ? (
-                <i className='tabler-check' />
+                <i className="tabler-check" />
               ) : (
-                <DirectionalIcon ltrIconClass='tabler-arrow-right' rtlIconClass='tabler-arrow-left' />
+                <DirectionalIcon ltrIconClass="tabler-arrow-right" rtlIconClass="tabler-arrow-left" />
               )
             }
           >

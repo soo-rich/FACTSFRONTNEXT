@@ -139,8 +139,8 @@ const ApexCandlestickChart = () => {
   return (
     <Card>
       <CardHeader
-        title='Stocks Prices'
-        subheader='$50,863.98'
+        title="Stocks Prices"
+        subheader="$50,863.98"
         sx={{
           flexDirection: ['column', 'row'],
           alignItems: ['flex-start', 'center'],
@@ -149,7 +149,7 @@ const ApexCandlestickChart = () => {
         }}
       />
       <CardContent>
-        <AppReactApexCharts type='candlestick' width='100%' height={400} options={options} series={series} />
+        <AppReactApexCharts type="candlestick" width="100%" height={400} options={options} series={series} />
       </CardContent>
     </Card>
   )

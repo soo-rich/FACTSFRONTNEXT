@@ -56,12 +56,12 @@ const OrderCard = () => {
                 '[&:not(:last-child)>div]:pie-6 [&:not(:last-child)>div]:border-ie': !isBelowMdScreen
               })}
             >
-              <div className='flex justify-between gap-4'>
-                <div className='flex flex-col items-start'>
-                  <Typography variant='h4'>{item.value.toLocaleString()}</Typography>
+              <div className="flex justify-between gap-4">
+                <div className="flex flex-col items-start">
+                  <Typography variant="h4">{item.value.toLocaleString()}</Typography>
                   <Typography>{item.title}</Typography>
                 </div>
-                <CustomAvatar variant='rounded' size={42} skin='light'>
+                <CustomAvatar variant="rounded" size={42} skin="light">
                   <i className={classnames(item.icon, 'text-[26px]')} />
                 </CustomAvatar>
               </div>
@@ -72,7 +72,7 @@ const OrderCard = () => {
                   })}
                 />
               )}
-              {isBelowSmScreen && index < data.length - 1 && <Divider className='mbs-6' />}
+              {isBelowSmScreen && index < data.length - 1 && <Divider className="mbs-6" />}
             </Grid>
           ))}
         </Grid>

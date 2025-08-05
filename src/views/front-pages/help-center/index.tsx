@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 // Component Imports
 import HelpCenterHeader from './HelpCenterHeader'

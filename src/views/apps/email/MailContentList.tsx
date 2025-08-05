@@ -50,7 +50,7 @@ type Props = {
 
 const ScrollWrapper = ({ children, isBelowLgScreen }: { children: ReactNode; isBelowLgScreen: boolean }) => {
   if (isBelowLgScreen) {
-    return <div className='bs-full overflow-y-auto overflow-x-hidden relative'>{children}</div>
+    return <div className="bs-full overflow-y-auto overflow-x-hidden relative">{children}</div>
   } else {
     return <PerfectScrollbar options={{ wheelPropagation: false }}>{children}</PerfectScrollbar>
   }
@@ -108,23 +108,23 @@ const MailContentList = (props: Props) => {
   }
 
   return isInitialMount ? (
-    <div className='flex items-center justify-center gap-2 grow is-full'>
+    <div className="flex items-center justify-center gap-2 grow is-full">
       <CircularProgress />
       <Typography>Loading...</Typography>
     </div>
   ) : areFilteredEmailsNone ? (
-    <div className='relative flex justify-center gap-2 grow is-full bg-backgroundPaper'>
-      <Typography className='m-3'>No emails found!</Typography>
+    <div className="relative flex justify-center gap-2 grow is-full bg-backgroundPaper">
+      <Typography className="m-3">No emails found!</Typography>
       {reload && (
-        <Backdrop open={reload} className='absolute text-white z-10 bg-textDisabled'>
-          <CircularProgress color='inherit' />
+        <Backdrop open={reload} className="absolute text-white z-10 bg-textDisabled">
+          <CircularProgress color="inherit" />
         </Backdrop>
       )}
     </div>
   ) : (
-    <div className='relative overflow-hidden grow is-full'>
+    <div className="relative overflow-hidden grow is-full">
       <ScrollWrapper isBelowLgScreen={isBelowLgScreen}>
-        <div className='flex flex-col'>
+        <div className="flex flex-col">
           {emails
             .filter(
               email =>
@@ -137,8 +137,8 @@ const MailContentList = (props: Props) => {
                 className={classnames('p-4 cursor-pointer', styles.emailList, { 'bg-actionHover': email.isRead })}
                 onClick={() => handleEmailClick(email.id)}
               >
-                <div className='flex items-center justify-between gap-2'>
-                  <div className='flex items-center gap-2 overflow-hidden'>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 overflow-hidden">
                     <Checkbox
                       checked={selectedEmails.has(email.id)}
                       onChange={() => toggleEmailSelected(email.id)}
@@ -150,11 +150,11 @@ const MailContentList = (props: Props) => {
                       />
                     </IconButton>
                     <CustomAvatar src={email.from.avatar} alt={email.from.name} size={32} />
-                    <div className='flex gap-4 justify-between items-center overflow-hidden'>
-                      <Typography className='font-medium whitespace-nowrap' color='text.primary'>
+                    <div className="flex gap-4 justify-between items-center overflow-hidden">
+                      <Typography className="font-medium whitespace-nowrap" color="text.primary">
                         {email.from.name}
                       </Typography>
-                      <Typography variant='body2' noWrap>
+                      <Typography variant="body2" noWrap>
                         {email.subject}
                       </Typography>
                     </div>
@@ -165,7 +165,7 @@ const MailContentList = (props: Props) => {
                         [styles.show]: isBelowLgScreen
                       })}
                     >
-                      <div className='flex items-center gap-2'>
+                      <div className="flex items-center gap-2">
                         {email.labels.map(label => (
                           <i
                             key={label}
@@ -173,7 +173,7 @@ const MailContentList = (props: Props) => {
                           />
                         ))}
                       </div>
-                      <Typography variant='body2' color='text.disabled' className='whitespace-nowrap'>
+                      <Typography variant="body2" color="text.disabled" className="whitespace-nowrap">
                         {new Intl.DateTimeFormat('en-US', {
                           hour: '2-digit',
                           minute: '2-digit',
@@ -184,12 +184,12 @@ const MailContentList = (props: Props) => {
                   )}
                   {!isBelowLgScreen && (
                     <div className={styles.emailActions}>
-                      <Tooltip title={folder === 'trash' ? 'Delete' : 'Move to trash'} placement='top'>
+                      <Tooltip title={folder === 'trash' ? 'Delete' : 'Move to trash'} placement="top">
                         <IconButton onClick={e => handleSingleEmailDelete(e, email.id)}>
-                          <i className='tabler-trash text-textSecondary' />
+                          <i className="tabler-trash text-textSecondary" />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title={email.isRead ? 'Mark as unread' : 'Mark as read'} placement='top'>
+                      <Tooltip title={email.isRead ? 'Mark as unread' : 'Mark as read'} placement="top">
                         <IconButton
                           onClick={e => {
                             handleToggleIsReadStatus(e, email.id)
@@ -205,9 +205,9 @@ const MailContentList = (props: Props) => {
                         </IconButton>
                       </Tooltip>
                       {(folder === 'inbox' || folder === 'trash') && (
-                        <Tooltip title='Move to spam' placement='top'>
+                        <Tooltip title="Move to spam" placement="top">
                           <IconButton onClick={e => handleMoveToSpam(e, email.id)}>
-                            <i className='tabler-info-circle text-textSecondary' />
+                            <i className="tabler-info-circle text-textSecondary" />
                           </IconButton>
                         </Tooltip>
                       )}
@@ -219,8 +219,8 @@ const MailContentList = (props: Props) => {
         </div>
       </ScrollWrapper>
       {reload && (
-        <Backdrop open={reload} className='absolute text-white z-10 bg-textDisabled'>
-          <CircularProgress color='inherit' />
+        <Backdrop open={reload} className="absolute text-white z-10 bg-textDisabled">
+          <CircularProgress color="inherit" />
         </Backdrop>
       )}
     </div>

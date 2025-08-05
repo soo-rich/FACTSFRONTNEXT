@@ -10,10 +10,10 @@ import CardStatsWithAreaChart from '@components/card-statistics/StatsWithAreaCha
 const CardStatsLineAreaCharts = ({ data }: { data: CardStatsWithAreaChartProps[] }) => {
   const renderData = data
     ? data.map((item: CardStatsWithAreaChartProps, index: number) => (
-        <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
-          <CardStatsWithAreaChart {...item} />
-        </Grid>
-      ))
+      <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
+        <CardStatsWithAreaChart {...item} />
+      </Grid>
+    ))
     : null
 
   return (

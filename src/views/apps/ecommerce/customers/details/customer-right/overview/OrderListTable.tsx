@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
@@ -17,21 +17,21 @@ import type { TextFieldProps } from '@mui/material/TextField'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -53,6 +53,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -99,11 +100,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -147,7 +148,7 @@ const OrderListTable = ({ orderData }: { orderData?: OrderType[] }) => {
           <Typography
             component={Link}
             href={getLocalizedUrl(`/apps/ecommerce/orders/details/${row.original.order}`, locale as Locale)}
-            color='primary.main'
+            color="primary.main"
           >{`#${row.original.order}`}</Typography>
         )
       }),
@@ -161,8 +162,8 @@ const OrderListTable = ({ orderData }: { orderData?: OrderType[] }) => {
           <Chip
             label={row.original.status}
             color={statusChipColor[row.original.status].color}
-            variant='tonal'
-            size='small'
+            variant="tonal"
+            size="small"
           />
         )
       }),
@@ -173,10 +174,10 @@ const OrderListTable = ({ orderData }: { orderData?: OrderType[] }) => {
       columnHelper.accessor('action', {
         header: 'Actions',
         cell: ({ row }) => (
-          <div className='flex items-center'>
+          <div className="flex items-center">
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary text-[22px]'
+              iconClassName="text-textSecondary text-[22px]"
               options={[
                 {
                   text: 'View',
@@ -234,66 +235,66 @@ const OrderListTable = ({ orderData }: { orderData?: OrderType[] }) => {
 
   return (
     <Card>
-      <CardContent className='flex justify-between flex-col items-start sm:flex-row sm:items-center gap-y-4'>
-        <Typography variant='h5'>Orders Placed</Typography>
+      <CardContent className="flex justify-between flex-col items-start sm:flex-row sm:items-center gap-y-4">
+        <Typography variant="h5">Orders Placed</Typography>
         <DebouncedInput
           value={globalFilter ?? ''}
           onChange={value => setGlobalFilter(String(value))}
-          placeholder='Search Order'
-          className='max-sm:is-full'
+          placeholder="Search Order"
+          className="max-sm:is-full"
         />
       </CardContent>
-      <div className='overflow-x-auto'>
+      <div className="overflow-x-auto">
         <table className={tableStyles.table}>
           <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <div
-                          className={classnames({
-                            'flex items-center': header.column.getIsSorted(),
-                            'cursor-pointer select-none': header.column.getCanSort()
-                          })}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: <i className='tabler-chevron-up text-xl' />,
-                            desc: <i className='tabler-chevron-down text-xl' />
-                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                        </div>
-                      </>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id}>
+                  {header.isPlaceholder ? null : (
+                    <>
+                      <div
+                        className={classnames({
+                          'flex items-center': header.column.getIsSorted(),
+                          'cursor-pointer select-none': header.column.getCanSort()
+                        })}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: <i className="tabler-chevron-up text-xl" />,
+                          desc: <i className="tabler-chevron-down text-xl" />
+                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                      </div>
+                    </>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
           </thead>
           {table.getFilteredRowModel().rows.length === 0 ? (
             <tbody>
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                  No data available
-                </td>
-              </tr>
+            <tr>
+              <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                No data available
+              </td>
+            </tr>
             </tbody>
           ) : (
             <tbody>
-              {table
-                .getRowModel()
-                .rows.slice(0, table.getState().pagination.pageSize)
-                .map(row => {
-                  return (
-                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                      {row.getVisibleCells().map(cell => (
-                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                      ))}
-                    </tr>
-                  )
-                })}
+            {table
+              .getRowModel()
+              .rows.slice(0, table.getState().pagination.pageSize)
+              .map(row => {
+                return (
+                  <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                    ))}
+                  </tr>
+                )
+              })}
             </tbody>
           )}
         </table>

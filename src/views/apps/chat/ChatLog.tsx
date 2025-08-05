@@ -1,6 +1,6 @@
 // React Imports
-import { useRef, useEffect } from 'react'
 import type { MutableRefObject, ReactNode } from 'react'
+import { useEffect, useRef } from 'react'
 
 // MUI Imports
 import Typography from '@mui/material/Typography'
@@ -12,7 +12,7 @@ import classnames from 'classnames'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // Type Imports
-import type { ChatType, ChatDataType, UserChatType, ProfileUserType } from '@/types/apps/chatTypes'
+import type { ChatDataType, ChatType, ProfileUserType, UserChatType } from '@/types/apps/chatTypes'
 
 // Component Imports
 import CustomAvatar from '@core/components/mui/Avatar'
@@ -72,11 +72,11 @@ const formatedChatData = (chats: ChatType['chat'], profileUser: ProfileUserType)
 
 // Wrapper for the chat log to handle scrolling
 const ScrollWrapper = ({
-  children,
-  isBelowLgScreen,
-  scrollRef,
-  className
-}: {
+                         children,
+                         isBelowLgScreen,
+                         scrollRef,
+                         className
+                       }: {
   children: ReactNode
   isBelowLgScreen: boolean
   scrollRef: MutableRefObject<null>
@@ -130,7 +130,7 @@ const ChatLog = ({ chatStore, isBelowLgScreen, isBelowMdScreen, isBelowSmScreen 
 
   return (
     <ScrollWrapper isBelowLgScreen={isBelowLgScreen} scrollRef={scrollRef}>
-      <CardContent className='p-0'>
+      <CardContent className="p-0">
         {activeUserChat &&
           formatedChatData(activeUserChat.chat, profileUser).map((msgGroup, index) => {
             const isSender = msgGroup.senderId === profileUser.id
@@ -142,19 +142,19 @@ const ChatLog = ({ chatStore, isBelowLgScreen, isBelowMdScreen, isBelowSmScreen 
                     <Avatar
                       alt={contacts.find(contact => contact.id === activeUserChat?.userId)?.fullName}
                       src={contacts.find(contact => contact.id === activeUserChat?.userId)?.avatar}
-                      className='is-8 bs-8'
+                      className="is-8 bs-8"
                     />
                   ) : (
                     <CustomAvatar
                       color={contacts.find(contact => contact.id === activeUserChat?.userId)?.avatarColor}
-                      skin='light'
+                      skin="light"
                       size={32}
                     >
                       {getInitials(contacts.find(contact => contact.id === activeUserChat?.userId)?.fullName as string)}
                     </CustomAvatar>
                   )
                 ) : profileUser.avatar ? (
-                  <Avatar alt={profileUser.fullName} src={profileUser.avatar} className='is-8 bs-8' />
+                  <Avatar alt={profileUser.fullName} src={profileUser.avatar} className="is-8 bs-8" />
                 ) : (
                   <CustomAvatar alt={profileUser.fullName} src={profileUser.avatar} size={32} />
                 )}
@@ -182,20 +182,20 @@ const ChatLog = ({ chatStore, isBelowLgScreen, isBelowMdScreen, isBelowSmScreen 
                     (msg, index) =>
                       index === msgGroup.messages.length - 1 &&
                       (isSender ? (
-                        <div key={index} className='flex items-center gap-2'>
+                        <div key={index} className="flex items-center gap-2">
                           {msg.msgStatus?.isSeen ? (
-                            <i className='tabler-checks text-success text-base' />
+                            <i className="tabler-checks text-success text-base" />
                           ) : msg.msgStatus?.isDelivered ? (
-                            <i className='tabler-checks text-base' />
+                            <i className="tabler-checks text-base" />
                           ) : (
-                            msg.msgStatus?.isSent && <i className='tabler-check text-base' />
+                            msg.msgStatus?.isSent && <i className="tabler-check text-base" />
                           )}
                           {index === activeUserChat.chat.length - 1 ? (
-                            <Typography variant='caption'>
+                            <Typography variant="caption">
                               {new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
                             </Typography>
                           ) : msg.time ? (
-                            <Typography variant='caption'>
+                            <Typography variant="caption">
                               {new Date(msg.time).toLocaleString('en-US', {
                                 hour: 'numeric',
                                 minute: 'numeric',
@@ -205,11 +205,11 @@ const ChatLog = ({ chatStore, isBelowLgScreen, isBelowMdScreen, isBelowSmScreen 
                           ) : null}
                         </div>
                       ) : index === activeUserChat.chat.length - 1 ? (
-                        <Typography key={index} variant='caption'>
+                        <Typography key={index} variant="caption">
                           {new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
                         </Typography>
                       ) : msg.time ? (
-                        <Typography key={index} variant='caption'>
+                        <Typography key={index} variant="caption">
                           {new Date(msg.time).toLocaleString('en-US', {
                             hour: 'numeric',
                             minute: 'numeric',

@@ -1,84 +1,100 @@
-import {Controller, useForm} from "react-hook-form";
-import {articleSchema, ArticleType, SaveArticleType} from "@/types/soosmart/article.type";
-import {ArticleService} from "@/service/article/article.service";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {toast} from "react-toastify";
-import {Grid2} from "@mui/material";
-import CustomTextField from "@/@core/components/mui/TextField";
-import Button from "@mui/material/Button";
-import {AddEditFormType} from "@/types/soosmart/add-edit-modal.type";
-import {valibotResolver} from "@hookform/resolvers/valibot";
+import { Controller, useForm } from 'react-hook-form'
+
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
+import { Grid2 } from '@mui/material'
+
+import Button from '@mui/material/Button'
+
+import { valibotResolver } from '@hookform/resolvers/valibot'
+
+import CustomTextField from '@/@core/components/mui/TextField'
+import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 
 
-const AddEditArticle = ({data: article, onSuccess, onCancel}: AddEditFormType<ArticleType>) => {
-  const queryClient = useQueryClient();
+import type { ArticleType, SaveArticleType } from '@/types/soosmart/article.type'
+import { articleSchema } from '@/types/soosmart/article.type'
+import { ArticleService } from '@/service/article/article.service'
+
+
+const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<ArticleType>) => {
+  const queryClient = useQueryClient()
 
   const {
     control,
     handleSubmit,
-    formState: {errors},
-    reset,
+    formState: { errors },
+    reset
   } = useForm<SaveArticleType>(
     {
       resolver: valibotResolver(articleSchema),
       defaultValues: {
         libelle: article?.libelle ?? '',
-        prix_unitaire: article?.prix_unitaire ?? 0,
-      },
+        prix_unitaire: article?.prix_unitaire ?? 0
+      }
     }
   )
 
   const AddMutation = useMutation({
     mutationFn: async (data: SaveArticleType) => {
-      return await ArticleService.addArticle(data);
+      return await ArticleService.addArticle(data)
     },
     onSuccess: () => {
-      toast.success('Ajout OK');
-      reset();
+      toast.success('Ajout OK')
+      reset()
+
       // Invalider le cache pour rafraîchir la liste
       queryClient.invalidateQueries({
-        queryKey: [ArticleService.ARTICLE_KEY],
-      });
+        queryKey: [ArticleService.ARTICLE_KEY]
+      })
+
+
       // Appeler le callback de succès si fourni
       if (onSuccess) {
-        onSuccess();
+        onSuccess()
       }
     },
     onError: () => {
-      toast.error('Erreur lors de l\'ajout de l\'article');
-    },
-  });
+      toast.error('Erreur lors de l\'ajout de l\'article')
+    }
+  })
 
   const UpdateMutation = useMutation({
     mutationFn: async (data: SaveArticleType) => {
       if (!article?.id) {
-        toast.warning('Aucun article à mettre à jour');
+        toast.warning('Aucun article à mettre à jour')
+
         return
       }
-      return await ArticleService.updateArticle(article.id, data);
+
+
+      return await ArticleService.updateArticle(article.id, data)
     },
     onSuccess: () => {
-      toast.success('Mise à jour OK');
-      reset();
+      toast.success('Mise à jour OK')
+      reset()
+
       // Invalider le cache pour rafraîchir la liste
       queryClient.invalidateQueries({
-        queryKey: [ArticleService.ARTICLE_KEY],
-      });
+        queryKey: [ArticleService.ARTICLE_KEY]
+      })
+
+
       // Appeler le callback de succès si fourni
       if (onSuccess) {
-        onSuccess();
+        onSuccess()
       }
     },
     onError: () => {
-      toast.error('Erreur lors de la mise à jour de l\'article');
-    },
+      toast.error('Erreur lors de la mise à jour de l\'article')
+    }
   })
 
   const submitForm = (data: SaveArticleType) => {
     if (article) {
-      UpdateMutation.mutate(data);
+      UpdateMutation.mutate(data)
     } else {
-      AddMutation.mutate(data);
+      AddMutation.mutate(data)
     }
   }
 
@@ -86,11 +102,12 @@ const AddEditArticle = ({data: article, onSuccess, onCancel}: AddEditFormType<Ar
     reset(
       {
         libelle: '',
-        prix_unitaire: 0,
+        prix_unitaire: 0
       }
-    );
+    )
+
     if (onCancel) {
-      onCancel();
+      onCancel()
     }
   }
 
@@ -99,7 +116,7 @@ const AddEditArticle = ({data: article, onSuccess, onCancel}: AddEditFormType<Ar
       <Grid2 container direction={'column'} spacing={3}>
         <Grid2>
           <Controller
-            render={({field}) => (
+            render={({ field }) => (
               <CustomTextField
                 fullWidth
                 label={'Libellé'}
@@ -119,7 +136,7 @@ const AddEditArticle = ({data: article, onSuccess, onCancel}: AddEditFormType<Ar
 
         <Grid2>
           <Controller
-            render={({field}) => (
+            render={({ field }) => (
               <CustomTextField
                 {...field}
                 fullWidth
@@ -127,11 +144,13 @@ const AddEditArticle = ({data: article, onSuccess, onCancel}: AddEditFormType<Ar
                 placeholder={'Entrez le prix de l\'article'}
                 type="number"
                 onChange={e => {
-                  const value = parseFloat(e.target.value);
+                  const value = parseFloat(e.target.value)
+
                   if (isNaN(value)) {
                     return
                   }
-                  field.onChange(isNaN(value) ? 0 : value); // Assure que le prix est un nombre
+
+                  field.onChange(isNaN(value) ? 0 : value) // Assure que le prix est un nombre
                 }}
                 error={!!errors.prix_unitaire}
                 {...(errors.prix_unitaire && {

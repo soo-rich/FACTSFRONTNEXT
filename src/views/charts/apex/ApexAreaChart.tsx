@@ -114,8 +114,8 @@ const ApexAreaChart = () => {
   return (
     <Card>
       <CardHeader
-        title='Line Chart'
-        subheader='Commercial networks'
+        title="Line Chart"
+        subheader="Commercial networks"
         sx={{
           flexDirection: ['column', 'row'],
           alignItems: ['flex-start', 'center'],
@@ -124,7 +124,7 @@ const ApexAreaChart = () => {
         }}
       />
       <CardContent>
-        <AppReactApexCharts type='area' width='100%' height={400} options={options} series={series} />
+        <AppReactApexCharts type="area" width="100%" height={400} options={options} series={series} />
       </CardContent>
     </Card>
   )

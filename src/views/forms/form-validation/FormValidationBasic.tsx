@@ -22,7 +22,7 @@ import IconButton from '@mui/material/IconButton'
 
 // Third-party Imports
 import { toast } from 'react-toastify'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 
 // Components Imports
 import CustomTextField from '@core/components/mui/TextField'
@@ -72,21 +72,21 @@ const FormValidationBasic = () => {
 
   return (
     <Card>
-      <CardHeader title='Basic' />
+      <CardHeader title="Basic" />
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={6}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
-                name='firstName'
+                name="firstName"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    label='First Name'
-                    placeholder='John'
+                    label="First Name"
+                    placeholder="John"
                     {...(errors.firstName && { error: true, helperText: 'This field is required.' })}
                   />
                 )}
@@ -94,15 +94,15 @@ const FormValidationBasic = () => {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
-                name='lastName'
+                name="lastName"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    label='Last Name'
-                    placeholder='Doe'
+                    label="Last Name"
+                    placeholder="Doe"
                     {...(errors.lastName && { error: true, helperText: 'This field is required.' })}
                   />
                 )}
@@ -110,16 +110,16 @@ const FormValidationBasic = () => {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
-                name='email'
+                name="email"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    type='email'
-                    label='Email'
-                    placeholder='johndoe@gmail.com'
+                    type="email"
+                    label="Email"
+                    placeholder="johndoe@gmail.com"
                     {...(errors.email && { error: true, helperText: 'This field is required.' })}
                   />
                 )}
@@ -127,26 +127,26 @@ const FormValidationBasic = () => {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
-                name='password'
+                name="password"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    label='Password'
-                    placeholder='············'
-                    id='form-validation-basic-password'
+                    label="Password"
+                    placeholder="············"
+                    id="form-validation-basic-password"
                     type={isPasswordShown ? 'text' : 'password'}
                     slotProps={{
                       input: {
                         endAdornment: (
-                          <InputAdornment position='end'>
+                          <InputAdornment position="end">
                             <IconButton
-                              edge='end'
+                              edge="end"
                               onClick={handleClickShowPassword}
                               onMouseDown={e => e.preventDefault()}
-                              aria-label='toggle password visibility'
+                              aria-label="toggle password visibility"
                             >
                               <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                             </IconButton>
@@ -161,7 +161,7 @@ const FormValidationBasic = () => {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
-                name='dob'
+                name="dob"
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { value, onChange } }) => (
@@ -170,13 +170,13 @@ const FormValidationBasic = () => {
                     showYearDropdown
                     showMonthDropdown
                     onChange={onChange}
-                    placeholderText='MM/DD/YYYY'
+                    placeholderText="MM/DD/YYYY"
                     customInput={
                       <CustomTextField
                         value={value}
                         onChange={onChange}
                         fullWidth
-                        label='Date Of Birth'
+                        label="Date Of Birth"
                         {...(errors.dob && { error: true, helperText: 'This field is required.' })}
                       />
                     }
@@ -186,16 +186,16 @@ const FormValidationBasic = () => {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
-                name='select'
+                name="select"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
-                  <CustomTextField select fullWidth label='Country' {...field} error={Boolean(errors.select)}>
-                    <MenuItem value=''>Select Country</MenuItem>
-                    <MenuItem value='UK'>UK</MenuItem>
-                    <MenuItem value='USA'>USA</MenuItem>
-                    <MenuItem value='Australia'>Australia</MenuItem>
-                    <MenuItem value='Germany'>Germany</MenuItem>
+                  <CustomTextField select fullWidth label="Country" {...field} error={Boolean(errors.select)}>
+                    <MenuItem value="">Select Country</MenuItem>
+                    <MenuItem value="UK">UK</MenuItem>
+                    <MenuItem value="USA">USA</MenuItem>
+                    <MenuItem value="Australia">Australia</MenuItem>
+                    <MenuItem value="Germany">Germany</MenuItem>
                   </CustomTextField>
                 )}
               />
@@ -203,7 +203,7 @@ const FormValidationBasic = () => {
             </Grid>
             <Grid size={{ xs: 12 }}>
               <Controller
-                name='textarea'
+                name="textarea"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
@@ -212,7 +212,7 @@ const FormValidationBasic = () => {
                     rows={4}
                     fullWidth
                     multiline
-                    label='Bio'
+                    label="Bio"
                     {...(errors.textarea && { error: true, helperText: 'This field is required.' })}
                   />
                 )}
@@ -222,14 +222,14 @@ const FormValidationBasic = () => {
               <FormControl error={Boolean(errors.radio)}>
                 <FormLabel>Gender</FormLabel>
                 <Controller
-                  name='radio'
+                  name="radio"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
-                    <RadioGroup row {...field} name='radio-buttons-group'>
-                      <FormControlLabel value='female' control={<Radio />} label='Female' />
-                      <FormControlLabel value='male' control={<Radio />} label='Male' />
-                      <FormControlLabel value='other' control={<Radio />} label='Other' />
+                    <RadioGroup row {...field} name="radio-buttons-group">
+                      <FormControlLabel value="female" control={<Radio />} label="Female" />
+                      <FormControlLabel value="male" control={<Radio />} label="Male" />
+                      <FormControlLabel value="other" control={<Radio />} label="Other" />
                     </RadioGroup>
                   )}
                 />
@@ -239,21 +239,21 @@ const FormValidationBasic = () => {
             <Grid size={{ xs: 12 }}>
               <FormControl error={Boolean(errors.checkbox)}>
                 <Controller
-                  name='checkbox'
+                  name="checkbox"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
-                    <FormControlLabel control={<Checkbox {...field} />} label='Agree to our terms and conditions' />
+                    <FormControlLabel control={<Checkbox {...field} />} label="Agree to our terms and conditions" />
                   )}
                 />
                 {errors.checkbox && <FormHelperText error>This field is required.</FormHelperText>}
               </FormControl>
             </Grid>
-            <Grid size={{ xs: 12 }} className='flex gap-4'>
-              <Button variant='contained' type='submit'>
+            <Grid size={{ xs: 12 }} className="flex gap-4">
+              <Button variant="contained" type="submit">
                 Submit
               </Button>
-              <Button variant='tonal' color='secondary' type='reset' onClick={() => reset()}>
+              <Button variant="tonal" color="secondary" type="reset" onClick={() => reset()}>
                 Reset
               </Button>
             </Grid>

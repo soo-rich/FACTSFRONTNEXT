@@ -37,15 +37,15 @@ export class ProformaService {
     return (await instance.get<ProformaType>(url + `/${numero}`)).data
   }
 
-  async updatereference(id: string, newreference: string) {
-    return (await instance.get<void>(url + `/reference/${id}?ref=${newreference}`)).data
-  }
-
   static async Updatedata(id: string, article_quantite: Article_QuantiteSave[]) {
     return (await instance.put<ProformaType>(url + `/${id}`, article_quantite)).data
   }
 
   static async DeleteDAta(numero: string) {
     return (await instance.delete<any>(url + `/${numero}`)).data
+  }
+
+  async updatereference(id: string, newreference: string) {
+    return (await instance.get<void>(url + `/reference/${id}?ref=${newreference}`)).data
   }
 }

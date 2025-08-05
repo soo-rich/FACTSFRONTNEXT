@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useState, useMemo, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
@@ -21,21 +21,21 @@ import type { TextFieldProps } from '@mui/material/TextField'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -59,6 +59,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -93,11 +94,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -177,13 +178,13 @@ const RolesTable = ({ tableData }: { tableData?: UsersType[] }) => {
       columnHelper.accessor('fullName', {
         header: 'User',
         cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
+          <div className="flex items-center gap-4">
             {getAvatar({ avatar: row.original.avatar, fullName: row.original.fullName })}
-            <div className='flex flex-col'>
-              <Typography className='font-medium' color='text.primary'>
+            <div className="flex flex-col">
+              <Typography className="font-medium" color="text.primary">
                 {row.original.fullName}
               </Typography>
-              <Typography variant='body2'>{row.original.username}</Typography>
+              <Typography variant="body2">{row.original.username}</Typography>
             </div>
           </div>
         )
@@ -191,12 +192,12 @@ const RolesTable = ({ tableData }: { tableData?: UsersType[] }) => {
       columnHelper.accessor('role', {
         header: 'Role',
         cell: ({ row }) => (
-          <div className='flex items-center gap-2'>
+          <div className="flex items-center gap-2">
             <Icon
               className={userRoleObj[row.original.role].icon}
               sx={{ color: `var(--mui-palette-${userRoleObj[row.original.role].color}-main)`, fontSize: '1.375rem' }}
             />
-            <Typography className='capitalize' color='text.primary'>
+            <Typography className="capitalize" color="text.primary">
               {row.original.role}
             </Typography>
           </div>
@@ -205,24 +206,24 @@ const RolesTable = ({ tableData }: { tableData?: UsersType[] }) => {
       columnHelper.accessor('currentPlan', {
         header: 'Plan',
         cell: ({ row }) => (
-          <Typography className='capitalize' color='text.primary'>
+          <Typography className="capitalize" color="text.primary">
             {row.original.currentPlan}
           </Typography>
         )
       }),
       columnHelper.accessor('billing', {
         header: 'Billing',
-        cell: ({ row }) => <Typography className='capitalize'>{row.original.billing}</Typography>
+        cell: ({ row }) => <Typography className="capitalize">{row.original.billing}</Typography>
       }),
       columnHelper.accessor('status', {
         header: 'Status',
         cell: ({ row }) => (
-          <div className='flex items-center gap-3'>
+          <div className="flex items-center gap-3">
             <Chip
-              variant='tonal'
-              className='capitalize'
+              variant="tonal"
+              className="capitalize"
               label={row.original.status}
-              size='small'
+              size="small"
               color={userStatusObj[row.original.status]}
             />
           </div>
@@ -231,18 +232,18 @@ const RolesTable = ({ tableData }: { tableData?: UsersType[] }) => {
       columnHelper.accessor('action', {
         header: 'Actions',
         cell: ({ row }) => (
-          <div className='flex items-center'>
+          <div className="flex items-center">
             <IconButton onClick={() => setData(data?.filter(product => product.id !== row.original.id))}>
-              <i className='tabler-trash text-textSecondary' />
+              <i className="tabler-trash text-textSecondary" />
             </IconButton>
             <IconButton>
-              <Link href={getLocalizedUrl('/apps/user/view', locale as Locale)} className='flex'>
-                <i className='tabler-eye text-textSecondary' />
+              <Link href={getLocalizedUrl('/apps/user/view', locale as Locale)} className="flex">
+                <i className="tabler-eye text-textSecondary" />
               </Link>
             </IconButton>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary'
+              iconClassName="text-textSecondary"
               options={[
                 {
                   text: 'Download',
@@ -298,10 +299,10 @@ const RolesTable = ({ tableData }: { tableData?: UsersType[] }) => {
     const { avatar, fullName } = params
 
     if (avatar) {
-      return <CustomAvatar src={avatar} skin='light' size={34} />
+      return <CustomAvatar src={avatar} skin="light" size={34} />
     } else {
       return (
-        <CustomAvatar skin='light' size={34}>
+        <CustomAvatar skin="light" size={34}>
           {getInitials(fullName as string)}
         </CustomAvatar>
       )
@@ -320,97 +321,97 @@ const RolesTable = ({ tableData }: { tableData?: UsersType[] }) => {
 
   return (
     <Card>
-      <CardContent className='flex justify-between flex-col gap-4 items-start sm:flex-row sm:items-center'>
-        <div className='flex items-center gap-2'>
+      <CardContent className="flex justify-between flex-col gap-4 items-start sm:flex-row sm:items-center">
+        <div className="flex items-center gap-2">
           <Typography>Show</Typography>
           <CustomTextField
             select
             value={table.getState().pagination.pageSize}
             onChange={e => table.setPageSize(Number(e.target.value))}
-            className='max-sm:is-full sm:is-[70px]'
+            className="max-sm:is-full sm:is-[70px]"
           >
-            <MenuItem value='10'>10</MenuItem>
-            <MenuItem value='25'>25</MenuItem>
-            <MenuItem value='50'>50</MenuItem>
+            <MenuItem value="10">10</MenuItem>
+            <MenuItem value="25">25</MenuItem>
+            <MenuItem value="50">50</MenuItem>
           </CustomTextField>
         </div>
-        <div className='flex gap-4 flex-col !items-start max-sm:is-full sm:flex-row sm:items-center'>
+        <div className="flex gap-4 flex-col !items-start max-sm:is-full sm:flex-row sm:items-center">
           <DebouncedInput
             value={globalFilter ?? ''}
-            className='max-sm:is-full min-is-[250px]'
+            className="max-sm:is-full min-is-[250px]"
             onChange={value => setGlobalFilter(String(value))}
-            placeholder='Search User'
+            placeholder="Search User"
           />
           <CustomTextField
             select
             value={role}
             onChange={e => setRole(e.target.value)}
-            id='roles-app-role-select'
-            className='max-sm:is-full sm:is-[160px]'
+            id="roles-app-role-select"
+            className="max-sm:is-full sm:is-[160px]"
             slotProps={{
               select: { displayEmpty: true }
             }}
           >
-            <MenuItem value=''>Select Role</MenuItem>
-            <MenuItem value='admin'>Admin</MenuItem>
-            <MenuItem value='author'>Author</MenuItem>
-            <MenuItem value='editor'>Editor</MenuItem>
-            <MenuItem value='maintainer'>Maintainer</MenuItem>
-            <MenuItem value='subscriber'>Subscriber</MenuItem>
+            <MenuItem value="">Select Role</MenuItem>
+            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="author">Author</MenuItem>
+            <MenuItem value="editor">Editor</MenuItem>
+            <MenuItem value="maintainer">Maintainer</MenuItem>
+            <MenuItem value="subscriber">Subscriber</MenuItem>
           </CustomTextField>
         </div>
       </CardContent>
-      <div className='overflow-x-auto'>
+      <div className="overflow-x-auto">
         <table className={tableStyles.table}>
           <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <div
-                          className={classnames({
-                            'flex items-center': header.column.getIsSorted(),
-                            'cursor-pointer select-none': header.column.getCanSort()
-                          })}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: <i className='tabler-chevron-up text-xl' />,
-                            desc: <i className='tabler-chevron-down text-xl' />
-                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                        </div>
-                      </>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id}>
+                  {header.isPlaceholder ? null : (
+                    <>
+                      <div
+                        className={classnames({
+                          'flex items-center': header.column.getIsSorted(),
+                          'cursor-pointer select-none': header.column.getCanSort()
+                        })}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: <i className="tabler-chevron-up text-xl" />,
+                          desc: <i className="tabler-chevron-down text-xl" />
+                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                      </div>
+                    </>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
           </thead>
           {table.getFilteredRowModel().rows.length === 0 ? (
             <tbody>
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                  No data available
-                </td>
-              </tr>
+            <tr>
+              <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                No data available
+              </td>
+            </tr>
             </tbody>
           ) : (
             <tbody>
-              {table
-                .getRowModel()
-                .rows.slice(0, table.getState().pagination.pageSize)
-                .map(row => {
-                  return (
-                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                      {row.getVisibleCells().map(cell => (
-                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                      ))}
-                    </tr>
-                  )
-                })}
+            {table
+              .getRowModel()
+              .rows.slice(0, table.getState().pagination.pageSize)
+              .map(row => {
+                return (
+                  <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                    ))}
+                  </tr>
+                )
+              })}
             </tbody>
           )}
         </table>

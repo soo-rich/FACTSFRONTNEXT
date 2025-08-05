@@ -35,34 +35,34 @@ const DeliveryPerformance = () => {
   return (
     <Card>
       <CardHeader
-        title='Delivery Performance'
-        subheader='12% increase in this month'
+        title="Delivery Performance"
+        subheader="12% increase in this month"
         action={<OptionMenu options={['Select All', 'Refresh', 'Share']} />}
       />
-      <CardContent className='flex flex-col gap-[30px]'>
+      <CardContent className="flex flex-col gap-[30px]">
         {deliveryData.map((data, index) => (
-          <div key={index} className='flex items-center gap-4'>
-            <CustomAvatar skin='light' color={data.color} variant='rounded' size={38}>
+          <div key={index} className="flex items-center gap-4">
+            <CustomAvatar skin="light" color={data.color} variant="rounded" size={38}>
               <i className={data.icon} />
             </CustomAvatar>
-            <div className='flex justify-between items-center gap-4 is-full'>
+            <div className="flex justify-between items-center gap-4 is-full">
               <div>
-                <Typography color='text.primary' className='line-clamp-1'>
+                <Typography color="text.primary" className="line-clamp-1">
                   {data.title}
                 </Typography>
-                <div className='flex items-center gap-1'>
+                <div className="flex items-center gap-1">
                   <i
                     className={classnames(
                       'text-xl',
                       data.change > 0 ? 'tabler-chevron-up text-success' : 'tabler-chevron-down text-error'
                     )}
                   />
-                  <Typography variant='body2' color={data.change > 0 ? 'success.main' : 'error.main'}>
+                  <Typography variant="body2" color={data.change > 0 ? 'success.main' : 'error.main'}>
                     {data.change}%
                   </Typography>
                 </div>
               </div>
-              <Typography color='text.primary' className='font-medium'>
+              <Typography color="text.primary" className="font-medium">
                 {data.value}
               </Typography>
             </div>

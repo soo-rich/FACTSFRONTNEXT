@@ -83,7 +83,7 @@ const ResetPasswordV2 = ({ mode }: { mode: SystemMode }) => {
   const handleClickShowConfirmPassword = () => setIsConfirmPasswordShown(show => !show)
 
   return (
-    <div className='flex bs-full justify-center'>
+    <div className="flex bs-full justify-center">
       <div
         className={classnames(
           'flex bs-full items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden',
@@ -92,39 +92,41 @@ const ResetPasswordV2 = ({ mode }: { mode: SystemMode }) => {
           }
         )}
       >
-        <ResetPasswordIllustration src={characterIllustration} alt='character-illustration' />
+        <ResetPasswordIllustration src={characterIllustration} alt="character-illustration" />
         {!hidden && (
           <MaskImg
-            alt='mask'
+            alt="mask"
             src={authBackground}
             className={classnames({ 'scale-x-[-1]': theme.direction === 'rtl' })}
           />
         )}
       </div>
-      <div className='flex justify-center items-center bs-full bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]'>
+      <div
+        className="flex justify-center items-center bs-full bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]">
         <Link
           href={getLocalizedUrl('/', locale as Locale)}
-          className='absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]'
+          className="absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]"
         >
           <Logo />
         </Link>
-        <div className='flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0'>
-          <div className='flex flex-col gap-1'>
-            <Typography variant='h4'>Reset Password 🔒</Typography>
+        <div
+          className="flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0">
+          <div className="flex flex-col gap-1">
+            <Typography variant="h4">Reset Password 🔒</Typography>
             <Typography>Your new password must be different from previously used passwords</Typography>
           </div>
-          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()} className='flex flex-col gap-6'>
+          <form noValidate autoComplete="off" onSubmit={e => e.preventDefault()} className="flex flex-col gap-6">
             <CustomTextField
               autoFocus
               fullWidth
-              label='New Password'
-              placeholder='············'
+              label="New Password"
+              placeholder="············"
               type={isPasswordShown ? 'text' : 'password'}
               slotProps={{
                 input: {
                   endAdornment: (
-                    <InputAdornment position='end'>
-                      <IconButton edge='end' onClick={handleClickShowPassword} onMouseDown={e => e.preventDefault()}>
+                    <InputAdornment position="end">
+                      <IconButton edge="end" onClick={handleClickShowPassword} onMouseDown={e => e.preventDefault()}>
                         <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                       </IconButton>
                     </InputAdornment>
@@ -134,15 +136,15 @@ const ResetPasswordV2 = ({ mode }: { mode: SystemMode }) => {
             />
             <CustomTextField
               fullWidth
-              label='Confirm Password'
-              placeholder='············'
+              label="Confirm Password"
+              placeholder="············"
               type={isConfirmPasswordShown ? 'text' : 'password'}
               slotProps={{
                 input: {
                   endAdornment: (
-                    <InputAdornment position='end'>
+                    <InputAdornment position="end">
                       <IconButton
-                        edge='end'
+                        edge="end"
                         onClick={handleClickShowConfirmPassword}
                         onMouseDown={e => e.preventDefault()}
                       >
@@ -153,18 +155,18 @@ const ResetPasswordV2 = ({ mode }: { mode: SystemMode }) => {
                 }
               }}
             />
-            <Button fullWidth variant='contained' type='submit'>
+            <Button fullWidth variant="contained" type="submit">
               Set New Password
             </Button>
-            <Typography className='flex justify-center items-center' color='primary.main'>
+            <Typography className="flex justify-center items-center" color="primary.main">
               <Link
                 href={getLocalizedUrl('/pages/auth/login-v2', locale as Locale)}
-                className='flex items-center gap-1.5'
+                className="flex items-center gap-1.5"
               >
                 <DirectionalIcon
-                  ltrIconClass='tabler-chevron-left'
-                  rtlIconClass='tabler-chevron-right'
-                  className='text-xl'
+                  ltrIconClass="tabler-chevron-left"
+                  rtlIconClass="tabler-chevron-right"
+                  className="text-xl"
                 />
                 <span>Back to login</span>
               </Link>

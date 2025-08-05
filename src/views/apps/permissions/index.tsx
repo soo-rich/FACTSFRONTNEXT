@@ -1,11 +1,12 @@
 'use client'
 
 // React Imports
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // MUI Imports
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import type { ButtonProps } from '@mui/material/Button'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
@@ -13,25 +14,24 @@ import TablePagination from '@mui/material/TablePagination'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 import type { TextFieldProps } from '@mui/material/TextField'
-import type { ButtonProps } from '@mui/material/Button'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -50,6 +50,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -86,11 +87,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -132,7 +133,7 @@ const Permissions = ({ permissionsData }: { permissionsData?: PermissionRowType[
     children: 'Add Permission',
     onClick: () => handleAddPermission(),
     className: 'max-sm:is-full',
-    startIcon: <i className='tabler-plus' />
+    startIcon: <i className="tabler-plus" />
   }
 
   // Hooks
@@ -140,28 +141,28 @@ const Permissions = ({ permissionsData }: { permissionsData?: PermissionRowType[
     () => [
       columnHelper.accessor('name', {
         header: 'Name',
-        cell: ({ row }) => <Typography color='text.primary'>{row.original.name}</Typography>
+        cell: ({ row }) => <Typography color="text.primary">{row.original.name}</Typography>
       }),
       columnHelper.accessor('assignedTo', {
         header: 'Assigned To',
         cell: ({ row }) =>
           typeof row.original.assignedTo === 'string' ? (
             <Chip
-              variant='tonal'
+              variant="tonal"
               label={row.original.assignedTo}
               color={colors[row.original.assignedTo]}
-              size='small'
-              className='capitalize'
+              size="small"
+              className="capitalize"
             />
           ) : (
             row.original.assignedTo.map((item, index) => (
               <Chip
                 key={index}
-                variant='tonal'
+                variant="tonal"
                 label={item}
                 color={colors[item]}
-                size='small'
-                className='capitalize mie-4'
+                size="small"
+                className="capitalize mie-4"
               />
             ))
           )
@@ -173,12 +174,12 @@ const Permissions = ({ permissionsData }: { permissionsData?: PermissionRowType[
       columnHelper.accessor('action', {
         header: 'Actions',
         cell: ({ row }) => (
-          <div className='flex items-center'>
+          <div className="flex items-center">
             <IconButton onClick={() => handleEditPermission(row.original.name)}>
-              <i className='tabler-edit text-textSecondary' />
+              <i className="tabler-edit text-textSecondary" />
             </IconButton>
             <IconButton>
-              <i className='tabler-dots-vertical text-textSecondary' />
+              <i className="tabler-dots-vertical text-textSecondary" />
             </IconButton>
           </div>
         ),
@@ -230,26 +231,26 @@ const Permissions = ({ permissionsData }: { permissionsData?: PermissionRowType[
   return (
     <>
       <Card>
-        <CardContent className='flex flex-col gap-4 sm:flex-row items-start sm:items-center justify-between flex-wrap'>
-          <div className='flex items-center gap-2'>
+        <CardContent className="flex flex-col gap-4 sm:flex-row items-start sm:items-center justify-between flex-wrap">
+          <div className="flex items-center gap-2">
             <Typography>Show</Typography>
             <CustomTextField
               select
               value={table.getState().pagination.pageSize}
               onChange={e => table.setPageSize(Number(e.target.value))}
-              className='is-[70px]'
+              className="is-[70px]"
             >
-              <MenuItem value='5'>5</MenuItem>
-              <MenuItem value='7'>7</MenuItem>
-              <MenuItem value='9'>9</MenuItem>
+              <MenuItem value="5">5</MenuItem>
+              <MenuItem value="7">7</MenuItem>
+              <MenuItem value="9">9</MenuItem>
             </CustomTextField>
           </div>
-          <div className='flex flex-wrap gap-4'>
+          <div className="flex flex-wrap gap-4">
             <DebouncedInput
               value={globalFilter ?? ''}
               onChange={value => setGlobalFilter(String(value))}
-              placeholder='Search Permissions'
-              className='max-sm:is-full'
+              placeholder="Search Permissions"
+              className="max-sm:is-full"
             />
             <OpenDialogOnElementClick
               element={Button}
@@ -259,57 +260,57 @@ const Permissions = ({ permissionsData }: { permissionsData?: PermissionRowType[
             />
           </div>
         </CardContent>
-        <div className='overflow-x-auto'>
+        <div className="overflow-x-auto">
           <table className={tableStyles.table}>
             <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            className={classnames({
-                              'flex items-center': header.column.getIsSorted(),
-                              'cursor-pointer select-none': header.column.getCanSort()
-                            })}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {{
-                              asc: <i className='tabler-chevron-up text-xl' />,
-                              desc: <i className='tabler-chevron-down text-xl' />
-                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                          </div>
-                        </>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div
+                          className={classnames({
+                            'flex items-center': header.column.getIsSorted(),
+                            'cursor-pointer select-none': header.column.getCanSort()
+                          })}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {{
+                            asc: <i className="tabler-chevron-up text-xl" />,
+                            desc: <i className="tabler-chevron-down text-xl" />
+                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                        </div>
+                      </>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
             </thead>
             {table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    No data available
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                  No data available
+                </td>
+              </tr>
               </tbody>
             ) : (
               <tbody>
-                {table
-                  .getRowModel()
-                  .rows.slice(0, table.getState().pagination.pageSize)
-                  .map(row => {
-                    return (
-                      <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                        {row.getVisibleCells().map(cell => (
-                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                        ))}
-                      </tr>
-                    )
-                  })}
+              {table
+                .getRowModel()
+                .rows.slice(0, table.getState().pagination.pageSize)
+                .map(row => {
+                  return (
+                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                      {row.getVisibleCells().map(cell => (
+                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                      ))}
+                    </tr>
+                  )
+                })}
               </tbody>
             )}
           </table>

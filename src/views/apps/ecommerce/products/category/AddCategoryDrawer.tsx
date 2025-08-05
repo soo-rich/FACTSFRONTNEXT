@@ -1,6 +1,6 @@
 // React Imports
-import { useState, useRef } from 'react'
 import type { ChangeEvent } from 'react'
+import { useRef, useState } from 'react'
 
 // MUI Imports
 import Button from '@mui/material/Button'
@@ -12,7 +12,7 @@ import Divider from '@mui/material/Divider'
 import InputAdornment from '@mui/material/InputAdornment'
 
 // Third-party Imports
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 
 // Type Imports
 import type { categoryType } from './ProductCategoryTable'
@@ -95,111 +95,111 @@ const AddCategoryDrawer = (props: Props) => {
   return (
     <Drawer
       open={open}
-      anchor='right'
-      variant='temporary'
+      anchor="right"
+      variant="temporary"
       onClose={handleReset}
       ModalProps={{ keepMounted: true }}
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
-      <div className='flex items-center justify-between pli-6 plb-5'>
-        <Typography variant='h5'>Add Category</Typography>
-        <IconButton size='small' onClick={handleReset}>
-          <i className='tabler-x text-textSecondary text-2xl' />
+      <div className="flex items-center justify-between pli-6 plb-5">
+        <Typography variant="h5">Add Category</Typography>
+        <IconButton size="small" onClick={handleReset}>
+          <i className="tabler-x text-textSecondary text-2xl" />
         </IconButton>
       </div>
       <Divider />
-      <div className='p-6'>
-        <form onSubmit={handleSubmit(data => handleFormSubmit(data))} className='flex flex-col gap-5'>
+      <div className="p-6">
+        <form onSubmit={handleSubmit(data => handleFormSubmit(data))} className="flex flex-col gap-5">
           <Controller
-            name='title'
+            name="title"
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
               <CustomTextField
                 {...field}
                 fullWidth
-                label='Title'
-                placeholder='Fashion'
+                label="Title"
+                placeholder="Fashion"
                 {...(errors.title && { error: true, helperText: 'This field is required.' })}
               />
             )}
           />
           <Controller
-            name='description'
+            name="description"
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
               <CustomTextField
                 {...field}
                 fullWidth
-                label='Description'
-                placeholder='Enter a description...'
+                label="Description"
+                placeholder="Enter a description..."
                 {...(errors.description && { error: true, helperText: 'This field is required.' })}
               />
             )}
           />
-          <div className='flex items-end gap-4'>
+          <div className="flex items-end gap-4">
             <CustomTextField
-              label='Attachment'
-              placeholder='No file chosen'
+              label="Attachment"
+              placeholder="No file chosen"
               value={fileName}
-              className='flex-auto'
+              className="flex-auto"
               slotProps={{
                 input: {
                   readOnly: true,
                   endAdornment: fileName ? (
-                    <InputAdornment position='end'>
-                      <IconButton size='small' edge='end' onClick={() => setFileName('')}>
-                        <i className='tabler-x' />
+                    <InputAdornment position="end">
+                      <IconButton size="small" edge="end" onClick={() => setFileName('')}>
+                        <i className="tabler-x" />
                       </IconButton>
                     </InputAdornment>
                   ) : null
                 }
               }}
             />
-            <Button component='label' variant='tonal' htmlFor='contained-button-file' className='min-is-fit'>
+            <Button component="label" variant="tonal" htmlFor="contained-button-file" className="min-is-fit">
               Choose
-              <input hidden id='contained-button-file' type='file' onChange={handleFileUpload} ref={fileInputRef} />
+              <input hidden id="contained-button-file" type="file" onChange={handleFileUpload} ref={fileInputRef} />
             </Button>
           </div>
           <CustomTextField
             select
             fullWidth
-            label='Parent Category'
+            label="Parent Category"
             value={category}
             onChange={e => setCategory(e.target.value)}
           >
-            <MenuItem value='HouseHold'>HouseHold</MenuItem>
-            <MenuItem value='Management'>Management</MenuItem>
-            <MenuItem value='Electronics'>Electronics</MenuItem>
-            <MenuItem value='Office'>Office</MenuItem>
-            <MenuItem value='Accessories'>Accessories</MenuItem>
+            <MenuItem value="HouseHold">HouseHold</MenuItem>
+            <MenuItem value="Management">Management</MenuItem>
+            <MenuItem value="Electronics">Electronics</MenuItem>
+            <MenuItem value="Office">Office</MenuItem>
+            <MenuItem value="Accessories">Accessories</MenuItem>
           </CustomTextField>
           <CustomTextField
             fullWidth
-            label='Comment'
+            label="Comment"
             value={comment}
             onChange={e => setComment(e.target.value)}
             multiline
             rows={4}
-            placeholder='Write a Comment...'
+            placeholder="Write a Comment..."
           />
           <CustomTextField
             select
             fullWidth
-            label='Category Status'
+            label="Category Status"
             value={status}
             onChange={e => setStatus(e.target.value)}
           >
-            <MenuItem value='Published'>Published</MenuItem>
-            <MenuItem value='Inactive'>Inactive</MenuItem>
-            <MenuItem value='Scheduled'>Scheduled</MenuItem>
+            <MenuItem value="Published">Published</MenuItem>
+            <MenuItem value="Inactive">Inactive</MenuItem>
+            <MenuItem value="Scheduled">Scheduled</MenuItem>
           </CustomTextField>
-          <div className='flex items-center gap-4'>
-            <Button variant='contained' type='submit'>
+          <div className="flex items-center gap-4">
+            <Button variant="contained" type="submit">
               Add
             </Button>
-            <Button variant='tonal' color='error' type='reset' onClick={handleReset}>
+            <Button variant="tonal" color="error" type="reset" onClick={handleReset}>
               Discard
             </Button>
           </div>

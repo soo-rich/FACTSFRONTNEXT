@@ -14,7 +14,7 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 
 // Third-party Imports
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 
 // Component Imports
 import ConfirmationDialog from '@components/dialogs/confirmation-dialog'
@@ -40,24 +40,24 @@ const AccountDelete = () => {
 
   return (
     <Card>
-      <CardHeader title='Delete Account' />
+      <CardHeader title="Delete Account" />
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl error={Boolean(errors.checkbox)} className='is-full mbe-6'>
+          <FormControl error={Boolean(errors.checkbox)} className="is-full mbe-6">
             <Controller
-              name='checkbox'
+              name="checkbox"
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
-                <FormControlLabel control={<Checkbox {...field} />} label='I confirm my account deactivation' />
+                <FormControlLabel control={<Checkbox {...field} />} label="I confirm my account deactivation" />
               )}
             />
             {errors.checkbox && <FormHelperText error>Please confirm you want to delete account</FormHelperText>}
           </FormControl>
-          <Button variant='contained' color='error' type='submit' disabled={!checkboxValue}>
+          <Button variant="contained" color="error" type="submit" disabled={!checkboxValue}>
             Deactivate Account
           </Button>
-          <ConfirmationDialog open={open} setOpen={setOpen} type='delete-account' />
+          <ConfirmationDialog open={open} setOpen={setOpen} type="delete-account" />
         </form>
       </CardContent>
     </Card>

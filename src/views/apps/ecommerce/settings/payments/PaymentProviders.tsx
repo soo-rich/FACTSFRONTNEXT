@@ -2,9 +2,9 @@
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
+import type { ButtonProps } from '@mui/material/Button'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import type { ButtonProps } from '@mui/material/Button'
 
 // Component Imports
 import PaymentProvidersDialog from '@components/dialogs/payment-providers'
@@ -19,9 +19,9 @@ const PaymentProviders = () => {
 
   return (
     <Card>
-      <CardHeader title='Payment providers' />
+      <CardHeader title="Payment providers" />
       <CardContent>
-        <Typography className='mbe-5'>
+        <Typography className="mbe-5">
           Providers that enable you to accept payment methods at a rate set by the third-party. An additional fee will
           apply to new orders once you select a plan.
         </Typography>

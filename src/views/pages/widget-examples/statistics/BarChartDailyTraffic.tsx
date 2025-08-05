@@ -92,16 +92,16 @@ const BarChartDailyTraffic = () => {
   return (
     <Card>
       <CardContent>
-        <div className='flex items-start justify-between'>
-          <div className='flex flex-col items-start'>
-            <Typography variant='h4'>2.84k</Typography>
-            <Typography variant='subtitle2' color='text.secondary'>
+        <div className="flex items-start justify-between">
+          <div className="flex flex-col items-start">
+            <Typography variant="h4">2.84k</Typography>
+            <Typography variant="subtitle2" color="text.secondary">
               Avg Daily Traffic
             </Typography>
           </div>
-          <Chip variant='tonal' color='success' label='+15%' size='small' />
+          <Chip variant="tonal" color="success" label="+15%" size="small" />
         </div>
-        <AppReactApexCharts type='bar' height={156} width='100%' series={series} options={options} />
+        <AppReactApexCharts type="bar" height={156} width="100%" series={series} options={options} />
       </CardContent>
     </Card>
   )

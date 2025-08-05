@@ -3,6 +3,7 @@
     border-start-start-radius: 8px;
     border-end-start-radius: 8px;
   }
+
   &:last-child span {
     border-start-end-radius: 8px;
     border-end-end-radius: 8px;

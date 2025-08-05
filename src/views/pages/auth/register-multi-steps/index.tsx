@@ -11,10 +11,10 @@ import { useParams } from 'next/navigation'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { styled, useTheme } from '@mui/material/styles'
 import Stepper from '@mui/material/Stepper'
+import type { StepProps } from '@mui/material/Step'
 import MuiStep from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import Typography from '@mui/material/Typography'
-import type { StepProps } from '@mui/material/Step'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -144,7 +144,7 @@ const RegisterMultiSteps = ({ mode }: { mode: SystemMode }) => {
   }
 
   return (
-    <div className='flex bs-full justify-between items-center'>
+    <div className="flex bs-full justify-between items-center">
       <div
         className={classnames(
           'flex bs-full items-center justify-center is-[23.75rem] lg:is-[28.125rem] relative p-6 max-lg:hidden',
@@ -154,46 +154,46 @@ const RegisterMultiSteps = ({ mode }: { mode: SystemMode }) => {
         )}
       >
         <RegisterIllustration
-          src='/images/illustrations/characters/7.png'
-          alt='character-illustration'
+          src="/images/illustrations/characters/7.png"
+          alt="character-illustration"
           className={classnames({ 'scale-x-[-1]': theme.direction === 'rtl' })}
         />
         {!isSmallScreen && (
           <MaskImg
-            alt='mask'
+            alt="mask"
             src={authBackground}
             className={classnames({ 'scale-x-[-1]': theme.direction === 'rtl' })}
           />
         )}
       </div>
-      <div className='flex flex-1 justify-center items-center bs-full bg-backgroundPaper'>
+      <div className="flex flex-1 justify-center items-center bs-full bg-backgroundPaper">
         <Link
           href={getLocalizedUrl('/', locale as Locale)}
-          className='absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]'
+          className="absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]"
         >
           <Logo />
         </Link>
-        <StepperWrapper className='p-6 sm:p-8 max-is-[46.25rem] mbs-11 sm:mbs-14 lg:mbs-0'>
+        <StepperWrapper className="p-6 sm:p-8 max-is-[46.25rem] mbs-11 sm:mbs-14 lg:mbs-0">
           <Stepper
             activeStep={activeStep}
             connector={
               !isSmallScreen ? (
                 <DirectionalIcon
-                  ltrIconClass='tabler-chevron-right'
-                  rtlIconClass='tabler-chevron-left'
-                  className='text-xl'
+                  ltrIconClass="tabler-chevron-right"
+                  rtlIconClass="tabler-chevron-left"
+                  className="text-xl"
                 />
               ) : null
             }
-            className='mbe-6 md:mbe-12'
+            className="mbe-6 md:mbe-12"
           >
             {steps.map((step, index) => {
               return (
                 <Step key={index}>
                   <StepLabel>
-                    <div className='step-label'>
+                    <div className="step-label">
                       <CustomAvatar
-                        variant='rounded'
+                        variant="rounded"
                         skin={activeStep === index ? 'filled' : 'light'}
                         {...(activeStep >= index && { color: 'primary' })}
                         {...(activeStep === index && { className: 'shadow-primarySm' })}
@@ -202,8 +202,8 @@ const RegisterMultiSteps = ({ mode }: { mode: SystemMode }) => {
                         <i className={classnames(step.icon, 'text-[22px]')} />
                       </CustomAvatar>
                       <div>
-                        <Typography className='step-title'>{step.title}</Typography>
-                        <Typography className='step-subtitle'>{step.subtitle}</Typography>
+                        <Typography className="step-title">{step.title}</Typography>
+                        <Typography className="step-subtitle">{step.subtitle}</Typography>
                       </div>
                     </div>
                   </StepLabel>

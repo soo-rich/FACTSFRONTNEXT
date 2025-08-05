@@ -49,23 +49,24 @@ const StatisticsCard = () => {
   return (
     <Card>
       <CardHeader
-        title='Statistics'
+        title="Statistics"
         action={
-          <Typography variant='subtitle2' color='text.disabled'>
+          <Typography variant="subtitle2" color="text.disabled">
             Updated 1 month ago
           </Typography>
         }
       />
-      <CardContent className='flex justify-between flex-wrap gap-4 md:pbs-10 max-md:pbe-6 max-[1060px]:pbe-[74px] max-[1200px]:pbe-[52px] max-[1320px]:pbe-[74px] max-[1501px]:pbe-[52px]'>
+      <CardContent
+        className="flex justify-between flex-wrap gap-4 md:pbs-10 max-md:pbe-6 max-[1060px]:pbe-[74px] max-[1200px]:pbe-[52px] max-[1320px]:pbe-[74px] max-[1501px]:pbe-[52px]">
         <Grid container spacing={4} sx={{ inlineSize: '100%' }}>
           {data.map((item, index) => (
-            <Grid key={index} size={{ xs: 6, sm: 3 }} className='flex items-center gap-4'>
-              <CustomAvatar color={item.color} variant='rounded' size={40} skin='light'>
+            <Grid key={index} size={{ xs: 6, sm: 3 }} className="flex items-center gap-4">
+              <CustomAvatar color={item.color} variant="rounded" size={40} skin="light">
                 <i className={item.icon}></i>
               </CustomAvatar>
-              <div className='flex flex-col'>
-                <Typography variant='h5'>{item.stats}</Typography>
-                <Typography variant='body2'>{item.title}</Typography>
+              <div className="flex flex-col">
+                <Typography variant="h5">{item.stats}</Typography>
+                <Typography variant="body2">{item.title}</Typography>
               </div>
             </Grid>
           ))}

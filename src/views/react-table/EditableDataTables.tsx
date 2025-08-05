@@ -7,18 +7,19 @@ import { useEffect, useState } from 'react'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 
+import type { Column, ColumnDef, Row, RowData, Table } from '@tanstack/react-table'
+
 // Third-party Imports
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import type { ColumnDef, Row, RowData, Column, Table } from '@tanstack/react-table'
 
 // Type Imports
 import type { DataType } from './data'
 
-// Style Imports
-import styles from '@core/styles/table.module.css'
-
 // Data Imports
 import defaultData from './data'
+
+// Style Imports
+import styles from '@core/styles/table.module.css'
 
 // Column Definitions
 const columnHelper = createColumnHelper<DataType>()
@@ -116,37 +117,37 @@ const EditableDataTables = () => {
 
   return (
     <Card>
-      <CardHeader title='Editable Table' />
-      <div className='overflow-x-auto'>
+      <CardHeader title="Editable Table" />
+      <div className="overflow-x-auto">
         <table className={styles.table}>
           <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id}>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                  </th>
-                ))}
-              </tr>
-            ))}
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id}>
+                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                </th>
+              ))}
+            </tr>
+          ))}
           </thead>
           <tbody>
-            {table
-              .getRowModel()
-              .rows.slice(0, 10)
-              .map(row => {
-                return (
-                  <tr key={row.id}>
-                    {row.getVisibleCells().map(cell => {
-                      return (
-                        <td key={cell.id} className={styles.cellWithInput}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </td>
-                      )
-                    })}
-                  </tr>
-                )
-              })}
+          {table
+            .getRowModel()
+            .rows.slice(0, 10)
+            .map(row => {
+              return (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map(cell => {
+                    return (
+                      <td key={cell.id} className={styles.cellWithInput}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

@@ -1,22 +1,22 @@
 'use client'
 
+import type { ChangeEvent, SyntheticEvent } from 'react'
 // React Imports
 import { useState } from 'react'
-import type { ChangeEvent, SyntheticEvent } from 'react'
 
 // MUI Imports
 import { styled } from '@mui/material/styles'
+import type { AccordionProps } from '@mui/material/Accordion'
 import MuiAccordion from '@mui/material/Accordion'
+import type { AccordionSummaryProps } from '@mui/material/AccordionSummary'
 import MuiAccordionSummary from '@mui/material/AccordionSummary'
+import type { AccordionDetailsProps } from '@mui/material/AccordionDetails'
 import MuiAccordionDetails from '@mui/material/AccordionDetails'
 import Typography from '@mui/material/Typography'
 import Checkbox from '@mui/material/Checkbox'
 import ListItem from '@mui/material/ListItem'
 import List from '@mui/material/List'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import type { AccordionProps } from '@mui/material/Accordion'
-import type { AccordionSummaryProps } from '@mui/material/AccordionSummary'
-import type { AccordionDetailsProps } from '@mui/material/AccordionDetails'
 
 // Type Imports
 import type { CourseContent } from '@/types/apps/academyTypes'
@@ -111,20 +111,21 @@ const Sidebar = ({ content }: { content?: CourseContent[] }) => {
         return (
           <Accordion key={index} expanded={expanded === index} onChange={handleChange(index)}>
             <AccordionSummary
-              id='customized-panel-header-1'
-              expandIcon={<i className='tabler-chevron-right text-textSecondary' />}
+              id="customized-panel-header-1"
+              expandIcon={<i className="tabler-chevron-right text-textSecondary" />}
               aria-controls={'sd'}
             >
               <div>
-                <Typography variant='h5'>{item.title}</Typography>
-                <Typography className='!font-normal !text-textSecondary'>{`${selectedTopics} / ${item.topics.length} | ${parseFloat(totalTime)} min`}</Typography>
+                <Typography variant="h5">{item.title}</Typography>
+                <Typography
+                  className="!font-normal !text-textSecondary">{`${selectedTopics} / ${item.topics.length} | ${parseFloat(totalTime)} min`}</Typography>
               </div>
             </AccordionSummary>
             <AccordionDetails>
-              <List role='list' component='div' className='flex flex-col gap-4 plb-0'>
+              <List role="list" component="div" className="flex flex-col gap-4 plb-0">
                 {item.topics.map((topic, i) => {
                   return (
-                    <ListItem key={i} role='listitem' className='gap-3 p-0'>
+                    <ListItem key={i} role="listitem" className="gap-3 p-0">
                       <ListItemIcon>
                         <Checkbox
                           tabIndex={-1}
@@ -133,8 +134,8 @@ const Sidebar = ({ content }: { content?: CourseContent[] }) => {
                         />
                       </ListItemIcon>
                       <div>
-                        <Typography className='font-medium !text-textPrimary'>{`${i + 1}. ${topic.title}`}</Typography>
-                        <Typography variant='body2'>{topic.time}</Typography>
+                        <Typography className="font-medium !text-textPrimary">{`${i + 1}. ${topic.title}`}</Typography>
+                        <Typography variant="body2">{topic.time}</Typography>
                       </div>
                     </ListItem>
                   )

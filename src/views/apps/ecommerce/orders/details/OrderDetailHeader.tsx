@@ -1,8 +1,8 @@
 // MUI Imports
+import type { ButtonProps } from '@mui/material/Button'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import Typography from '@mui/material/Typography'
-import type { ButtonProps } from '@mui/material/Button'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -44,21 +44,21 @@ const OrderDetailHeader = ({ orderData, order }: { orderData?: OrderType; order:
   })
 
   return (
-    <div className='flex flex-wrap justify-between sm:items-center max-sm:flex-col gap-y-4'>
-      <div className='flex flex-col items-start gap-1'>
-        <div className='flex items-center gap-2'>
-          <Typography variant='h5'>{`Order #${order}`}</Typography>
+    <div className="flex flex-wrap justify-between sm:items-center max-sm:flex-col gap-y-4">
+      <div className="flex flex-col items-start gap-1">
+        <div className="flex items-center gap-2">
+          <Typography variant="h5">{`Order #${order}`}</Typography>
           <Chip
-            variant='tonal'
+            variant="tonal"
             label={orderData?.status}
             color={statusChipColor[orderData?.status || ''].color}
-            size='small'
+            size="small"
           />
           <Chip
-            variant='tonal'
+            variant="tonal"
             label={paymentStatus[orderData?.payment ?? 0].text}
             color={paymentStatus[orderData?.payment ?? 0].color}
-            size='small'
+            size="small"
           />
         </div>
         <Typography>{`${new Date(orderData?.date ?? '').toDateString()}, ${orderData?.time} (ET)`}</Typography>

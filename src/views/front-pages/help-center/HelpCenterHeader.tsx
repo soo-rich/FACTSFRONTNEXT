@@ -37,19 +37,19 @@ const HelpCenterHeader = ({ searchValue, setSearchValue }: Props) => {
           'flex flex-col gap-4 items-center text-center pbs-[150px] lg:pbs-[168px] pbe-[40px] sm:pbe-[100px] pli-5'
         )}
       >
-        <Typography variant='h4' color='primary.main'>
+        <Typography variant="h4" color="primary.main">
           Hello, how can we help?
         </Typography>
         <CustomTextFieldStyled
-          className='is-full sm:max-is-[55%] md:max-is-[465px]'
-          placeholder='Ask a question...'
+          className="is-full sm:max-is-[55%] md:max-is-[465px]"
+          placeholder="Ask a question..."
           value={searchValue}
           onChange={e => setSearchValue(e.target.value)}
           slotProps={{
             input: {
               startAdornment: (
-                <InputAdornment position='start'>
-                  <i className='tabler-search' />
+                <InputAdornment position="start">
+                  <i className="tabler-search" />
                 </InputAdornment>
               )
             }

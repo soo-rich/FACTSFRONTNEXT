@@ -13,12 +13,11 @@ import type { ApexOptions } from 'apexcharts'
 
 // Components Imports
 import OptionMenu from '@core/components/option-menu'
+// Styles Imports
+import './styles.css'
 
 // Styled Component Imports
 const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexCharts'))
-
-// Styles Imports
-import './styles.css'
 
 // Vars
 const colors = {
@@ -141,13 +140,13 @@ const CarrierPerformance = () => {
 
   return (
     <Card>
-      <CardHeader title='Carrier Performance' action={<OptionMenu options={['View More', 'Delete']} />} />
+      <CardHeader title="Carrier Performance" action={<OptionMenu options={['View More', 'Delete']} />} />
       <CardContent>
         <AppReactApexCharts
-          id='carrier-performance'
-          type='bar'
+          id="carrier-performance"
+          type="bar"
           height={360}
-          width='100%'
+          width="100%"
           series={series}
           options={options}
         />

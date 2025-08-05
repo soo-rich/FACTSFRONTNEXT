@@ -37,12 +37,12 @@ const AddActions = () => {
     <Grid container spacing={6}>
       <Grid size={{ xs: 12 }}>
         <Card>
-          <CardContent className='flex flex-col gap-4'>
+          <CardContent className="flex flex-col gap-4">
             <Button
               fullWidth
-              variant='contained'
-              className='capitalize'
-              startIcon={<i className='tabler-send' />}
+              variant="contained"
+              className="capitalize"
+              startIcon={<i className="tabler-send" />}
               onClick={() => setSendDrawerOpen(true)}
             >
               Send Invoice
@@ -50,14 +50,14 @@ const AddActions = () => {
             <Button
               fullWidth
               component={Link}
-              color='secondary'
-              variant='tonal'
-              className='capitalize'
+              color="secondary"
+              variant="tonal"
+              className="capitalize"
               href={getLocalizedUrl('/apps/invoice/preview/4987', locale as Locale)}
             >
               Preview
             </Button>
-            <Button fullWidth color='secondary' variant='tonal' className='capitalize'>
+            <Button fullWidth color="secondary" variant="tonal" className="capitalize">
               Save
             </Button>
           </CardContent>
@@ -66,30 +66,30 @@ const AddActions = () => {
       </Grid>
 
       <Grid size={{ xs: 12 }}>
-        <CustomTextField select fullWidth defaultValue='Internet Banking' label='Accept payments via'>
-          <MenuItem value='Internet Banking'>Internet Banking</MenuItem>
-          <MenuItem value='Debit Card'>Debit Card</MenuItem>
-          <MenuItem value='Credit Card'>Credit Card</MenuItem>
-          <MenuItem value='Paypal'>Paypal</MenuItem>
-          <MenuItem value='UPI Transfer'>UPI Transfer</MenuItem>
+        <CustomTextField select fullWidth defaultValue="Internet Banking" label="Accept payments via">
+          <MenuItem value="Internet Banking">Internet Banking</MenuItem>
+          <MenuItem value="Debit Card">Debit Card</MenuItem>
+          <MenuItem value="Credit Card">Credit Card</MenuItem>
+          <MenuItem value="Paypal">Paypal</MenuItem>
+          <MenuItem value="UPI Transfer">UPI Transfer</MenuItem>
         </CustomTextField>
-        <div className='flex items-center justify-between mbs-3'>
-          <InputLabel htmlFor='invoice-edit-payment-terms' className='cursor-pointer'>
+        <div className="flex items-center justify-between mbs-3">
+          <InputLabel htmlFor="invoice-edit-payment-terms" className="cursor-pointer">
             Payment Terms
           </InputLabel>
-          <Switch defaultChecked id='invoice-edit-payment-terms' />
+          <Switch defaultChecked id="invoice-edit-payment-terms" />
         </div>
-        <div className='flex items-center justify-between'>
-          <InputLabel htmlFor='invoice-edit-client-notes' className='cursor-pointer'>
+        <div className="flex items-center justify-between">
+          <InputLabel htmlFor="invoice-edit-client-notes" className="cursor-pointer">
             Client Notes
           </InputLabel>
-          <Switch id='invoice-edit-client-notes' />
+          <Switch id="invoice-edit-client-notes" />
         </div>
-        <div className='flex items-center justify-between'>
-          <InputLabel htmlFor='invoice-edit-payment-stub' className='cursor-pointer'>
+        <div className="flex items-center justify-between">
+          <InputLabel htmlFor="invoice-edit-payment-stub" className="cursor-pointer">
             Payment Stub
           </InputLabel>
-          <Switch id='invoice-edit-payment-stub' />
+          <Switch id="invoice-edit-payment-stub" />
         </div>
       </Grid>
     </Grid>

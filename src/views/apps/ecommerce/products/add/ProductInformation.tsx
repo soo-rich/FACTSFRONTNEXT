@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography'
 
 // Third-party Imports
 import classnames from 'classnames'
-import { useEditor, EditorContent } from '@tiptap/react'
+import { EditorContent, useEditor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { Underline } from '@tiptap/extension-underline'
 import { Placeholder } from '@tiptap/extension-placeholder'
@@ -30,43 +30,43 @@ const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
   }
 
   return (
-    <div className='flex flex-wrap gap-x-3 gap-y-1 pbs-6 pbe-4 pli-6'>
+    <div className="flex flex-wrap gap-x-3 gap-y-1 pbs-6 pbe-4 pli-6">
       <CustomIconButton
         {...(editor.isActive('bold') && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().toggleBold().run()}
       >
         <i className={classnames('tabler-bold', { 'text-textSecondary': !editor.isActive('bold') })} />
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive('underline') && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
       >
         <i className={classnames('tabler-underline', { 'text-textSecondary': !editor.isActive('underline') })} />
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive('italic') && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().toggleItalic().run()}
       >
         <i className={classnames('tabler-italic', { 'text-textSecondary': !editor.isActive('italic') })} />
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive('strike') && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().toggleStrike().run()}
       >
         <i className={classnames('tabler-strikethrough', { 'text-textSecondary': !editor.isActive('strike') })} />
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive({ textAlign: 'left' }) && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().setTextAlign('left').run()}
       >
         <i
@@ -75,8 +75,8 @@ const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive({ textAlign: 'center' }) && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().setTextAlign('center').run()}
       >
         <i
@@ -87,8 +87,8 @@ const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive({ textAlign: 'right' }) && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().setTextAlign('right').run()}
       >
         <i
@@ -99,8 +99,8 @@ const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive({ textAlign: 'justify' }) && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().setTextAlign('justify').run()}
       >
         <i
@@ -135,25 +135,25 @@ const ProductInformation = () => {
 
   return (
     <Card>
-      <CardHeader title='Product Information' />
+      <CardHeader title="Product Information" />
       <CardContent>
-        <Grid container spacing={6} className='mbe-6'>
+        <Grid container spacing={6} className="mbe-6">
           <Grid size={{ xs: 12 }}>
-            <CustomTextField fullWidth label='Product Name' placeholder='iPhone 14' />
+            <CustomTextField fullWidth label="Product Name" placeholder="iPhone 14" />
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <CustomTextField fullWidth label='SKU' placeholder='FXSK123U' />
+            <CustomTextField fullWidth label="SKU" placeholder="FXSK123U" />
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <CustomTextField fullWidth label='Barcode' placeholder='0123-4567' />
+            <CustomTextField fullWidth label="Barcode" placeholder="0123-4567" />
           </Grid>
         </Grid>
-        <Typography className='mbe-1'>Description (Optional)</Typography>
-        <Card className='p-0 border shadow-none'>
-          <CardContent className='p-0'>
+        <Typography className="mbe-1">Description (Optional)</Typography>
+        <Card className="p-0 border shadow-none">
+          <CardContent className="p-0">
             <EditorToolbar editor={editor} />
-            <Divider className='mli-6' />
-            <EditorContent editor={editor} className='bs-[135px] overflow-y-auto flex ' />
+            <Divider className="mli-6" />
+            <EditorContent editor={editor} className="bs-[135px] overflow-y-auto flex " />
           </CardContent>
         </Card>
       </CardContent>

@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -13,19 +13,19 @@ import Typography from '@mui/material/Typography'
 // Third-party Imports
 import classnames from 'classnames'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 
 // Component Imports
 import Link from '@components/Link'
@@ -127,13 +127,13 @@ const OrderTable = () => {
       columnHelper.accessor('productName', {
         header: 'Product',
         cell: ({ row }) => (
-          <div className='flex items-center gap-3'>
-            <img src={row.original.productImage} alt={row.original.productName} height={34} className='rounded' />
-            <div className='flex flex-col items-start'>
-              <Typography color='text.primary' className='font-medium'>
+          <div className="flex items-center gap-3">
+            <img src={row.original.productImage} alt={row.original.productName} height={34} className="rounded" />
+            <div className="flex flex-col items-start">
+              <Typography color="text.primary" className="font-medium">
                 {row.original.productName}
               </Typography>
-              <Typography variant='body2'>{row.original.brand}</Typography>
+              <Typography variant="body2">{row.original.brand}</Typography>
             </div>
           </div>
         )
@@ -185,57 +185,57 @@ const OrderTable = () => {
   })
 
   return (
-    <div className='overflow-x-auto'>
+    <div className="overflow-x-auto">
       <table className={tableStyles.table}>
         <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th key={header.id}>
-                  {header.isPlaceholder ? null : (
-                    <>
-                      <div
-                        className={classnames({
-                          'flex items-center': header.column.getIsSorted(),
-                          'cursor-pointer select-none': header.column.getCanSort()
-                        })}
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                        {{
-                          asc: <i className='tabler-chevron-up text-xl' />,
-                          desc: <i className='tabler-chevron-down text-xl' />
-                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                      </div>
-                    </>
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
+        {table.getHeaderGroups().map(headerGroup => (
+          <tr key={headerGroup.id}>
+            {headerGroup.headers.map(header => (
+              <th key={header.id}>
+                {header.isPlaceholder ? null : (
+                  <>
+                    <div
+                      className={classnames({
+                        'flex items-center': header.column.getIsSorted(),
+                        'cursor-pointer select-none': header.column.getCanSort()
+                      })}
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {{
+                        asc: <i className="tabler-chevron-up text-xl" />,
+                        desc: <i className="tabler-chevron-down text-xl" />
+                      }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                    </div>
+                  </>
+                )}
+              </th>
+            ))}
+          </tr>
+        ))}
         </thead>
         {table.getFilteredRowModel().rows.length === 0 ? (
           <tbody>
-            <tr>
-              <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                No data available
-              </td>
-            </tr>
+          <tr>
+            <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+              No data available
+            </td>
+          </tr>
           </tbody>
         ) : (
-          <tbody className='border-be'>
-            {table
-              .getRowModel()
-              .rows.slice(0, table.getState().pagination.pageSize)
-              .map(row => {
-                return (
-                  <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                    {row.getVisibleCells().map(cell => (
-                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                    ))}
-                  </tr>
-                )
-              })}
+          <tbody className="border-be">
+          {table
+            .getRowModel()
+            .rows.slice(0, table.getState().pagination.pageSize)
+            .map(row => {
+              return (
+                <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                  {row.getVisibleCells().map(cell => (
+                    <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                  ))}
+                </tr>
+              )
+            })}
           </tbody>
         )}
       </table>
@@ -247,45 +247,45 @@ const OrderDetailsCard = () => {
   return (
     <Card>
       <CardHeader
-        title='Order Details'
+        title="Order Details"
         action={
-          <Typography component={Link} color='primary.main' className='font-medium'>
+          <Typography component={Link} color="primary.main" className="font-medium">
             Edit
           </Typography>
         }
       />
       <OrderTable />
-      <CardContent className='flex justify-end'>
+      <CardContent className="flex justify-end">
         <div>
-          <div className='flex items-center gap-12'>
-            <Typography color='text.primary' className='min-is-[100px]'>
+          <div className="flex items-center gap-12">
+            <Typography color="text.primary" className="min-is-[100px]">
               Subtotal:
             </Typography>
-            <Typography color='text.primary' className='font-medium'>
+            <Typography color="text.primary" className="font-medium">
               $2,093
             </Typography>
           </div>
-          <div className='flex items-center gap-12'>
-            <Typography color='text.primary' className='min-is-[100px]'>
+          <div className="flex items-center gap-12">
+            <Typography color="text.primary" className="min-is-[100px]">
               Shipping Fee:
             </Typography>
-            <Typography color='text.primary' className='font-medium'>
+            <Typography color="text.primary" className="font-medium">
               $2
             </Typography>
           </div>
-          <div className='flex items-center gap-12'>
-            <Typography color='text.primary' className='min-is-[100px]'>
+          <div className="flex items-center gap-12">
+            <Typography color="text.primary" className="min-is-[100px]">
               Tax:
             </Typography>
-            <Typography color='text.primary' className='font-medium'>
+            <Typography color="text.primary" className="font-medium">
               $28
             </Typography>
           </div>
-          <div className='flex items-center gap-12'>
-            <Typography color='text.primary' className='font-medium min-is-[100px]'>
+          <div className="flex items-center gap-12">
+            <Typography color="text.primary" className="font-medium min-is-[100px]">
               Total:
             </Typography>
-            <Typography color='text.primary' className='font-medium'>
+            <Typography color="text.primary" className="font-medium">
               $2113
             </Typography>
           </div>

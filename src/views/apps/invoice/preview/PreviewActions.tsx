@@ -31,29 +31,29 @@ const PreviewActions = ({ id, onButtonClick }: { id: string; onButtonClick: () =
   return (
     <>
       <Card>
-        <CardContent className='flex flex-col gap-4'>
+        <CardContent className="flex flex-col gap-4">
           <Button
             fullWidth
-            variant='contained'
-            className='capitalize'
-            startIcon={<i className='tabler-send' />}
+            variant="contained"
+            className="capitalize"
+            startIcon={<i className="tabler-send" />}
             onClick={() => setSendDrawerOpen(true)}
           >
             Send Invoice
           </Button>
-          <Button fullWidth color='secondary' variant='tonal' className='capitalize'>
+          <Button fullWidth color="secondary" variant="tonal" className="capitalize">
             Download
           </Button>
-          <div className='flex items-center gap-4'>
-            <Button fullWidth color='secondary' variant='tonal' className='capitalize' onClick={onButtonClick}>
+          <div className="flex items-center gap-4">
+            <Button fullWidth color="secondary" variant="tonal" className="capitalize" onClick={onButtonClick}>
               Print
             </Button>
             <Button
               fullWidth
               component={Link}
-              color='secondary'
-              variant='tonal'
-              className='capitalize'
+              color="secondary"
+              variant="tonal"
+              className="capitalize"
               href={getLocalizedUrl(`/apps/invoice/edit/${id}`, locale as Locale)}
             >
               Edit
@@ -61,11 +61,11 @@ const PreviewActions = ({ id, onButtonClick }: { id: string; onButtonClick: () =
           </div>
           <Button
             fullWidth
-            color='success'
-            variant='contained'
-            className='capitalize'
+            color="success"
+            variant="contained"
+            className="capitalize"
             onClick={() => setPaymentDrawerOpen(true)}
-            startIcon={<i className='tabler-currency-dollar' />}
+            startIcon={<i className="tabler-currency-dollar" />}
           >
             Add Payment
           </Button>

@@ -117,7 +117,7 @@ const ApexColumnChart = () => {
   return (
     <Card>
       <CardHeader
-        title='Data Science'
+        title="Data Science"
         sx={{
           flexDirection: ['column', 'row'],
           alignItems: ['flex-start', 'center'],
@@ -126,7 +126,7 @@ const ApexColumnChart = () => {
         }}
       />
       <CardContent>
-        <AppReactApexCharts type='bar' width='100%' height={400} options={options} series={series} />
+        <AppReactApexCharts type="bar" width="100%" height={400} options={options} series={series} />
       </CardContent>
     </Card>
   )

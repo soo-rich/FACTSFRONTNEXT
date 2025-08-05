@@ -24,9 +24,10 @@ const ChangePassword = () => {
 
   return (
     <Card>
-      <CardHeader title='Change Password' />
-      <CardContent className='flex flex-col gap-4'>
-        <Alert icon={false} severity='warning' onClose={() => {}}>
+      <CardHeader title="Change Password" />
+      <CardContent className="flex flex-col gap-4">
+        <Alert icon={false} severity="warning" onClose={() => {
+        }}>
           <AlertTitle>Ensure that these requirements are met</AlertTitle>
           Minimum 8 characters long, uppercase & symbol
         </Alert>
@@ -37,15 +38,15 @@ const ChangePassword = () => {
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <CustomTextField
                     fullWidth
-                    label='Password'
+                    label="Password"
                     type={isPasswordShown ? 'text' : 'password'}
-                    placeholder='············'
+                    placeholder="············"
                     slotProps={{
                       input: {
                         endAdornment: (
-                          <InputAdornment position='end'>
+                          <InputAdornment position="end">
                             <IconButton
-                              edge='end'
+                              edge="end"
                               onClick={() => setIsPasswordShown(!isPasswordShown)}
                               onMouseDown={e => e.preventDefault()}
                             >
@@ -60,15 +61,15 @@ const ChangePassword = () => {
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <CustomTextField
                     fullWidth
-                    label='Confirm Password'
+                    label="Confirm Password"
                     type={isConfirmPasswordShown ? 'text' : 'password'}
-                    placeholder='············'
+                    placeholder="············"
                     slotProps={{
                       input: {
                         endAdornment: (
-                          <InputAdornment position='end'>
+                          <InputAdornment position="end">
                             <IconButton
-                              edge='end'
+                              edge="end"
                               onClick={() => setIsConfirmPasswordShown(!isConfirmPasswordShown)}
                               onMouseDown={e => e.preventDefault()}
                             >
@@ -83,7 +84,7 @@ const ChangePassword = () => {
               </Grid>
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <Button variant='contained'>Change Password</Button>
+              <Button variant="contained">Change Password</Button>
             </Grid>
           </Grid>
         </form>

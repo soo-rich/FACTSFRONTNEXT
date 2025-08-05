@@ -18,9 +18,9 @@ const CardActionCollapsible = () => {
   return (
     <Card>
       <CardHeader
-        title='Collapsible'
+        title="Collapsible"
         action={
-          <IconButton size='small' aria-label='collapse' onClick={() => setCollapse(!collapse)}>
+          <IconButton size="small" aria-label="collapse" onClick={() => setCollapse(!collapse)}>
             <i className={collapse ? 'tabler-chevron-down' : 'tabler-chevron-up'} />
           </IconButton>
         }
@@ -28,7 +28,7 @@ const CardActionCollapsible = () => {
       <Collapse in={!collapse}>
         <CardContent>
           <Typography>
-            Click on <i className='tabler-chevron-up text-xl align-sub' /> icon to see it in action
+            Click on <i className="tabler-chevron-up text-xl align-sub" /> icon to see it in action
           </Typography>
         </CardContent>
       </Collapse>

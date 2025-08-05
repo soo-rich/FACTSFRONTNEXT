@@ -117,32 +117,32 @@ const ProjectStatus = () => {
 
   return (
     <Card>
-      <CardHeader title='Project Status' action={<OptionMenu options={['Share', 'Refresh', 'Update']} />} />
-      <CardContent className='flex flex-col gap-6'>
-        <div className='flex items-center gap-4'>
-          <CustomAvatar skin='light' variant='rounded' color='warning'>
-            <i className='tabler-currency-dollar' />
+      <CardHeader title="Project Status" action={<OptionMenu options={['Share', 'Refresh', 'Update']} />} />
+      <CardContent className="flex flex-col gap-6">
+        <div className="flex items-center gap-4">
+          <CustomAvatar skin="light" variant="rounded" color="warning">
+            <i className="tabler-currency-dollar" />
           </CustomAvatar>
-          <div className='flex justify-between items-center is-full'>
-            <div className='flex flex-col'>
-              <Typography className='font-medium' color='text.primary'>
+          <div className="flex justify-between items-center is-full">
+            <div className="flex flex-col">
+              <Typography className="font-medium" color="text.primary">
                 $4,3742
               </Typography>
-              <Typography variant='body2'>Your Earnings</Typography>
+              <Typography variant="body2">Your Earnings</Typography>
             </div>
-            <Typography className='font-medium' color='success.main'>
+            <Typography className="font-medium" color="success.main">
               +10.2%
             </Typography>
           </div>
         </div>
-        <AppReactApexCharts type='area' height={198} width='100%' series={series} options={options} />
-        <div className='flex flex-col gap-4'>
+        <AppReactApexCharts type="area" height={198} width="100%" series={series} options={options} />
+        <div className="flex flex-col gap-4">
           {data.map((item: DataType, index: number) => (
-            <div key={index} className='flex items-center justify-between gap-4'>
-              <Typography className='font-medium' color='text.primary'>
+            <div key={index} className="flex items-center justify-between gap-4">
+              <Typography className="font-medium" color="text.primary">
                 {item.title}
               </Typography>
-              <div className='flex items-center gap-4'>
+              <div className="flex items-center gap-4">
                 <Typography>{item.amount}</Typography>
                 <Typography color={`${item.trend === 'negative' ? 'error' : 'success'}.main`}>
                   {`${item.trend === 'negative' ? '-' : '+'}${item.trendDiff}`}

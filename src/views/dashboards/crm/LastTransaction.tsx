@@ -12,7 +12,7 @@ import { useColorScheme } from '@mui/material/styles'
 import classnames from 'classnames'
 
 // Types Imports
-import type { ThemeColor, SystemMode } from '@core/types'
+import type { SystemMode, ThemeColor } from '@core/types'
 
 // Components Imports
 import OptionMenu from '@core/components/option-menu'
@@ -98,62 +98,62 @@ const LastTransaction = ({ serverMode }: { serverMode: SystemMode }) => {
   return (
     <Card>
       <CardHeader
-        title='Last Transaction'
+        title="Last Transaction"
         action={<OptionMenu options={['Show all entries', 'Refresh', 'Download']} />}
       />
-      <div className='overflow-x-auto'>
+      <div className="overflow-x-auto">
         <table className={tableStyles.table}>
-          <thead className='uppercase'>
-            <tr className='border-be'>
-              <th className='leading-6 plb-4 pis-6 pli-2'>Card</th>
-              <th className='leading-6 plb-4 pli-2'>Date</th>
-              <th className='leading-6 plb-4 pli-2'>Status</th>
-              <th className='leading-6 plb-4 pie-6 pli-2 text-right'>Trend</th>
-            </tr>
+          <thead className="uppercase">
+          <tr className="border-be">
+            <th className="leading-6 plb-4 pis-6 pli-2">Card</th>
+            <th className="leading-6 plb-4 pli-2">Date</th>
+            <th className="leading-6 plb-4 pli-2">Status</th>
+            <th className="leading-6 plb-4 pie-6 pli-2 text-right">Trend</th>
+          </tr>
           </thead>
           <tbody>
-            {data.map((row, index) => (
-              <tr key={index} className='border-0'>
-                <td className='pis-6 pli-2 plb-3'>
-                  <div className='flex items-center gap-4'>
-                    <Avatar
-                      variant='rounded'
-                      className={classnames('is-[50px] bs-[30px]', {
-                        'bg-white': _mode === 'dark',
-                        'bg-actionHover': _mode === 'light'
-                      })}
-                    >
-                      <img width={30} alt={row.imgName} src={`/images/logos/${row.imgName}.png`} />
-                    </Avatar>
-                    <div className='flex flex-col'>
-                      <Typography color='text.primary'>{row.cardNumber}</Typography>
-                      <Typography variant='body2' color='text.disabled'>
-                        {row.cardType}
-                      </Typography>
-                    </div>
-                  </div>
-                </td>
-                <td className='pli-2 plb-3'>
-                  <div className='flex flex-col'>
-                    <Typography color='text.primary'>Sent</Typography>
-                    <Typography variant='body2' color='text.disabled'>
-                      {row.date}
+          {data.map((row, index) => (
+            <tr key={index} className="border-0">
+              <td className="pis-6 pli-2 plb-3">
+                <div className="flex items-center gap-4">
+                  <Avatar
+                    variant="rounded"
+                    className={classnames('is-[50px] bs-[30px]', {
+                      'bg-white': _mode === 'dark',
+                      'bg-actionHover': _mode === 'light'
+                    })}
+                  >
+                    <img width={30} alt={row.imgName} src={`/images/logos/${row.imgName}.png`} />
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <Typography color="text.primary">{row.cardNumber}</Typography>
+                    <Typography variant="body2" color="text.disabled">
+                      {row.cardType}
                     </Typography>
                   </div>
-                </td>
-                <td className='pli-2 plb-3'>
-                  <Chip
-                    variant='tonal'
-                    size='small'
-                    label={statusObj[row.status].text}
-                    color={statusObj[row.status].color}
-                  />
-                </td>
-                <td className='pli-2 plb-3 pie-6 text-right'>
-                  <Typography color='text.primary'>{row.trend}</Typography>
-                </td>
-              </tr>
-            ))}
+                </div>
+              </td>
+              <td className="pli-2 plb-3">
+                <div className="flex flex-col">
+                  <Typography color="text.primary">Sent</Typography>
+                  <Typography variant="body2" color="text.disabled">
+                    {row.date}
+                  </Typography>
+                </div>
+              </td>
+              <td className="pli-2 plb-3">
+                <Chip
+                  variant="tonal"
+                  size="small"
+                  label={statusObj[row.status].text}
+                  color={statusObj[row.status].color}
+                />
+              </td>
+              <td className="pli-2 plb-3 pie-6 text-right">
+                <Typography color="text.primary">{row.trend}</Typography>
+              </td>
+            </tr>
+          ))}
           </tbody>
         </table>
       </div>

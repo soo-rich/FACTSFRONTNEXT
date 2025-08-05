@@ -9,13 +9,13 @@ import Chip from '@mui/material/Chip'
 import Grid from '@mui/material/Grid2'
 import Radio from '@mui/material/Radio'
 import Switch from '@mui/material/Switch'
+import type { ButtonProps } from '@mui/material/Button'
 import Button from '@mui/material/Button'
 import RadioGroup from '@mui/material/RadioGroup'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import type { ButtonProps } from '@mui/material/Button'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -89,7 +89,7 @@ const PaymentMethod = () => {
 
   return (
     <Card>
-      <CardHeader title='Payment Method' />
+      <CardHeader title="Payment Method" />
       <CardContent>
         <Grid container spacing={6}>
           <Grid size={{ xs: 12, md: 6 }}>
@@ -97,13 +97,13 @@ const PaymentMethod = () => {
               <Grid size={{ xs: 12 }}>
                 <RadioGroup
                   row
-                  name='payment-method-radio'
+                  name="payment-method-radio"
                   value={paymentMethod}
                   onChange={e => setPaymentMethod(e.target.value as 'credit' | 'cod')}
-                  className='flex gap-4'
+                  className="flex gap-4"
                 >
-                  <FormControlLabel value='credit' control={<Radio />} label='Credit/Debit/ATM Card' />
-                  <FormControlLabel value='cash' control={<Radio />} label='COD/Cheque' />
+                  <FormControlLabel value="credit" control={<Radio />} label="Credit/Debit/ATM Card" />
+                  <FormControlLabel value="cash" control={<Radio />} label="COD/Cheque" />
                 </RadioGroup>
               </Grid>
               {paymentMethod === 'credit' ? (
@@ -111,10 +111,10 @@ const PaymentMethod = () => {
                   <Grid size={{ xs: 12 }}>
                     <CustomTextField
                       fullWidth
-                      name='number'
-                      autoComplete='off'
-                      label='Card Number'
-                      placeholder='0000 0000 0000 0000'
+                      name="number"
+                      autoComplete="off"
+                      label="Card Number"
+                      placeholder="0000 0000 0000 0000"
                       value={cardData.cardNumber}
                       onChange={e => setCardData({ ...cardData, cardNumber: e.target.value })}
                     />
@@ -122,10 +122,10 @@ const PaymentMethod = () => {
                   <Grid size={{ xs: 12, md: 6 }}>
                     <CustomTextField
                       fullWidth
-                      name='name'
-                      label='Name'
-                      autoComplete='off'
-                      placeholder='John Doe'
+                      name="name"
+                      label="Name"
+                      autoComplete="off"
+                      placeholder="John Doe"
                       value={cardData.name}
                       onChange={e => setCardData({ ...cardData, name: e.target.value })}
                     />
@@ -133,10 +133,10 @@ const PaymentMethod = () => {
                   <Grid size={{ xs: 6, md: 3 }}>
                     <CustomTextField
                       fullWidth
-                      name='expiry'
-                      autoComplete='off'
-                      label='Expiry Date'
-                      placeholder='MM/YY'
+                      name="expiry"
+                      autoComplete="off"
+                      label="Expiry Date"
+                      placeholder="MM/YY"
                       value={cardData.expiryDate}
                       onChange={e => setCardData({ ...cardData, expiryDate: e.target.value })}
                     />
@@ -144,16 +144,16 @@ const PaymentMethod = () => {
                   <Grid size={{ xs: 6, md: 3 }}>
                     <CustomTextField
                       fullWidth
-                      name='cvv'
-                      label='CVV Code'
-                      autoComplete='off'
-                      placeholder='654'
+                      name="cvv"
+                      label="CVV Code"
+                      autoComplete="off"
+                      placeholder="654"
                       value={cardData.cardCvv}
                       onChange={e => setCardData({ ...cardData, cardCvv: e.target.value })}
                     />
                   </Grid>
                   <Grid size={{ xs: 12 }}>
-                    <FormControlLabel control={<Switch defaultChecked />} label='Save Card for future billing?' />
+                    <FormControlLabel control={<Switch defaultChecked />} label="Save Card for future billing?" />
                   </Grid>
                 </>
               ) : (
@@ -167,51 +167,51 @@ const PaymentMethod = () => {
                   </Typography>
                 </Grid>
               )}
-              <Grid size={{ xs: 12 }} className='flex gap-4 flex-wrap'>
-                <Button type='submit' variant='contained'>
+              <Grid size={{ xs: 12 }} className="flex gap-4 flex-wrap">
+                <Button type="submit" variant="contained">
                   Save Changes
                 </Button>
-                <Button type='reset' variant='tonal' color='secondary' onClick={handleReset}>
+                <Button type="reset" variant="tonal" color="secondary" onClick={handleReset}>
                   Cancel
                 </Button>
               </Grid>
             </Grid>
           </Grid>
 
-          <Grid size={{ xs: 12, md: 6 }} className='flex flex-col gap-6'>
-            <Typography color='text.primary' className='font-medium'>
+          <Grid size={{ xs: 12, md: 6 }} className="flex flex-col gap-6">
+            <Typography color="text.primary" className="font-medium">
               My Cards
             </Typography>
             {data.map((item: DataType, index: number) => (
               <div
                 key={index}
-                className='flex flex-col rounded bg-actionHover sm:flex-row items-start sm:justify-between max-sm:gap-4 p-6'
+                className="flex flex-col rounded bg-actionHover sm:flex-row items-start sm:justify-between max-sm:gap-4 p-6"
               >
-                <div className='flex flex-col items-start gap-2'>
+                <div className="flex flex-col items-start gap-2">
                   <img src={item.imgSrc} alt={item.imgAlt} />
-                  <div className='flex items-center gap-4'>
-                    <Typography className='text-textPrimary font-medium'>{item.name}</Typography>
+                  <div className="flex items-center gap-4">
+                    <Typography className="text-textPrimary font-medium">{item.name}</Typography>
                     {item.cardStatus ? (
-                      <Chip color={item.badgeColor} variant='tonal' label={item.cardStatus} size='small' />
+                      <Chip color={item.badgeColor} variant="tonal" label={item.cardStatus} size="small" />
                     ) : null}
                   </div>
                   <Typography>
                     {item.cardNumber && item.cardNumber.slice(0, -4).replace(/[0-9]/g, '*') + item.cardNumber.slice(-4)}
                   </Typography>
                 </div>
-                <div className='flex flex-col sm:items-end gap-4'>
-                  <div className='flex gap-4'>
+                <div className="flex flex-col sm:items-end gap-4">
+                  <div className="flex gap-4">
                     <OpenDialogOnElementClick
                       element={Button}
                       elementProps={buttonProps(index)}
                       dialog={BillingCard}
                       dialogProps={{ data: data[creditCard] }}
                     />
-                    <Button variant='tonal' color='error' size='small'>
+                    <Button variant="tonal" color="error" size="small">
                       Delete
                     </Button>
                   </div>
-                  <Typography variant='body2'>Card expires at {item.expiryDate}</Typography>
+                  <Typography variant="body2">Card expires at {item.expiryDate}</Typography>
                 </div>
               </div>
             ))}

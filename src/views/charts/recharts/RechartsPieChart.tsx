@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 
 // Component Imports
-import { Tooltip, PieChart, Pie, Cell, ResponsiveContainer } from '@/libs/Recharts'
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from '@/libs/Recharts'
 
 // Styled Component Imports
 const AppRecharts = dynamic(() => import('@/libs/styles/AppRecharts'))
@@ -45,7 +45,7 @@ const renderCustomizedLabel = (props: LabelProp) => {
   const y = cy + radius * Math.sin(-midAngle * RADIAN)
 
   return (
-    <text x={x} y={y} fill='#fff' textAnchor='middle' dominantBaseline='central' className='max-[400px]:text-xs'>
+    <text x={x} y={y} fill="#fff" textAnchor="middle" dominantBaseline="central" className="max-[400px]:text-xs">
       {`${(percent * 100).toFixed(0)}%`}
     </text>
   )
@@ -54,19 +54,19 @@ const renderCustomizedLabel = (props: LabelProp) => {
 const RechartsPieChart = () => {
   return (
     <Card>
-      <CardHeader title='Expense Ratio' subheader='Spending on various categories' />
+      <CardHeader title="Expense Ratio" subheader="Spending on various categories" />
       <CardContent>
         <AppRecharts>
-          <div className='bs-[350px]'>
+          <div className="bs-[350px]">
             <ResponsiveContainer>
               <PieChart height={350} style={{ direction: 'ltr' }}>
                 <Pie
                   data={data}
                   innerRadius={80}
-                  dataKey='value'
+                  dataKey="value"
                   label={renderCustomizedLabel}
                   labelLine={false}
-                  stroke='none'
+                  stroke="none"
                 >
                   {data.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
@@ -77,22 +77,22 @@ const RechartsPieChart = () => {
             </ResponsiveContainer>
           </div>
         </AppRecharts>
-        <div className='flex justify-center flex-wrap gap-6'>
-          <Box className='flex items-center gap-1.5' sx={{ '& i': { color: '#00d4bd' } }}>
-            <i className='tabler-circle-filled text-xs' />
-            <Typography variant='body2'>R&D</Typography>
+        <div className="flex justify-center flex-wrap gap-6">
+          <Box className="flex items-center gap-1.5" sx={{ '& i': { color: '#00d4bd' } }}>
+            <i className="tabler-circle-filled text-xs" />
+            <Typography variant="body2">R&D</Typography>
           </Box>
-          <Box className='flex items-center gap-1.5' sx={{ '& i': { color: '#ffe700' } }}>
-            <i className='tabler-circle-filled text-xs' />
-            <Typography variant='body2'>Operational</Typography>
+          <Box className="flex items-center gap-1.5" sx={{ '& i': { color: '#ffe700' } }}>
+            <i className="tabler-circle-filled text-xs" />
+            <Typography variant="body2">Operational</Typography>
           </Box>
-          <Box className='flex items-center gap-1.5' sx={{ '& i': { color: '#FFA1A1' } }}>
-            <i className='tabler-circle-filled text-xs' />
-            <Typography variant='body2'>Networking</Typography>
+          <Box className="flex items-center gap-1.5" sx={{ '& i': { color: '#FFA1A1' } }}>
+            <i className="tabler-circle-filled text-xs" />
+            <Typography variant="body2">Networking</Typography>
           </Box>
-          <Box className='flex items-center gap-1.5' sx={{ '& i': { color: '#826bf8' } }}>
-            <i className='tabler-circle-filled text-xs' />
-            <Typography variant='body2'>Hiring</Typography>
+          <Box className="flex items-center gap-1.5" sx={{ '& i': { color: '#826bf8' } }}>
+            <i className="tabler-circle-filled text-xs" />
+            <Typography variant="body2">Hiring</Typography>
           </Box>
         </div>
       </CardContent>

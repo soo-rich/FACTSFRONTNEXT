@@ -42,22 +42,22 @@ const data: DataType[] = [
 const SubscribersOrders = () => {
   return (
     <Card>
-      <CardHeader title='Statistics' action={<OptionMenu options={['Refresh', 'Share', 'Update']} />} />
-      <CardContent className='flex flex-col gap-y-6'>
+      <CardHeader title="Statistics" action={<OptionMenu options={['Refresh', 'Share', 'Update']} />} />
+      <CardContent className="flex flex-col gap-y-6">
         {data.map((item, index) => (
-          <div key={index} className='flex flex-col gap-2'>
-            <div className='flex items-center justify-between gap-3'>
-              <Typography variant='h6'>{item.title}</Typography>
-              <Chip variant='tonal' label={item.chipText} size='small' color={item.chipColor} />
+          <div key={index} className="flex flex-col gap-2">
+            <div className="flex items-center justify-between gap-3">
+              <Typography variant="h6">{item.title}</Typography>
+              <Chip variant="tonal" label={item.chipText} size="small" color={item.chipColor} />
             </div>
             <div>
-              <div className='flex items-center justify-between gap-3'>
+              <div className="flex items-center justify-between gap-3">
                 <Typography>{item.subtitle}</Typography>
-                <Typography variant='body2' color='text.disabled'>
+                <Typography variant="body2" color="text.disabled">
                   {item.progress}%
                 </Typography>
               </div>
-              <Progress variant='determinate' value={item.progress} className='bs-2 mbs-1' color={item.progressColor} />
+              <Progress variant="determinate" value={item.progress} className="bs-2 mbs-1" color={item.progressColor} />
             </div>
           </div>
         ))}

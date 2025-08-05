@@ -2,8 +2,8 @@
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Avatar from '@mui/material/Avatar'
-import Typography from '@mui/material/Typography'
 import type { TypographyProps } from '@mui/material/Typography'
+import Typography from '@mui/material/Typography'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -52,28 +52,28 @@ const CustomerDetails = ({ orderData }: { orderData?: OrderType }) => {
 
   return (
     <Card>
-      <CardContent className='flex flex-col gap-6'>
-        <Typography variant='h5'>Customer details</Typography>
-        <div className='flex items-center gap-3'>
+      <CardContent className="flex flex-col gap-6">
+        <Typography variant="h5">Customer details</Typography>
+        <div className="flex items-center gap-3">
           {getAvatar({ avatar: orderData?.avatar ?? '', customer: orderData?.customer ?? '' })}
-          <div className='flex flex-col'>
-            <Typography color='text.primary' className='font-medium'>
+          <div className="flex flex-col">
+            <Typography color="text.primary" className="font-medium">
               {orderData?.customer}
             </Typography>
             <Typography>Customer ID: #47389</Typography>
           </div>
         </div>
-        <div className='flex items-center gap-3'>
-          <CustomAvatar skin='light' color='success' size={40}>
-            <i className='tabler-shopping-cart' />
+        <div className="flex items-center gap-3">
+          <CustomAvatar skin="light" color="success" size={40}>
+            <i className="tabler-shopping-cart" />
           </CustomAvatar>
-          <Typography color='text.primary' className='font-medium'>
+          <Typography color="text.primary" className="font-medium">
             12 Orders
           </Typography>
         </div>
-        <div className='flex flex-col gap-1'>
-          <div className='flex justify-between items-center'>
-            <Typography color='text.primary' className='font-medium'>
+        <div className="flex flex-col gap-1">
+          <div className="flex justify-between items-center">
+            <Typography color="text.primary" className="font-medium">
               Contact info
             </Typography>
             <OpenDialogOnElementClick

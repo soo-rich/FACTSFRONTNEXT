@@ -1,30 +1,42 @@
-'use client';
+'use client'
 
-import {AddEditFormType} from "@/types/soosmart/add-edit-modal.type";
-import {ProjetType, SaveProjet, schemaProjetSave, UpdateProjet} from "@/types/soosmart/projet.type";
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {Controller, useForm} from "react-hook-form";
-import {valibotResolver} from "@hookform/resolvers/valibot";
-import {ProjetService} from "@/service/projet/projet.service";
-import {toast} from "react-toastify";
-import {Grid2, TextareaAutosize} from "@mui/material";
-import CustomTextField from "@core/components/mui/TextField";
-import Typography from "@mui/material/Typography";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
-import {ClientService} from "@/service/client/client.service";
-import {useMemo, useState} from "react";
-import CustomAutocomplete from "@core/components/mui/Autocomplete";
+import { useMemo, useState } from 'react'
 
-const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<ProjetType>) => {
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-  const queryClient = useQueryClient();
-  const [clientName, setClientName] = useState<string>('');
+
+import { Controller, useForm } from 'react-hook-form'
+import { valibotResolver } from '@hookform/resolvers/valibot'
+
+
+import { toast } from 'react-toastify'
+import { Grid2, TextareaAutosize } from '@mui/material'
+
+
+import Typography from '@mui/material/Typography'
+import Checkbox from '@mui/material/Checkbox'
+import Button from '@mui/material/Button'
+
+import CustomTextField from '@core/components/mui/TextField'
+import type { ProjetType, SaveProjet, UpdateProjet } from '@/types/soosmart/projet.type'
+import { schemaProjetSave } from '@/types/soosmart/projet.type'
+import { ProjetService } from '@/service/projet/projet.service'
+import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
+
+import { ClientService } from '@/service/client/client.service'
+
+
+import CustomAutocomplete from '@core/components/mui/Autocomplete'
+
+const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<ProjetType>) => {
+
+  const queryClient = useQueryClient()
+  const [clientName, setClientName] = useState<string>('')
 
   const {
     control,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
     reset
   } = useForm<SaveProjet>({
     resolver: valibotResolver(schemaProjetSave),
@@ -32,86 +44,97 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
       projet_type: projet?.projet_type ?? '',
       description: projet?.description ?? '',
       client_id: projet?.client ?? '',
-      offre: projet?.offre ?? false,
-    },
+      offre: projet?.offre ?? false
+    }
   })
+
   const querykey = useMemo(() => [`${ClientService.CLIENT_KEY}+search`, clientName], [clientName])
-  const {data, isLoading, isError} = useQuery({
+
+  const { data, isLoading, isError } = useQuery({
     queryKey: querykey,
     queryFn: async () => {
       return await ClientService.getClientsByNom(
-        clientName,
-      );
+        clientName
+      )
     },
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
 
   const AddMutation = useMutation({
     mutationFn: async (data: SaveProjet) => {
-      return await ProjetService.saveProjet(data);
+      return await ProjetService.saveProjet(data)
     },
     onSuccess: () => {
-      toast.success('Ajout OK');
+      toast.success('Ajout OK')
       reset({
         projet_type: '',
         description: '',
         client_id: '',
-        offre: false,
-      });
+        offre: false
+      })
+
       // Invalider le cache pour rafraîchir la liste
       queryClient.invalidateQueries({
-        queryKey: [ProjetService.PROJT_KEY],
-      });
+        queryKey: [ProjetService.PROJT_KEY]
+      })
+
+
       // Appeler le callback de succès si fourni
       if (onSuccess) {
-        onSuccess();
+        onSuccess()
       }
     },
     onError: () => {
-      toast.error('Erreur lors de l\'ajout du projet');
+      toast.error('Erreur lors de l\'ajout du projet')
     }
-  });
+  })
 
   const UpdateMutation = useMutation({
     mutationFn: async (data: UpdateProjet) => {
       if (!projet?.id) {
-        toast.warning("Aucun projet sélectionné pour la mise à jour");
-        return;
+        toast.warning('Aucun projet sélectionné pour la mise à jour')
+
+        return
       }
-      return await ProjetService.updateProjet(data, projet?.id);
+
+
+      return await ProjetService.updateProjet(data, projet?.id)
     },
     onSuccess: () => {
-      toast.success('Mise à jour OK');
+      toast.success('Mise à jour OK')
       reset({
         projet_type: '',
         description: '',
         client_id: '',
-        offre: false,
-      });
+        offre: false
+      })
+
       // Invalider le cache pour rafraîchir la liste
       queryClient.invalidateQueries({
-        queryKey: [ProjetService.PROJT_KEY],
-      });
+        queryKey: [ProjetService.PROJT_KEY]
+      })
+
+
       // Appeler le callback de succès si fourni
       if (onSuccess) {
-        onSuccess();
+        onSuccess()
       }
     },
     onError: () => {
-      toast.error('Erreur lors de la mise à jour du projet');
+      toast.error('Erreur lors de la mise à jour du projet')
     }
-  });
+  })
 
   const onSubmit = (data: SaveProjet) => {
     if (projet) {
       UpdateMutation.mutate({
-        ...data,
-      });
+        ...data
+      })
     } else {
       console.log(data)
-      AddMutation.mutate(data);
+      AddMutation.mutate(data)
     }
   }
 
@@ -122,11 +145,12 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
         projet_type: '',
         description: '',
         client_id: '',
-        offre: false,
+        offre: false
       }
-    );
+    )
+
     if (onCancel) {
-      onCancel();
+      onCancel()
     }
   }
 
@@ -135,8 +159,8 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
       <Grid2 container direction={'column'} spacing={3}>
         <Grid2 container direction={'row'} spacing={3}>
           <Grid2 size={10}>
-            <Controller rules={{required: true}} render={
-              ({field}) => (
+            <Controller rules={{ required: true }} render={
+              ({ field }) => (
                 <CustomTextField
                   {...field}
                   fullWidth
@@ -148,7 +172,7 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
                   })}
                 />
               )
-            } name={'projet_type'} control={control}/>
+            } name={'projet_type'} control={control} />
           </Grid2>
 
           <Grid2 size={2} container sx={{
@@ -156,27 +180,28 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
             justifyContent: 'center'
           }}>
             <Controller render={
-              ({field}) => (
+              ({ field }) => (
                 <div className={'flex items-center gap-2 sm:flex-col'}>
                   <Typography>Offre</Typography>
-                  <Checkbox  {...field} checked={field.value}/>
+                  <Checkbox  {...field} checked={field.value} />
                 </div>
               )
-            } name={'offre'} control={control}/>
+            } name={'offre'} control={control} />
           </Grid2>
         </Grid2>
         <Controller render={
-          ({field}) => (
+          ({ field }) => (
             <CustomAutocomplete
               options={data || []}
               hidden={!!projet}
               fullWidth
               onChange={(event, newvalue) => {
-                field.onChange(event);
+                field.onChange(event)
+
                 if (newvalue) {
-                  field.onChange(newvalue.id);
+                  field.onChange(newvalue.id)
                 } else {
-                  field.onChange('');
+                  field.onChange('')
                 }
               }}
               getOptionKey={option => option.id}
@@ -190,8 +215,9 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
                     label={'Client'}
                     fullWidth
                     onChange={event => {
-                      const value = event.target.value;
-                      setClientName(value);
+                      const value = event.target.value
+
+                      setClientName(value)
                     }}
                     error={!!errors.client_id}
                     {...(errors.client_id && {
@@ -203,18 +229,18 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
               }}
             />
           )
-        } name={'client_id'} control={control}/>
+        } name={'client_id'} control={control} />
         <Grid2 size={12} container
                direction={'column'}
                sx={{
-                 justifyContent: "flex-start",
-                 alignItems: "flex-start",
+                 justifyContent: 'flex-start',
+                 alignItems: 'flex-start'
                }}>
           <Typography>Description</Typography>
           <Controller render={
-            ({field}) => (<TextareaAutosize
+            ({ field }) => (<TextareaAutosize
                 {...field}
-                style={{height: '20%'}}
+                style={{ height: '20%' }}
                 className={'border-2 border-gray-400 rounded-md p-2 w-full focus:outline-none focus:border-primary h-32'}
                 placeholder={'Description du projet'}
                 error={!!errors.description}
@@ -224,7 +250,7 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
                 })}
               />
             )
-          } name={'description'} control={control}/>
+          } name={'description'} control={control} />
 
         </Grid2>
 
@@ -259,4 +285,4 @@ const AddEditProjet = ({data: projet, onSuccess, onCancel}: AddEditFormType<Proj
 }
 
 
-export default AddEditProjet;
+export default AddEditProjet

@@ -1,25 +1,26 @@
 'use client'
 
-import {useMemo, useState} from 'react'
+import { useMemo, useState } from 'react'
 
-import {Typography} from '@mui/material'
+import { useParams } from 'next/navigation'
 
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
+import { Typography } from '@mui/material'
 
-import {createColumnHelper} from '@tanstack/react-table'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import {toast} from 'react-toastify'
+import { createColumnHelper } from '@tanstack/react-table'
+
+import { toast } from 'react-toastify'
 
 // MUI Imports
 import UtiliMetod from '@/utils/utilsmethod'
 import OptionMenu from '@core/components/option-menu'
 import TableGeneric from '@/components/table/TableGeneric'
-import {FactureService} from "@/service/dossier/facture.service";
-import {FactureType} from "@/types/soosmart/dossier/facture.type";
-import {getLocalizedUrl} from "@/utils/i18n";
-import {Locale} from "@configs/i18n";
-import CustomIconButton from "@core/components/mui/IconButton";
-import {useParams} from "next/navigation";
+import { FactureService } from '@/service/dossier/facture.service'
+import type { FactureType } from '@/types/soosmart/dossier/facture.type'
+import { getLocalizedUrl } from '@/utils/i18n'
+import type { Locale } from '@configs/i18n'
+import CustomIconButton from '@core/components/mui/IconButton'
 
 
 const columnHelper = createColumnHelper<FactureType>()
@@ -31,9 +32,9 @@ const FactureList = () => {
   const [filter, setFilter] = useState('')
 
   // hooks
-  const {lang: locale}= useParams()
+  const { lang: locale } = useParams()
 
-  const {data, isLoading, isError} = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: [FactureService.FACTURE_KEY, pageIndex, pageSize],
     queryFn: async () => {
       return await FactureService.getAll({
@@ -81,7 +82,7 @@ const FactureList = () => {
       }),
       columnHelper.accessor('date', {
         header: 'Créé le',
-        cell: ({row}) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
+        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
       }),
       columnHelper.accessor('total_ht', {
         header: 'Total HT',
@@ -98,23 +99,23 @@ const FactureList = () => {
       columnHelper.display({
         id: 'actions', // Important: donner un ID à la colonne display
         header: 'Actions',
-        cell: ({row}) => (
-          <div className='flex gap-2'>
+        cell: ({ row }) => (
+          <div className="flex gap-2">
             <CustomIconButton
               href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
-              className='cursor-pointer text-green-600 hover:text-green-800'
+              className="cursor-pointer text-green-600 hover:text-green-800"
             >
-              <i className='tabler-file-type-pdf'/>
+              <i className="tabler-file-type-pdf" />
             </CustomIconButton>
 
             <OptionMenu
-              iconButtonProps={{size: 'medium'}}
-              iconClassName='text-textSecondary'
+              iconButtonProps={{ size: 'medium' }}
+              iconClassName="text-textSecondary"
               options={[
                 {
                   text: 'Details',
                   icon: 'tabler-eye',
-                  menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
+                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
                 },
 
                 {

@@ -19,16 +19,16 @@ const CardActionRemoveCard = () => {
     <Fade in={!visibility} timeout={300}>
       <Card>
         <CardHeader
-          title='Remove Card'
+          title="Remove Card"
           action={
-            <IconButton size='small' aria-label='remove-card' onClick={() => setVisibility(!visibility)}>
-              <i className='tabler-x' />
+            <IconButton size="small" aria-label="remove-card" onClick={() => setVisibility(!visibility)}>
+              <i className="tabler-x" />
             </IconButton>
           }
         />
         <CardContent>
           <Typography>
-            Click on <i className='tabler-x text-xl align-sub' /> icon to see it in action
+            Click on <i className="tabler-x text-xl align-sub" /> icon to see it in action
           </Typography>
         </CardContent>
       </Card>

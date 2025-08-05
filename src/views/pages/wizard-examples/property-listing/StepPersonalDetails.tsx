@@ -1,6 +1,6 @@
 // React Imports
-import { useState } from 'react'
 import type { ChangeEvent } from 'react'
+import { useState } from 'react'
 
 // MUI Imports
 import Grid from '@mui/material/Grid2'
@@ -52,8 +52,8 @@ const data: CustomInputVerticalData[] = [
 const StepPersonalDetails = ({ activeStep, handleNext, handlePrev, steps }: Props) => {
   // Vars
   const initialSelectedOption: string = data.filter(item => item.isSelected)[
-    data.filter(item => item.isSelected).length - 1
-  ].value
+  data.filter(item => item.isSelected).length - 1
+    ].value
 
   // States
   const [selectedOption, setSelectedOption] = useState<string>(initialSelectedOption)
@@ -80,41 +80,41 @@ const StepPersonalDetails = ({ activeStep, handleNext, handlePrev, steps }: Prop
 
         return (
           <CustomInputVertical
-            type='radio'
+            type="radio"
             key={index}
             gridProps={{ size: { xs: 12, sm: 4 } }}
             selected={selectedOption}
-            name='custom-radios-basic'
+            name="custom-radios-basic"
             handleChange={handleOptionChange}
             data={typeof item.asset === 'string' ? { ...item, asset } : item}
           />
         )
       })}
       <Grid size={{ xs: 12, md: 6 }}>
-        <CustomTextField fullWidth label='First Name' placeholder='John' />
+        <CustomTextField fullWidth label="First Name" placeholder="John" />
       </Grid>
       <Grid size={{ xs: 12, md: 6 }}>
-        <CustomTextField fullWidth label='Last Name' placeholder='Doe' />
+        <CustomTextField fullWidth label="Last Name" placeholder="Doe" />
       </Grid>
       <Grid size={{ xs: 12, md: 6 }}>
-        <CustomTextField fullWidth label='Username' placeholder='john.doe' />
+        <CustomTextField fullWidth label="Username" placeholder="john.doe" />
       </Grid>
       <Grid size={{ xs: 12, md: 6 }}>
         <CustomTextField
           fullWidth
-          label='Password'
-          placeholder='············'
-          id='personal-details-password'
+          label="Password"
+          placeholder="············"
+          id="personal-details-password"
           type={isPasswordShown ? 'text' : 'password'}
           slotProps={{
             input: {
               endAdornment: (
-                <InputAdornment position='end'>
+                <InputAdornment position="end">
                   <IconButton
-                    edge='end'
+                    edge="end"
                     onClick={handleClickShowPassword}
                     onMouseDown={e => e.preventDefault()}
-                    aria-label='toggle password visibility'
+                    aria-label="toggle password visibility"
                   >
                     <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                   </IconButton>
@@ -125,31 +125,31 @@ const StepPersonalDetails = ({ activeStep, handleNext, handlePrev, steps }: Prop
         />
       </Grid>
       <Grid size={{ xs: 12, md: 6 }}>
-        <CustomTextField fullWidth label='Email' placeholder='john.doe@gmail.com' />
+        <CustomTextField fullWidth label="Email" placeholder="john.doe@gmail.com" />
       </Grid>
       <Grid size={{ xs: 12, md: 6 }}>
-        <CustomTextField fullWidth label='Contact' placeholder='202 555 0111' />
+        <CustomTextField fullWidth label="Contact" placeholder="202 555 0111" />
       </Grid>
       <Grid size={{ xs: 12 }}>
-        <div className='flex items-center justify-between'>
+        <div className="flex items-center justify-between">
           <Button
-            variant='tonal'
-            color='secondary'
+            variant="tonal"
+            color="secondary"
             disabled={activeStep === 0}
             onClick={handlePrev}
-            startIcon={<DirectionalIcon ltrIconClass='tabler-arrow-left' rtlIconClass='tabler-arrow-right' />}
+            startIcon={<DirectionalIcon ltrIconClass="tabler-arrow-left" rtlIconClass="tabler-arrow-right" />}
           >
             Previous
           </Button>
           <Button
-            variant='contained'
+            variant="contained"
             color={activeStep === steps.length - 1 ? 'success' : 'primary'}
             onClick={handleNext}
             endIcon={
               activeStep === steps.length - 1 ? (
-                <i className='tabler-check' />
+                <i className="tabler-check" />
               ) : (
-                <DirectionalIcon ltrIconClass='tabler-arrow-right' rtlIconClass='tabler-arrow-left' />
+                <DirectionalIcon ltrIconClass="tabler-arrow-right" rtlIconClass="tabler-arrow-left" />
               )
             }
           >

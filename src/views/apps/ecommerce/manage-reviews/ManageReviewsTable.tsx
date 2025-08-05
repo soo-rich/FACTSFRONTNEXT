@@ -20,21 +20,21 @@ import type { TextFieldProps } from '@mui/material/TextField'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { ReviewType } from '@/types/apps/ecommerceTypes'
@@ -56,6 +56,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -79,11 +80,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -148,13 +149,13 @@ const ManageReviewsTable = ({ reviewsData }: { reviewsData?: ReviewType[] }) => 
       columnHelper.accessor('product', {
         header: 'Product',
         cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <img src={row.original.productImage} width={38} height={38} className='rounded bg-actionHover' />
-            <div className='flex flex-col items-start'>
-              <Typography className='font-medium' color='text.primary'>
+          <div className="flex items-center gap-4">
+            <img src={row.original.productImage} width={38} height={38} className="rounded bg-actionHover" />
+            <div className="flex flex-col items-start">
+              <Typography className="font-medium" color="text.primary">
                 {row.original.product}
               </Typography>
-              <Typography variant='body2' className='text-wrap'>
+              <Typography variant="body2" className="text-wrap">
                 {row.original.companyName}
               </Typography>
             </div>
@@ -164,18 +165,18 @@ const ManageReviewsTable = ({ reviewsData }: { reviewsData?: ReviewType[] }) => 
       columnHelper.accessor('reviewer', {
         header: 'Reviewer',
         cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
+          <div className="flex items-center gap-4">
             <CustomAvatar src={row.original.avatar} size={34} />
-            <div className='flex flex-col items-start'>
+            <div className="flex flex-col items-start">
               <Typography
                 component={Link}
                 href={getLocalizedUrl('/apps/ecommerce/customers/details/879861', locale as Locale)}
-                color='primary.main'
-                className='font-medium'
+                color="primary.main"
+                className="font-medium"
               >
                 {row.original.reviewer}
               </Typography>
-              <Typography variant='body2'>{row.original.email}</Typography>
+              <Typography variant="body2">{row.original.email}</Typography>
             </div>
           </div>
         )
@@ -184,17 +185,17 @@ const ManageReviewsTable = ({ reviewsData }: { reviewsData?: ReviewType[] }) => 
         header: 'Review',
         sortingFn: (rowA, rowB) => rowA.original.review - rowB.original.review,
         cell: ({ row }) => (
-          <div className='flex flex-col gap-1'>
+          <div className="flex flex-col gap-1">
             <Rating
-              name='product-review'
+              name="product-review"
               readOnly
               value={row.original.review}
-              emptyIcon={<i className='tabler-star-filled' />}
+              emptyIcon={<i className="tabler-star-filled" />}
             />
-            <Typography className='font-medium' color='text.primary'>
+            <Typography className="font-medium" color="text.primary">
               {row.original.head}
             </Typography>
-            <Typography variant='body2' className='text-wrap'>
+            <Typography variant="body2" className="text-wrap">
               {row.original.para}
             </Typography>
           </div>
@@ -221,12 +222,12 @@ const ManageReviewsTable = ({ reviewsData }: { reviewsData?: ReviewType[] }) => 
       columnHelper.accessor('status', {
         header: 'Status',
         cell: ({ row }) => (
-          <div className='flex items-center gap-3'>
+          <div className="flex items-center gap-3">
             <Chip
               label={row.original.status}
-              variant='tonal'
+              variant="tonal"
               color={row.original.status === 'Published' ? 'success' : 'warning'}
-              size='small'
+              size="small"
             />
           </div>
         )
@@ -236,7 +237,7 @@ const ManageReviewsTable = ({ reviewsData }: { reviewsData?: ReviewType[] }) => 
         cell: ({ row }) => (
           <OptionMenu
             iconButtonProps={{ size: 'medium' }}
-            iconClassName='text-textSecondary'
+            iconClassName="text-textSecondary"
             options={[
               {
                 text: 'View',
@@ -304,96 +305,96 @@ const ManageReviewsTable = ({ reviewsData }: { reviewsData?: ReviewType[] }) => 
   return (
     <>
       <Card>
-        <div className='flex flex-wrap justify-between gap-4 p-6'>
+        <div className="flex flex-wrap justify-between gap-4 p-6">
           <DebouncedInput
             value={globalFilter ?? ''}
             onChange={value => setGlobalFilter(String(value))}
-            placeholder='Search Product'
-            className='max-sm:is-full'
+            placeholder="Search Product"
+            className="max-sm:is-full"
           />
-          <div className='flex max-sm:flex-col sm:items-center gap-4 max-sm:is-full'>
+          <div className="flex max-sm:flex-col sm:items-center gap-4 max-sm:is-full">
             <CustomTextField
               select
               value={table.getState().pagination.pageSize}
               onChange={e => table.setPageSize(Number(e.target.value))}
-              className='sm:is-[140px] flex-auto is-full'
+              className="sm:is-[140px] flex-auto is-full"
             >
-              <MenuItem value='10'>10</MenuItem>
-              <MenuItem value='25'>25</MenuItem>
-              <MenuItem value='50'>50</MenuItem>
+              <MenuItem value="10">10</MenuItem>
+              <MenuItem value="25">25</MenuItem>
+              <MenuItem value="50">50</MenuItem>
             </CustomTextField>
             <CustomTextField
               select
               fullWidth
               value={status}
               onChange={e => setStatus(e.target.value)}
-              className='is-full sm:is-[140px] flex-auto'
+              className="is-full sm:is-[140px] flex-auto"
             >
-              <MenuItem value='All'>All</MenuItem>
-              <MenuItem value='Published'>Published</MenuItem>
-              <MenuItem value='Pending'>Pending</MenuItem>
+              <MenuItem value="All">All</MenuItem>
+              <MenuItem value="Published">Published</MenuItem>
+              <MenuItem value="Pending">Pending</MenuItem>
             </CustomTextField>
             <Button
-              variant='tonal'
-              className='max-sm:is-full'
-              startIcon={<i className='tabler-upload' />}
-              color='secondary'
+              variant="tonal"
+              className="max-sm:is-full"
+              startIcon={<i className="tabler-upload" />}
+              color="secondary"
             >
               Export
             </Button>
           </div>
         </div>
-        <div className='overflow-x-auto'>
+        <div className="overflow-x-auto">
           <table className={tableStyles.table}>
             <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            className={classnames({
-                              'flex items-center': header.column.getIsSorted(),
-                              'cursor-pointer select-none': header.column.getCanSort()
-                            })}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {{
-                              asc: <i className='tabler-chevron-up text-xl' />,
-                              desc: <i className='tabler-chevron-down text-xl' />
-                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                          </div>
-                        </>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div
+                          className={classnames({
+                            'flex items-center': header.column.getIsSorted(),
+                            'cursor-pointer select-none': header.column.getCanSort()
+                          })}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {{
+                            asc: <i className="tabler-chevron-up text-xl" />,
+                            desc: <i className="tabler-chevron-down text-xl" />
+                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                        </div>
+                      </>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
             </thead>
             {table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    No data available
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                  No data available
+                </td>
+              </tr>
               </tbody>
             ) : (
               <tbody>
-                {table
-                  .getRowModel()
-                  .rows.slice(0, table.getState().pagination.pageSize)
-                  .map(row => {
-                    return (
-                      <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                        {row.getVisibleCells().map(cell => (
-                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                        ))}
-                      </tr>
-                    )
-                  })}
+              {table
+                .getRowModel()
+                .rows.slice(0, table.getState().pagination.pageSize)
+                .map(row => {
+                  return (
+                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                      {row.getVisibleCells().map(cell => (
+                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                      ))}
+                    </tr>
+                  )
+                })}
               </tbody>
             )}
           </table>

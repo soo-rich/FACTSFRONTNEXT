@@ -1,6 +1,6 @@
 // React Imports
-import { useEffect, useState, useRef } from 'react'
 import type { ChangeEvent } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 // MUI Imports
 import Drawer from '@mui/material/Drawer'
@@ -15,17 +15,17 @@ import Tooltip from '@mui/material/Tooltip'
 import InputAdornment from '@mui/material/InputAdornment'
 
 // Third-party Imports
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { minLength, nonEmpty, object, pipe, string } from 'valibot'
 import type { InferInput } from 'valibot'
+import { minLength, nonEmpty, object, pipe, string } from 'valibot'
 
 // Type Imports
 import type { ColumnType, TaskType } from '@/types/apps/kanbanTypes'
 import type { AppDispatch } from '@/redux-store'
 
 // Slice Imports
-import { editTask, deleteTask } from '@/redux-store/slices/kanban'
+import { deleteTask, editTask } from '@/redux-store/slices/kanban'
 
 // Component Imports
 import CustomAvatar from '@core/components/mui/Avatar'
@@ -131,27 +131,27 @@ const KanbanDrawer = (props: KanbanDrawerProps) => {
     <div>
       <Drawer
         open={drawerOpen}
-        anchor='right'
-        variant='temporary'
+        anchor="right"
+        variant="temporary"
         ModalProps={{ keepMounted: true }}
         sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
         onClose={handleClose}
       >
-        <div className='flex justify-between items-center pli-6 plb-5 border-be'>
-          <Typography variant='h5'>Edit Task</Typography>
-          <IconButton size='small' onClick={handleClose}>
-            <i className='tabler-x text-2xl text-textPrimary' />
+        <div className="flex justify-between items-center pli-6 plb-5 border-be">
+          <Typography variant="h5">Edit Task</Typography>
+          <IconButton size="small" onClick={handleClose}>
+            <i className="tabler-x text-2xl text-textPrimary" />
           </IconButton>
         </div>
-        <div className='p-6'>
-          <form className='flex flex-col gap-y-5' onSubmit={handleSubmit(updateTask)}>
+        <div className="p-6">
+          <form className="flex flex-col gap-y-5" onSubmit={handleSubmit(updateTask)}>
             <Controller
-              name='title'
+              name="title"
               control={control}
               render={({ field }) => (
                 <CustomTextField
                   fullWidth
-                  label='Title'
+                  label="Title"
                   {...field}
                   error={Boolean(errors.title)}
                   helperText={errors.title?.message}
@@ -161,29 +161,29 @@ const KanbanDrawer = (props: KanbanDrawerProps) => {
 
             <AppReactDatepicker
               selected={date ? new Date(date) : new Date()}
-              id='basic-input'
+              id="basic-input"
               onChange={(date: Date | null) => {
                 date !== null && setDate(date)
               }}
-              placeholderText='Click to select a date'
+              placeholderText="Click to select a date"
               dateFormat={'d MMMM, yyyy'}
-              customInput={<CustomTextField label='Due Date' fullWidth />}
+              customInput={<CustomTextField label="Due Date" fullWidth />}
             />
             <CustomTextField
               select
-              label='Label'
+              label="Label"
               slotProps={{
                 select: {
                   multiple: true,
                   value: badgeText || [],
                   onChange: e => setBadgeText(e.target.value as string[]),
                   renderValue: selected => (
-                    <div className='flex flex-wrap gap-1'>
+                    <div className="flex flex-wrap gap-1">
                       {(selected as string[]).map(value => (
                         <Chip
-                          variant='tonal'
+                          variant="tonal"
                           key={value}
-                          size='small'
+                          size="small"
                           onMouseDown={e => e.stopPropagation()}
                           label={value}
                           color={chipColor[value]?.color}
@@ -203,58 +203,58 @@ const KanbanDrawer = (props: KanbanDrawerProps) => {
               ))}
             </CustomTextField>
             <div>
-              <Typography variant='caption' color='text.primary'>
+              <Typography variant="caption" color="text.primary">
                 Assigned
               </Typography>
-              <div className='flex gap-1'>
+              <div className="flex gap-1">
                 {task.assigned?.map((avatar, index) => (
                   <Tooltip title={avatar.name} key={index}>
-                    <CustomAvatar key={index} src={avatar.src} size={26} className='cursor-pointer' />
+                    <CustomAvatar key={index} src={avatar.src} size={26} className="cursor-pointer" />
                   </Tooltip>
                 ))}
-                <CustomAvatar size={26} className='cursor-pointer'>
-                  <i className='tabler-plus text-base text-textSecondary' />
+                <CustomAvatar size={26} className="cursor-pointer">
+                  <i className="tabler-plus text-base text-textSecondary" />
                 </CustomAvatar>
               </div>
             </div>
-            <div className='flex items-center gap-4'>
+            <div className="flex items-center gap-4">
               <CustomTextField
                 fullWidth
-                placeholder='Choose File'
-                variant='outlined'
+                placeholder="Choose File"
+                variant="outlined"
                 value={fileName}
                 slotProps={{
                   input: {
                     readOnly: true,
                     endAdornment: fileName ? (
-                      <InputAdornment position='end'>
-                        <IconButton size='small' edge='end' onClick={() => setFileName('')}>
-                          <i className='tabler-x' />
+                      <InputAdornment position="end">
+                        <IconButton size="small" edge="end" onClick={() => setFileName('')}>
+                          <i className="tabler-x" />
                         </IconButton>
                       </InputAdornment>
                     ) : null
                   }
                 }}
               />
-              <Button component='label' variant='tonal' htmlFor='contained-button-file'>
+              <Button component="label" variant="tonal" htmlFor="contained-button-file">
                 Choose
-                <input hidden id='contained-button-file' type='file' onChange={handleFileUpload} ref={fileInputRef} />
+                <input hidden id="contained-button-file" type="file" onChange={handleFileUpload} ref={fileInputRef} />
               </Button>
             </div>
             <CustomTextField
               fullWidth
-              label='Comment'
+              label="Comment"
               value={comment}
               onChange={e => setComment(e.target.value)}
               multiline
               rows={4}
-              placeholder='Write a Comment....'
+              placeholder="Write a Comment...."
             />
-            <div className='flex gap-4'>
-              <Button variant='contained' color='primary' type='submit'>
+            <div className="flex gap-4">
+              <Button variant="contained" color="primary" type="submit">
                 Update
               </Button>
-              <Button variant='tonal' color='error' type='reset' onClick={handleReset}>
+              <Button variant="tonal" color="error" type="reset" onClick={handleReset}>
                 Delete
               </Button>
             </div>

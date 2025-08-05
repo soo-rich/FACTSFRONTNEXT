@@ -1,8 +1,8 @@
 'use client'
 
+import type { SyntheticEvent } from 'react'
 // React Imports
 import { useState } from 'react'
-import type { SyntheticEvent } from 'react'
 
 // Next Imports
 import dynamic from 'next/dynamic'
@@ -70,7 +70,7 @@ const renderTabs = (value: TabCategory) => {
     <Tab
       key={index}
       value={item.type}
-      className='mie-4'
+      className="mie-4"
       label={
         <div
           className={classnames(
@@ -78,10 +78,10 @@ const renderTabs = (value: TabCategory) => {
             item.type === value ? 'border-solid border-[var(--mui-palette-primary-main)]' : 'border-dashed'
           )}
         >
-          <CustomAvatar variant='rounded' skin='light' size={38} {...(item.type === value && { color: 'primary' })}>
+          <CustomAvatar variant="rounded" skin="light" size={38} {...(item.type === value && { color: 'primary' })}>
             <i className={classnames('text-[22px]', { 'text-textSecondary': item.type !== value }, item.avatarIcon)} />
           </CustomAvatar>
-          <Typography className='font-medium capitalize' color='text.primary'>
+          <Typography className="font-medium capitalize" color="text.primary">
             {item.type}
           </Typography>
         </div>
@@ -98,11 +98,11 @@ const renderTabPanels = (value: TabCategory, theme: Theme, options: ApexOptions,
     const finalColors = colors.map((color, i) => (seriesIndex === i ? 'var(--mui-palette-primary-main)' : color))
 
     return (
-      <TabPanel key={index} value={item.type} className='!p-0'>
+      <TabPanel key={index} value={item.type} className="!p-0">
         <AppReactApexCharts
-          type='bar'
+          type="bar"
           height={230}
-          width='100%'
+          width="100%"
           options={{ ...options, colors: finalColors }}
           series={item.series}
         />
@@ -229,18 +229,18 @@ const EarningReportsWithTabs = () => {
   return (
     <Card>
       <CardHeader
-        title='Earning Reports'
-        subheader='Yearly Earnings Overview'
+        title="Earning Reports"
+        subheader="Yearly Earnings Overview"
         action={<OptionMenu options={['Last Week', 'Last Month', 'Last Year']} />}
       />
       <CardContent>
         <TabContext value={value}>
           <TabList
-            variant='scrollable'
-            scrollButtons='auto'
+            variant="scrollable"
+            scrollButtons="auto"
             onChange={handleChange}
-            aria-label='earning report tabs'
-            className='!border-0 mbe-10'
+            aria-label="earning report tabs"
+            className="!border-0 mbe-10"
             sx={{
               '& .MuiTabs-indicator': { display: 'none !important' },
               '& .MuiTab-root': { padding: '0 !important', border: '0 !important' }
@@ -249,11 +249,12 @@ const EarningReportsWithTabs = () => {
             {renderTabs(value)}
             <Tab
               disabled
-              value='add'
+              value="add"
               label={
-                <div className='flex flex-col items-center justify-center is-[110px] bs-[100px] border border-dashed rounded-xl'>
-                  <CustomAvatar variant='rounded' size={34}>
-                    <i className='tabler-plus text-textSecondary' />
+                <div
+                  className="flex flex-col items-center justify-center is-[110px] bs-[100px] border border-dashed rounded-xl">
+                  <CustomAvatar variant="rounded" size={34}>
+                    <i className="tabler-plus text-textSecondary" />
                   </CustomAvatar>
                 </div>
               }

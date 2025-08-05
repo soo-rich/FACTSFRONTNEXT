@@ -126,8 +126,8 @@ const StepperAlternativeLabel = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Username'
-                placeholder='johnDoe'
+                label="Username"
+                placeholder="johnDoe"
                 value={formData.username}
                 onChange={e => setFormData({ ...formData, username: e.target.value })}
               />
@@ -135,9 +135,9 @@ const StepperAlternativeLabel = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                type='email'
-                label='Email'
-                placeholder='johndoe@gmail.com'
+                type="email"
+                label="Email"
+                placeholder="johndoe@gmail.com"
                 value={formData.email}
                 onChange={e => setFormData({ ...formData, email: e.target.value })}
               />
@@ -145,21 +145,21 @@ const StepperAlternativeLabel = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Password'
-                placeholder='············'
-                id='stepper-alternative-password'
+                label="Password"
+                placeholder="············"
+                id="stepper-alternative-password"
                 type={formData.isPasswordShown ? 'text' : 'password'}
                 value={formData.password}
                 onChange={e => setFormData({ ...formData, password: e.target.value })}
                 slotProps={{
                   input: {
                     endAdornment: (
-                      <InputAdornment position='end'>
+                      <InputAdornment position="end">
                         <IconButton
-                          edge='end'
+                          edge="end"
                           onClick={handleClickShowPassword}
                           onMouseDown={e => e.preventDefault()}
-                          aria-label='toggle password visibility'
+                          aria-label="toggle password visibility"
                         >
                           <i className={formData.isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                         </IconButton>
@@ -172,21 +172,21 @@ const StepperAlternativeLabel = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Confirm Password'
-                placeholder='············'
-                id='stepper-alternative-confirm-password'
+                label="Confirm Password"
+                placeholder="············"
+                id="stepper-alternative-confirm-password"
                 type={formData.isConfirmPasswordShown ? 'text' : 'password'}
                 value={formData.confirmPassword}
                 onChange={e => setFormData({ ...formData, confirmPassword: e.target.value })}
                 slotProps={{
                   input: {
                     endAdornment: (
-                      <InputAdornment position='end'>
+                      <InputAdornment position="end">
                         <IconButton
-                          edge='end'
+                          edge="end"
                           onClick={handleClickShowConfirmPassword}
                           onMouseDown={e => e.preventDefault()}
-                          aria-label='toggle confirm password visibility'
+                          aria-label="toggle confirm password visibility"
                         >
                           <i className={formData.isConfirmPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                         </IconButton>
@@ -204,8 +204,8 @@ const StepperAlternativeLabel = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='First Name'
-                placeholder='John'
+                label="First Name"
+                placeholder="John"
                 value={formData.firstName}
                 onChange={e => setFormData({ ...formData, firstName: e.target.value })}
               />
@@ -213,8 +213,8 @@ const StepperAlternativeLabel = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Last Name'
-                placeholder='Doe'
+                label="Last Name"
+                placeholder="Doe"
                 value={formData.lastName}
                 onChange={e => setFormData({ ...formData, lastName: e.target.value })}
               />
@@ -223,22 +223,22 @@ const StepperAlternativeLabel = () => {
               <CustomTextField
                 select
                 fullWidth
-                label='Country'
+                label="Country"
                 value={formData.country}
                 onChange={e => setFormData({ ...formData, country: e.target.value as string })}
               >
-                <MenuItem value=''>Select Country</MenuItem>
-                <MenuItem value='UK'>UK</MenuItem>
-                <MenuItem value='USA'>USA</MenuItem>
-                <MenuItem value='Australia'>Australia</MenuItem>
-                <MenuItem value='Germany'>Germany</MenuItem>
+                <MenuItem value="">Select Country</MenuItem>
+                <MenuItem value="UK">UK</MenuItem>
+                <MenuItem value="USA">USA</MenuItem>
+                <MenuItem value="Australia">Australia</MenuItem>
+                <MenuItem value="Germany">Germany</MenuItem>
               </CustomTextField>
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 select
                 fullWidth
-                label='Language'
+                label="Language"
                 value={formData.language}
                 slotProps={{
                   select: {
@@ -247,13 +247,13 @@ const StepperAlternativeLabel = () => {
                   }
                 }}
               >
-                <MenuItem value='English'>English</MenuItem>
-                <MenuItem value='French'>French</MenuItem>
-                <MenuItem value='Spanish'>Spanish</MenuItem>
-                <MenuItem value='Portuguese'>Portuguese</MenuItem>
-                <MenuItem value='Italian'>Italian</MenuItem>
-                <MenuItem value='German'>German</MenuItem>
-                <MenuItem value='Arabic'>Arabic</MenuItem>
+                <MenuItem value="English">English</MenuItem>
+                <MenuItem value="French">French</MenuItem>
+                <MenuItem value="Spanish">Spanish</MenuItem>
+                <MenuItem value="Portuguese">Portuguese</MenuItem>
+                <MenuItem value="Italian">Italian</MenuItem>
+                <MenuItem value="German">German</MenuItem>
+                <MenuItem value="Arabic">Arabic</MenuItem>
               </CustomTextField>
             </Grid>
           </>
@@ -264,8 +264,8 @@ const StepperAlternativeLabel = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Facebook'
-                placeholder='https://www.facebook.com/johndoe'
+                label="Facebook"
+                placeholder="https://www.facebook.com/johndoe"
                 value={formData.facebook}
                 onChange={e => setFormData({ ...formData, facebook: e.target.value })}
               />
@@ -273,8 +273,8 @@ const StepperAlternativeLabel = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Twitter'
-                placeholder='https://www.twitter.com/johndoe'
+                label="Twitter"
+                placeholder="https://www.twitter.com/johndoe"
                 value={formData.twitter}
                 onChange={e => setFormData({ ...formData, twitter: e.target.value })}
               />
@@ -282,8 +282,8 @@ const StepperAlternativeLabel = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Instagram'
-                placeholder='https://www.instagram.com/johndoe'
+                label="Instagram"
+                placeholder="https://www.instagram.com/johndoe"
                 value={formData.instagram}
                 onChange={e => setFormData({ ...formData, instagram: e.target.value })}
               />
@@ -291,8 +291,8 @@ const StepperAlternativeLabel = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Github'
-                placeholder='https://www.github.com/johndoe'
+                label="Github"
+                placeholder="https://www.github.com/johndoe"
                 value={formData.github}
                 onChange={e => setFormData({ ...formData, github: e.target.value })}
               />
@@ -316,10 +316,10 @@ const StepperAlternativeLabel = () => {
                     stepIcon: StepperCustomDot
                   }}
                 >
-                  <div className='step-label'>
+                  <div className="step-label">
                     <div>
-                      <Typography className='step-title'>{label.title}</Typography>
-                      <Typography className='step-subtitle'>{label.subtitle}</Typography>
+                      <Typography className="step-title">{label.title}</Typography>
+                      <Typography className="step-subtitle">{label.subtitle}</Typography>
                     </div>
                   </div>
                 </StepLabel>
@@ -328,13 +328,13 @@ const StepperAlternativeLabel = () => {
           })}
         </Stepper>
       </StepperWrapper>
-      <Card className='mt-4'>
+      <Card className="mt-4">
         <CardContent>
           {activeStep === steps.length ? (
             <>
-              <Typography className='mlb-2 mli-1'>All steps are completed!</Typography>
-              <div className='flex justify-end mt-4'>
-                <Button variant='contained' onClick={handleReset}>
+              <Typography className="mlb-2 mli-1">All steps are completed!</Typography>
+              <div className="flex justify-end mt-4">
+                <Button variant="contained" onClick={handleReset}>
                   Reset
                 </Button>
               </div>
@@ -344,30 +344,30 @@ const StepperAlternativeLabel = () => {
               <form onSubmit={e => e.preventDefault()}>
                 <Grid container spacing={6}>
                   <Grid size={{ xs: 12 }}>
-                    <Typography className='font-medium' color='text.primary'>
+                    <Typography className="font-medium" color="text.primary">
                       {steps[activeStep].title}
                     </Typography>
-                    <Typography variant='body2'>{steps[activeStep].subtitle}</Typography>
+                    <Typography variant="body2">{steps[activeStep].subtitle}</Typography>
                   </Grid>
                   {renderStepContent(activeStep)}
-                  <Grid size={{ xs: 12 }} className='flex justify-between'>
+                  <Grid size={{ xs: 12 }} className="flex justify-between">
                     <Button
-                      variant='tonal'
+                      variant="tonal"
                       disabled={activeStep === 0}
                       onClick={handleBack}
-                      color='secondary'
-                      startIcon={<DirectionalIcon ltrIconClass='tabler-arrow-left' rtlIconClass='tabler-arrow-right' />}
+                      color="secondary"
+                      startIcon={<DirectionalIcon ltrIconClass="tabler-arrow-left" rtlIconClass="tabler-arrow-right" />}
                     >
                       Back
                     </Button>
                     <Button
-                      variant='contained'
+                      variant="contained"
                       onClick={handleNext}
                       endIcon={
                         activeStep === steps.length - 1 ? (
-                          <i className='tabler-check' />
+                          <i className="tabler-check" />
                         ) : (
-                          <DirectionalIcon ltrIconClass='tabler-arrow-right' rtlIconClass='tabler-arrow-left' />
+                          <DirectionalIcon ltrIconClass="tabler-arrow-right" rtlIconClass="tabler-arrow-left" />
                         )
                       }
                     >

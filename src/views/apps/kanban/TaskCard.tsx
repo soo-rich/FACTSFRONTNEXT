@@ -21,7 +21,7 @@ import type { AppDispatch } from '@/redux-store'
 import type { ThemeColor } from '@core/types'
 
 // Slice Imports
-import { getCurrentTask, deleteTask } from '@/redux-store/slices/kanban'
+import { deleteTask, getCurrentTask } from '@/redux-store/slices/kanban'
 
 // Component Imports
 import CustomAvatar from '@core/components/mui/Avatar'
@@ -106,32 +106,32 @@ const TaskCard = (props: TaskCardProps) => {
         )}
         onClick={() => handleTaskClick()}
       >
-        <CardContent className='flex flex-col gap-y-2 items-start relative overflow-hidden'>
+        <CardContent className="flex flex-col gap-y-2 items-start relative overflow-hidden">
           {task.badgeText && task.badgeText.length > 0 && (
-            <div className='flex flex-wrap items-center justify-start gap-2 is-full max-is-[85%]'>
+            <div className="flex flex-wrap items-center justify-start gap-2 is-full max-is-[85%]">
               {task.badgeText.map(
                 (badge, index) =>
                   chipColor[badge]?.color && (
-                    <Chip variant='tonal' key={index} label={badge} size='small' color={chipColor[badge].color} />
+                    <Chip variant="tonal" key={index} label={badge} size="small" color={chipColor[badge].color} />
                   )
               )}
             </div>
           )}
-          <div className='absolute block-start-4 inline-end-3' onClick={e => e.stopPropagation()}>
+          <div className="absolute block-start-4 inline-end-3" onClick={e => e.stopPropagation()}>
             <IconButton
-              aria-label='more'
-              size='small'
+              aria-label="more"
+              size="small"
               className={classnames(styles.menu, {
                 [styles.menuOpen]: menuOpen
               })}
-              aria-controls='long-menu'
-              aria-haspopup='true'
+              aria-controls="long-menu"
+              aria-haspopup="true"
               onClick={handleClick}
             >
-              <i className='tabler-dots-vertical' />
+              <i className="tabler-dots-vertical" />
             </IconButton>
             <Menu
-              id='long-menu'
+              id="long-menu"
               transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               anchorEl={anchorEl}
@@ -151,33 +151,33 @@ const TaskCard = (props: TaskCardProps) => {
             </Menu>
           </div>
 
-          {task.image && <img src={task.image} alt='task Image' className='is-full rounded' />}
-          <Typography color='text.primary' className='max-is-[85%] break-words'>
+          {task.image && <img src={task.image} alt="task Image" className="is-full rounded" />}
+          <Typography color="text.primary" className="max-is-[85%] break-words">
             {task.title}
           </Typography>
           {(task.attachments !== undefined && task.attachments > 0) ||
           (task.comments !== undefined && task.comments > 0) ||
           (task.assigned !== undefined && task.assigned.length > 0) ? (
-            <div className='flex justify-between items-center gap-4 is-full'>
+            <div className="flex justify-between items-center gap-4 is-full">
               {(task.attachments !== undefined && task.attachments > 0) ||
               (task.comments !== undefined && task.comments > 0) ? (
-                <div className='flex gap-4'>
+                <div className="flex gap-4">
                   {task.attachments !== undefined && task.attachments > 0 && (
-                    <div className='flex items-center gap-1'>
-                      <i className='tabler-paperclip text-xl text-textSecondary' />
-                      <Typography color='text.secondary'>{task.attachments}</Typography>
+                    <div className="flex items-center gap-1">
+                      <i className="tabler-paperclip text-xl text-textSecondary" />
+                      <Typography color="text.secondary">{task.attachments}</Typography>
                     </div>
                   )}
                   {task.comments !== undefined && task.comments > 0 && (
-                    <div className='flex items-center gap-1'>
-                      <i className='tabler-message-2 text-xl text-textSecondary' />
-                      <Typography color='text.secondary'>{task.comments}</Typography>
+                    <div className="flex items-center gap-1">
+                      <i className="tabler-message-2 text-xl text-textSecondary" />
+                      <Typography color="text.secondary">{task.comments}</Typography>
                     </div>
                   )}
                 </div>
               ) : null}
               {task.assigned !== undefined && task.assigned.length > 0 && (
-                <AvatarGroup max={4} className='pull-up'>
+                <AvatarGroup max={4} className="pull-up">
                   {task.assigned?.map((avatar, index) => (
                     <Tooltip title={avatar.name} key={index}>
                       <CustomAvatar
@@ -185,7 +185,7 @@ const TaskCard = (props: TaskCardProps) => {
                         src={avatar.src}
                         alt={avatar.name}
                         size={26}
-                        className='cursor-pointer'
+                        className="cursor-pointer"
                       />
                     </Tooltip>
                   ))}

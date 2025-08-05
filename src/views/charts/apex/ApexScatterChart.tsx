@@ -136,7 +136,7 @@ const ApexScatterChart = () => {
   return (
     <Card>
       <CardHeader
-        title='New Technologies Data'
+        title="New Technologies Data"
         sx={{
           flexDirection: ['column', 'row'],
           alignItems: ['flex-start', 'center'],
@@ -145,7 +145,7 @@ const ApexScatterChart = () => {
         }}
       />
       <CardContent>
-        <AppReactApexCharts type='scatter' width='100%' height={400} options={options} series={series} />
+        <AppReactApexCharts type="scatter" width="100%" height={400} options={options} series={series} />
       </CardContent>
     </Card>
   )

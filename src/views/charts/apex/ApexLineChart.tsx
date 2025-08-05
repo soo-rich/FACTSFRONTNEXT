@@ -92,8 +92,8 @@ const ApexLineChart = () => {
   return (
     <Card>
       <CardHeader
-        title='Balance'
-        subheader='Commercial networks & enterprises'
+        title="Balance"
+        subheader="Commercial networks & enterprises"
         sx={{
           flexDirection: ['column', 'row'],
           alignItems: ['flex-start', 'center'],
@@ -102,7 +102,7 @@ const ApexLineChart = () => {
         }}
       />
       <CardContent>
-        <AppReactApexCharts type='line' width='100%' height={400} options={options} series={series} />
+        <AppReactApexCharts type="line" width="100%" height={400} options={options} series={series} />
       </CardContent>
     </Card>
   )

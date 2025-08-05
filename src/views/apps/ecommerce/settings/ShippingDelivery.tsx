@@ -40,54 +40,54 @@ const ShippingRateCard = (props: ShippingRateCardProps) => {
   const { title, avatar, data } = props
 
   return (
-    <div className='flex flex-col items-start gap-4'>
-      <div className='flex items-center gap-2 is-full'>
+    <div className="flex flex-col items-start gap-4">
+      <div className="flex items-center gap-2 is-full">
         <CustomAvatar src={avatar} size={34} />
-        <div className='flex-auto'>
-          <Typography className='font-medium' color='text.primary'>
+        <div className="flex-auto">
+          <Typography className="font-medium" color="text.primary">
             {title}
           </Typography>
-          <Typography variant='body2'>United states of America</Typography>
+          <Typography variant="body2">United states of America</Typography>
         </div>
-        <IconButton color='secondary' size='small'>
-          <i className='tabler-pencil' />
+        <IconButton color="secondary" size="small">
+          <i className="tabler-pencil" />
         </IconButton>
-        <IconButton color='secondary' size='small'>
-          <i className='tabler-trash' />
+        <IconButton color="secondary" size="small">
+          <i className="tabler-trash" />
         </IconButton>
       </div>
-      <div className='is-full border rounded overflow-x-auto'>
+      <div className="is-full border rounded overflow-x-auto">
         <table className={tableStyles.table}>
-          <thead className='border-0'>
-            <tr>
-              <th>Rate Name</th>
-              <th>Condition</th>
-              <th>Price</th>
-              <th className='is-[100px]'>Actions</th>
-            </tr>
+          <thead className="border-0">
+          <tr>
+            <th>Rate Name</th>
+            <th>Condition</th>
+            <th>Price</th>
+            <th className="is-[100px]">Actions</th>
+          </tr>
           </thead>
           <tbody>
-            {data.map((data, index) => (
-              <tr key={index}>
-                <td>{data.rate}</td>
-                <td>{data.condition}</td>
-                <td>{data.price}</td>
-                <td className='is-[100px]'>
-                  <OptionMenu
-                    iconButtonProps={{ size: 'medium' }}
-                    iconClassName='text-textSecondary text-[22px]'
-                    options={[
-                      { text: 'Edit', icon: 'tabler-edit' },
-                      { text: 'Delete', icon: 'tabler-trash' }
-                    ]}
-                  />
-                </td>
-              </tr>
-            ))}
+          {data.map((data, index) => (
+            <tr key={index}>
+              <td>{data.rate}</td>
+              <td>{data.condition}</td>
+              <td>{data.price}</td>
+              <td className="is-[100px]">
+                <OptionMenu
+                  iconButtonProps={{ size: 'medium' }}
+                  iconClassName="text-textSecondary text-[22px]"
+                  options={[
+                    { text: 'Edit', icon: 'tabler-edit' },
+                    { text: 'Delete', icon: 'tabler-trash' }
+                  ]}
+                />
+              </td>
+            </tr>
+          ))}
           </tbody>
         </table>
       </div>
-      <Button variant='tonal' size='small'>
+      <Button variant="tonal" size="small">
         Add Rate
       </Button>
     </div>
@@ -98,18 +98,18 @@ const ShippingDelivery = () => {
   return (
     <Card>
       <CardHeader
-        title='Shipping zones'
-        subheader='Choose where you ship and how much you charge for shipping at checkout.'
+        title="Shipping zones"
+        subheader="Choose where you ship and how much you charge for shipping at checkout."
         action={
-          <Typography component={Link} color='primary.main' className='font-medium'>
+          <Typography component={Link} color="primary.main" className="font-medium">
             Create zone
           </Typography>
         }
         sx={{ '& .MuiCardHeader-action': { alignSelf: 'center' } }}
       />
-      <CardContent className='flex flex-col gap-6'>
-        <ShippingRateCard title='Domestic' avatar='/images/avatars/1.png' data={domesticTableData} />
-        <ShippingRateCard title='International' avatar='/images/cards/us.png' data={internationalTableData} />
+      <CardContent className="flex flex-col gap-6">
+        <ShippingRateCard title="Domestic" avatar="/images/avatars/1.png" data={domesticTableData} />
+        <ShippingRateCard title="International" avatar="/images/cards/us.png" data={internationalTableData} />
       </CardContent>
     </Card>
   )

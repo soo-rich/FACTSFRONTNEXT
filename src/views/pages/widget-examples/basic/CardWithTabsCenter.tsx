@@ -1,8 +1,8 @@
 'use client'
 
+import type { SyntheticEvent } from 'react'
 // React Imports
 import { useState } from 'react'
-import type { SyntheticEvent } from 'react'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -25,41 +25,41 @@ const CardWithTabsCenter = () => {
   return (
     <Card>
       <TabContext value={value}>
-        <TabList centered onChange={handleChange} aria-label='card navigation examples'>
-          <Tab value='1' label='Item One' />
-          <Tab value='2' label='Item Two' />
-          <Tab value='3' label='Item Three' />
+        <TabList centered onChange={handleChange} aria-label="card navigation examples">
+          <Tab value="1" label="Item One" />
+          <Tab value="2" label="Item Two" />
+          <Tab value="3" label="Item Three" />
         </TabList>
         <CardContent>
-          <TabPanel value='1' className='text-center'>
-            <Typography variant='h5' className='mbe-2'>
+          <TabPanel value="1" className="text-center">
+            <Typography variant="h5" className="mbe-2">
               Header One
             </Typography>
-            <Typography color='text.secondary' className='mbe-6'>
+            <Typography color="text.secondary" className="mbe-6">
               Pudding tiramisu caramels. Gingerbread gummies danish chocolate bar toffee marzipan. Wafer wafer cake
               powder danish oat cake.
             </Typography>
-            <Button variant='contained'>Button One</Button>
+            <Button variant="contained">Button One</Button>
           </TabPanel>
-          <TabPanel value='2' className='text-center'>
-            <Typography variant='h5' className='mbe-2'>
+          <TabPanel value="2" className="text-center">
+            <Typography variant="h5" className="mbe-2">
               Header Two
             </Typography>
-            <Typography color='text.secondary' className='mbe-6'>
+            <Typography color="text.secondary" className="mbe-6">
               Dragée chupa chups soufflé cheesecake jelly tootsie roll cupcake marzipan. Carrot cake sweet roll gummi
               bears caramels jelly beans.
             </Typography>
-            <Button variant='contained'>Button Two</Button>
+            <Button variant="contained">Button Two</Button>
           </TabPanel>
-          <TabPanel value='3' className='text-center'>
-            <Typography variant='h5' className='mbe-2'>
+          <TabPanel value="3" className="text-center">
+            <Typography variant="h5" className="mbe-2">
               Header Three
             </Typography>
-            <Typography color='text.secondary' className='mbe-6'>
+            <Typography color="text.secondary" className="mbe-6">
               Icing cake macaroon macaroon jelly chocolate bar. Chupa chups dessert dessert soufflé chocolate bar
               jujubes gummi bears lollipop.
             </Typography>
-            <Button variant='contained'>Button Three</Button>
+            <Button variant="contained">Button Three</Button>
           </TabPanel>
         </CardContent>
       </TabContext>

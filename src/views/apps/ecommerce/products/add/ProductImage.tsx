@@ -60,7 +60,7 @@ const ProductImage = () => {
     if (file.type.startsWith('image')) {
       return <img width={38} height={38} alt={file.name} src={URL.createObjectURL(file as any)} />
     } else {
-      return <i className='tabler-file-description' />
+      return <i className="tabler-file-description" />
     }
   }
 
@@ -72,14 +72,14 @@ const ProductImage = () => {
   }
 
   const fileList = files.map((file: FileProp) => (
-    <ListItem key={file.name} className='pis-4 plb-3'>
-      <div className='file-details'>
-        <div className='file-preview'>{renderFilePreview(file)}</div>
+    <ListItem key={file.name} className="pis-4 plb-3">
+      <div className="file-details">
+        <div className="file-preview">{renderFilePreview(file)}</div>
         <div>
-          <Typography className='file-name font-medium' color='text.primary'>
+          <Typography className="file-name font-medium" color="text.primary">
             {file.name}
           </Typography>
-          <Typography className='file-size' variant='body2'>
+          <Typography className="file-size" variant="body2">
             {Math.round(file.size / 100) / 10 > 1000
               ? `${(Math.round(file.size / 100) / 10000).toFixed(1)} mb`
               : `${(Math.round(file.size / 100) / 10).toFixed(1)} kb`}
@@ -87,7 +87,7 @@ const ProductImage = () => {
         </div>
       </div>
       <IconButton onClick={() => handleRemoveFile(file)}>
-        <i className='tabler-x text-xl' />
+        <i className="tabler-x text-xl" />
       </IconButton>
     </ListItem>
   ))
@@ -100,9 +100,9 @@ const ProductImage = () => {
     <Dropzone>
       <Card>
         <CardHeader
-          title='Product Image'
+          title="Product Image"
           action={
-            <Typography component={Link} color='primary.main' className='font-medium'>
+            <Typography component={Link} color="primary.main" className="font-medium">
               Add media from URL
             </Typography>
           }
@@ -111,13 +111,13 @@ const ProductImage = () => {
         <CardContent>
           <div {...getRootProps({ className: 'dropzone' })}>
             <input {...getInputProps()} />
-            <div className='flex items-center flex-col gap-2 text-center'>
-              <CustomAvatar variant='rounded' skin='light' color='secondary'>
-                <i className='tabler-upload' />
+            <div className="flex items-center flex-col gap-2 text-center">
+              <CustomAvatar variant="rounded" skin="light" color="secondary">
+                <i className="tabler-upload" />
               </CustomAvatar>
-              <Typography variant='h4'>Drag and Drop Your Image Here.</Typography>
-              <Typography color='text.disabled'>or</Typography>
-              <Button variant='tonal' size='small'>
+              <Typography variant="h4">Drag and Drop Your Image Here.</Typography>
+              <Typography color="text.disabled">or</Typography>
+              <Button variant="tonal" size="small">
                 Browse Image
               </Button>
             </div>
@@ -125,11 +125,11 @@ const ProductImage = () => {
           {files.length ? (
             <>
               <List>{fileList}</List>
-              <div className='buttons'>
-                <Button color='error' variant='tonal' onClick={handleRemoveAllFiles}>
+              <div className="buttons">
+                <Button color="error" variant="tonal" onClick={handleRemoveAllFiles}>
                   Remove All
                 </Button>
-                <Button variant='contained'>Upload Files</Button>
+                <Button variant="contained">Upload Files</Button>
               </div>
             </>
           ) : null}

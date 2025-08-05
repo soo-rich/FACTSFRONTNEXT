@@ -6,6 +6,7 @@
   .drag {
     display: none;
     cursor: grab;
+
     &:active {
       cursor: grabbing;
     }
@@ -18,6 +19,7 @@
       display: inline-flex !important;
     }
   }
+
   .menu {
     display: none !important;
 

@@ -83,32 +83,32 @@ const OurTeam = () => {
   }, [])
 
   return (
-    <section id='team' className='plb-[100px] bg-backgroundPaper' ref={ref}>
+    <section id="team" className="plb-[100px] bg-backgroundPaper" ref={ref}>
       <div className={frontCommonStyles.layoutSpacing}>
-        <div className='flex flex-col gap-y-4 items-center justify-center'>
-          <Chip size='small' variant='tonal' color='primary' label='Our Great Team' />
-          <div className='flex flex-col items-center gap-y-1 justify-center flex-wrap'>
-            <div className='flex items-center gap-x-2'>
-              <Typography color='text.primary' variant='h4'>
-                <span className='relative z-[1] font-extrabold'>
+        <div className="flex flex-col gap-y-4 items-center justify-center">
+          <Chip size="small" variant="tonal" color="primary" label="Our Great Team" />
+          <div className="flex flex-col items-center gap-y-1 justify-center flex-wrap">
+            <div className="flex items-center gap-x-2">
+              <Typography color="text.primary" variant="h4">
+                <span className="relative z-[1] font-extrabold">
                   Supported
                   <img
-                    src='/images/front-pages/landing-page/bg-shape.png'
-                    alt='bg-shape'
-                    className='absolute block-end-0 z-[1] bs-[40%] is-[132%] -inline-start-[19%] block-start-[17px]'
+                    src="/images/front-pages/landing-page/bg-shape.png"
+                    alt="bg-shape"
+                    className="absolute block-end-0 z-[1] bs-[40%] is-[132%] -inline-start-[19%] block-start-[17px]"
                   />
                 </span>{' '}
                 by Real People
               </Typography>
             </div>
-            <Typography className='text-center'>Who is behind these great-looking interfaces?</Typography>
+            <Typography className="text-center">Who is behind these great-looking interfaces?</Typography>
           </div>
         </div>
-        <Grid container rowSpacing={16} columnSpacing={6} className='pbs-[100px]'>
+        <Grid container rowSpacing={16} columnSpacing={6} className="pbs-[100px]">
           {team.map((member, index) => (
             <Grid size={{ xs: 12, md: 6, lg: 3 }} key={index}>
-              <Card className='border overflow-visible' color={member.color as ThemeColor}>
-                <div className='flex flex-col items-center justify-center p-0'>
+              <Card className="border overflow-visible" color={member.color as ThemeColor}>
+                <div className="flex flex-col items-center justify-center p-0">
                   <div
                     className={classnames(
                       'flex justify-center is-full mli-auto text-center bs-[189px] relative overflow-visible',
@@ -116,12 +116,12 @@ const OurTeam = () => {
                     )}
                     style={{ backgroundColor: member.color }}
                   >
-                    <img src={member.image} alt={member.name} className='bs-[240px] absolute block-start-[-50px]' />
+                    <img src={member.image} alt={member.name} className="bs-[240px] absolute block-start-[-50px]" />
                   </div>
-                  <div className='flex flex-col gap-3 p-5 is-full'>
-                    <div className='text-center'>
-                      <Typography variant='h5'>{member.name}</Typography>
-                      <Typography color='text.disabled'>{member.position}</Typography>
+                  <div className="flex flex-col gap-3 p-5 is-full">
+                    <div className="text-center">
+                      <Typography variant="h5">{member.name}</Typography>
+                      <Typography color="text.disabled">{member.position}</Typography>
                     </div>
                   </div>
                 </div>

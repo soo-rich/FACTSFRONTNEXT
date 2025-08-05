@@ -35,30 +35,30 @@ const MyCourseHeader = (props: Props) => {
   const leftIllustration = useImageVariant(mode, lightIllustration, darkIllustration)
 
   return (
-    <Card className='relative flex justify-center'>
-      <img src={leftIllustration} className='max-md:hidden absolute max-is-[100px] top-12 start-12' />
-      <div className='flex flex-col items-center gap-4 max-md:pli-5 plb-12 md:is-1/2'>
-        <Typography variant='h4' className='text-center md:is-3/4'>
-          Education, talents, and career opportunities. <span className='text-primary'>All in one place.</span>
+    <Card className="relative flex justify-center">
+      <img src={leftIllustration} className="max-md:hidden absolute max-is-[100px] top-12 start-12" />
+      <div className="flex flex-col items-center gap-4 max-md:pli-5 plb-12 md:is-1/2">
+        <Typography variant="h4" className="text-center md:is-3/4">
+          Education, talents, and career opportunities. <span className="text-primary">All in one place.</span>
         </Typography>
-        <Typography className='text-center'>
+        <Typography className="text-center">
           Grow your skill with the most reliable online courses and certifications in marketing, information technology,
           programming, and data science.
         </Typography>
-        <div className='flex items-center gap-4 max-sm:is-full'>
+        <div className="flex items-center gap-4 max-sm:is-full">
           <CustomTextField
-            placeholder='Find your course'
+            placeholder="Find your course"
             value={searchValue}
             onChange={e => setSearchValue(e.target.value)}
-            className='sm:is-[350px] max-sm:flex-1'
+            className="sm:is-[350px] max-sm:flex-1"
           />
-          <CustomIconButton variant='contained' color='primary'>
-            <i className='tabler-search' />
+          <CustomIconButton variant="contained" color="primary">
+            <i className="tabler-search" />
           </CustomIconButton>
         </div>
       </div>
       <img
-        src='/images/apps/academy/9.png'
+        src="/images/apps/academy/9.png"
         className={classnames('max-md:hidden absolute max-bs-[180px] bottom-0 end-0', {
           'scale-x-[-1]': theme.direction === 'rtl'
         })}

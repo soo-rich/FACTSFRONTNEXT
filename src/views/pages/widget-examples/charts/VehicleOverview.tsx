@@ -69,10 +69,10 @@ const data: dataTypes[] = [
 const VehicleOverview = () => {
   return (
     <Card>
-      <CardHeader title='Vehicle Overview' action={<OptionMenu options={['Refresh', 'Update', 'Share']} />} />
+      <CardHeader title="Vehicle Overview" action={<OptionMenu options={['Refresh', 'Update', 'Share']} />} />
       <CardContent>
-        <div className='flex flex-col gap-6'>
-          <div className='flex is-full'>
+        <div className="flex flex-col gap-6">
+          <div className="flex is-full">
             {data.map((item, index) => (
               <div
                 key={index}
@@ -80,7 +80,7 @@ const VehicleOverview = () => {
               >
                 <Typography className={classnames(styles.header, 'relative max-sm:hidden')}>{item.heading}</Typography>
                 <LinearProgress
-                  variant='determinate'
+                  variant="determinate"
                   value={-1}
                   className={classnames('bs-[46px]')}
                   // eslint-disable-next-line lines-around-comment
@@ -91,8 +91,8 @@ const VehicleOverview = () => {
                   }}
                 />
                 <Typography
-                  variant='body2'
-                  className='absolute bottom-3 start-2 font-medium'
+                  variant="body2"
+                  className="absolute bottom-3 start-2 font-medium"
                   sx={{
                     color: theme =>
                       index === 0
@@ -101,7 +101,7 @@ const VehicleOverview = () => {
                           ? 'var(--mui-palette-common-white)'
                           : // eslint-disable-next-line lines-around-comment
                             // @ts-ignore
-                            theme.palette.getContrastText(theme.palette[item.progressColor][item.progressColorVariant])
+                          theme.palette.getContrastText(theme.palette[item.progressColor][item.progressColorVariant])
                   }}
                 >
                   {item.progressData}
@@ -109,25 +109,25 @@ const VehicleOverview = () => {
               </div>
             ))}
           </div>
-          <div className='overflow-x-auto'>
+          <div className="overflow-x-auto">
             <table className={tableStyles.table}>
               <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    <td className='flex items-center gap-2 pis-0'>
-                      <i className={classnames(item.icon, 'text-textPrimary text-[1.5rem]')}></i>
-                      <Typography color='text.primary'>{item.heading}</Typography>
-                    </td>
-                    <td className='text-end'>
-                      <Typography color='text.primary' className='font-medium'>
-                        {item.time}
-                      </Typography>
-                    </td>
-                    <td className='text-end pie-0'>
-                      <Typography>{item.progressData}</Typography>
-                    </td>
-                  </tr>
-                ))}
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <td className="flex items-center gap-2 pis-0">
+                    <i className={classnames(item.icon, 'text-textPrimary text-[1.5rem]')}></i>
+                    <Typography color="text.primary">{item.heading}</Typography>
+                  </td>
+                  <td className="text-end">
+                    <Typography color="text.primary" className="font-medium">
+                      {item.time}
+                    </Typography>
+                  </td>
+                  <td className="text-end pie-0">
+                    <Typography>{item.progressData}</Typography>
+                  </td>
+                </tr>
+              ))}
               </tbody>
             </table>
           </div>

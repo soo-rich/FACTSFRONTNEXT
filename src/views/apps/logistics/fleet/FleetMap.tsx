@@ -1,9 +1,9 @@
 // React Imports
-import { useRef, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
+import type { MapRef } from 'react-map-gl'
 // Third-party Imports
 import { Map, Marker } from 'react-map-gl'
-import type { MapRef } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 // Types Imports
@@ -41,14 +41,14 @@ const FleetMap = (props: Props) => {
   }, [viewState])
 
   return (
-    <div className='is-full bs-full'>
+    <div className="is-full bs-full">
       <Map
         mapboxAccessToken={mapboxAccessToken}
         // eslint-disable-next-line lines-around-comment
         // @ts-ignore
         ref={mapRef}
         initialViewState={{ longitude: -73.999024, latitude: 40.75249842, zoom: 12.5 }}
-        mapStyle='mapbox://styles/mapbox/light-v9'
+        mapStyle="mapbox://styles/mapbox/light-v9"
         attributionControl={false}
       >
         {geojson.features.map((item, index) => {
@@ -60,7 +60,7 @@ const FleetMap = (props: Props) => {
               style={{ display: 'flex' }}
             >
               <img
-                src='/images/apps/logistics/fleet-car.png'
+                src="/images/apps/logistics/fleet-car.png"
                 height={42}
                 width={20}
                 {...(index === carIndex && {

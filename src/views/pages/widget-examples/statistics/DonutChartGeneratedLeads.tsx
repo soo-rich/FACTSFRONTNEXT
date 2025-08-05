@@ -88,24 +88,24 @@ const BarChartRevenueGrowth = () => {
   }
 
   return (
-    <Card className='overflow-visible'>
-      <CardContent className='flex justify-between gap-4'>
-        <div className='flex flex-col justify-between'>
-          <div className='flex flex-col'>
-            <Typography variant='h5'>Generated Leads</Typography>
+    <Card className="overflow-visible">
+      <CardContent className="flex justify-between gap-4">
+        <div className="flex flex-col justify-between">
+          <div className="flex flex-col">
+            <Typography variant="h5">Generated Leads</Typography>
             <Typography>Monthly Report</Typography>
           </div>
-          <div className='flex flex-col items-start'>
-            <Typography variant='h3'>4,350</Typography>
-            <div className='flex items-center gap-1'>
-              <i className='tabler-chevron-up text-success text-xl'></i>
-              <Typography color='success.main' component='span'>
+          <div className="flex flex-col items-start">
+            <Typography variant="h3">4,350</Typography>
+            <div className="flex items-center gap-1">
+              <i className="tabler-chevron-up text-success text-xl"></i>
+              <Typography color="success.main" component="span">
                 +15.8%
               </Typography>
             </div>
           </div>
         </div>
-        <AppReactApexCharts type='donut' width={165} height={229} series={series} options={options} />
+        <AppReactApexCharts type="donut" width={165} height={229} series={series} options={options} />
       </CardContent>
     </Card>
   )

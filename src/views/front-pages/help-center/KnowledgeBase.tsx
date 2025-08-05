@@ -35,7 +35,7 @@ const allArticles: popularArticlesType[] = [
       { title: 'How do i add or change my details?' },
       { title: 'How do refunds work?' },
       { title: 'Can I Get A Refund?' },
-      { title: "I'm trying to find a specific item" }
+      { title: 'I\'m trying to find a specific item' }
     ]
   },
   {
@@ -56,7 +56,7 @@ const allArticles: popularArticlesType[] = [
     articles: [
       { title: 'Can I use the same license for the...' },
       { title: 'How to contact an author?' },
-      { title: "I'm making a test site - it's not for ..." },
+      { title: 'I\'m making a test site - it\'s not for ...' },
       { title: 'which license do I need?' },
       { title: 'I want to make multiple end prod ...' },
       { title: 'For logo what license do I need?' }
@@ -80,7 +80,7 @@ const allArticles: popularArticlesType[] = [
     articles: [
       { title: 'Signing in with a social account' },
       { title: 'Locked Out of Account' },
-      { title: "I'm not receiving the verification email" },
+      { title: 'I\'m not receiving the verification email' },
       { title: 'Forgotten Username Or Password' },
       { title: 'New password not accepted' },
       { title: 'What is Sign In Verification?' }
@@ -103,7 +103,7 @@ const allArticles: popularArticlesType[] = [
 const KnowledgeBase = () => {
   return (
     <section className={classnames('flex flex-col gap-6 md:plb-[100px] plb-[50px]', frontCommonStyles.layoutSpacing)}>
-      <Typography variant='h4' className='text-center'>
+      <Typography variant="h4" className="text-center">
         Knowledge Base
       </Typography>
       <Grid container spacing={6}>
@@ -111,42 +111,42 @@ const KnowledgeBase = () => {
           return (
             <Grid size={{ xs: 12, lg: 4 }} key={index}>
               <Card>
-                <CardContent className='flex flex-col items-start gap-6 text-center'>
-                  <div className='flex gap-3 items-center'>
-                    <CustomAvatar skin='light' variant='rounded' color='primary' size={32}>
+                <CardContent className="flex flex-col items-start gap-6 text-center">
+                  <div className="flex gap-3 items-center">
+                    <CustomAvatar skin="light" variant="rounded" color="primary" size={32}>
                       <i className={classnames('text-xl', article.icon)} />
                     </CustomAvatar>
-                    <Typography variant='h5'>{article.title}</Typography>
+                    <Typography variant="h5">{article.title}</Typography>
                   </div>
-                  <div className='flex flex-col gap-2 is-full'>
+                  <div className="flex flex-col gap-2 is-full">
                     {article.articles.map((data, index) => {
                       return (
-                        <div key={index} className='flex justify-between items-center gap-2'>
+                        <div key={index} className="flex justify-between items-center gap-2">
                           <Typography
-                            color='text.primary'
+                            color="text.primary"
                             component={Link}
-                            href='/front-pages/help-center/article/how-to-add-product-in-cart'
-                            className='truncate'
+                            href="/front-pages/help-center/article/how-to-add-product-in-cart"
+                            className="truncate"
                           >
                             {data.title}
                           </Typography>
                           <DirectionalIcon
-                            ltrIconClass='tabler-chevron-right text-textDisabled text-xl'
-                            rtlIconClass='tabler-chevron-left text-textDisabled text-xl'
+                            ltrIconClass="tabler-chevron-right text-textDisabled text-xl"
+                            rtlIconClass="tabler-chevron-left text-textDisabled text-xl"
                           />
                         </div>
                       )
                     })}
                   </div>
                   <Link
-                    href='/front-pages/help-center/article/how-to-add-product-in-cart'
-                    className='flex items-center gap-x-2 text-primary'
+                    href="/front-pages/help-center/article/how-to-add-product-in-cart"
+                    className="flex items-center gap-x-2 text-primary"
                   >
-                    <span className='font-medium'>See all 6 articles</span>
+                    <span className="font-medium">See all 6 articles</span>
                     <DirectionalIcon
-                      className='text-lg'
-                      ltrIconClass='tabler-arrow-right'
-                      rtlIconClass='tabler-arrow-left'
+                      className="text-lg"
+                      ltrIconClass="tabler-arrow-right"
+                      rtlIconClass="tabler-arrow-left"
                     />
                   </Link>
                 </CardContent>

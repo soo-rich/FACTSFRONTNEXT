@@ -19,20 +19,20 @@ import Typography from '@mui/material/Typography'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -54,6 +54,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -122,18 +123,18 @@ const ReferredUsersTable = ({ referralsData }: { referralsData?: ReferralsType[]
       columnHelper.accessor('user', {
         header: 'Users',
         cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
+          <div className="flex items-center gap-4">
             <CustomAvatar src={row.original.avatar} size={34} />
-            <div className='flex flex-col items-start'>
+            <div className="flex flex-col items-start">
               <Typography
                 component={Link}
                 href={getLocalizedUrl('/apps/ecommerce/customers/details/879861', locale as Locale)}
-                color='text.primary'
-                className='font-medium hover:text-primary'
+                color="text.primary"
+                className="font-medium hover:text-primary"
               >
                 {row.original.user}
               </Typography>
-              <Typography variant='body2'>{row.original.email}</Typography>
+              <Typography variant="body2">{row.original.email}</Typography>
             </div>
           </div>
         )
@@ -145,7 +146,7 @@ const ReferredUsersTable = ({ referralsData }: { referralsData?: ReferralsType[]
       columnHelper.accessor('status', {
         header: 'Status',
         cell: ({ row }) => (
-          <Chip variant='tonal' label={row.original.status} size='small' color={userStatusObj[row.original.status]} />
+          <Chip variant="tonal" label={row.original.status} size="small" color={userStatusObj[row.original.status]} />
         )
       }),
       columnHelper.accessor('value', {
@@ -154,7 +155,7 @@ const ReferredUsersTable = ({ referralsData }: { referralsData?: ReferralsType[]
       }),
       columnHelper.accessor('earning', {
         header: 'Earning',
-        cell: ({ row }) => <Typography color='text.primary'>{row.original.earning}</Typography>
+        cell: ({ row }) => <Typography color="text.primary">{row.original.earning}</Typography>
       })
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -190,75 +191,75 @@ const ReferredUsersTable = ({ referralsData }: { referralsData?: ReferralsType[]
   return (
     <>
       <Card>
-        <CardContent className='flex flex-wrap justify-between items-center gap-4'>
-          <Typography variant='h5'>Referred Users</Typography>
-          <div className='flex flex-wrap items-center gap-4'>
+        <CardContent className="flex flex-wrap justify-between items-center gap-4">
+          <Typography variant="h5">Referred Users</Typography>
+          <div className="flex flex-wrap items-center gap-4">
             <CustomTextField
               select
               value={table.getState().pagination.pageSize}
               onChange={e => table.setPageSize(Number(e.target.value))}
-              className='flex-auto is-[70px]'
+              className="flex-auto is-[70px]"
             >
-              <MenuItem value='10'>10</MenuItem>
-              <MenuItem value='25'>25</MenuItem>
-              <MenuItem value='50'>50</MenuItem>
+              <MenuItem value="10">10</MenuItem>
+              <MenuItem value="25">25</MenuItem>
+              <MenuItem value="50">50</MenuItem>
             </CustomTextField>
-            <Button variant='tonal' startIcon={<i className='tabler-upload' />} color='secondary'>
+            <Button variant="tonal" startIcon={<i className="tabler-upload" />} color="secondary">
               Export
             </Button>
           </div>
         </CardContent>
-        <div className='overflow-x-auto'>
+        <div className="overflow-x-auto">
           <table className={tableStyles.table}>
             <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            className={classnames({
-                              'flex items-center': header.column.getIsSorted(),
-                              'cursor-pointer select-none': header.column.getCanSort()
-                            })}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {{
-                              asc: <i className='tabler-chevron-up text-xl' />,
-                              desc: <i className='tabler-chevron-down text-xl' />
-                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                          </div>
-                        </>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div
+                          className={classnames({
+                            'flex items-center': header.column.getIsSorted(),
+                            'cursor-pointer select-none': header.column.getCanSort()
+                          })}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {{
+                            asc: <i className="tabler-chevron-up text-xl" />,
+                            desc: <i className="tabler-chevron-down text-xl" />
+                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                        </div>
+                      </>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
             </thead>
             {table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    No data available
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                  No data available
+                </td>
+              </tr>
               </tbody>
             ) : (
               <tbody>
-                {table
-                  .getRowModel()
-                  .rows.slice(0, table.getState().pagination.pageSize)
-                  .map(row => {
-                    return (
-                      <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                        {row.getVisibleCells().map(cell => (
-                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                        ))}
-                      </tr>
-                    )
-                  })}
+              {table
+                .getRowModel()
+                .rows.slice(0, table.getState().pagination.pageSize)
+                .map(row => {
+                  return (
+                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                      {row.getVisibleCells().map(cell => (
+                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                      ))}
+                    </tr>
+                  )
+                })}
               </tbody>
             )}
           </table>

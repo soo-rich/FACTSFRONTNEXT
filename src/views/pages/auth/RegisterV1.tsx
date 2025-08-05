@@ -42,28 +42,28 @@ const RegisterV1 = () => {
 
   return (
     <AuthIllustrationWrapper>
-      <Card className='flex flex-col sm:is-[450px]'>
-        <CardContent className='sm:!p-12'>
-          <Link href={getLocalizedUrl('/', locale as Locale)} className='flex justify-center mbe-6'>
+      <Card className="flex flex-col sm:is-[450px]">
+        <CardContent className="sm:!p-12">
+          <Link href={getLocalizedUrl('/', locale as Locale)} className="flex justify-center mbe-6">
             <Logo />
           </Link>
-          <div className='flex flex-col gap-1 mbe-6'>
-            <Typography variant='h4'>Adventure starts here 🚀</Typography>
+          <div className="flex flex-col gap-1 mbe-6">
+            <Typography variant="h4">Adventure starts here 🚀</Typography>
             <Typography>Make your app management easy and fun!</Typography>
           </div>
-          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()} className='flex flex-col gap-6'>
-            <CustomTextField autoFocus fullWidth label='Username' placeholder='Enter your username' />
-            <CustomTextField fullWidth label='Email' placeholder='Enter your email' />
+          <form noValidate autoComplete="off" onSubmit={e => e.preventDefault()} className="flex flex-col gap-6">
+            <CustomTextField autoFocus fullWidth label="Username" placeholder="Enter your username" />
+            <CustomTextField fullWidth label="Email" placeholder="Enter your email" />
             <CustomTextField
               fullWidth
-              label='Password'
-              placeholder='············'
+              label="Password"
+              placeholder="············"
               type={isPasswordShown ? 'text' : 'password'}
               slotProps={{
                 input: {
                   endAdornment: (
-                    <InputAdornment position='end'>
-                      <IconButton edge='end' onClick={handleClickShowPassword} onMouseDown={e => e.preventDefault()}>
+                    <InputAdornment position="end">
+                      <IconButton edge="end" onClick={handleClickShowPassword} onMouseDown={e => e.preventDefault()}>
                         <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                       </IconButton>
                     </InputAdornment>
@@ -76,38 +76,38 @@ const RegisterV1 = () => {
               label={
                 <>
                   <span>I agree to </span>
-                  <Link className='text-primary' href='/' onClick={e => e.preventDefault()}>
+                  <Link className="text-primary" href="/" onClick={e => e.preventDefault()}>
                     privacy policy & terms
                   </Link>
                 </>
               }
             />
-            <Button fullWidth variant='contained' type='submit'>
+            <Button fullWidth variant="contained" type="submit">
               Sign Up
             </Button>
-            <div className='flex justify-center items-center flex-wrap gap-2'>
+            <div className="flex justify-center items-center flex-wrap gap-2">
               <Typography>Already have an account?</Typography>
               <Typography
                 component={Link}
                 href={getLocalizedUrl('/pages/auth/login-v1', locale as Locale)}
-                color='primary.main'
+                color="primary.main"
               >
                 Sign in instead
               </Typography>
             </div>
-            <Divider className='gap-2 text-textPrimary'>or</Divider>
-            <div className='flex justify-center items-center gap-1.5'>
-              <IconButton className='text-facebook' size='small'>
-                <i className='tabler-brand-facebook-filled' />
+            <Divider className="gap-2 text-textPrimary">or</Divider>
+            <div className="flex justify-center items-center gap-1.5">
+              <IconButton className="text-facebook" size="small">
+                <i className="tabler-brand-facebook-filled" />
               </IconButton>
-              <IconButton className='text-twitter' size='small'>
-                <i className='tabler-brand-twitter-filled' />
+              <IconButton className="text-twitter" size="small">
+                <i className="tabler-brand-twitter-filled" />
               </IconButton>
-              <IconButton className='text-textPrimary' size='small'>
-                <i className='tabler-brand-github-filled' />
+              <IconButton className="text-textPrimary" size="small">
+                <i className="tabler-brand-github-filled" />
               </IconButton>
-              <IconButton className='text-error' size='small'>
-                <i className='tabler-brand-google-filled' />
+              <IconButton className="text-error" size="small">
+                <i className="tabler-brand-google-filled" />
               </IconButton>
             </div>
           </form>

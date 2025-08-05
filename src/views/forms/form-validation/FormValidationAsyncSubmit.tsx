@@ -15,7 +15,7 @@ import IconButton from '@mui/material/IconButton'
 
 // Third-party Imports
 import { toast } from 'react-toastify'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 
 // Components Imports
 import CustomTextField from '@core/components/mui/TextField'
@@ -60,21 +60,21 @@ const FormValidationAsyncSubmit = () => {
 
   return (
     <Card>
-      <CardHeader title='Async Submit' />
+      <CardHeader title="Async Submit" />
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={6}>
             <Grid size={{ xs: 12 }}>
               <Controller
-                name='firstName'
+                name="firstName"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    label='First Name'
-                    placeholder='John'
+                    label="First Name"
+                    placeholder="John"
                     {...(errors.firstName && { error: true, helperText: 'This field is required.' })}
                   />
                 )}
@@ -82,15 +82,15 @@ const FormValidationAsyncSubmit = () => {
             </Grid>
             <Grid size={{ xs: 12 }}>
               <Controller
-                name='lastName'
+                name="lastName"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    label='Last Name'
-                    placeholder='Doe'
+                    label="Last Name"
+                    placeholder="Doe"
                     {...(errors.lastName && { error: true, helperText: 'This field is required.' })}
                   />
                 )}
@@ -98,16 +98,16 @@ const FormValidationAsyncSubmit = () => {
             </Grid>
             <Grid size={{ xs: 12 }}>
               <Controller
-                name='email'
+                name="email"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    type='email'
-                    label='Email'
-                    placeholder='johndoe@gmail.com'
+                    type="email"
+                    label="Email"
+                    placeholder="johndoe@gmail.com"
                     {...(errors.email && { error: true, helperText: 'This field is required.' })}
                   />
                 )}
@@ -115,26 +115,26 @@ const FormValidationAsyncSubmit = () => {
             </Grid>
             <Grid size={{ xs: 12 }}>
               <Controller
-                name='password'
+                name="password"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
-                    label='Password'
-                    id='outlined-password'
-                    placeholder='············'
+                    label="Password"
+                    id="outlined-password"
+                    placeholder="············"
                     type={isPasswordShown ? 'text' : 'password'}
                     slotProps={{
                       input: {
                         endAdornment: (
-                          <InputAdornment position='end'>
+                          <InputAdornment position="end">
                             <IconButton
-                              edge='end'
+                              edge="end"
                               onClick={handleClickShowPassword}
                               onMouseDown={e => e.preventDefault()}
-                              aria-label='toggle password visibility'
+                              aria-label="toggle password visibility"
                             >
                               <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                             </IconButton>
@@ -147,12 +147,12 @@ const FormValidationAsyncSubmit = () => {
                 )}
               />
             </Grid>
-            <Grid size={{ xs: 12 }} className='flex gap-4'>
-              <Button variant='contained' type='submit' className='gap-2'>
-                {loading && <CircularProgress size={20} color='inherit' />}
+            <Grid size={{ xs: 12 }} className="flex gap-4">
+              <Button variant="contained" type="submit" className="gap-2">
+                {loading && <CircularProgress size={20} color="inherit" />}
                 Submit
               </Button>
-              <Button variant='tonal' color='secondary' type='reset' onClick={() => reset()}>
+              <Button variant="tonal" color="secondary" type="reset" onClick={() => reset()}>
                 Reset
               </Button>
             </Grid>

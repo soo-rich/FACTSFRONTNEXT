@@ -1,8 +1,8 @@
 'use client'
 
+import type { MouseEvent } from 'react'
 // React Imports
 import { useState } from 'react'
-import type { MouseEvent } from 'react'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -32,33 +32,33 @@ const CardMobile = () => {
   return (
     <Card>
       <Grid container>
-        <Grid size={{ xs: 12, md: 5 }} className='flex items-center justify-center'>
-          <CardContent className='flex items-center justify-center'>
-            <img alt='iPhone 11 Pro' src='/images/cards/4.png' height={175} />
+        <Grid size={{ xs: 12, md: 5 }} className="flex items-center justify-center">
+          <CardContent className="flex items-center justify-center">
+            <img alt="iPhone 11 Pro" src="/images/cards/4.png" height={175} />
           </CardContent>
         </Grid>
-        <Grid size={{ xs: 12, md: 7 }} className='md:border-is border-bs md:border-bs-0'>
+        <Grid size={{ xs: 12, md: 7 }} className="md:border-is border-bs md:border-bs-0">
           <CardContent>
-            <Typography variant='h5' className='mbe-2'>
+            <Typography variant="h5" className="mbe-2">
               Apple iPhone 11 Pro
             </Typography>
-            <Typography className='mbe-2' color='text.secondary'>
+            <Typography className="mbe-2" color="text.secondary">
               Apple iPhone 11 Pro smartphone. Announced Sep 2019. Features 5.8″ display Apple A13 Bionic
             </Typography>
-            <div className='flex gap-1'>
+            <div className="flex gap-1">
               <Typography>Price:</Typography>
-              <Typography className='font-medium'>$899</Typography>
+              <Typography className="font-medium">$899</Typography>
             </div>
           </CardContent>
-          <CardActions className='justify-between card-actions-dense'>
-            <Button startIcon={<i className='tabler-shopping-cart' />}>Add to Cart</Button>
+          <CardActions className="justify-between card-actions-dense">
+            <Button startIcon={<i className="tabler-shopping-cart" />}>Add to Cart</Button>
             <IconButton
-              id='share-button'
-              aria-haspopup='true'
+              id="share-button"
+              aria-haspopup="true"
               {...(open && { 'aria-expanded': true, 'aria-controls': 'share-menu' })}
               onClick={handleClick}
             >
-              <i className='tabler-share' />
+              <i className="tabler-share" />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
@@ -67,16 +67,16 @@ const CardMobile = () => {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>
-                <i className='tabler-brand-facebook text-xl' />
+                <i className="tabler-brand-facebook text-xl" />
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <i className='tabler-brand-twitter text-xl' />
+                <i className="tabler-brand-twitter text-xl" />
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <i className='tabler-brand-linkedin text-xl' />
+                <i className="tabler-brand-linkedin text-xl" />
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <i className='tabler-brand-google text-xl' />
+                <i className="tabler-brand-google text-xl" />
               </MenuItem>
             </Menu>
           </CardActions>

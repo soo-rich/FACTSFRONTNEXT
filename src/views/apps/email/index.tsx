@@ -104,7 +104,7 @@ const EmailWrapper = ({ folder, label }: { folder?: string; label?: string }) =>
         uniqueLabels={uniqueLabels}
         label={label || ''}
       />
-      <Backdrop open={backdropOpen} onClick={handleBackdropClick} className='absolute z-10' />
+      <Backdrop open={backdropOpen} onClick={handleBackdropClick} className="absolute z-10" />
       <MailContent
         store={emailStore}
         dispatch={dispatch}

@@ -184,34 +184,34 @@ const TotalEarning = () => {
   return (
     <Card>
       <CardHeader
-        title='Total Earning'
+        title="Total Earning"
         action={<OptionMenu options={['Refresh', 'Share', 'Update']} />}
         subheader={
-          <div className='flex items-center gap-2'>
-            <Typography variant='h2'>87%</Typography>
-            <div className='flex items-center gap-1'>
-              <i className='tabler-chevron-up text-xl text-success' />
-              <Typography color='success.main'>25.8%</Typography>
+          <div className="flex items-center gap-2">
+            <Typography variant="h2">87%</Typography>
+            <div className="flex items-center gap-1">
+              <i className="tabler-chevron-up text-xl text-success" />
+              <Typography color="success.main">25.8%</Typography>
             </div>
           </div>
         }
       />
-      <CardContent className='flex flex-col gap-4'>
-        <AppReactApexCharts type='bar' height={189} width='100%' series={series} options={options} />
+      <CardContent className="flex flex-col gap-4">
+        <AppReactApexCharts type="bar" height={189} width="100%" series={series} options={options} />
         {data.map((item, index) => (
-          <div key={index} className='flex items-center gap-4'>
-            <CustomAvatar skin='light' variant='rounded' color={item.avatarColor} size={38}>
+          <div key={index} className="flex items-center gap-4">
+            <CustomAvatar skin="light" variant="rounded" color={item.avatarColor} size={38}>
               <i className={classnames(item.avatarIcon, 'text-[22px]')} />
             </CustomAvatar>
-            <div className='flex justify-between items-center is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
+            <div className="flex justify-between items-center is-full">
+              <div className="flex flex-col">
+                <Typography className="font-medium" color="text.primary">
                   {item.title}
                 </Typography>
-                <Typography variant='body2'>{item.subtitle}</Typography>
+                <Typography variant="body2">{item.subtitle}</Typography>
               </div>
               <Typography
-                className='font-medium'
+                className="font-medium"
                 color={`${item.amountDiff === 'negative' ? 'error' : 'success'}.main`}
               >{`${item.amountDiff === 'negative' ? '-' : '+'}$${item.amount}`}</Typography>
             </div>

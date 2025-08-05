@@ -2,18 +2,18 @@
 
 // React Imports
 import type { ChangeEvent } from 'react'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 // MUI Imports
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
+import type { ButtonProps } from '@mui/material/Button'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid2'
 import MenuItem from '@mui/material/MenuItem'
 import Avatar from '@mui/material/Avatar'
 import Divider from '@mui/material/Divider'
-import type { ButtonProps } from '@mui/material/Button'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -37,10 +37,10 @@ import frontCommonStyles from '@views/front-pages/styles.module.css'
 const cardData: CustomInputHorizontalData[] = [
   {
     title: (
-      <div className='flex items-center gap-4'>
+      <div className="flex items-center gap-4">
         <Avatar
-          variant='rounded'
-          className='is-[58px] bs-[34px]'
+          variant="rounded"
+          className="is-[58px] bs-[34px]"
           sx={theme => ({
             backgroundColor: 'var(--mui-palette-action-hover)',
             ...theme.applyStyles('dark', {
@@ -48,9 +48,9 @@ const cardData: CustomInputHorizontalData[] = [
             })
           })}
         >
-          <img src='/images/logos/visa.png' alt='plan' className='bs-3' />
+          <img src="/images/logos/visa.png" alt="plan" className="bs-3" />
         </Avatar>
-        <Typography color='text.primary' className='font-medium'>
+        <Typography color="text.primary" className="font-medium">
           Credit Card
         </Typography>
       </div>
@@ -60,10 +60,10 @@ const cardData: CustomInputHorizontalData[] = [
   },
   {
     title: (
-      <div className='flex items-center gap-4'>
+      <div className="flex items-center gap-4">
         <Avatar
-          variant='rounded'
-          className='is-[58px] bs-[34px]'
+          variant="rounded"
+          className="is-[58px] bs-[34px]"
           sx={theme => ({
             backgroundColor: 'var(--mui-palette-action-hover)',
             ...theme.applyStyles('dark', {
@@ -71,9 +71,9 @@ const cardData: CustomInputHorizontalData[] = [
             })
           })}
         >
-          <img src='/images/logos/paypal.png' alt='plan' className='bs-5' />
+          <img src="/images/logos/paypal.png" alt="plan" className="bs-5" />
         </Avatar>
-        <Typography color='text.primary' className='font-medium'>
+        <Typography color="text.primary" className="font-medium">
           Paypal
         </Typography>
       </div>
@@ -92,8 +92,8 @@ const Payment = ({ data }: { data: PricingPlanType[] }) => {
   }
 
   const initialSelected: string = cardData.filter(item => item.isSelected)[
-    cardData.filter(item => item.isSelected).length - 1
-  ].value
+  cardData.filter(item => item.isSelected).length - 1
+    ].value
 
   // States
   const [selectCountry, setSelectCountry] = useState('Brazil')
@@ -127,9 +127,10 @@ const Payment = ({ data }: { data: PricingPlanType[] }) => {
       <Card>
         <Grid container>
           <Grid size={{ md: 12, lg: 7 }}>
-            <CardContent className='flex flex-col max-sm:gap-y-5 gap-y-8 sm:p-8 border-be lg:border-be-0 lg:border-e bs-full'>
-              <div className='flex flex-col gap-2'>
-                <Typography variant='h4'>Checkout</Typography>
+            <CardContent
+              className="flex flex-col max-sm:gap-y-5 gap-y-8 sm:p-8 border-be lg:border-be-0 lg:border-e bs-full">
+              <div className="flex flex-col gap-2">
+                <Typography variant="h4">Checkout</Typography>
                 <Typography>
                   All plans include 40+ advanced tools and features to boost your product. Choose the best plan to fit
                   your needs.
@@ -139,8 +140,8 @@ const Payment = ({ data }: { data: PricingPlanType[] }) => {
                 {cardData.map((item, index) => (
                   <CustomInputHorizontal
                     key={index}
-                    type='radio'
-                    name='paymemt-method'
+                    type="radio"
+                    name="paymemt-method"
                     data={item}
                     selected={selectInput}
                     handleChange={handlePaymentChange}
@@ -149,29 +150,29 @@ const Payment = ({ data }: { data: PricingPlanType[] }) => {
                 ))}
               </Grid>
               <div>
-                <Typography variant='h4' className='mbe-6'>
+                <Typography variant="h4" className="mbe-6">
                   Billing Details
                 </Typography>
                 <Grid container spacing={5}>
                   <Grid size={{ xs: 12, sm: 6 }}>
-                    <CustomTextField fullWidth label='Email Address' placeholder='john.deo@gmail.com' type='email' />
+                    <CustomTextField fullWidth label="Email Address" placeholder="john.deo@gmail.com" type="email" />
                   </Grid>
                   <Grid size={{ xs: 12, sm: 6 }}>
                     <CustomTextField
                       fullWidth
-                      type='password'
-                      id='password-input'
-                      label='Password'
-                      placeholder='Password'
+                      type="password"
+                      id="password-input"
+                      label="Password"
+                      placeholder="Password"
                     />
                   </Grid>
                   <Grid size={{ xs: 12, sm: 6 }}>
                     <CustomTextField
                       select
                       fullWidth
-                      label='Billing Country'
-                      name='country'
-                      variant='outlined'
+                      label="Billing Country"
+                      name="country"
+                      variant="outlined"
                       value={selectCountry}
                       onChange={handleCountryChange}
                     >
@@ -184,44 +185,44 @@ const Payment = ({ data }: { data: PricingPlanType[] }) => {
                   </Grid>
                   <Grid size={{ xs: 12, sm: 6 }}>
                     <CustomTextField
-                      label='Billing Zip / Postal Code'
-                      id='postal-code-input'
-                      placeholder='Billing Zip / Postal Code'
+                      label="Billing Zip / Postal Code"
+                      id="postal-code-input"
+                      placeholder="Billing Zip / Postal Code"
                       fullWidth
-                      type='number'
+                      type="number"
                     />
                   </Grid>
                 </Grid>
               </div>
               {selectInput === 'credit-card' && (
                 <div>
-                  <Typography variant='h4' className='mbe-6'>
+                  <Typography variant="h4" className="mbe-6">
                     Credit Card Info
                   </Typography>
                   <Grid container spacing={5}>
                     <Grid size={{ xs: 12 }}>
                       <CustomTextField
                         fullWidth
-                        id='card-number-input'
-                        placeholder='8763 2345 3478'
-                        label='Card Number'
-                        type='number'
+                        id="card-number-input"
+                        placeholder="8763 2345 3478"
+                        label="Card Number"
+                        type="number"
                       />
                     </Grid>
                     <Grid size={{ xs: 12, sm: 6 }}>
-                      <CustomTextField fullWidth id='card-holder-name' placeholder='John Doe' label='Card Holder' />
+                      <CustomTextField fullWidth id="card-holder-name" placeholder="John Doe" label="Card Holder" />
                     </Grid>
                     <Grid size={{ xs: 12, sm: 3 }}>
                       <CustomTextField
                         fullWidth
-                        id='expiry-date'
-                        placeholder='05/2026'
-                        label='EXP. date'
-                        type='number'
+                        id="expiry-date"
+                        placeholder="05/2026"
+                        label="EXP. date"
+                        type="number"
                       />
                     </Grid>
                     <Grid size={{ xs: 12, sm: 3 }}>
-                      <CustomTextField fullWidth id='cvv' placeholder='734' label='CVV' type='number' />
+                      <CustomTextField fullWidth id="cvv" placeholder="734" label="CVV" type="number" />
                     </Grid>
                   </Grid>
                 </div>
@@ -229,19 +230,19 @@ const Payment = ({ data }: { data: PricingPlanType[] }) => {
             </CardContent>
           </Grid>
           <Grid size={{ md: 12, lg: 5 }}>
-            <CardContent className='flex flex-col gap-8 sm:p-8'>
-              <div className='flex flex-col gap-2'>
-                <Typography variant='h4'>Order Summary</Typography>
+            <CardContent className="flex flex-col gap-8 sm:p-8">
+              <div className="flex flex-col gap-2">
+                <Typography variant="h4">Order Summary</Typography>
                 <Typography>
                   It can help you manage and service orders before, during, and after fulfillment.
                 </Typography>
               </div>
-              <div className='flex flex-col gap-5'>
-                <div className='flex flex-col gap-4 p-6 bg-actionHover rounded'>
+              <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-4 p-6 bg-actionHover rounded">
                   <Typography>A simple start for everyone</Typography>
-                  <div className='flex items-baseline'>
-                    <Typography variant='h1'>$59.99</Typography>
-                    <Typography component='sub'>/month</Typography>
+                  <div className="flex items-baseline">
+                    <Typography variant="h1">$59.99</Typography>
+                    <Typography component="sub">/month</Typography>
                   </div>
                   <OpenDialogOnElementClick
                     element={Button}
@@ -251,30 +252,30 @@ const Payment = ({ data }: { data: PricingPlanType[] }) => {
                   />
                 </div>
                 <div>
-                  <div className='flex gap-2 items-center justify-between mbe-2'>
+                  <div className="flex gap-2 items-center justify-between mbe-2">
                     <Typography>Subscription</Typography>
-                    <Typography color='text.primary' className='font-medium'>
+                    <Typography color="text.primary" className="font-medium">
                       $85.99
                     </Typography>
                   </div>
-                  <div className='flex gap-2 items-center justify-between'>
+                  <div className="flex gap-2 items-center justify-between">
                     <Typography>Tax</Typography>
-                    <Typography color='text.primary' className='font-medium'>
+                    <Typography color="text.primary" className="font-medium">
                       $4.99
                     </Typography>
                   </div>
-                  <Divider className='mlb-4' />
-                  <div className='flex gap-2 items-center justify-between'>
+                  <Divider className="mlb-4" />
+                  <div className="flex gap-2 items-center justify-between">
                     <Typography>Total</Typography>
-                    <Typography color='text.primary' className='font-medium'>
+                    <Typography color="text.primary" className="font-medium">
                       $90.98
                     </Typography>
                   </div>
                 </div>
                 <Button
-                  variant='contained'
-                  color='success'
-                  endIcon={<DirectionalIcon ltrIconClass='tabler-arrow-right' rtlIconClass='tabler-arrow-left' />}
+                  variant="contained"
+                  color="success"
+                  endIcon={<DirectionalIcon ltrIconClass="tabler-arrow-right" rtlIconClass="tabler-arrow-left" />}
                 >
                   Proceed With Payment
                 </Button>

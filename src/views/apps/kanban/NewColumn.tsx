@@ -7,10 +7,10 @@ import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 
 // Third-party Imports
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { object, string, minLength, pipe, nonEmpty } from 'valibot'
 import type { InferInput } from 'valibot'
+import { minLength, nonEmpty, object, pipe, string } from 'valibot'
 
 // Component Imports
 import CustomTextField from '@core/components/mui/TextField'
@@ -64,14 +64,14 @@ const NewColumn = ({ addNewColumn }: { addNewColumn: (title: string) => void }) 
   }
 
   return (
-    <div className='flex flex-col gap-4 items-start min-is-[16.5rem] is-[16.5rem]'>
-      <Typography variant='h5' onClick={toggleDisplay} className='flex items-center gap-1 cursor-pointer'>
-        <i className='tabler-plus text-base' />
-        <span className='whitespace-nowrap'>Add New</span>
+    <div className="flex flex-col gap-4 items-start min-is-[16.5rem] is-[16.5rem]">
+      <Typography variant="h5" onClick={toggleDisplay} className="flex items-center gap-1 cursor-pointer">
+        <i className="tabler-plus text-base" />
+        <span className="whitespace-nowrap">Add New</span>
       </Typography>
       {display && (
         <form
-          className='flex flex-col gap-4 is-[16.5rem]'
+          className="flex flex-col gap-4 is-[16.5rem]"
           onSubmit={handleSubmit(onSubmit)}
           onKeyDown={e => {
             if (e.key === 'Escape') {
@@ -80,28 +80,28 @@ const NewColumn = ({ addNewColumn }: { addNewColumn: (title: string) => void }) 
           }}
         >
           <Controller
-            name='title'
+            name="title"
             control={control}
             render={({ field }) => (
               <CustomTextFieldStyled
                 fullWidth
                 autoFocus
-                variant='outlined'
-                placeholder='Board Title'
+                variant="outlined"
+                placeholder="Board Title"
                 {...field}
                 error={Boolean(errors.title)}
                 helperText={errors.title ? errors.title.message : null}
               />
             )}
           />
-          <div className='flex gap-3'>
-            <Button variant='contained' size='small' color='primary' type='submit'>
+          <div className="flex gap-3">
+            <Button variant="contained" size="small" color="primary" type="submit">
               Add
             </Button>
             <Button
-              variant='tonal'
-              size='small'
-              color='secondary'
+              variant="tonal"
+              size="small"
+              color="secondary"
               onClick={() => {
                 handleReset()
               }}

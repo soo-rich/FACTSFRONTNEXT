@@ -40,29 +40,29 @@ const TableCard = (props: CardProps) => {
   const { title, data } = props
 
   return (
-    <div className='flex flex-col gap-4'>
-      <Typography variant='h5'>{title}</Typography>
-      <div className='border rounded overflow-x-auto'>
+    <div className="flex flex-col gap-4">
+      <Typography variant="h5">{title}</Typography>
+      <div className="border rounded overflow-x-auto">
         <table className={tableStyles.table}>
-          <thead className='border-0'>
-            <tr>
-              <th className='is-2/4'>Type</th>
-              <th className='is-1/4'>Email</th>
-              <th className='is-1/4'>App</th>
-            </tr>
+          <thead className="border-0">
+          <tr>
+            <th className="is-2/4">Type</th>
+            <th className="is-1/4">Email</th>
+            <th className="is-1/4">App</th>
+          </tr>
           </thead>
           <tbody>
-            {data.map((data, index) => (
-              <tr key={index}>
-                <td className='text-textPrimary'>{data.type}</td>
-                <td>
-                  <Checkbox defaultChecked={data.email} />
-                </td>
-                <td>
-                  <Checkbox defaultChecked={data.app} />
-                </td>
-              </tr>
-            ))}
+          {data.map((data, index) => (
+            <tr key={index}>
+              <td className="text-textPrimary">{data.type}</td>
+              <td>
+                <Checkbox defaultChecked={data.email} />
+              </td>
+              <td>
+                <Checkbox defaultChecked={data.app} />
+              </td>
+            </tr>
+          ))}
           </tbody>
         </table>
       </div>
@@ -73,10 +73,10 @@ const TableCard = (props: CardProps) => {
 const Notifications = () => {
   return (
     <Card>
-      <CardContent className='flex flex-col gap-6'>
-        <TableCard title='Customer' data={customerData} />
-        <TableCard title='Orders' data={ordersData} />
-        <TableCard title='Shipping' data={shippingData} />
+      <CardContent className="flex flex-col gap-6">
+        <TableCard title="Customer" data={customerData} />
+        <TableCard title="Orders" data={ordersData} />
+        <TableCard title="Shipping" data={shippingData} />
       </CardContent>
     </Card>
   )

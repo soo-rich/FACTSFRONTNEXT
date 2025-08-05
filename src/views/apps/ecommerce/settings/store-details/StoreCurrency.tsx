@@ -16,20 +16,20 @@ const StoreCurrency = () => {
 
   return (
     <Card>
-      <CardHeader title='Store currency' subheader='The currency your products are sold in.' />
+      <CardHeader title="Store currency" subheader="The currency your products are sold in." />
       <CardContent>
         <CustomTextField
           select
           fullWidth
-          label='Store currency'
+          label="Store currency"
           value={currency}
           onChange={e => setCurrency(e.target.value)}
         >
-          <MenuItem value=''>Select Currency</MenuItem>
-          <MenuItem value='INR'>INR</MenuItem>
-          <MenuItem value='USD'>USD</MenuItem>
-          <MenuItem value='Euro'>Euro</MenuItem>
-          <MenuItem value='Pound'>Pound</MenuItem>
+          <MenuItem value="">Select Currency</MenuItem>
+          <MenuItem value="INR">INR</MenuItem>
+          <MenuItem value="USD">USD</MenuItem>
+          <MenuItem value="Euro">Euro</MenuItem>
+          <MenuItem value="Pound">Pound</MenuItem>
         </CustomTextField>
       </CardContent>
     </Card>

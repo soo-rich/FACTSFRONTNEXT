@@ -1,6 +1,6 @@
 // React Imports
 import type { SyntheticEvent } from 'react'
-import { useState, forwardRef } from 'react'
+import { forwardRef, useState } from 'react'
 
 // MUI Imports
 import Grid from '@mui/material/Grid2'
@@ -72,18 +72,18 @@ const StepDealDetails = ({ activeStep, handleNext, handlePrev, steps }: Props) =
   return (
     <Grid container spacing={6}>
       <Grid size={{ xs: 12, sm: 6 }}>
-        <CustomTextField fullWidth label='Deal Title' placeholder='Black Friday sale, 25% off' />
+        <CustomTextField fullWidth label="Deal Title" placeholder="Black Friday sale, 25% off" />
       </Grid>
       <Grid size={{ xs: 12, sm: 6 }}>
-        <CustomTextField fullWidth label='Deal Code' placeholder='25PEROFF' />
+        <CustomTextField fullWidth label="Deal Code" placeholder="25PEROFF" />
       </Grid>
       <Grid size={{ xs: 12, sm: 6 }}>
         <CustomTextField
           fullWidth
           multiline
           minRows={4}
-          label='Deal Description'
-          placeholder='To sell or distribute something as a business deal'
+          label="Deal Description"
+          placeholder="To sell or distribute something as a business deal"
         />
       </Grid>
       <Grid size={{ xs: 12, sm: 6 }}>
@@ -97,15 +97,15 @@ const StepDealDetails = ({ activeStep, handleNext, handlePrev, steps }: Props) =
                   multiple: true, // @ts-ignore
                   onChange: handleChange,
                   renderValue: selected => (
-                    <div className='flex flex-wrap gap-2'>
+                    <div className="flex flex-wrap gap-2">
                       {(selected as string[]).map((value, index) => (
-                        <Chip size='small' key={index} label={value} />
+                        <Chip size="small" key={index} label={value} />
                       ))}
                     </div>
                   )
                 }
               }}
-              label='Offered Items'
+              label="Offered Items"
               value={offeredItems}
             >
               {offeredItemsArray.map((item, index) => (
@@ -116,19 +116,19 @@ const StepDealDetails = ({ activeStep, handleNext, handlePrev, steps }: Props) =
             </CustomTextField>
           </Grid>
           <Grid size={{ xs: 12 }}>
-            <CustomTextField select fullWidth label='Cart Condition' defaultValue=''>
-              <MenuItem value=''>
-                <Typography color='text.primary' noWrap>
+            <CustomTextField select fullWidth label="Cart Condition" defaultValue="">
+              <MenuItem value="">
+                <Typography color="text.primary" noWrap>
                   Select Condition
                 </Typography>
               </MenuItem>
-              <MenuItem value='all'>
-                <Typography color='text.primary' noWrap>
+              <MenuItem value="all">
+                <Typography color="text.primary" noWrap>
                   Cart must contain all selected Downloads
                 </Typography>
               </MenuItem>
-              <MenuItem value='any'>
-                <Typography color='text.primary' noWrap>
+              <MenuItem value="any">
+                <Typography color="text.primary" noWrap>
                   Cart needs one or more of the selected Downloads
                 </Typography>
               </MenuItem>
@@ -142,44 +142,44 @@ const StepDealDetails = ({ activeStep, handleNext, handlePrev, steps }: Props) =
           endDate={endDate as Date}
           selected={startDate}
           startDate={startDate as Date}
-          id='date-range-picker'
+          id="date-range-picker"
           onChange={handleDateChange}
           shouldCloseOnSelect={false}
           customInput={
-            <CustomInput label='Deal Duration' start={startDate as Date | number} end={endDate as Date | number} />
+            <CustomInput label="Deal Duration" start={startDate as Date | number} end={endDate as Date | number} />
           }
         />
       </Grid>
       <Grid size={{ xs: 12, sm: 6 }}>
         <FormControl>
           <FormLabel>Notify Users</FormLabel>
-          <FormGroup aria-label='position' row>
-            <FormControlLabel value='email' label='Email' control={<Checkbox />} />
-            <FormControlLabel value='sms' label='SMS' control={<Checkbox />} />
-            <FormControlLabel control={<Checkbox />} value='push-notification' label='Push Notification' />
+          <FormGroup aria-label="position" row>
+            <FormControlLabel value="email" label="Email" control={<Checkbox />} />
+            <FormControlLabel value="sms" label="SMS" control={<Checkbox />} />
+            <FormControlLabel control={<Checkbox />} value="push-notification" label="Push Notification" />
           </FormGroup>
         </FormControl>
       </Grid>
       <Grid size={{ xs: 12 }}>
-        <div className='flex items-center justify-between'>
+        <div className="flex items-center justify-between">
           <Button
-            variant='tonal'
-            color='secondary'
+            variant="tonal"
+            color="secondary"
             disabled={activeStep === 0}
             onClick={handlePrev}
-            startIcon={<DirectionalIcon ltrIconClass='tabler-arrow-left' rtlIconClass='tabler-arrow-right' />}
+            startIcon={<DirectionalIcon ltrIconClass="tabler-arrow-left" rtlIconClass="tabler-arrow-right" />}
           >
             Previous
           </Button>
           <Button
-            variant='contained'
+            variant="contained"
             color={activeStep === steps.length - 1 ? 'success' : 'primary'}
             onClick={handleNext}
             endIcon={
               activeStep === steps.length - 1 ? (
-                <i className='tabler-check' />
+                <i className="tabler-check" />
               ) : (
-                <DirectionalIcon ltrIconClass='tabler-arrow-right' rtlIconClass='tabler-arrow-left' />
+                <DirectionalIcon ltrIconClass="tabler-arrow-right" rtlIconClass="tabler-arrow-left" />
               )
             }
           >

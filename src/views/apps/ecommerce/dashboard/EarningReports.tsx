@@ -124,40 +124,40 @@ const EarningReports = () => {
   return (
     <Card>
       <CardHeader
-        title='Earning Reports'
-        subheader='Weekly Earnings Overview'
+        title="Earning Reports"
+        subheader="Weekly Earnings Overview"
         action={<OptionMenu options={['Refresh', 'Update', 'Share']} />}
       />
-      <CardContent className='flex flex-col gap-5'>
+      <CardContent className="flex flex-col gap-5">
         {data.map((item, index) => (
-          <div key={index} className='flex items-center gap-4'>
-            <CustomAvatar skin='light' variant='rounded' color={item.avatarColor} size={34}>
+          <div key={index} className="flex items-center gap-4">
+            <CustomAvatar skin="light" variant="rounded" color={item.avatarColor} size={34}>
               <i className={classnames(item.avatarIcon, 'text-[22px]')} />
             </CustomAvatar>
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
+            <div className="flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full">
+              <div className="flex flex-col">
+                <Typography className="font-medium" color="text.primary">
                   {item.title}
                 </Typography>
-                <Typography variant='body2'>{item.subtitle}</Typography>
+                <Typography variant="body2">{item.subtitle}</Typography>
               </div>
-              <div className='flex items-center gap-4'>
+              <div className="flex items-center gap-4">
                 <Typography>{item.amount}</Typography>
-                <div className='flex items-center gap-1'>
+                <div className="flex items-center gap-1">
                   <i
                     className={classnames(
                       item.trend === 'negative' ? 'tabler-chevron-down text-error' : 'tabler-chevron-up text-success',
                       'text-xl'
                     )}
                   />
-                  <Typography variant='body2' className='text-textDisabled'>{`${item.trendNumber}%`}</Typography>
+                  <Typography variant="body2" className="text-textDisabled">{`${item.trendNumber}%`}</Typography>
                 </div>
               </div>
             </div>
           </div>
         ))}
-        <div className='pbs-[60px]'>
-          <AppReactApexCharts type='bar' height={158} width='100%' series={series} options={options} />
+        <div className="pbs-[60px]">
+          <AppReactApexCharts type="bar" height={158} width="100%" series={series} options={options} />
         </div>
       </CardContent>
     </Card>

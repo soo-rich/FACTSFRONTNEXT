@@ -16,7 +16,7 @@ const data: DataType[] = [
   {
     id: 1,
     avatar: '8.png',
-    fullName: "Korrie O'Crevy",
+    fullName: 'Korrie O\'Crevy',
     post: 'Nuclear Power Engineer',
     email: 'kocrevy0@thetimes.co.uk',
     city: 'Krasnosilka',

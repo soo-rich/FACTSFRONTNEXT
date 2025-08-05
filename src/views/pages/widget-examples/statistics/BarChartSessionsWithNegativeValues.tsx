@@ -161,14 +161,14 @@ const BarChartSessionsWithNegativeValues = () => {
 
   return (
     <Card>
-      <CardHeader title='Sessions' subheader='This Month' className='pbe-0' />
-      <CardContent className='flex flex-col'>
-        <AppReactApexCharts type='bar' height={98} width='100%' options={options} series={series} />
-        <div className='flex items-center justify-between flex-wrap gap-x-4 gap-y-0.5'>
-          <Typography variant='h4' color='text.primary'>
+      <CardHeader title="Sessions" subheader="This Month" className="pbe-0" />
+      <CardContent className="flex flex-col">
+        <AppReactApexCharts type="bar" height={98} width="100%" options={options} series={series} />
+        <div className="flex items-center justify-between flex-wrap gap-x-4 gap-y-0.5">
+          <Typography variant="h4" color="text.primary">
             45.1k
           </Typography>
-          <Typography variant='body2' color='success.main'>
+          <Typography variant="body2" color="success.main">
             +12.6%
           </Typography>
         </div>

@@ -25,23 +25,23 @@ const CardActionRefreshContent = () => {
   }
 
   return (
-    <Card className='relative'>
+    <Card className="relative">
       <CardHeader
-        title='Refresh Content'
+        title="Refresh Content"
         action={
-          <IconButton size='small' aria-label='refresh-content' onClick={handleBackDrop}>
-            <i className='tabler-refresh' />
+          <IconButton size="small" aria-label="refresh-content" onClick={handleBackDrop}>
+            <i className="tabler-refresh" />
           </IconButton>
         }
       />
       <CardContent>
         <Typography>
-          Click on <i className='tabler-refresh text-xl align-sub' /> icon to see it in action
+          Click on <i className="tabler-refresh text-xl align-sub" /> icon to see it in action
         </Typography>
       </CardContent>
 
-      <Backdrop open={reload} className='absolute text-white z-[cal(var(--mui-zIndex-mobileStepper)-1)]'>
-        <CircularProgress color='inherit' />
+      <Backdrop open={reload} className="absolute text-white z-[cal(var(--mui-zIndex-mobileStepper)-1)]">
+        <CircularProgress color="inherit" />
       </Backdrop>
     </Card>
   )

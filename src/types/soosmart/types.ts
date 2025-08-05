@@ -1,7 +1,8 @@
-import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { LucideIcon } from 'lucide-react';
-import * as React from 'react';
-import { ReactNode } from 'react';
+
+import type { ReactNode } from 'react'
+
+import type * as DialogPrimitive from '@radix-ui/react-dialog'
+import type { LucideIcon } from 'lucide-react'
 
 export type ChildrenType = {
   children: ReactNode;
@@ -9,8 +10,8 @@ export type ChildrenType = {
 
 export type buttonDialogProps = {
   buttonprops?: {
-  buttonIconClassName?: string,
-  buttonClassName?: string,
+    buttonIconClassName?: string,
+    buttonClassName?: string,
     buttonIcon?: LucideIcon
     buttonLabel?: string,
   }

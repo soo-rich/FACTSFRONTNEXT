@@ -1,6 +1,6 @@
 // React Imports
-import { useState } from 'react'
 import type { MouseEvent, ReactNode } from 'react'
+import { useState } from 'react'
 
 // MUI Imports
 import Typography from '@mui/material/Typography'
@@ -15,7 +15,7 @@ import { styled } from '@mui/material'
 // Third-party Imports
 import classnames from 'classnames'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import { useEditor, EditorContent } from '@tiptap/react'
+import { EditorContent, useEditor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { Underline } from '@tiptap/extension-underline'
 import { Placeholder } from '@tiptap/extension-placeholder'
@@ -59,10 +59,10 @@ type Props = {
 
 const ScrollWrapper = ({ children, isBelowLgScreen }: { children: ReactNode; isBelowLgScreen: boolean }) => {
   if (isBelowLgScreen) {
-    return <div className='bs-full overflow-y-auto overflow-x-hidden bg-actionHover'>{children}</div>
+    return <div className="bs-full overflow-y-auto overflow-x-hidden bg-actionHover">{children}</div>
   } else {
     return (
-      <PerfectScrollbar className='bg-actionHover' options={{ wheelPropagation: false }}>
+      <PerfectScrollbar className="bg-actionHover" options={{ wheelPropagation: false }}>
         {children}
       </PerfectScrollbar>
     )
@@ -89,43 +89,43 @@ const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
   }
 
   return (
-    <div className='flex flex-wrap gap-x-3 gap-y-1 pli-6'>
+    <div className="flex flex-wrap gap-x-3 gap-y-1 pli-6">
       <CustomIconButton
         {...(editor.isActive('bold') && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().toggleBold().run()}
       >
         <i className={classnames('tabler-bold', { 'text-textPrimary': !editor.isActive('bold') })} />
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive('underline') && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
       >
         <i className={classnames('tabler-underline', { 'text-textPrimary': !editor.isActive('underline') })} />
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive('italic') && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().toggleItalic().run()}
       >
         <i className={classnames('tabler-italic', { 'text-textPrimary': !editor.isActive('italic') })} />
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive('strike') && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().toggleStrike().run()}
       >
         <i className={classnames('tabler-strikethrough', { 'text-textPrimary': !editor.isActive('strike') })} />
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive({ textAlign: 'left' }) && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().setTextAlign('left').run()}
       >
         <i
@@ -134,8 +134,8 @@ const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive({ textAlign: 'center' }) && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().setTextAlign('center').run()}
       >
         <i
@@ -146,8 +146,8 @@ const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive({ textAlign: 'right' }) && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().setTextAlign('right').run()}
       >
         <i
@@ -158,8 +158,8 @@ const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
       </CustomIconButton>
       <CustomIconButton
         {...(editor.isActive({ textAlign: 'justify' }) && { color: 'primary' })}
-        variant='tonal'
-        size='small'
+        variant="tonal"
+        size="small"
         onClick={() => editor.chain().focus().setTextAlign('justify').run()}
       >
         <i
@@ -247,45 +247,45 @@ const MailDetails = (props: Props) => {
     <DetailsDrawer drawerOpen={drawerOpen}>
       {currentEmail && (
         <>
-          <div className='plb-4 pli-6'>
-            <div className='flex justify-between gap-2'>
-              <div className='flex gap-2 items-center overflow-hidden'>
+          <div className="plb-4 pli-6">
+            <div className="flex justify-between gap-2">
+              <div className="flex gap-2 items-center overflow-hidden">
                 <IconButton onClick={handleCloseDrawer}>
                   <DirectionalIcon
-                    ltrIconClass='tabler-chevron-left'
-                    rtlIconClass='tabler-chevron-right'
-                    className='text-textSecondary'
+                    ltrIconClass="tabler-chevron-left"
+                    rtlIconClass="tabler-chevron-right"
+                    className="text-textSecondary"
                   />
                 </IconButton>
-                <div className='flex items-center flex-wrap gap-2 overflow-hidden'>
-                  <Typography color='text.primary' noWrap>
+                <div className="flex items-center flex-wrap gap-2 overflow-hidden">
+                  <Typography color="text.primary" noWrap>
                     {currentEmail.subject}
                   </Typography>
-                  <div className='flex items-center flex-wrap gap-2'>
+                  <div className="flex items-center flex-wrap gap-2">
                     {currentEmail.labels && currentEmail.labels.length
                       ? currentEmail.labels.map(label => {
-                          return (
-                            <CustomChip
-                              key={label}
-                              variant='tonal'
-                              round='true'
-                              size='small'
-                              label={label}
-                              color={labelColors[label].color}
-                              className='capitalize'
-                            />
-                          )
-                        })
+                        return (
+                          <CustomChip
+                            key={label}
+                            variant="tonal"
+                            round="true"
+                            size="small"
+                            label={label}
+                            color={labelColors[label].color}
+                            className="capitalize"
+                          />
+                        )
+                      })
                       : null}
                   </div>
                 </div>
               </div>
-              <div className='flex items-center gap-2'>
+              <div className="flex items-center gap-2">
                 <IconButton disabled={currentEmail.id === emails[0].id} onClick={() => handleEmailNavigation('prev')}>
                   <DirectionalIcon
-                    ltrIconClass='tabler-chevron-left'
-                    rtlIconClass='tabler-chevron-right'
-                    className='text-textSecondary'
+                    ltrIconClass="tabler-chevron-left"
+                    rtlIconClass="tabler-chevron-right"
+                    className="text-textSecondary"
                   />
                 </IconButton>
                 <IconButton
@@ -293,64 +293,64 @@ const MailDetails = (props: Props) => {
                   onClick={() => handleEmailNavigation('next')}
                 >
                   <DirectionalIcon
-                    ltrIconClass='tabler-chevron-right'
-                    rtlIconClass='tabler-chevron-left'
-                    className='text-textSecondary'
+                    ltrIconClass="tabler-chevron-right"
+                    rtlIconClass="tabler-chevron-left"
+                    className="text-textSecondary"
                   />
                 </IconButton>
               </div>
             </div>
           </div>
-          <div className='flex items-center justify-between gap-4 plb-2 pli-6 border-y'>
-            <div className='flex gap-1'>
-              <Tooltip title={folder === 'trash' ? 'Delete' : 'Move to trash'} placement='top'>
+          <div className="flex items-center justify-between gap-4 plb-2 pli-6 border-y">
+            <div className="flex gap-1">
+              <Tooltip title={folder === 'trash' ? 'Delete' : 'Move to trash'} placement="top">
                 <IconButton
                   onClick={e => {
                     setDrawerOpen(false)
                     handleSingleEmailDelete(e, currentEmail.id)
                   }}
                 >
-                  <i className='tabler-trash text-textSecondary' />
+                  <i className="tabler-trash text-textSecondary" />
                 </IconButton>
               </Tooltip>
-              <Tooltip title='Mark as unread' placement='top'>
+              <Tooltip title="Mark as unread" placement="top">
                 <IconButton
                   onClick={e => {
                     setDrawerOpen(false)
                     handleToggleIsReadStatus(e, currentEmail.id)
                   }}
                 >
-                  <i className='tabler-mail text-textSecondary' />
+                  <i className="tabler-mail text-textSecondary" />
                 </IconButton>
               </Tooltip>
               {folder === 'inbox' && (
-                <Tooltip title='Move to spam' placement='top'>
+                <Tooltip title="Move to spam" placement="top">
                   <IconButton onClick={handleMoveAllToSpam}>
-                    <i className='tabler-info-circle text-textSecondary' />
+                    <i className="tabler-info-circle text-textSecondary" />
                   </IconButton>
                 </Tooltip>
               )}
               {folder === 'spam' && (
-                <Tooltip title='Move to inbox' placement='top'>
+                <Tooltip title="Move to inbox" placement="top">
                   <IconButton onClick={handleMoveAllToInbox}>
-                    <i className='tabler-inbox text-textSecondary' />
+                    <i className="tabler-inbox text-textSecondary" />
                   </IconButton>
                 </Tooltip>
               )}
               {folder === 'trash' && (
                 <OptionMenu
                   tooltipProps={{ title: 'Move to folder', placement: 'top' }}
-                  icon={<i className='tabler-folder text-textSecondary' />}
+                  icon={<i className="tabler-folder text-textSecondary" />}
                   iconButtonProps={{ size: 'medium' }}
                   options={[
                     {
                       text: 'Spam',
-                      icon: <i className='tabler-info-circle' />,
+                      icon: <i className="tabler-info-circle" />,
                       menuItemProps: { onClick: handleMoveAllToSpam }
                     },
                     {
                       text: 'Inbox',
-                      icon: <i className='tabler-inbox' />,
+                      icon: <i className="tabler-inbox" />,
                       menuItemProps: { onClick: handleMoveAllToInbox }
                     }
                   ]}
@@ -358,7 +358,7 @@ const MailDetails = (props: Props) => {
               )}
               <OptionMenu
                 tooltipProps={{ title: 'Toggle label', placement: 'top' }}
-                icon={<i className='tabler-tag text-textSecondary' />}
+                icon={<i className="tabler-tag text-textSecondary" />}
                 iconButtonProps={{ size: 'medium' }}
                 options={Object.entries(labelColors).map(([key, value]) => ({
                   text: key.charAt(0).toUpperCase() + key.slice(1),
@@ -367,7 +367,7 @@ const MailDetails = (props: Props) => {
                 }))}
               />
             </div>
-            <div className='flex gap-1'>
+            <div className="flex gap-1">
               <IconButton
                 onClick={e => {
                   handleToggleStarEmail(e, currentEmail.id)
@@ -389,14 +389,14 @@ const MailDetails = (props: Props) => {
                 </IconButton>
               ) : null}
               <IconButton>
-                <i className='tabler-dots-vertical text-textSecondary' />
+                <i className="tabler-dots-vertical text-textSecondary" />
               </IconButton>
             </div>
           </div>
           <ScrollWrapper isBelowLgScreen={isBelowLgScreen}>
-            <div className='plb-5 pli-8 flex flex-col gap-4'>
+            <div className="plb-5 pli-8 flex flex-col gap-4">
               {currentEmail.replies.length && !showReplies ? (
-                <Typography className='self-center text-center cursor-pointer' onClick={() => setShowReplies(true)}>
+                <Typography className="self-center text-center cursor-pointer" onClick={() => setShowReplies(true)}>
                   {`${currentEmail.replies.length} Earlier Messages`}
                 </Typography>
               ) : null}
@@ -418,46 +418,46 @@ const MailDetails = (props: Props) => {
                   </>
                 ) : null}
                 <MailCard data={currentEmail} isReplies={true} />
-                <Card className='border mbs-4'>
+                <Card className="border mbs-4">
                   {!reply ? (
                     <CardContent>
                       <Typography>
                         Click here to
-                        <span className='text-primary cursor-pointer mli-1' onClick={() => setReply(true)}>
+                        <span className="text-primary cursor-pointer mli-1" onClick={() => setReply(true)}>
                           Reply
                         </span>
                         or
-                        <span className='text-primary cursor-pointer mis-1'>Forward</span>
+                        <span className="text-primary cursor-pointer mis-1">Forward</span>
                       </Typography>
                     </CardContent>
                   ) : (
-                    <div className='flex flex-col gap-y-6'>
-                      <CardContent className='pbe-0'>
-                        <Typography color='text.primary'>{`Reply to ${currentEmail.from.name}`}</Typography>
+                    <div className="flex flex-col gap-y-6">
+                      <CardContent className="pbe-0">
+                        <Typography color="text.primary">{`Reply to ${currentEmail.from.name}`}</Typography>
                       </CardContent>
                       <div>
                         <EditorToolbar editor={editor} />
-                        <EditorContent editor={editor} className='overflow-y-auto' />
+                        <EditorContent editor={editor} className="overflow-y-auto" />
                       </div>
-                      <CardActions className='flex items-center justify-end pbs-0'>
+                      <CardActions className="flex items-center justify-end pbs-0">
                         <IconButton>
-                          <i className='tabler-trash text-textSecondary' onClick={() => setReply(false)} />
+                          <i className="tabler-trash text-textSecondary" onClick={() => setReply(false)} />
                         </IconButton>
                         {isBelowSmScreen ? (
-                          <CustomIconButton color='secondary'>
-                            <i className='tabler-paperclip text-textPrimary' />
+                          <CustomIconButton color="secondary">
+                            <i className="tabler-paperclip text-textPrimary" />
                           </CustomIconButton>
                         ) : (
-                          <Button color='secondary' startIcon={<i className='tabler-paperclip text-textPrimary' />}>
+                          <Button color="secondary" startIcon={<i className="tabler-paperclip text-textPrimary" />}>
                             Attachments
                           </Button>
                         )}
                         {isBelowSmScreen ? (
-                          <CustomIconButton variant='contained' color='primary'>
-                            <i className='tabler-send' />
+                          <CustomIconButton variant="contained" color="primary">
+                            <i className="tabler-send" />
                           </CustomIconButton>
                         ) : (
-                          <Button variant='contained' color='primary' endIcon={<i className='tabler-send' />}>
+                          <Button variant="contained" color="primary" endIcon={<i className="tabler-send" />}>
                             Send
                           </Button>
                         )}

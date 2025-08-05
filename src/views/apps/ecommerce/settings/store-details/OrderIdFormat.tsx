@@ -13,19 +13,19 @@ const OrderIdFormat = () => {
   return (
     <Card>
       <CardHeader
-        title='Order id format'
-        subheader='Shown on the Orders page, customer pages, and customer order notifications to identify orders.'
+        title="Order id format"
+        subheader="Shown on the Orders page, customer pages, and customer order notifications to identify orders."
       />
       <CardContent>
         <Grid container spacing={6}>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
               fullWidth
-              label='Prefix'
-              placeholder='Prefix'
+              label="Prefix"
+              placeholder="Prefix"
               slotProps={{
                 input: {
-                  startAdornment: <InputAdornment position='start'>#</InputAdornment>
+                  startAdornment: <InputAdornment position="start">#</InputAdornment>
                 }
               }}
             />
@@ -33,17 +33,17 @@ const OrderIdFormat = () => {
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
               fullWidth
-              label='Suffix'
-              placeholder='Suffix'
+              label="Suffix"
+              placeholder="Suffix"
               slotProps={{
                 input: {
-                  endAdornment: <InputAdornment position='end'>$</InputAdornment>
+                  endAdornment: <InputAdornment position="end">$</InputAdornment>
                 }
               }}
             />
           </Grid>
         </Grid>
-        <Typography className='mbs-2'>Your order ID will appear as #1001, #1002, #1003 ...</Typography>
+        <Typography className="mbs-2">Your order ID will appear as #1001, #1002, #1003 ...</Typography>
       </CardContent>
     </Card>
   )

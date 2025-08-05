@@ -15,21 +15,21 @@ import type { TextFieldProps } from '@mui/material/TextField'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Component Imports
 import AddCategoryDrawer from './AddCategoryDrawer'
@@ -44,6 +44,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -76,11 +77,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -241,13 +242,13 @@ const ProductCategoryTable = () => {
       columnHelper.accessor('categoryTitle', {
         header: 'Categories',
         cell: ({ row }) => (
-          <div className='flex items-center gap-3'>
-            <img src={row.original.image} width={38} height={38} className='rounded bg-actionHover' />
-            <div className='flex flex-col items-start'>
-              <Typography className='font-medium' color='text.primary'>
+          <div className="flex items-center gap-3">
+            <img src={row.original.image} width={38} height={38} className="rounded bg-actionHover" />
+            <div className="flex flex-col items-start">
+              <Typography className="font-medium" color="text.primary">
                 {row.original.categoryTitle}
               </Typography>
-              <Typography variant='body2'>{row.original.description}</Typography>
+              <Typography variant="body2">{row.original.description}</Typography>
             </div>
           </div>
         )
@@ -267,13 +268,13 @@ const ProductCategoryTable = () => {
       columnHelper.accessor('actions', {
         header: 'Actions',
         cell: ({ row }) => (
-          <div className='flex items-center'>
+          <div className="flex items-center">
             <IconButton>
-              <i className='tabler-edit text-textSecondary' />
+              <i className="tabler-edit text-textSecondary" />
             </IconButton>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary'
+              iconClassName="text-textSecondary"
               options={[
                 { text: 'Download', icon: 'tabler-download' },
                 {
@@ -325,85 +326,85 @@ const ProductCategoryTable = () => {
   return (
     <>
       <Card>
-        <div className='flex flex-wrap justify-between gap-4 p-6'>
+        <div className="flex flex-wrap justify-between gap-4 p-6">
           <DebouncedInput
             value={globalFilter ?? ''}
             onChange={value => setGlobalFilter(String(value))}
-            placeholder='Search'
-            className='max-sm:is-full'
+            placeholder="Search"
+            className="max-sm:is-full"
           />
-          <div className='flex max-sm:flex-col items-start sm:items-center gap-4 max-sm:is-full'>
+          <div className="flex max-sm:flex-col items-start sm:items-center gap-4 max-sm:is-full">
             <CustomTextField
               select
               value={table.getState().pagination.pageSize}
               onChange={e => table.setPageSize(Number(e.target.value))}
-              className='flex-auto max-sm:is-full sm:is-[70px]'
+              className="flex-auto max-sm:is-full sm:is-[70px]"
             >
-              <MenuItem value='10'>10</MenuItem>
-              <MenuItem value='15'>15</MenuItem>
-              <MenuItem value='25'>25</MenuItem>
+              <MenuItem value="10">10</MenuItem>
+              <MenuItem value="15">15</MenuItem>
+              <MenuItem value="25">25</MenuItem>
             </CustomTextField>
             <Button
-              variant='contained'
-              className='max-sm:is-full'
+              variant="contained"
+              className="max-sm:is-full"
               onClick={() => setAddCategoryOpen(!addCategoryOpen)}
-              startIcon={<i className='tabler-plus' />}
+              startIcon={<i className="tabler-plus" />}
             >
               Add Category
             </Button>
           </div>
         </div>
-        <div className='overflow-x-auto'>
+        <div className="overflow-x-auto">
           <table className={tableStyles.table}>
             <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            className={classnames({
-                              'flex items-center': header.column.getIsSorted(),
-                              'cursor-pointer select-none': header.column.getCanSort()
-                            })}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {{
-                              asc: <i className='tabler-chevron-up text-xl' />,
-                              desc: <i className='tabler-chevron-down text-xl' />
-                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                          </div>
-                        </>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div
+                          className={classnames({
+                            'flex items-center': header.column.getIsSorted(),
+                            'cursor-pointer select-none': header.column.getCanSort()
+                          })}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {{
+                            asc: <i className="tabler-chevron-up text-xl" />,
+                            desc: <i className="tabler-chevron-down text-xl" />
+                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                        </div>
+                      </>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
             </thead>
             {table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    No data available
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                  No data available
+                </td>
+              </tr>
               </tbody>
             ) : (
               <tbody>
-                {table
-                  .getRowModel()
-                  .rows.slice(0, table.getState().pagination.pageSize)
-                  .map(row => {
-                    return (
-                      <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                        {row.getVisibleCells().map(cell => (
-                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                        ))}
-                      </tr>
-                    )
-                  })}
+              {table
+                .getRowModel()
+                .rows.slice(0, table.getState().pagination.pageSize)
+                .map(row => {
+                  return (
+                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                      {row.getVisibleCells().map(cell => (
+                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                      ))}
+                    </tr>
+                  )
+                })}
               </tbody>
             )}
           </table>

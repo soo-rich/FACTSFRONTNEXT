@@ -75,14 +75,14 @@ const LineChartProfit = () => {
 
   return (
     <Card>
-      <CardHeader title='Profit' subheader='Last Month' className='pbe-0' />
-      <CardContent className='flex flex-col'>
-        <AppReactApexCharts type='line' height={98} width='100%' options={options} series={series} />
-        <div className='flex items-center justify-between flex-wrap gap-x-4 gap-y-0.5'>
-          <Typography variant='h4' color='text.primary'>
+      <CardHeader title="Profit" subheader="Last Month" className="pbe-0" />
+      <CardContent className="flex flex-col">
+        <AppReactApexCharts type="line" height={98} width="100%" options={options} series={series} />
+        <div className="flex items-center justify-between flex-wrap gap-x-4 gap-y-0.5">
+          <Typography variant="h4" color="text.primary">
             624k
           </Typography>
-          <Typography variant='body2' color='success.main'>
+          <Typography variant="body2" color="success.main">
             +8.2%
           </Typography>
         </div>

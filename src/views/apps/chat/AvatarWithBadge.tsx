@@ -48,7 +48,7 @@ const AvatarWithBadge = (props: AvatarWithBadgeProps) => {
   return (
     <Badge
       ref={ref}
-      overlap='circular'
+      overlap="circular"
       badgeContent={<BadgeContentSpan color={badgeColor as ThemeColor} onClick={onClick} badgeSize={badgeSize || 8} />}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
     >

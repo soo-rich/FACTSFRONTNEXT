@@ -10,7 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import classnames from 'classnames'
 
 // Types Imports
-import type { SidebarLeftProps, CalendarFiltersType } from '@/types/apps/calendarTypes'
+import type { CalendarFiltersType, SidebarLeftProps } from '@/types/apps/calendarTypes'
 import type { ThemeColor } from '@core/types'
 
 // Styled Component Imports
@@ -37,21 +37,21 @@ const SidebarLeft = (props: SidebarLeftProps) => {
 
   const renderFilters = colorsArr.length
     ? colorsArr.map(([key, value]: string[]) => {
-        return (
-          <FormControlLabel
-            className='mbe-1'
-            key={key}
-            label={key}
-            control={
-              <Checkbox
-                color={value as ThemeColor}
-                checked={calendarStore.selectedCalendars.indexOf(key as CalendarFiltersType) > -1}
-                onChange={() => dispatch(filterCalendarLabel(key as CalendarFiltersType))}
-              />
-            }
-          />
-        )
-      })
+      return (
+        <FormControlLabel
+          className="mbe-1"
+          key={key}
+          label={key}
+          control={
+            <Checkbox
+              color={value as ThemeColor}
+              checked={calendarStore.selectedCalendars.indexOf(key as CalendarFiltersType) > -1}
+              onChange={() => dispatch(filterCalendarLabel(key as CalendarFiltersType))}
+            />
+          }
+        />
+      )
+    })
     : null
 
   const handleSidebarToggleSidebar = () => {
@@ -89,17 +89,17 @@ const SidebarLeft = (props: SidebarLeftProps) => {
           }
         }}
       >
-        <div className='is-full p-6'>
+        <div className="is-full p-6">
           <Button
             fullWidth
-            variant='contained'
+            variant="contained"
             onClick={handleSidebarToggleSidebar}
-            startIcon={<i className='tabler-plus' />}
+            startIcon={<i className="tabler-plus" />}
           >
             Add Event
           </Button>
         </div>
-        <Divider className='is-full' />
+        <Divider className="is-full" />
         <AppReactDatepicker
           inline
           onChange={date => calendarApi.gotoDate(date)}
@@ -108,18 +108,18 @@ const SidebarLeft = (props: SidebarLeftProps) => {
             sx: { '& .react-datepicker': { boxShadow: 'none !important', border: 'none !important' } }
           }}
         />
-        <Divider className='is-full' />
+        <Divider className="is-full" />
 
-        <div className='flex flex-col p-6 is-full'>
-          <Typography variant='h5' className='mbe-4'>
+        <div className="flex flex-col p-6 is-full">
+          <Typography variant="h5" className="mbe-4">
             Event Filters
           </Typography>
           <FormControlLabel
-            className='mbe-1'
-            label='View All'
+            className="mbe-1"
+            label="View All"
             control={
               <Checkbox
-                color='secondary'
+                color="secondary"
                 checked={calendarStore.selectedCalendars.length === colorsArr.length}
                 onChange={e => dispatch(filterAllCalendarLabels(e.target.checked))}
               />

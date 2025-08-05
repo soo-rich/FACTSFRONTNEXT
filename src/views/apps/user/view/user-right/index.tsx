@@ -1,8 +1,8 @@
 'use client'
 
+import type { ReactElement, SyntheticEvent } from 'react'
 // React Imports
 import { useState } from 'react'
-import type { SyntheticEvent, ReactElement } from 'react'
 
 // MUI Imports
 import Tab from '@mui/material/Tab'
@@ -26,26 +26,26 @@ const UserRight = ({ tabContentList }: { tabContentList: { [key: string]: ReactE
       <TabContext value={activeTab}>
         <Grid container spacing={6}>
           <Grid size={{ xs: 12 }}>
-            <CustomTabList onChange={handleChange} variant='scrollable' pill='true'>
-              <Tab icon={<i className='tabler-users' />} value='overview' label='Overview' iconPosition='start' />
-              <Tab icon={<i className='tabler-lock' />} value='security' label='Security' iconPosition='start' />
+            <CustomTabList onChange={handleChange} variant="scrollable" pill="true">
+              <Tab icon={<i className="tabler-users" />} value="overview" label="Overview" iconPosition="start" />
+              <Tab icon={<i className="tabler-lock" />} value="security" label="Security" iconPosition="start" />
               <Tab
-                icon={<i className='tabler-bookmark' />}
-                value='billing-plans'
-                label='Billing & Plans'
-                iconPosition='start'
+                icon={<i className="tabler-bookmark" />}
+                value="billing-plans"
+                label="Billing & Plans"
+                iconPosition="start"
               />
               <Tab
-                icon={<i className='tabler-bell' />}
-                value='notifications'
-                label='Notifications'
-                iconPosition='start'
+                icon={<i className="tabler-bell" />}
+                value="notifications"
+                label="Notifications"
+                iconPosition="start"
               />
-              <Tab icon={<i className='tabler-link' />} value='connections' label='Connections' iconPosition='start' />
+              <Tab icon={<i className="tabler-link" />} value="connections" label="Connections" iconPosition="start" />
             </CustomTabList>
           </Grid>
           <Grid size={{ xs: 12 }}>
-            <TabPanel value={activeTab} className='p-0'>
+            <TabPanel value={activeTab} className="p-0">
               {tabContentList[activeTab]}
             </TabPanel>
           </Grid>

@@ -99,17 +99,17 @@ const Connections = () => {
       <Grid container>
         <Grid size={{ xs: 12, md: 6 }}>
           <CardHeader
-            title='Connected Accounts'
-            subheader='Display content from your connected accounts on your site'
+            title="Connected Accounts"
+            subheader="Display content from your connected accounts on your site"
           />
-          <CardContent className='flex flex-col gap-4'>
+          <CardContent className="flex flex-col gap-4">
             {connectedAccountsArr.map((item, index) => (
-              <div key={index} className='flex items-center justify-between gap-4'>
-                <div className='flex flex-grow items-center gap-4'>
+              <div key={index} className="flex items-center justify-between gap-4">
+                <div className="flex flex-grow items-center gap-4">
                   <img height={32} width={32} src={item.logo} alt={item.title} />
-                  <div className='flex-grow'>
-                    <Typography className='text-textPrimary font-medium'>{item.title}</Typography>
-                    <Typography variant='body2'>{item.subtitle}</Typography>
+                  <div className="flex-grow">
+                    <Typography className="text-textPrimary font-medium">{item.title}</Typography>
+                    <Typography variant="body2">{item.subtitle}</Typography>
                   </div>
                 </div>
                 <Switch defaultChecked={item.checked} />
@@ -118,30 +118,30 @@ const Connections = () => {
           </CardContent>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <CardHeader title='Social Accounts' subheader='Display content from social accounts on your site' />
-          <CardContent className='flex flex-col gap-4'>
+          <CardHeader title="Social Accounts" subheader="Display content from social accounts on your site" />
+          <CardContent className="flex flex-col gap-4">
             {socialAccountsArr.map((item, index) => (
-              <div key={index} className='flex items-center justify-between gap-4'>
-                <div className='flex flex-grow items-center gap-4'>
+              <div key={index} className="flex items-center justify-between gap-4">
+                <div className="flex flex-grow items-center gap-4">
                   <img height={32} width={32} src={item.logo} alt={item.title} />
-                  <div className='flex-grow'>
-                    <Typography className='text-textPrimary font-medium'>{item.title}</Typography>
+                  <div className="flex-grow">
+                    <Typography className="text-textPrimary font-medium">{item.title}</Typography>
                     {item.isConnected ? (
                       <Typography
-                        variant='body2'
-                        color='primary.main'
+                        variant="body2"
+                        color="primary.main"
                         component={Link}
                         href={item.href || '/'}
-                        target='_blank'
+                        target="_blank"
                       >
                         {item.username}
                       </Typography>
                     ) : (
-                      <Typography variant='body2'>Not Connected</Typography>
+                      <Typography variant="body2">Not Connected</Typography>
                     )}
                   </div>
                 </div>
-                <CustomIconButton variant='tonal' color={item.isConnected ? 'error' : 'secondary'}>
+                <CustomIconButton variant="tonal" color={item.isConnected ? 'error' : 'secondary'}>
                   <i className={item.isConnected ? 'tabler-trash' : 'tabler-link'} />
                 </CustomIconButton>
               </div>

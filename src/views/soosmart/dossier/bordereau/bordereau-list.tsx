@@ -1,29 +1,33 @@
 'use client'
 
-import {useMemo, useState} from 'react'
+import { useMemo, useState } from 'react'
 
-import {Typography} from '@mui/material'
+import { useParams } from 'next/navigation'
 
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
+import { Typography } from '@mui/material'
 
-import {createColumnHelper} from '@tanstack/react-table'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import {toast} from 'react-toastify'
+import { createColumnHelper } from '@tanstack/react-table'
+
+import { toast } from 'react-toastify'
 
 // MUI Imports
+import Checkbox from '@mui/material/Checkbox'
+
+import Tooltip from '@mui/material/Tooltip'
+
 import UtiliMetod from '@/utils/utilsmethod'
 import OptionMenu from '@core/components/option-menu'
 import TableGeneric from '@/components/table/TableGeneric'
-import {BorderauService} from '@/service/dossier/borderau.service'
-import {BorderauType} from "@/types/soosmart/dossier/borderau.type";
-import {FactureService} from "@/service/dossier/facture.service";
-import AdoptedSwitchComponent from "@views/soosmart/dossier/AdopteComponent";
-import Checkbox from "@mui/material/Checkbox";
-import Tooltip from "@mui/material/Tooltip";
-import CustomIconButton from "@core/components/mui/IconButton";
-import {getLocalizedUrl} from "@/utils/i18n";
-import {Locale} from "@configs/i18n";
-import {useParams} from "next/navigation";
+import { BorderauService } from '@/service/dossier/borderau.service'
+import type { BorderauType } from '@/types/soosmart/dossier/borderau.type'
+import { FactureService } from '@/service/dossier/facture.service'
+import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
+
+import CustomIconButton from '@core/components/mui/IconButton'
+import { getLocalizedUrl } from '@/utils/i18n'
+import type { Locale } from '@configs/i18n'
 
 
 const columnHelper = createColumnHelper<BorderauType>()
@@ -36,9 +40,9 @@ const BordereauList = () => {
   const [filter, setFilter] = useState('')
 
   // hooks
-  const {lang: locale}= useParams()
+  const { lang: locale } = useParams()
 
-  const {data, isLoading, isError} = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: [BorderauService.BORDERAU_KEY, pageIndex, pageSize, notadopted],
     queryFn: async () => {
       return notadopted
@@ -94,7 +98,8 @@ const BordereauList = () => {
     () => [
       columnHelper.accessor('adopte', {
         header: 'Adoptée',
-        cell: ({row}) => <Tooltip placement={'top'} title={row.original.adopte?'Adopter':'Nom Adopter'}><Checkbox checked={row.original.adopte}/></Tooltip>
+        cell: ({ row }) => <Tooltip placement={'top'} title={row.original.adopte ? 'Adopter' : 'Nom Adopter'}><Checkbox
+          checked={row.original.adopte} /></Tooltip>
       }),
       columnHelper.accessor('reference', {
         header: 'Reference',
@@ -110,7 +115,7 @@ const BordereauList = () => {
       }),
       columnHelper.accessor('date', {
         header: 'Créé le',
-        cell: ({row}) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
+        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
       }),
       columnHelper.accessor('total_ht', {
         header: 'Total HT',
@@ -127,30 +132,30 @@ const BordereauList = () => {
       columnHelper.display({
         id: 'actions', // Important: donner un ID à la colonne display
         header: 'Actions',
-        cell: ({row}) => (
-          <div className='flex gap-2'>
+        cell: ({ row }) => (
+          <div className="flex gap-2">
             <CustomIconButton
               href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
-              className='cursor-pointer text-green-600 hover:text-green-800'
+              className="cursor-pointer text-green-600 hover:text-green-800"
             >
-              <i className='tabler-file-type-pdf'/>
+              <i className="tabler-file-type-pdf" />
             </CustomIconButton>
-            {!row.original.adopte?(<CustomIconButton
+            {!row.original.adopte ? (<CustomIconButton
               onClick={() => {
                 AdoptMutation.mutate(row.original.id)
               }}
-              className='cursor-pointer text-primary'
+              className="cursor-pointer text-primary"
             >
-              <i className='tabler-check'/>
-            </CustomIconButton>):null}
+              <i className="tabler-check" />
+            </CustomIconButton>) : null}
             <OptionMenu
-              iconButtonProps={{size: 'medium'}}
-              iconClassName='text-textSecondary'
+              iconButtonProps={{ size: 'medium' }}
+              iconClassName="text-textSecondary"
               options={[
                 {
                   text: 'Details',
                   icon: 'tabler-eye',
-                  menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
+                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
                 },
                 {
                   text: 'Adapter',
@@ -185,7 +190,7 @@ const BordereauList = () => {
         enableHiding: true // Permet de cacher cette colonne
       })
     ],
-    []
+    [AdoptMutation, DeleteMutation, locale]
   )
 
   return (
@@ -195,7 +200,7 @@ const BordereauList = () => {
         columns={columns}
         isLoading={isLoading}
         isError={isError}
-        ComponentOther={<AdoptedSwitchComponent checked={notadopted} handleChange={setNotadopte}/>}
+        ComponentOther={<AdoptedSwitchComponent checked={notadopted} handleChange={setNotadopte} />}
         page={pageIndex}
         visibleColumns={true}
         SetPage={setPageIndex}

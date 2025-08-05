@@ -113,7 +113,7 @@ const ChatWrapper = () => {
         messageInputRef={messageInputRef}
       />
 
-      <Backdrop open={backdropOpen} onClick={() => setBackdropOpen(false)} className='absolute z-10' />
+      <Backdrop open={backdropOpen} onClick={() => setBackdropOpen(false)} className="absolute z-10" />
     </div>
   )
 }

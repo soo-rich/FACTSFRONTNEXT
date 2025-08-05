@@ -32,44 +32,44 @@ const popularArticles: popularArticlesType[] = [
   {
     slug: 'getting-started',
     title: 'Getting Started',
-    svg: <Rocket color='var(--mui-palette-text-secondary)' />,
-    subtitle: "Whether you're new or you're a power user, this article will"
+    svg: <Rocket color="var(--mui-palette-text-secondary)" />,
+    subtitle: 'Whether you\'re new or you\'re a power user, this article will'
   },
   {
     slug: 'first-steps',
     title: 'First Steps',
-    svg: <Gift color='var(--mui-palette-text-secondary)' />,
+    svg: <Gift color="var(--mui-palette-text-secondary)" />,
     subtitle: 'Are you a new customer and wondering how to get started?'
   },
   {
     slug: 'external-content',
     title: 'Add External Content',
-    svg: <File color='var(--mui-palette-text-secondary)' />,
+    svg: <File color="var(--mui-palette-text-secondary)" />,
     subtitle: 'Article will show you how to expand the functionality of App'
   }
 ]
 
 const Articles = () => {
   return (
-    <section className='md:plb-[100px] plb-[50px] bg-backgroundPaper'>
+    <section className="md:plb-[100px] plb-[50px] bg-backgroundPaper">
       <div className={frontCommonStyles.layoutSpacing}>
-        <Typography variant='h4' className='text-center mbe-6'>
+        <Typography variant="h4" className="text-center mbe-6">
           Popular Articles
         </Typography>
         <Grid container spacing={6}>
           {popularArticles.map((article, index) => {
             return (
               <Grid size={{ xs: 12, lg: 4 }} key={index}>
-                <Card variant='outlined'>
-                  <CardContent className='flex flex-col items-center justify-center gap-3 text-center'>
+                <Card variant="outlined">
+                  <CardContent className="flex flex-col items-center justify-center gap-3 text-center">
                     {article.svg}
-                    <Typography variant='h5'>{article.title}</Typography>
+                    <Typography variant="h5">{article.title}</Typography>
                     <Typography>{article.subtitle}</Typography>
                     <Button
                       component={Link}
-                      href='/front-pages/help-center/article/how-to-add-product-in-cart'
-                      variant='tonal'
-                      size='small'
+                      href="/front-pages/help-center/article/how-to-add-product-in-cart"
+                      variant="tonal"
+                      size="small"
                     >
                       Read More
                     </Button>

@@ -15,21 +15,21 @@ import type { TextFieldProps } from '@mui/material/TextField'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { ProjectTableRowType } from '@/types/pages/profileTypes'
@@ -47,6 +47,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -66,11 +67,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -132,25 +133,25 @@ const ProjectTables = ({ projectTable }: { projectTable?: ProjectTableRowType[] 
       columnHelper.accessor('title', {
         header: 'Project',
         cell: ({ row }) => (
-          <div className='flex items-center gap-3'>
+          <div className="flex items-center gap-3">
             <CustomAvatar src={row.original.avatar} size={34} />
-            <div className='flex flex-col'>
-              <Typography className='font-medium' color='text.primary'>
+            <div className="flex flex-col">
+              <Typography className="font-medium" color="text.primary">
                 {row.original.title}
               </Typography>
-              <Typography variant='body2'>{row.original.subtitle}</Typography>
+              <Typography variant="body2">{row.original.subtitle}</Typography>
             </div>
           </div>
         )
       }),
       columnHelper.accessor('leader', {
         header: 'Leader',
-        cell: ({ row }) => <Typography color='text.primary'>{row.original.leader}</Typography>
+        cell: ({ row }) => <Typography color="text.primary">{row.original.leader}</Typography>
       }),
       columnHelper.accessor('avatarGroup', {
         header: 'Team',
         cell: ({ row }) => (
-          <AvatarGroup max={4} className='flex items-center pull-up'>
+          <AvatarGroup max={4} className="flex items-center pull-up">
             {row.original.avatarGroup.map((avatar, index) => (
               <CustomAvatar key={index} src={avatar} size={26} />
             ))}
@@ -161,9 +162,9 @@ const ProjectTables = ({ projectTable }: { projectTable?: ProjectTableRowType[] 
       columnHelper.accessor('status', {
         header: 'Progress',
         cell: ({ row }) => (
-          <div className='flex items-center gap-3'>
-            <LinearProgress color='primary' value={row.original.status} variant='determinate' className='is-20' />
-            <Typography color='text.primary'>{`${row.original.status}%`}</Typography>
+          <div className="flex items-center gap-3">
+            <LinearProgress color="primary" value={row.original.status} variant="determinate" className="is-20" />
+            <Typography color="text.primary">{`${row.original.status}%`}</Typography>
           </div>
         )
       }),
@@ -171,7 +172,7 @@ const ProjectTables = ({ projectTable }: { projectTable?: ProjectTableRowType[] 
         header: 'Actions',
         cell: () => (
           <OptionMenu
-            iconClassName='text-textSecondary'
+            iconClassName="text-textSecondary"
             options={[
               'Details',
               'Archive',
@@ -219,57 +220,57 @@ const ProjectTables = ({ projectTable }: { projectTable?: ProjectTableRowType[] 
   return (
     <Card>
       <CardHeader
-        className='flex-wrap gap-x-4 gap-y-2'
-        title='Project List'
+        className="flex-wrap gap-x-4 gap-y-2"
+        title="Project List"
         action={
           <DebouncedInput
             value={globalFilter ?? ''}
             onChange={value => setGlobalFilter(String(value))}
-            placeholder='Search Project'
+            placeholder="Search Project"
           />
         }
       />
 
-      <div className='overflow-x-auto'>
+      <div className="overflow-x-auto">
         <table className={tableStyles.table}>
           <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <div
-                        className={classnames({
-                          'flex items-center': header.column.getIsSorted(),
-                          'cursor-pointer select-none': header.column.getCanSort()
-                        })}
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                        {{
-                          asc: <i className='tabler-chevron-up text-xl' />,
-                          desc: <i className='tabler-chevron-down text-xl' />
-                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                      </div>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id}>
+                  {header.isPlaceholder ? null : (
+                    <div
+                      className={classnames({
+                        'flex items-center': header.column.getIsSorted(),
+                        'cursor-pointer select-none': header.column.getCanSort()
+                      })}
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {{
+                        asc: <i className="tabler-chevron-up text-xl" />,
+                        desc: <i className="tabler-chevron-down text-xl" />
+                      }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                    </div>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
           </thead>
           <tbody>
-            {table
-              .getRowModel()
-              .rows.slice(0, table.getState().pagination.pageSize)
-              .map(row => {
-                return (
-                  <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                    {row.getVisibleCells().map(cell => (
-                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                    ))}
-                  </tr>
-                )
-              })}
+          {table
+            .getRowModel()
+            .rows.slice(0, table.getState().pagination.pageSize)
+            .map(row => {
+              return (
+                <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                  {row.getVisibleCells().map(cell => (
+                    <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                  ))}
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

@@ -30,19 +30,19 @@ const CardActionAll = () => {
 
   return (
     <Fade in={!visibility} timeout={300}>
-      <Card className='relative'>
+      <Card className="relative">
         <CardHeader
-          title='All Actions'
+          title="All Actions"
           action={
-            <div className='flex'>
-              <IconButton size='small' aria-label='collapse' onClick={() => setCollapse(!collapse)}>
+            <div className="flex">
+              <IconButton size="small" aria-label="collapse" onClick={() => setCollapse(!collapse)}>
                 <i className={collapse ? 'tabler-chevron-down' : 'tabler-chevron-up'} />
               </IconButton>
-              <IconButton size='small' aria-label='refresh-content' onClick={handleBackDrop}>
-                <i className='tabler-refresh' />
+              <IconButton size="small" aria-label="refresh-content" onClick={handleBackDrop}>
+                <i className="tabler-refresh" />
               </IconButton>
-              <IconButton size='small' aria-label='remove-card' onClick={() => setVisibility(!visibility)}>
-                <i className='tabler-x' />
+              <IconButton size="small" aria-label="remove-card" onClick={() => setVisibility(!visibility)}>
+                <i className="tabler-x" />
               </IconButton>
             </div>
           }
@@ -52,8 +52,8 @@ const CardActionAll = () => {
             <Typography>Click on the above icons to see them in action</Typography>
           </CardContent>
 
-          <Backdrop open={reload} className='absolute text-white z-[cal(var(--mui-zIndex-mobileStepper)-1)]'>
-            <CircularProgress color='inherit' />
+          <Backdrop open={reload} className="absolute text-white z-[cal(var(--mui-zIndex-mobileStepper)-1)]">
+            <CircularProgress color="inherit" />
           </Backdrop>
         </Collapse>
       </Card>

@@ -84,12 +84,12 @@ const RadarSalesChart = () => {
   return (
     <Card>
       <CardHeader
-        title='Sales'
-        subheader='Last 6 Months'
+        title="Sales"
+        subheader="Last 6 Months"
         action={<OptionMenu options={['Last Month', 'Last 6 months', 'Last Year']} />}
       />
       <CardContent>
-        <AppReactApexCharts type='radar' height={373} width='100%' series={series} options={options} />
+        <AppReactApexCharts type="radar" height={373} width="100%" series={series} options={options} />
       </CardContent>
     </Card>
   )

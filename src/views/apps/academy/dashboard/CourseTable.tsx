@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
@@ -18,21 +18,21 @@ import type { TextFieldProps } from '@mui/material/TextField'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { Course } from '@/types/apps/academyTypes'
@@ -53,6 +53,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -76,11 +77,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -144,22 +145,22 @@ const CourseTable = ({ courseData }: { courseData?: Course[] }) => {
       columnHelper.accessor('courseTitle', {
         header: 'Course Name',
         cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <CustomAvatar variant='rounded' skin='light' color={row.original.color}>
+          <div className="flex items-center gap-4">
+            <CustomAvatar variant="rounded" skin="light" color={row.original.color}>
               <i className={classnames('text-[28px]', row.original.logo)} />
             </CustomAvatar>
-            <div className='flex flex-col'>
+            <div className="flex flex-col">
               <Typography
                 component={Link}
                 href={getLocalizedUrl('/apps/academy/course-details', locale as Locale)}
-                className='font-medium hover:text-primary'
-                color='text.primary'
+                className="font-medium hover:text-primary"
+                color="text.primary"
               >
                 {row.original.courseTitle}
               </Typography>
-              <div className='flex items-center gap-2'>
+              <div className="flex items-center gap-2">
                 <CustomAvatar src={row.original.image} size={22} />
-                <Typography variant='body2' color='text.primary'>
+                <Typography variant="body2" color="text.primary">
                   {row.original.user}
                 </Typography>
               </div>
@@ -170,7 +171,7 @@ const CourseTable = ({ courseData }: { courseData?: Course[] }) => {
       columnHelper.accessor('time', {
         header: 'Time',
         cell: ({ row }) => (
-          <Typography className='font-medium' color='text.primary'>
+          <Typography className="font-medium" color="text.primary">
             {row.original.time}
           </Typography>
         ),
@@ -191,35 +192,35 @@ const CourseTable = ({ courseData }: { courseData?: Course[] }) => {
           )
         },
         cell: ({ row }) => (
-          <div className='flex items-center gap-4 min-is-48'>
+          <div className="flex items-center gap-4 min-is-48">
             <Typography
-              className='font-medium'
-              color='text.primary'
+              className="font-medium"
+              color="text.primary"
             >{`${Math.floor((row.original.completedTasks / row.original.totalTasks) * 100)}%`}</Typography>
             <LinearProgress
-              color='primary'
+              color="primary"
               value={Math.floor((row.original.completedTasks / row.original.totalTasks) * 100)}
-              variant='determinate'
-              className='is-full bs-2'
+              variant="determinate"
+              className="is-full bs-2"
             />
-            <Typography variant='body2'>{`${row.original.completedTasks}/${row.original.totalTasks}`}</Typography>
+            <Typography variant="body2">{`${row.original.completedTasks}/${row.original.totalTasks}`}</Typography>
           </div>
         )
       }),
       columnHelper.accessor('userCount', {
         header: 'Status',
         cell: ({ row }) => (
-          <div className='flex items-center justify-between gap-5'>
-            <div className='flex items-center gap-1.5'>
-              <i className='tabler-users text-primary' />
+          <div className="flex items-center justify-between gap-5">
+            <div className="flex items-center gap-1.5">
+              <i className="tabler-users text-primary" />
               <Typography>{row.original.userCount}</Typography>
             </div>
-            <div className='flex items-center gap-1.5'>
-              <i className='tabler-book text-info' />
+            <div className="flex items-center gap-1.5">
+              <i className="tabler-book text-info" />
               <Typography>{row.original.note}</Typography>
             </div>
-            <div className='flex items-center gap-1.5'>
-              <i className='tabler-video text-error' />
+            <div className="flex items-center gap-1.5">
+              <i className="tabler-video text-error" />
               <Typography>{row.original.view}</Typography>
             </div>
           </div>
@@ -263,67 +264,67 @@ const CourseTable = ({ courseData }: { courseData?: Course[] }) => {
   return (
     <Card>
       <CardHeader
-        title='Course you are taking'
+        title="Course you are taking"
         action={
           <DebouncedInput
             value={globalFilter ?? ''}
             onChange={value => setGlobalFilter(String(value))}
-            placeholder='Search Course'
+            placeholder="Search Course"
           />
         }
-        className='flex-wrap gap-4'
+        className="flex-wrap gap-4"
       />
-      <div className='overflow-x-auto'>
+      <div className="overflow-x-auto">
         <table className={tableStyles.table}>
           <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <div
-                          className={classnames({
-                            'flex items-center': header.column.getIsSorted(),
-                            'cursor-pointer select-none': header.column.getCanSort()
-                          })}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: <i className='tabler-chevron-up text-xl' />,
-                            desc: <i className='tabler-chevron-down text-xl' />
-                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                        </div>
-                      </>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id}>
+                  {header.isPlaceholder ? null : (
+                    <>
+                      <div
+                        className={classnames({
+                          'flex items-center': header.column.getIsSorted(),
+                          'cursor-pointer select-none': header.column.getCanSort()
+                        })}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: <i className="tabler-chevron-up text-xl" />,
+                          desc: <i className="tabler-chevron-down text-xl" />
+                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                      </div>
+                    </>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
           </thead>
           {table.getFilteredRowModel().rows.length === 0 ? (
             <tbody>
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                  No data available
-                </td>
-              </tr>
+            <tr>
+              <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                No data available
+              </td>
+            </tr>
             </tbody>
           ) : (
             <tbody>
-              {table
-                .getRowModel()
-                .rows.slice(0, table.getState().pagination.pageSize)
-                .map(row => {
-                  return (
-                    <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                      {row.getVisibleCells().map(cell => (
-                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                      ))}
-                    </tr>
-                  )
-                })}
+            {table
+              .getRowModel()
+              .rows.slice(0, table.getState().pagination.pageSize)
+              .map(row => {
+                return (
+                  <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                    ))}
+                  </tr>
+                )
+              })}
             </tbody>
           )}
         </table>

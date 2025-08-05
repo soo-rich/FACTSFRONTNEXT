@@ -1,5 +1,5 @@
 // React Imports
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 // MUI Imports
 import Grid from '@mui/material/Grid2'
@@ -21,9 +21,9 @@ const productStockObj: ProductStockType = {
 }
 
 const TableFilters = ({
-  setData,
-  productData
-}: {
+                        setData,
+                        productData
+                      }: {
   setData: (data: ProductType[]) => void
   productData?: ProductType[]
 }) => {
@@ -55,53 +55,53 @@ const TableFilters = ({
           <CustomTextField
             select
             fullWidth
-            id='select-status'
+            id="select-status"
             value={status}
             onChange={e => setStatus(e.target.value)}
             slotProps={{
               select: { displayEmpty: true }
             }}
           >
-            <MenuItem value=''>Select Status</MenuItem>
-            <MenuItem value='Scheduled'>Scheduled</MenuItem>
-            <MenuItem value='Published'>Publish</MenuItem>
-            <MenuItem value='Inactive'>Inactive</MenuItem>
+            <MenuItem value="">Select Status</MenuItem>
+            <MenuItem value="Scheduled">Scheduled</MenuItem>
+            <MenuItem value="Published">Publish</MenuItem>
+            <MenuItem value="Inactive">Inactive</MenuItem>
           </CustomTextField>
         </Grid>
         <Grid size={{ xs: 12, sm: 4 }}>
           <CustomTextField
             select
             fullWidth
-            id='select-category'
+            id="select-category"
             value={category}
             onChange={e => setCategory(e.target.value)}
             slotProps={{
               select: { displayEmpty: true }
             }}
           >
-            <MenuItem value=''>Select Category</MenuItem>
-            <MenuItem value='Accessories'>Accessories</MenuItem>
-            <MenuItem value='Home Decor'>Home Decor</MenuItem>
-            <MenuItem value='Electronics'>Electronics</MenuItem>
-            <MenuItem value='Shoes'>Shoes</MenuItem>
-            <MenuItem value='Office'>Office</MenuItem>
-            <MenuItem value='Games'>Games</MenuItem>
+            <MenuItem value="">Select Category</MenuItem>
+            <MenuItem value="Accessories">Accessories</MenuItem>
+            <MenuItem value="Home Decor">Home Decor</MenuItem>
+            <MenuItem value="Electronics">Electronics</MenuItem>
+            <MenuItem value="Shoes">Shoes</MenuItem>
+            <MenuItem value="Office">Office</MenuItem>
+            <MenuItem value="Games">Games</MenuItem>
           </CustomTextField>
         </Grid>
         <Grid size={{ xs: 12, sm: 4 }}>
           <CustomTextField
             select
             fullWidth
-            id='select-stock'
+            id="select-stock"
             value={stock}
             onChange={e => setStock(e.target.value as string)}
             slotProps={{
               select: { displayEmpty: true }
             }}
           >
-            <MenuItem value=''>Select Stock</MenuItem>
-            <MenuItem value='In Stock'>In Stock</MenuItem>
-            <MenuItem value='Out of Stock'>Out of Stock</MenuItem>
+            <MenuItem value="">Select Stock</MenuItem>
+            <MenuItem value="In Stock">In Stock</MenuItem>
+            <MenuItem value="Out of Stock">Out of Stock</MenuItem>
           </CustomTextField>
         </Grid>
       </Grid>

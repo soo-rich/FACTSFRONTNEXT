@@ -1,8 +1,8 @@
 'use client'
 
+import type { ChangeEvent, SyntheticEvent } from 'react'
 // React Imports
 import { useState } from 'react'
-import type { ChangeEvent, SyntheticEvent } from 'react'
 
 // MUI Imports
 import Grid from '@mui/material/Grid2'
@@ -66,8 +66,8 @@ const data: CustomInputHorizontalData[] = [
 const FormLayoutsCollapsible = () => {
   // Vars
   const initialSelectedOption: string = data.filter(item => item.isSelected)[
-    data.filter(item => item.isSelected).length - 1
-  ].value
+  data.filter(item => item.isSelected).length - 1
+    ].value
 
   // States
   const [expanded, setExpanded] = useState<string | false>('panel1')
@@ -121,17 +121,17 @@ const FormLayoutsCollapsible = () => {
   return (
     <form onSubmit={e => e.preventDefault()}>
       <Accordion expanded={expanded === 'panel1'} onChange={handleExpandChange('panel1')}>
-        <AccordionSummary expandIcon={<i className='tabler-chevron-right' />}>
+        <AccordionSummary expandIcon={<i className="tabler-chevron-right" />}>
           <Typography>Delivery Address</Typography>
         </AccordionSummary>
         <Divider />
-        <AccordionDetails className='!pbs-6'>
+        <AccordionDetails className="!pbs-6">
           <Grid container spacing={6}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Full Name'
-                placeholder='John Doe'
+                label="Full Name"
+                placeholder="John Doe"
                 value={cardData.fullName}
                 onChange={e => setCardData({ ...cardData, fullName: e.target.value })}
               />
@@ -139,8 +139,8 @@ const FormLayoutsCollapsible = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Phone No.'
-                placeholder='123-456-7890'
+                label="Phone No."
+                placeholder="123-456-7890"
                 value={cardData.phone}
                 onChange={e => setCardData({ ...cardData, phone: e.target.value })}
               />
@@ -150,8 +150,8 @@ const FormLayoutsCollapsible = () => {
                 fullWidth
                 rows={4}
                 multiline
-                label='Address'
-                placeholder='1456, Liberty Street'
+                label="Address"
+                placeholder="1456, Liberty Street"
                 value={cardData.address}
                 onChange={e => setCardData({ ...cardData, address: e.target.value })}
               />
@@ -159,9 +159,9 @@ const FormLayoutsCollapsible = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                type='number'
-                label='ZIP Code'
-                placeholder='10005'
+                type="number"
+                label="ZIP Code"
+                placeholder="10005"
                 value={cardData.zipCode}
                 onChange={e => setCardData({ ...cardData, zipCode: e.target.value })}
               />
@@ -169,8 +169,8 @@ const FormLayoutsCollapsible = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='Landmark'
-                placeholder='Nr Wall Street'
+                label="Landmark"
+                placeholder="Nr Wall Street"
                 value={cardData.landmark}
                 onChange={e => setCardData({ ...cardData, landmark: e.target.value })}
               />
@@ -178,8 +178,8 @@ const FormLayoutsCollapsible = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <CustomTextField
                 fullWidth
-                label='City'
-                placeholder='New York'
+                label="City"
+                placeholder="New York"
                 value={cardData.city}
                 onChange={e => setCardData({ ...cardData, city: e.target.value })}
               />
@@ -188,27 +188,27 @@ const FormLayoutsCollapsible = () => {
               <CustomTextField
                 select
                 fullWidth
-                label='Country'
+                label="Country"
                 value={cardData.country}
                 onChange={e => setCardData({ ...cardData, country: e.target.value })}
               >
-                <MenuItem value=''>Select Country</MenuItem>
-                <MenuItem value='UK'>UK</MenuItem>
-                <MenuItem value='USA'>USA</MenuItem>
-                <MenuItem value='Australia'>Australia</MenuItem>
-                <MenuItem value='Germany'>Germany</MenuItem>
+                <MenuItem value="">Select Country</MenuItem>
+                <MenuItem value="UK">UK</MenuItem>
+                <MenuItem value="USA">USA</MenuItem>
+                <MenuItem value="Australia">Australia</MenuItem>
+                <MenuItem value="Germany">Germany</MenuItem>
               </CustomTextField>
             </Grid>
             <Grid size={{ xs: 12 }}>
               <FormLabel>Address Type</FormLabel>
               <RadioGroup
                 row
-                name='radio-buttons-group'
+                name="radio-buttons-group"
                 value={cardData.addressType}
                 onChange={e => setCardData({ ...cardData, addressType: e.target.value })}
               >
-                <FormControlLabel value='home' control={<Radio />} label='Home (All day delivery)' />
-                <FormControlLabel value='office' control={<Radio />} label='Office (Delivery between 10 AM - 5 PM)' />
+                <FormControlLabel value="home" control={<Radio />} label="Home (All day delivery)" />
+                <FormControlLabel value="office" control={<Radio />} label="Office (Delivery between 10 AM - 5 PM)" />
               </RadioGroup>
             </Grid>
           </Grid>
@@ -216,15 +216,15 @@ const FormLayoutsCollapsible = () => {
       </Accordion>
 
       <Accordion expanded={expanded === 'panel2'} onChange={handleExpandChange('panel2')}>
-        <AccordionSummary expandIcon={<i className='tabler-chevron-right' />}>
+        <AccordionSummary expandIcon={<i className="tabler-chevron-right" />}>
           <Typography>Delivery Options</Typography>
         </AccordionSummary>
         <Divider />
-        <AccordionDetails className='!pbs-6'>
+        <AccordionDetails className="!pbs-6">
           <Grid container>
             {data.map((item, index) => (
               <CustomInputHorizontal
-                type='radio'
+                type="radio"
                 key={index}
                 data={item}
                 gridProps={{
@@ -233,7 +233,7 @@ const FormLayoutsCollapsible = () => {
                     '[&:first-of-type>*]:rounded-be-none [&:last-of-type>*]:rounded-bs-none [&:nth-of-type(2)>*]:rounded-none'
                 }}
                 selected={selectedOption}
-                name='custom-radios-basic'
+                name="custom-radios-basic"
                 handleChange={handleOptionChange}
               />
             ))}
@@ -242,23 +242,23 @@ const FormLayoutsCollapsible = () => {
       </Accordion>
 
       <Accordion expanded={expanded === 'panel3'} onChange={handleExpandChange('panel3')}>
-        <AccordionSummary expandIcon={<i className='tabler-chevron-right' />}>
+        <AccordionSummary expandIcon={<i className="tabler-chevron-right" />}>
           <Typography>Payment Method</Typography>
         </AccordionSummary>
         <Divider />
-        <AccordionDetails className='!pbs-6'>
+        <AccordionDetails className="!pbs-6">
           <Grid container spacing={6}>
             <Grid size={{ xs: 12, md: 6 }}>
               <Grid container spacing={6}>
                 <Grid size={{ xs: 12 }}>
                   <RadioGroup
                     row
-                    name='payment-method-radio'
+                    name="payment-method-radio"
                     value={paymentMethod}
                     onChange={e => setPaymentMethod(e.target.value)}
                   >
-                    <FormControlLabel value='credit' control={<Radio />} label='Credit/Debit/ATM Card' />
-                    <FormControlLabel value='cash' control={<Radio />} label='Cash on Delivery' />
+                    <FormControlLabel value="credit" control={<Radio />} label="Credit/Debit/ATM Card" />
+                    <FormControlLabel value="cash" control={<Radio />} label="Cash on Delivery" />
                   </RadioGroup>
                 </Grid>
                 {paymentMethod === 'credit' ? (
@@ -267,10 +267,10 @@ const FormLayoutsCollapsible = () => {
                       <Grid size={{ xs: 12 }}>
                         <CustomTextField
                           fullWidth
-                          name='number'
-                          autoComplete='off'
-                          label='Card Number'
-                          placeholder='0000 0000 0000 0000'
+                          name="number"
+                          autoComplete="off"
+                          label="Card Number"
+                          placeholder="0000 0000 0000 0000"
                           value={cardData.number}
                           onChange={e => setCardData({ ...cardData, number: e.target.value })}
                         />
@@ -278,10 +278,10 @@ const FormLayoutsCollapsible = () => {
                       <Grid size={{ xs: 12 }}>
                         <CustomTextField
                           fullWidth
-                          name='name'
-                          label='Name'
-                          autoComplete='off'
-                          placeholder='John Doe'
+                          name="name"
+                          label="Name"
+                          autoComplete="off"
+                          placeholder="John Doe"
                           value={cardData.name}
                           onChange={e => setCardData({ ...cardData, name: e.target.value })}
                         />
@@ -289,10 +289,10 @@ const FormLayoutsCollapsible = () => {
                       <Grid size={{ xs: 6 }}>
                         <CustomTextField
                           fullWidth
-                          name='expiry'
-                          autoComplete='off'
-                          label='Expiry Date'
-                          placeholder='MM/YY'
+                          name="expiry"
+                          autoComplete="off"
+                          label="Expiry Date"
+                          placeholder="MM/YY"
                           value={cardData.expiry}
                           onChange={e => setCardData({ ...cardData, expiry: e.target.value })}
                         />
@@ -300,10 +300,10 @@ const FormLayoutsCollapsible = () => {
                       <Grid size={{ xs: 6 }}>
                         <CustomTextField
                           fullWidth
-                          name='cvv'
-                          label='CVV Code'
-                          autoComplete='off'
-                          placeholder='123'
+                          name="cvv"
+                          label="CVV Code"
+                          autoComplete="off"
+                          placeholder="123"
                           value={cardData.cvv}
                           onChange={e => setCardData({ ...cardData, cvv: e.target.value })}
                         />
@@ -316,11 +316,11 @@ const FormLayoutsCollapsible = () => {
           </Grid>
         </AccordionDetails>
         <Divider />
-        <AccordionDetails className='flex gap-4 pbs-6'>
-          <Button type='submit' variant='contained'>
+        <AccordionDetails className="flex gap-4 pbs-6">
+          <Button type="submit" variant="contained">
             Place Order
           </Button>
-          <Button type='reset' variant='tonal' color='secondary' onClick={() => handleReset()}>
+          <Button type="reset" variant="tonal" color="secondary" onClick={() => handleReset()}>
             Reset
           </Button>
         </AccordionDetails>

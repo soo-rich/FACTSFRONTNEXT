@@ -32,21 +32,21 @@ type Props = {
 const FaqHeader = ({ searchValue, setSearchValue }: Props) => {
   return (
     <Card className={classnames('shadow-none bg-transparent bg-cover', styles.bgImage)} elevation={0}>
-      <CardContent className='flex flex-col items-center is-full text-center !plb-[5.8125rem] pli-5'>
-        <Typography variant='h4' className='mbe-2.5'>
+      <CardContent className="flex flex-col items-center is-full text-center !plb-[5.8125rem] pli-5">
+        <Typography variant="h4" className="mbe-2.5">
           Hello, how can we help?
         </Typography>
-        <Typography className='mbe-4'>or choose a category to quickly find the help you need</Typography>
+        <Typography className="mbe-4">or choose a category to quickly find the help you need</Typography>
         <CustomTextFieldStyled
-          className='is-full sm:max-is-[55%] md:max-is-[600px]'
-          placeholder='search articles...'
+          className="is-full sm:max-is-[55%] md:max-is-[600px]"
+          placeholder="search articles..."
           value={searchValue}
           onChange={e => setSearchValue(e.target.value)}
           slotProps={{
             input: {
               startAdornment: (
-                <InputAdornment position='start'>
-                  <i className='tabler-search' />
+                <InputAdornment position="start">
+                  <i className="tabler-search" />
                 </InputAdornment>
               )
             }

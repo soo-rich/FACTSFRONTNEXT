@@ -71,7 +71,7 @@ const ApexRadialBarChart = () => {
             label: 'Comments',
             fontSize: '1.125rem',
             color: 'var(--mui-palette-text-primary)',
-            formatter: function (w) {
+            formatter: function(w) {
               const totalValue =
                 w.globals.seriesTotals.reduce((a: any, b: any) => {
                   return a + b
@@ -97,9 +97,9 @@ const ApexRadialBarChart = () => {
 
   return (
     <Card>
-      <CardHeader title='Statistics' />
+      <CardHeader title="Statistics" />
       <CardContent>
-        <AppReactApexCharts type='radialBar' width='100%' height={400} options={options} series={[80, 50, 35]} />
+        <AppReactApexCharts type="radialBar" width="100%" height={400} options={options} series={[80, 50, 35]} />
       </CardContent>
     </Card>
   )

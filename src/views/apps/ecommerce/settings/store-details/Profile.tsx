@@ -11,23 +11,23 @@ import CustomTextField from '@core/components/mui/TextField'
 const Profile = () => {
   return (
     <Card>
-      <CardHeader title='Profile' />
+      <CardHeader title="Profile" />
       <CardContent>
         <Grid container spacing={6}>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField fullWidth label='Store name' placeholder='ABCD' />
+            <CustomTextField fullWidth label="Store name" placeholder="ABCD" />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField fullWidth label='Phone' placeholder='+(123) 456-7890' />
+            <CustomTextField fullWidth label="Phone" placeholder="+(123) 456-7890" />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField fullWidth label='Store contact email' placeholder='johndoe@email.com' />
+            <CustomTextField fullWidth label="Store contact email" placeholder="johndoe@email.com" />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <CustomTextField fullWidth label='Sender email' placeholder='johndoe@email.com' />
+            <CustomTextField fullWidth label="Sender email" placeholder="johndoe@email.com" />
           </Grid>
           <Grid size={{ xs: 12 }}>
-            <Alert severity='warning' icon={<i className='tabler-bell' />} className='font-medium text-lg'>
+            <Alert severity="warning" icon={<i className="tabler-bell" />} className="font-medium text-lg">
               Confirm that you have access to johndoe@gmail.com in sender email settings.
             </Alert>
           </Grid>

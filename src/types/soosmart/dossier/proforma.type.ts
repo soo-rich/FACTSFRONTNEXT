@@ -1,6 +1,7 @@
-import * as v from 'valibot';
-import {Article_Quantite, schemaArticleQuantiteslist} from "./Article_Quantite";
+import * as v from 'valibot'
 
+import type { Article_Quantite } from './Article_Quantite'
+import { schemaArticleQuantiteslist } from './Article_Quantite'
 
 
 export type ProformaType = {
@@ -20,8 +21,8 @@ export type ProformaType = {
 export const schemaProforma = v.object({
   projet_id: v.nullable(v.string()),
   client_id: v.nullable(v.string()),
-  reference: v.pipe(v.string(), v.minLength(3, "entre au moin 3 carateres")),
-  articleQuantiteslist: v.pipe(v.array(schemaArticleQuantiteslist), v.minLength(1)),
-});
+  reference: v.pipe(v.string(), v.minLength(3, 'entre au moin 3 carateres')),
+  articleQuantiteslist: v.pipe(v.array(schemaArticleQuantiteslist), v.minLength(1))
+})
 
 export type ProformaSave = v.InferInput<typeof schemaProforma>;

@@ -1,8 +1,8 @@
 'use client'
 
-// React Imports
-import { useState, useMemo } from 'react'
 import type { MouseEvent } from 'react'
+// React Imports
+import { useMemo, useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
@@ -21,21 +21,21 @@ import TablePagination from '@mui/material/TablePagination'
 
 // Third-party Imports
 import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -58,6 +58,7 @@ declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
@@ -121,7 +122,7 @@ const InvoiceListTable = ({ invoiceData }: { invoiceData?: InvoiceType[] }) => {
           <Typography
             component={Link}
             href={getLocalizedUrl(`/apps/invoice/preview/${row.original.id}`, locale as Locale)}
-            color='primary.main'
+            color="primary.main"
           >{`#${row.original.id}`}</Typography>
         )
       }),
@@ -131,23 +132,23 @@ const InvoiceListTable = ({ invoiceData }: { invoiceData?: InvoiceType[] }) => {
           <Tooltip
             title={
               <div>
-                <Typography variant='body2' component='span' className='text-inherit'>
+                <Typography variant="body2" component="span" className="text-inherit">
                   {row.original.invoiceStatus}
                 </Typography>
                 <br />
-                <Typography variant='body2' component='span' className='text-inherit'>
+                <Typography variant="body2" component="span" className="text-inherit">
                   Balance:
                 </Typography>{' '}
                 {row.original.balance}
                 <br />
-                <Typography variant='body2' component='span' className='text-inherit'>
+                <Typography variant="body2" component="span" className="text-inherit">
                   Due Date:
                 </Typography>{' '}
                 {row.original.dueDate}
               </div>
             }
           >
-            <CustomAvatar skin='light' color={invoiceStatusObj[row.original.invoiceStatus].color} size={28}>
+            <CustomAvatar skin="light" color={invoiceStatusObj[row.original.invoiceStatus].color} size={28}>
               <i className={classnames('text-base', invoiceStatusObj[row.original.invoiceStatus].icon)} />
             </CustomAvatar>
           </Tooltip>
@@ -164,21 +165,21 @@ const InvoiceListTable = ({ invoiceData }: { invoiceData?: InvoiceType[] }) => {
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({ row }) => (
-          <div className='flex items-center'>
+          <div className="flex items-center">
             <IconButton onClick={() => setData(data?.filter(invoice => invoice.id !== row.original.id))}>
-              <i className='tabler-trash text-textSecondary' />
+              <i className="tabler-trash text-textSecondary" />
             </IconButton>
             <IconButton>
               <Link
                 href={getLocalizedUrl(`/apps/invoice/preview/${row.original.id}`, locale as Locale)}
-                className='flex'
+                className="flex"
               >
-                <i className='tabler-eye text-textSecondary' />
+                <i className="tabler-eye text-textSecondary" />
               </Link>
             </IconButton>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary'
+              iconClassName="text-textSecondary"
               options={[
                 {
                   text: 'Download',
@@ -249,93 +250,93 @@ const InvoiceListTable = ({ invoiceData }: { invoiceData?: InvoiceType[] }) => {
   return (
     <Card>
       <CardHeader
-        title='Invoice List'
+        title="Invoice List"
         sx={{ '& .MuiCardHeader-action': { m: 0 } }}
-        className='flex items-center justify-between flex-wrap gap-4'
+        className="flex items-center justify-between flex-wrap gap-4"
         action={
-          <div className='flex items-center gap-4 flex-wrap'>
-            <div className='flex items-center gap-2'>
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="flex items-center gap-2">
               <Typography>Show</Typography>
               <CustomTextField
                 select
                 value={table.getState().pagination.pageSize}
                 onChange={e => table.setPageSize(Number(e.target.value))}
-                className='is-[70px]'
+                className="is-[70px]"
               >
-                <MenuItem value='10'>10</MenuItem>
-                <MenuItem value='25'>25</MenuItem>
-                <MenuItem value='50'>50</MenuItem>
+                <MenuItem value="10">10</MenuItem>
+                <MenuItem value="25">25</MenuItem>
+                <MenuItem value="50">50</MenuItem>
               </CustomTextField>
             </div>
             <Button
-              variant='tonal'
-              aria-haspopup='true'
+              variant="tonal"
+              aria-haspopup="true"
               onClick={handleClick}
-              color='secondary'
+              color="secondary"
               aria-expanded={open ? 'true' : undefined}
-              endIcon={<i className='tabler-upload' />}
+              endIcon={<i className="tabler-upload" />}
               aria-controls={open ? 'user-view-overview-export' : undefined}
             >
               Export
             </Button>
-            <Menu open={open} anchorEl={anchorEl} onClose={handleClose} id='user-view-overview-export'>
-              <MenuItem onClick={handleClose} className='uppercase'>
+            <Menu open={open} anchorEl={anchorEl} onClose={handleClose} id="user-view-overview-export">
+              <MenuItem onClick={handleClose} className="uppercase">
                 pdf
               </MenuItem>
-              <MenuItem onClick={handleClose} className='uppercase'>
+              <MenuItem onClick={handleClose} className="uppercase">
                 xlsx
               </MenuItem>
-              <MenuItem onClick={handleClose} className='uppercase'>
+              <MenuItem onClick={handleClose} className="uppercase">
                 csv
               </MenuItem>
             </Menu>
           </div>
         }
       />
-      <div className='overflow-x-auto'>
+      <div className="overflow-x-auto">
         <table className={tableStyles.table}>
           <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id} {...(header.id === 'action' && { className: 'is-24' })}>
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <div
-                          className={classnames({
-                            'flex items-center': header.column.getIsSorted(),
-                            'cursor-pointer select-none': header.column.getCanSort()
-                          })}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: <i className='tabler-chevron-up text-xl' />,
-                            desc: <i className='tabler-chevron-down text-xl' />
-                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                        </div>
-                      </>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id} {...(header.id === 'action' && { className: 'is-24' })}>
+                  {header.isPlaceholder ? null : (
+                    <>
+                      <div
+                        className={classnames({
+                          'flex items-center': header.column.getIsSorted(),
+                          'cursor-pointer select-none': header.column.getCanSort()
+                        })}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: <i className="tabler-chevron-up text-xl" />,
+                          desc: <i className="tabler-chevron-down text-xl" />
+                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                      </div>
+                    </>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
           </thead>
           <tbody>
-            {table
-              .getRowModel()
-              .rows.slice(0, table.getState().pagination.pageSize)
-              .map(row => {
-                return (
-                  <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                    {row.getVisibleCells().map(cell => (
-                      <td key={cell.id} {...(cell.id.includes('action') && { className: 'is-24' })}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </td>
-                    ))}
-                  </tr>
-                )
-              })}
+          {table
+            .getRowModel()
+            .rows.slice(0, table.getState().pagination.pageSize)
+            .map(row => {
+              return (
+                <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                  {row.getVisibleCells().map(cell => (
+                    <td key={cell.id} {...(cell.id.includes('action') && { className: 'is-24' })}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

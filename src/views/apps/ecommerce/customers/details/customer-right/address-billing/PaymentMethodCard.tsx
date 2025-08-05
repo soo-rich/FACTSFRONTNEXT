@@ -11,10 +11,10 @@ import Chip from '@mui/material/Chip'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
-import IconButton from '@mui/material/IconButton'
-import Button from '@mui/material/Button'
-import type { ButtonProps } from '@mui/material/Button'
 import type { IconButtonProps } from '@mui/material/IconButton'
+import IconButton from '@mui/material/IconButton'
+import type { ButtonProps } from '@mui/material/Button'
+import Button from '@mui/material/Button'
 
 // Component Imports
 import CustomAvatar from '@core/components/mui/Avatar'
@@ -63,7 +63,7 @@ const CustomerAddress = (props: dataType) => {
 
   // Vars
   const iconButtonProps: IconButtonProps = {
-    children: <i className='tabler-edit' />,
+    children: <i className="tabler-edit" />,
     className: 'text-textSecondary'
   }
 
@@ -76,10 +76,10 @@ const CustomerAddress = (props: dataType) => {
 
   return (
     <>
-      <div className='flex flex-wrap justify-between items-center mlb-3 gap-y-2'>
-        <div className='flex items-center gap-2'>
+      <div className="flex flex-wrap justify-between items-center mlb-3 gap-y-2">
+        <div className="flex items-center gap-2">
           <IconButton
-            size='large'
+            size="large"
             sx={{
               '& i': {
                 transition: 'transform 0.3s',
@@ -88,10 +88,10 @@ const CustomerAddress = (props: dataType) => {
             }}
             onClick={() => setExpanded(!expanded)}
           >
-            <i className='tabler-chevron-down text-textPrimary' />
+            <i className="tabler-chevron-down text-textPrimary" />
           </IconButton>
-          <div className='flex items-center gap-4'>
-            <div className='flex justify-center items-center bg-[#F6F8FA] rounded-sm is-[50px] bs-[30px]'>
+          <div className="flex items-center gap-4">
+            <div className="flex justify-center items-center bg-[#F6F8FA] rounded-sm is-[50px] bs-[30px]">
               <img
                 src={
                   typeOfCard === 'Mastercard' ? mastercard : typeOfCard === 'American Express' ? americanExpress : visa
@@ -100,18 +100,18 @@ const CustomerAddress = (props: dataType) => {
                 height={typeOfCard === 'Mastercard' ? 19 : typeOfCard === 'American Express' ? 16 : 12}
               />
             </div>
-            <div className='flex flex-col items-start gap-1'>
-              <div className='flex flex-wrap items-center gap-x-2 gap-y-1'>
-                <Typography color='text.primary' className='font-medium'>
+            <div className="flex flex-col items-start gap-1">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <Typography color="text.primary" className="font-medium">
                   {typeOfCard}
                 </Typography>
-                {isDefaultCard && <Chip variant='tonal' color='success' label='Default Card' size='small' />}
+                {isDefaultCard && <Chip variant="tonal" color="success" label="Default Card" size="small" />}
               </div>
               <Typography>Expires {expiryDate}</Typography>
             </div>
           </div>
         </div>
-        <div className='mis-10'>
+        <div className="mis-10">
           <OpenDialogOnElementClick
             element={IconButton}
             elementProps={iconButtonProps}
@@ -119,47 +119,47 @@ const CustomerAddress = (props: dataType) => {
             dialogProps={{ data: editCardData }}
           />
           <IconButton>
-            <i className='tabler-trash text-textSecondary' />
+            <i className="tabler-trash text-textSecondary" />
           </IconButton>
           <OptionMenu
-            iconClassName='text-textSecondary'
+            iconClassName="text-textSecondary"
             iconButtonProps={{ size: 'medium' }}
             options={['Set as Default Card']}
           />
         </div>
       </div>
       <Collapse in={expanded} timeout={300}>
-        <Grid container spacing={6} className='pbe-3 pis-12'>
+        <Grid container spacing={6} className="pbe-3 pis-12">
           <Grid size={{ xs: 12, md: 6 }}>
             <Grid container spacing={2}>
               <Grid size={{ xs: 4 }}>
-                <div className='flex flex-col gap-1'>
-                  <Typography variant='body2'>Name</Typography>
-                  <Typography variant='body2'>Number</Typography>
-                  <Typography variant='body2'>Expires</Typography>
-                  <Typography variant='body2'>Type</Typography>
-                  <Typography variant='body2'>Issuer</Typography>
-                  <Typography variant='body2'>ID</Typography>
+                <div className="flex flex-col gap-1">
+                  <Typography variant="body2">Name</Typography>
+                  <Typography variant="body2">Number</Typography>
+                  <Typography variant="body2">Expires</Typography>
+                  <Typography variant="body2">Type</Typography>
+                  <Typography variant="body2">Issuer</Typography>
+                  <Typography variant="body2">ID</Typography>
                 </div>
               </Grid>
               <Grid size={{ xs: 8 }}>
-                <div className='flex flex-col gap-1'>
-                  <Typography variant='body2' color='text.primary' className='font-medium'>
+                <div className="flex flex-col gap-1">
+                  <Typography variant="body2" color="text.primary" className="font-medium">
                     Violet Mendoza
                   </Typography>
-                  <Typography variant='body2' color='text.primary' className='font-medium'>
+                  <Typography variant="body2" color="text.primary" className="font-medium">
                     **** 4487
                   </Typography>
-                  <Typography variant='body2' color='text.primary' className='font-medium'>
+                  <Typography variant="body2" color="text.primary" className="font-medium">
                     08/2028
                   </Typography>
-                  <Typography variant='body2' color='text.primary' className='font-medium'>
+                  <Typography variant="body2" color="text.primary" className="font-medium">
                     {typeOfCard}
                   </Typography>
-                  <Typography variant='body2' color='text.primary' className='font-medium'>
+                  <Typography variant="body2" color="text.primary" className="font-medium">
                     VICBANK
                   </Typography>
-                  <Typography variant='body2' color='text.primary' className='font-medium'>
+                  <Typography variant="body2" color="text.primary" className="font-medium">
                     DH73DJ8
                   </Typography>
                 </div>
@@ -169,37 +169,37 @@ const CustomerAddress = (props: dataType) => {
           <Grid size={{ xs: 12, md: 6 }}>
             <Grid container>
               <Grid size={{ xs: 4 }}>
-                <div className='flex flex-col gap-1'>
-                  <Typography variant='body2'>Billing</Typography>
-                  <Typography variant='body2'>Number</Typography>
-                  <Typography variant='body2'>Email</Typography>
-                  <Typography variant='body2'>Origin</Typography>
-                  <Typography variant='body2'>CVC</Typography>
+                <div className="flex flex-col gap-1">
+                  <Typography variant="body2">Billing</Typography>
+                  <Typography variant="body2">Number</Typography>
+                  <Typography variant="body2">Email</Typography>
+                  <Typography variant="body2">Origin</Typography>
+                  <Typography variant="body2">CVC</Typography>
                 </div>
               </Grid>
               <Grid size={{ xs: 8 }}>
-                <div className='flex flex-col gap-1'>
-                  <Typography variant='body2' color='text.primary' className='font-medium'>
+                <div className="flex flex-col gap-1">
+                  <Typography variant="body2" color="text.primary" className="font-medium">
                     USA
                   </Typography>
-                  <Typography variant='body2' color='text.primary' className='font-medium'>
+                  <Typography variant="body2" color="text.primary" className="font-medium">
                     +7634 983 637
                   </Typography>
-                  <Typography variant='body2' color='text.primary' className='font-medium'>
+                  <Typography variant="body2" color="text.primary" className="font-medium">
                     vafgot@vultukir.org
                   </Typography>
-                  <div className='flex gap-2'>
-                    <Typography variant='body2' color='text.primary' className='font-medium'>
+                  <div className="flex gap-2">
+                    <Typography variant="body2" color="text.primary" className="font-medium">
                       United States
                     </Typography>
-                    <img src='/images/cards/us.png' height={20} />
+                    <img src="/images/cards/us.png" height={20} />
                   </div>
-                  <div className='flex gap-2'>
-                    <Typography variant='body2' color='text.primary' className='font-medium'>
+                  <div className="flex gap-2">
+                    <Typography variant="body2" color="text.primary" className="font-medium">
                       Passed
                     </Typography>
-                    <CustomAvatar skin='light' size={20} color='success'>
-                      <i className='tabler-check text-xs' />
+                    <CustomAvatar skin="light" size={20} color="success">
+                      <i className="tabler-check text-xs" />
                     </CustomAvatar>
                   </div>
                 </div>
@@ -223,9 +223,9 @@ const PaymentMethod = () => {
   return (
     <Card>
       <CardHeader
-        title='Payment Methods'
+        title="Payment Methods"
         action={<OpenDialogOnElementClick element={Button} elementProps={buttonProps} dialog={AddNewCard} />}
-        className='flex-wrap gap-4'
+        className="flex-wrap gap-4"
       />
       <CardContent>
         {data.map((address, index) => (

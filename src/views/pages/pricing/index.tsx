@@ -13,7 +13,7 @@ import Pricing from '@components/pricing'
 const PricingPage = ({ data }: { data?: PricingPlanType[] }) => {
   return (
     <Card>
-      <CardContent className='xl:!plb-16 xl:pli-[6.25rem] pbs-10 pbe-5 pli-5 sm:p-16'>
+      <CardContent className="xl:!plb-16 xl:pli-[6.25rem] pbs-10 pbe-5 pli-5 sm:p-16">
         <Pricing data={data} />
       </CardContent>
     </Card>

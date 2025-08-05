@@ -31,39 +31,39 @@ const data: DataType[] = [
 const AssignmentProgress = () => {
   return (
     <Card>
-      <CardHeader title='Assignment Progress' action={<OptionMenu options={['Refresh', 'Update', 'Share']} />} />
-      <CardContent className='flex flex-col gap-8'>
+      <CardHeader title="Assignment Progress" action={<OptionMenu options={['Refresh', 'Update', 'Share']} />} />
+      <CardContent className="flex flex-col gap-8">
         {data.map((item, i) => (
-          <div key={i} className='flex items-center gap-4'>
-            <div className='relative flex items-center justify-center'>
+          <div key={i} className="flex items-center gap-4">
+            <div className="relative flex items-center justify-center">
               <CircularProgress
-                variant='determinate'
+                variant="determinate"
                 size={54}
                 value={100}
                 thickness={3}
-                className='absolute text-[var(--mui-palette-customColors-trackBg)]'
+                className="absolute text-[var(--mui-palette-customColors-trackBg)]"
               />
               <CircularProgress
-                variant='determinate'
+                variant="determinate"
                 size={54}
                 value={item.progress}
                 thickness={3}
                 color={item.color}
                 sx={{ '& .MuiCircularProgress-circle': { strokeLinecap: 'round' } }}
               />
-              <Typography className='absolute font-medium' color='text.primary'>
+              <Typography className="absolute font-medium" color="text.primary">
                 {`${item.progress}%`}
               </Typography>
             </div>
-            <div className='flex justify-between items-center is-full gap-4'>
+            <div className="flex justify-between items-center is-full gap-4">
               <div>
-                <Typography className='font-medium mbe-1.5' color='text.primary'>
+                <Typography className="font-medium mbe-1.5" color="text.primary">
                   {item.title}
                 </Typography>
-                <Typography variant='body2'>{`${item.tasks} Tasks`}</Typography>
+                <Typography variant="body2">{`${item.tasks} Tasks`}</Typography>
               </div>
-              <CustomIconButton size='small' variant='tonal' color='secondary' className='min-is-fit'>
-                <DirectionalIcon ltrIconClass='tabler-chevron-right' rtlIconClass='tabler-chevron-left' />
+              <CustomIconButton size="small" variant="tonal" color="secondary" className="min-is-fit">
+                <DirectionalIcon ltrIconClass="tabler-chevron-right" rtlIconClass="tabler-chevron-left" />
               </CustomIconButton>
             </div>
           </div>

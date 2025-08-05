@@ -1,6 +1,6 @@
 // React Imports
-import { useState } from 'react'
 import type { ReactNode } from 'react'
+import { useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
@@ -67,7 +67,7 @@ export const labelColors: { [key: string]: LabelColor } = {
 
 const ScrollWrapper = ({ children, isBelowLgScreen }: { children: ReactNode; isBelowLgScreen: boolean }) => {
   if (isBelowLgScreen) {
-    return <div className='bs-full overflow-y-auto overflow-x-hidden'>{children}</div>
+    return <div className="bs-full overflow-y-auto overflow-x-hidden">{children}</div>
   } else {
     return <PerfectScrollbar options={{ wheelPropagation: false }}>{children}</PerfectScrollbar>
   }
@@ -108,7 +108,7 @@ const SidebarLeft = (props: Props) => {
       <Drawer
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
-        className='bs-full'
+        className="bs-full"
         variant={!isBelowMdScreen ? 'permanent' : 'persistent'}
         ModalProps={{ disablePortal: true, keepMounted: true }}
         sx={{
@@ -123,12 +123,12 @@ const SidebarLeft = (props: Props) => {
         }}
       >
         <CardContent>
-          <Button color='primary' variant='contained' fullWidth onClick={() => setOpenCompose(true)}>
+          <Button color="primary" variant="contained" fullWidth onClick={() => setOpenCompose(true)}>
             Compose
           </Button>
         </CardContent>
         <ScrollWrapper isBelowLgScreen={isBelowLgScreen}>
-          <div className='flex flex-col gap-1 plb-4'>
+          <div className="flex flex-col gap-1 plb-4">
             {Object.entries(icons).map(([key, value]) => (
               <Link
                 key={key}
@@ -138,18 +138,18 @@ const SidebarLeft = (props: Props) => {
                   [styles.activeSidebarListItem]: key === folder && !label
                 })}
               >
-                <div className='flex items-center gap-2.5'>
+                <div className="flex items-center gap-2.5">
                   <i className={classnames(value, 'text-xl')} />
-                  <Typography className='capitalize' color='inherit'>
+                  <Typography className="capitalize" color="inherit">
                     {key}
                   </Typography>
                 </div>
                 {folderCounts[key] && (
                   <CustomChip
                     label={folderCounts[key]}
-                    size='small'
-                    round='true'
-                    variant='tonal'
+                    size="small"
+                    round="true"
+                    variant="tonal"
                     color={
                       key === 'inbox' ? 'primary' : key === 'draft' ? 'warning' : key === 'spam' ? 'error' : 'default'
                     }
@@ -158,11 +158,11 @@ const SidebarLeft = (props: Props) => {
               </Link>
             ))}
           </div>
-          <div className='flex flex-col gap-4 plb-4'>
-            <Typography variant='caption' className='uppercase pli-6'>
+          <div className="flex flex-col gap-4 plb-4">
+            <Typography variant="caption" className="uppercase pli-6">
               Labels
             </Typography>
-            <div className='flex flex-col gap-3'>
+            <div className="flex flex-col gap-3">
               {uniqueLabels.map(labelName => (
                 <Link
                   key={labelName}
@@ -173,7 +173,7 @@ const SidebarLeft = (props: Props) => {
                   })}
                 >
                   <i className={classnames('tabler-circle-filled text-xs', labelColors[labelName].colorClass)} />
-                  <Typography className='capitalize' color='inherit'>
+                  <Typography className="capitalize" color="inherit">
                     {labelName}
                   </Typography>
                 </Link>

@@ -33,16 +33,16 @@ export type CardStatsCustomerStatsProps = {
   description: string
 } & (
   | {
-      stats?: string
-      content?: string
-      chipLabel?: never
-    }
+  stats?: string
+  content?: string
+  chipLabel?: never
+}
   | {
-      chipLabel?: string
-      stats?: never
-      content?: never
-    }
-)
+  chipLabel?: string
+  stats?: never
+  content?: never
+}
+  )
 
 export type CardStatsSquareProps = {
   avatarIcon: string

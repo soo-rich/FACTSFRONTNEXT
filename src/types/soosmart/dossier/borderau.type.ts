@@ -1,4 +1,4 @@
-import { Article_Quantite } from "./Article_Quantite";
+import type { Article_Quantite } from './Article_Quantite'
 
 export type BorderauType = {
   id: string;

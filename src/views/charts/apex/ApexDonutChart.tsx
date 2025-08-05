@@ -117,9 +117,9 @@ const ApexDonutChart = () => {
 
   return (
     <Card>
-      <CardHeader title='Expense Ratio' subheader='Spending on various categories' />
+      <CardHeader title="Expense Ratio" subheader="Spending on various categories" />
       <CardContent>
-        <AppReactApexCharts type='donut' width='100%' height={400} options={options} series={[85, 16, 50, 50]} />
+        <AppReactApexCharts type="donut" width="100%" height={400} options={options} series={[85, 16, 50, 50]} />
       </CardContent>
     </Card>
   )

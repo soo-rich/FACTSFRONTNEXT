@@ -11,6 +11,7 @@ export class FactureService {
   static async PostData(id_borderau: any) {
     return (await instance.post<FactureType>(`${url}/${id_borderau}`, {})).data
   }
+
   static async getAll(params?: ParamRequests) {
     return (
       await instance.get<CustomresponseType<FactureType>>(url, {
@@ -18,9 +19,10 @@ export class FactureService {
       })
     ).data
   }
+
   static async paid(id: string) {
     return (
-      await instance.get<boolean>(url+`/paid/${id}`)
+      await instance.get<boolean>(url + `/paid/${id}`)
     ).data
   }
 

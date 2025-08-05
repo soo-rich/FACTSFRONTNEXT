@@ -2,8 +2,8 @@
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
 import type { ButtonProps } from '@mui/material/Button'
+import Button from '@mui/material/Button'
 
 // Type Imports
 import type { PricingPlanType } from '@/types/pages/pricingTypes'
@@ -22,10 +22,10 @@ const DialogPricing = ({ data }: { data?: PricingPlanType[] }) => {
   return (
     <>
       <Card>
-        <CardContent className='flex flex-col items-center text-center gap-4'>
-          <i className='tabler-coin text-[34px] text-textPrimary' />
-          <Typography variant='h5'>Pricing</Typography>
-          <Typography color='text.primary'>
+        <CardContent className="flex flex-col items-center text-center gap-4">
+          <i className="tabler-coin text-[34px] text-textPrimary" />
+          <Typography variant="h5">Pricing</Typography>
+          <Typography color="text.primary">
             Elegant pricing options dialog popup example, easy to use in any page.
           </Typography>
           <OpenDialogOnElementClick

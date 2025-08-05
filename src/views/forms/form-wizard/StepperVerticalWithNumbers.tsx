@@ -66,10 +66,10 @@ const StepperVerticalWithNumbers = () => {
 
   return (
     <Card>
-      <CardHeader title='Vertical Stepper with Numbers' />
+      <CardHeader title="Vertical Stepper with Numbers" />
       <CardContent>
         <StepperWrapper>
-          <Stepper activeStep={activeStep} orientation='vertical'>
+          <Stepper activeStep={activeStep} orientation="vertical">
             {steps.map((step, index) => (
               <Step key={index} className={classNames({ active: activeStep === index })}>
                 <StepLabel
@@ -77,21 +77,21 @@ const StepperVerticalWithNumbers = () => {
                     stepIcon: StepperCustomDot
                   }}
                 >
-                  <div className='step-label'>
-                    <Typography className='step-number'>{`0${index + 1}`}</Typography>
+                  <div className="step-label">
+                    <Typography className="step-number">{`0${index + 1}`}</Typography>
                     <div>
-                      <Typography className='step-title'>{step.title}</Typography>
-                      <Typography className='step-subtitle'>{step.subtitle}</Typography>
+                      <Typography className="step-title">{step.title}</Typography>
+                      <Typography className="step-subtitle">{step.subtitle}</Typography>
                     </div>
                   </div>
                 </StepLabel>
                 <StepContent>
                   <Typography>{step.description}</Typography>
-                  <div className='flex gap-4 mt-4'>
-                    <Button variant='contained' onClick={handleNext} size='small'>
+                  <div className="flex gap-4 mt-4">
+                    <Button variant="contained" onClick={handleNext} size="small">
                       {index === steps.length - 1 ? 'Finish' : 'Next'}
                     </Button>
-                    <Button size='small' color='secondary' variant='tonal' onClick={handleBack} disabled={index === 0}>
+                    <Button size="small" color="secondary" variant="tonal" onClick={handleBack} disabled={index === 0}>
                       Back
                     </Button>
                   </div>
@@ -101,9 +101,9 @@ const StepperVerticalWithNumbers = () => {
           </Stepper>
         </StepperWrapper>
         {activeStep === steps.length && (
-          <div className='mt-2'>
+          <div className="mt-2">
             <Typography>All steps are completed!</Typography>
-            <Button variant='contained' onClick={handleReset} size='small' className='mt-2'>
+            <Button variant="contained" onClick={handleReset} size="small" className="mt-2">
               Reset
             </Button>
           </div>

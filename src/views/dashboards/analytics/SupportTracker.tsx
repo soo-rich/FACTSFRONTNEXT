@@ -180,33 +180,33 @@ const SupportTracker = () => {
   return (
     <Card>
       <CardHeader
-        title='Support Tracker'
-        subheader='Last 7 Days'
+        title="Support Tracker"
+        subheader="Last 7 Days"
         action={<OptionMenu options={['Refresh', 'Edit', 'Share']} />}
       />
-      <CardContent className='flex flex-col sm:flex-row items-center justify-between gap-7'>
-        <div className='flex flex-col gap-6 is-full sm:is-[unset]'>
-          <div className='flex flex-col'>
-            <Typography variant='h2'>164</Typography>
+      <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-7">
+        <div className="flex flex-col gap-6 is-full sm:is-[unset]">
+          <div className="flex flex-col">
+            <Typography variant="h2">164</Typography>
             <Typography>Total Tickets</Typography>
           </div>
-          <div className='flex flex-col gap-4 is-full'>
+          <div className="flex flex-col gap-4 is-full">
             {data.map((item, index) => (
-              <div key={index} className='flex items-center gap-4'>
-                <CustomAvatar skin='light' variant='rounded' color={item.avatarColor} size={34}>
+              <div key={index} className="flex items-center gap-4">
+                <CustomAvatar skin="light" variant="rounded" color={item.avatarColor} size={34}>
                   <i className={classnames(item.avatarIcon, 'text-[22px]')} />
                 </CustomAvatar>
-                <div className='flex flex-col'>
-                  <Typography className='font-medium' color='text.primary'>
+                <div className="flex flex-col">
+                  <Typography className="font-medium" color="text.primary">
                     {item.title}
                   </Typography>
-                  <Typography variant='body2'>{item.subtitle}</Typography>
+                  <Typography variant="body2">{item.subtitle}</Typography>
                 </div>
               </div>
             ))}
           </div>
         </div>
-        <AppReactApexCharts type='radialBar' height={350} width='100%' series={[85]} options={options} />
+        <AppReactApexCharts type="radialBar" height={350} width="100%" series={[85]} options={options} />
       </CardContent>
     </Card>
   )
