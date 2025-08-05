@@ -1,5 +1,5 @@
 import instance from '@/service/axios-manager/instance'
-import type { StatistiqueType } from '@/types/statistique/statistique.type'
+import type { StatistiqueType } from '@/types/soosmart/statistique/statistique.type'
 
 const url = `stat`
 
