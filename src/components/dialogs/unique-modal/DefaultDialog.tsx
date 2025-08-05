@@ -1,21 +1,26 @@
 import {Dialog} from "@mui/material";
-import {AddEditModalType} from "@/types/soosmart/add-edit-modal.type";
-import DialogCloseButton from "@components/dialogs/DialogCloseButton";
+
 import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
 import DialogContent from "@mui/material/DialogContent";
+
+import DialogCloseButton from "@components/dialogs/DialogCloseButton";
+import type {AddEditModalType} from "@/types/soosmart/add-edit-modal.type";
 
 const DefaultDialog = ({open, setOpen, title, subtitle, children, OnSuccess , dialogMaxWidth}: AddEditModalType) => {
   const handleClose = () => {
     setOpen(false)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSuccess = () => {
     OnSuccess?.();
     handleClose()
 
   }
-  return (
+
+
+return (
     <Dialog
       fullWidth
       open={open}

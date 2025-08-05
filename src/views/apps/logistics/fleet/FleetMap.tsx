@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react'
 
 import type { MapRef } from 'react-map-gl'
+
 // Third-party Imports
 import { Map, Marker } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'

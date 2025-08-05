@@ -3,6 +3,7 @@ import type { ReactNode, SyntheticEvent } from 'react'
 import { useEffect } from 'react'
 
 import type { AccordionProps } from '@mui/material/Accordion'
+
 // Mui Imports
 import MuiAccordion from '@mui/material/Accordion'
 import type { AccordionDetailsProps } from '@mui/material/AccordionDetails'

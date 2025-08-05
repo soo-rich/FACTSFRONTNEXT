@@ -39,6 +39,6 @@ export class ClientService {
   }
 
   static async changePotentiel(id: string) {
-    return (await instance.get<Boolean>(api + '/' + id)).data
+    return (await instance.get<boolean>(api + '/' + id)).data
   }
 }

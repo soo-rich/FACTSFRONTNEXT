@@ -50,6 +50,7 @@ export const InterceptorRemoveParamsNull = (instance: AxiosInstance) => {
     if (config.params) {
       config.params = Object.fromEntries(
         Object.entries(config.params).filter(
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           ([_, value]) => value !== null && value !== undefined && value !== ''
         )
       )

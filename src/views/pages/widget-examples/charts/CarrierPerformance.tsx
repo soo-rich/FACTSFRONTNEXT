@@ -13,6 +13,7 @@ import type { ApexOptions } from 'apexcharts'
 
 // Components Imports
 import OptionMenu from '@core/components/option-menu'
+
 // Styles Imports
 import './styles.css'
 

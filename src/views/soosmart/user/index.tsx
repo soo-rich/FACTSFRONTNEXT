@@ -202,7 +202,7 @@ const UserIndex = () => {
       })
 
     ],
-    []
+    [ActivateMutation, DeleteMutation]
   )
 
 

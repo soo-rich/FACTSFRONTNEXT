@@ -50,7 +50,7 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
 
   const querykey = useMemo(() => [`${ClientService.CLIENT_KEY}+search`, clientName], [clientName])
 
-  const { data, isLoading, isError } = useQuery({
+  const { data} = useQuery({
     queryKey: querykey,
     queryFn: async () => {
       return await ClientService.getClientsByNom(

@@ -138,7 +138,7 @@ const FactureList = () => {
         enableHiding: true // Permet de cacher cette colonne
       })
     ],
-    []
+    [DeleteMutation, locale]
   )
 
   return (

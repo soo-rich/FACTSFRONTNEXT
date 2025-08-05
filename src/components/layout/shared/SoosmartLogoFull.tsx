@@ -3,6 +3,7 @@ import type {SVGAttributes} from 'react'
 
 const SoosmartLogoFull = (props: SVGAttributes<SVGElement>) => {
   const {width = '100%',} = props
+
   return (
     <>
 

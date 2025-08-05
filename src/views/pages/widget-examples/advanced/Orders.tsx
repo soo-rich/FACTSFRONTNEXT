@@ -1,6 +1,7 @@
 'use client'
 
 import type { SyntheticEvent } from 'react'
+
 // React Imports
 import { Fragment, useState } from 'react'
 

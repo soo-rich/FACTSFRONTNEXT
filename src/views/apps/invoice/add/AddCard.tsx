@@ -1,6 +1,7 @@
 'use client'
 
 import type { SyntheticEvent } from 'react'
+
 // React Imports
 import { useState } from 'react'
 
@@ -25,6 +26,7 @@ import classnames from 'classnames'
 // Type Imports
 import type { InvoiceType } from '@/types/apps/invoiceTypes'
 import type { FormDataType } from './AddCustomerDrawer'
+
 // Component Imports
 import AddCustomerDrawer, { initialFormData } from './AddCustomerDrawer'
 import Logo from '@components/layout/shared/Logo'

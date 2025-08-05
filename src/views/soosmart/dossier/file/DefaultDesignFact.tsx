@@ -265,7 +265,7 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe:
                 <Typography>Payement : 60% à la commande </Typography>
                 <Typography className={'ml-20'}>40% à la livraison</Typography>
                 <Typography>Délai de livraison : 2 semaines </Typography>
-                <Typography> Validité de l'offre : 90 jours </Typography>
+                <Typography> Validité de l&apos;offre : 90 jours </Typography>
               </Grid>
             </>
 

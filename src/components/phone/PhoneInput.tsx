@@ -1,16 +1,21 @@
 import 'react-international-phone/style.css';
 
+import React from 'react';
+
+import type {
+  BaseTextFieldProps} from '@mui/material';
 import {
-  BaseTextFieldProps,
   InputAdornment,
   MenuItem,
   Select,
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
+
+
+import type {
+  CountryIso2} from 'react-international-phone';
 import {
-  CountryIso2,
   defaultCountries,
   FlagImage,
   parseCountry,
@@ -68,6 +73,7 @@ export const MuiPhone: React.FC<MUIPhoneProps> = ({
               }}
               sx={{
                 width: 'max-content',
+
                 // Remove default outline (display only on focus)
                 fieldset: {
                   display: 'none',
@@ -77,6 +83,7 @@ export const MuiPhone: React.FC<MUIPhoneProps> = ({
                     display: 'block',
                   },
                 },
+
                 // Update default spacing
                 '.MuiSelect-select': {
                   padding: '8px',
@@ -94,7 +101,9 @@ export const MuiPhone: React.FC<MUIPhoneProps> = ({
             >
               {defaultCountries.map((c) => {
                 const country = parseCountry(c);
-                return (
+
+
+return (
                   <MenuItem key={country.iso2} value={country.iso2}>
                     <FlagImage
                       iso2={country.iso2}

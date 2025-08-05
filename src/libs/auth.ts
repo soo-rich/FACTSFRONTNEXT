@@ -1,6 +1,7 @@
 // Third-party Imports
 import CredentialProvider from 'next-auth/providers/credentials'
 import type {NextAuthOptions} from 'next-auth'
+
 import {AuthService} from "@/service/auth/auth-service";
 import {JwtUtils} from "@/service/jwt/JwtUtils";
 
@@ -36,6 +37,7 @@ export const authOptions: NextAuthOptions = {
         try {
           // ** Login API Call to match the user credentials and receive user data in response along with his role
           if (!credentials) return null;
+
           const res = await AuthService.login({
             username: credentials.username,
             password: credentials.password,

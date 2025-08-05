@@ -28,9 +28,7 @@ export class BorderauService {
     ).data
   }
 
-  static async Updatedata(id: string, data: any) {
-    throw new Error('Method not implemented.')
-  }
+
 
   static async DeleteDAta(id: string) {
     return (await instance.delete(`${url}/${id}`)).data

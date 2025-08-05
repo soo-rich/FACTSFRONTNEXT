@@ -1,6 +1,7 @@
 'use client'
 
 import type { SyntheticEvent } from 'react'
+
 // React Imports
 import { useRef, useState } from 'react'
 
@@ -23,6 +24,7 @@ import { useTheme } from '@mui/material/styles'
 
 // Third Party Imports
 import type { ApexOptions } from 'apexcharts'
+
 // Style Imports
 import './styles.css'
 

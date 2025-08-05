@@ -69,6 +69,22 @@ const ProjetIndex = () => {
     }
   })
 
+  const DeleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await ProjetService.deleteProjet(id)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [ProjetService.PROJT_KEY]
+      })
+      toast.success('Projet supprimé avec succès')
+    },
+    onError: () => {
+      toast.error('Erreur lors de la suppression du projet')
+    }
+  })
+
+
   const columns = useMemo(() => [
     columnHelper.accessor('projet_type', {
       header: 'Type de projet',
@@ -141,23 +157,8 @@ const ProjetIndex = () => {
       ),
       enableHiding: true // Permet de cacher cette colonne
     })
-  ], [])
+  ], [ActivateMutation, DeleteMutation, columnHelper])
 
-
-  const DeleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      return await ProjetService.deleteProjet(id)
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [ProjetService.PROJT_KEY]
-      })
-      toast.success('Projet supprimé avec succès')
-    },
-    onError: () => {
-      toast.error('Erreur lors de la suppression du projet')
-    }
-  })
 
 
   return (
