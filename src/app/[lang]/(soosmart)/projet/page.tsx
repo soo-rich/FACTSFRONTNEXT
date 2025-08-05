@@ -1,9 +1,9 @@
-import ProjetIndex from "@views/soosmart/projet";
+import ProjetIndex from '@views/soosmart/projet'
 
 const ProjetPage = () => {
   return (
-    <ProjetIndex/>
-  );
+    <ProjetIndex />
+  )
 }
 
 

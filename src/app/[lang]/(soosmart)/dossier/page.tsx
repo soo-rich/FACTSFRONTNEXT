@@ -1,9 +1,9 @@
-import DossierIndex from "@views/soosmart/dossier";
+import DossierIndex from '@views/soosmart/dossier'
 
 const DossierPage = () => {
   return (
-    <DossierIndex/>
-  );
+    <DossierIndex />
+  )
 }
 
 

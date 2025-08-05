@@ -1,8 +1,8 @@
-import UserIndex from "@views/soosmart/user";
+import UserIndex from '@views/soosmart/user'
 
 const UserPage = () => {
 
-  return <UserIndex/>
+  return <UserIndex />
 }
 
 

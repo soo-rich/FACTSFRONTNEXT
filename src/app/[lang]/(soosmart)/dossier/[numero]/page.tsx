@@ -1,10 +1,10 @@
-import DocumentViews from "@views/soosmart/dossier/file/Document";
+import DocumentViews from '@views/soosmart/dossier/file/Document'
 
 const DocumenentPage = async () => {
   return (
-    <DocumentViews/>
-  );
+    <DocumentViews />
+  )
 }
 
 
-export default DocumenentPage;
+export default DocumenentPage

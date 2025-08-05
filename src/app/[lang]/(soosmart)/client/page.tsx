@@ -1,13 +1,12 @@
-import ClientIndex from "@views/soosmart/client";
+import ClientIndex from '@views/soosmart/client'
 
 const ClientPage = () => {
 
 
   return (
-    <ClientIndex/>
-  );
+    <ClientIndex />
+  )
 }
 
 
-
-export default ClientPage;
+export default ClientPage

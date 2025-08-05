@@ -2,10 +2,11 @@
 import Button from '@mui/material/Button'
 
 // Type Imports
-import type {ChildrenType} from '@core/types'
-import type {Locale} from '@configs/i18n'
+import type { ChildrenType } from '@core/types'
+import type { Locale } from '@configs/i18n'
+
 // Config Imports
-import {i18n} from '@configs/i18n'
+import { i18n } from '@configs/i18n'
 
 // Layout Imports
 import LayoutWrapper from '@layouts/LayoutWrapper'
@@ -23,15 +24,15 @@ import ScrollToTop from '@core/components/scroll-to-top'
 import AuthGuard from '@/hocs/AuthGuard'
 
 // Util Imports
-import {getDictionary} from '@/utils/getDictionary'
-import {getMode, getSystemMode} from '@core/utils/serverHelpers'
+import { getDictionary } from '@/utils/getDictionary'
+import { getMode, getSystemMode } from '@core/utils/serverHelpers'
 import ProviderTokenCheker from '@/components/token/TokenChecker'
-import PathGenerate from "@components/pathbreadcrumbs/PathGenerate";
+import PathGenerate from '@components/pathbreadcrumbs/PathGenerate'
 
 const Layout = async (props: ChildrenType & { params: Promise<{ lang: Locale }> }) => {
   const params = await props.params
 
-  const {children} = props
+  const { children } = props
 
   // Vars
   const direction = i18n.langDirection[params.lang]
@@ -47,26 +48,26 @@ const Layout = async (props: ChildrenType & { params: Promise<{ lang: Locale }> 
             systemMode={systemMode}
             verticalLayout={
               <VerticalLayout
-                navigation={<Navigation dictionary={dictionary} mode={mode}/>}
-                navbar={<Navbar/>}
-                footer={<VerticalFooter/>}
+                navigation={<Navigation dictionary={dictionary} mode={mode} />}
+                navbar={<Navbar />}
+                footer={<VerticalFooter />}
               >
-                <PathGenerate dictionary={dictionary}/>
+                <PathGenerate dictionary={dictionary} />
                 {children}
               </VerticalLayout>
             }
             horizontalLayout={
-              <HorizontalLayout header={<Header dictionary={dictionary}/>} footer={<HorizontalFooter/>}>
-                <PathGenerate dictionary={dictionary}/>  {children}
+              <HorizontalLayout header={<Header dictionary={dictionary} />} footer={<HorizontalFooter />}>
+                <PathGenerate dictionary={dictionary} /> {children}
               </HorizontalLayout>
             }
           />
-          <ScrollToTop className='mui-fixed'>
+          <ScrollToTop className="mui-fixed">
             <Button
-              variant='contained'
-              className='is-10 bs-10 rounded-full p-0 min-is-0 flex items-center justify-center'
+              variant="contained"
+              className="is-10 bs-10 rounded-full p-0 min-is-0 flex items-center justify-center"
             >
-              <i className='tabler-arrow-up'/>
+              <i className="tabler-arrow-up" />
             </Button>
           </ScrollToTop>
 
