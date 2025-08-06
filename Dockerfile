@@ -1,45 +1,39 @@
-# Dockerfile ultra simple - Copy tout, puis install, puis build
+# Approche 2: Copie tout et build dans le conteneur (avec pnpm)
 FROM node:18-alpine
 
-# Installer pnpm et dépendances système
-RUN npm install -g pnpm && \
-    apk add --no-cache libc6-compat curl
-
-# Créer le répertoire de travail
 WORKDIR /app
 
-# Copier TOUT le projet en premier
+# Installer les dépendances système si nécessaire
+RUN apk add --no-cache libc6-compat
+
+# Installer pnpm globalement
+RUN npm install -g pnpm
+
+# Ajouter un utilisateur non-root
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copier tous les fichiers du projet (pour les scripts post-install)
 COPY . .
 
-# Configuration pnpm pour éviter les warnings
-RUN pnpm config set auto-install-peers true && \
-    pnpm config set strict-peer-dependencies false
+# Changer les permissions pour l'utilisateur nextjs
+RUN chown -R nextjs:nodejs /app
 
-# Variables d'environnement
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=production
+# Passer à l'utilisateur nextjs pour l'installation et le build
+USER nextjs
 
-# Installer les dépendances (maintenant tous les fichiers sont présents)
+# Installer toutes les dépendances avec pnpm
 RUN pnpm install --frozen-lockfile
 
 # Build de l'application
-RUN pnpm run build
+RUN pnpm build
 
-# Créer utilisateur non-root
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs && \
-    chown -R nextjs:nodejs /app
-
-USER nextjs
+# Nettoyer les dépendances de dev (optionnel, pour réduire la taille)
+# RUN pnpm prune --prod
 
 EXPOSE 3000
 
+ENV NODE_ENV=production
 ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
 
-# Health check
-#HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-#    CMD curl -f http://localhost:3000/ || exit 1
-
-# Démarrer l'application
 CMD ["pnpm", "start"]
