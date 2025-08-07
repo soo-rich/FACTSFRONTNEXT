@@ -36,7 +36,7 @@ docker push $DOCKER_USERNAME/$IMAGE_NAME:$LATEST_TAG
 
 if [ $? -eq 0 ]; then
     echo "✅ Push réussi !"
-    echo "🎉 Ton image est disponible sur : https://hub.docker.com/r/$DOCKER_USERNAME/$IMAGE_NAME"
+    echo "🎉 Ton image est disponible sur : https://hub.docker.com/repositories/$DOCKER_USERNAME/$IMAGE_NAME"
 else
     echo "❌ Échec du push"
     exit 1
