@@ -20,13 +20,13 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 // Type Imports
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 
-import type zod from 'zod'
-
-import { zodResolver } from '@hookform/resolvers/zod'
-
 import { signIn } from 'next-auth/react'
 
 import { toast } from 'react-toastify'
+
+import { valibotResolver } from '@hookform/resolvers/valibot'
+
+import type { InferInput } from 'valibot'
 
 import type { Locale } from '@configs/i18n'
 
@@ -46,7 +46,7 @@ import AuthIllustrationWrapper from './AuthIllustrationWrapper'
 import { schemaLogin } from '@/service/auth/auth-service'
 
 
-type formdata = zod.infer<typeof schemaLogin>
+type formdata = InferInput<typeof schemaLogin>
 
 const Login = () => {
   // States
@@ -65,10 +65,10 @@ const Login = () => {
 
   } = useForm<formdata>(
     {
-      resolver: zodResolver(schemaLogin),
+      resolver: valibotResolver(schemaLogin),
       defaultValues: {
-        username: 'ulrich',
-        password: '123456789'
+        username: '',
+        password: ''
       },
       mode: 'onSubmit',
       reValidateMode: 'onChange',

@@ -1,10 +1,10 @@
-import { z } from 'zod'
+import { minLength, object, pipe, string } from 'valibot'
 
 import instance from '@/service/axios-manager/instance'
 
-export const schemaLogin = z.object({
-  username: z.string().min(2, { message: 'entre 2 caracteres au minimum' }),
-  password: z.string().min(6, { message: 'entre 6 caracteres au minimum' })
+export const schemaLogin = object({
+  username: pipe(string(), minLength(2, 'entre 2 caracteres au minimum')),
+  password: pipe(string(), minLength(6, 'entre 6 caracteres au minimum'))
 })
 
 export class AuthService {
