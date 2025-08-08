@@ -16,7 +16,6 @@ const FooterContent = () => {
       <p>
         <span className='text-textSecondary'>{`© ${new Date().getFullYear()}`}</span>
       </p>
-
     </div>
   )
 }
