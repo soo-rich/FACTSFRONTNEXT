@@ -26,13 +26,10 @@ import type { FactStat } from '@/types/soosmart/statistique/statistique.type'
 import type { DashComponementType } from '@/types/componentTypes'
 
 import { StatAPIService } from '@/service/statistique/stat-api.service'
-import CardStatsSquare from '@components/card-statistics/CardStatsSquare'
 import LoadingWithoutModal from '@components/LoadingWithoutModal'
 import ErrorView from '@components/ErrorView'
 import Utilsmethod from '@/utils/utilsmethod'
 import DashCardStatsSquare from '@views/soosmart/dashboard/component/DashCardStatsSquare'
-
-// import CardStatsSquare from '@components/card-statistics/CardStatsSquare'
 
 type Props = CardProps & {
   color: ThemeColor

@@ -44,9 +44,9 @@ export const userUpdateSchema = object({
 
 export const changePasswordSchema = pipe(
   object({
-    password: pipe(string(), minLength(1, 'Le mot de passe actuel est requis')),
-    newpassword: pipe(string(), minLength(1, 'Le nouveau mot de passe est requis')),
-    confirmpassword: pipe(string(), minLength(1, 'La confirmation du mot de passe est requise'))
+    password: pipe(string(), minLength(5, 'Le mot de passe actuel est requis')),
+    newpassword: pipe(string(), minLength(6, 'Le nouveau mot de passe est requis et doit contenir au moins 6 caractères'), regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{6,}$/, 'Le mot de passe doit contenir au moins une majuscule, un chiffre et un symbole')),
+    confirmpassword: pipe(string(), minLength(6, 'La confirmation du mot de passe est requise'))
   }),
   custom((data) => {
     return (data as any).newpassword === (data as any).confirmpassword

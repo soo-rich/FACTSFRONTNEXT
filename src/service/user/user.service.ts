@@ -27,6 +27,10 @@ export class UserService {
     return (await instance.post<UtilisateurDto>(url, user)).data
   }
 
+  static async useConnect() {
+    return (await instance.get<UtilisateurDto>(url+'/me')).data
+  }
+
   static async update({ id, user }: { id: string, user: UtilisateurUpdate }) {
     return (await instance.put<UtilisateurDto>(url + `/${id}`, user)).data
   }
