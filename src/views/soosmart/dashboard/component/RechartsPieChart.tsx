@@ -81,7 +81,7 @@ const RechartsPieChart = () => {
 
   return (
     <Card className={'h-full'}>
-      <CardHeader title="Pie Chart" subheader="" />
+      <CardHeader title="Pourcentage des Generation de Document" subheader="" />
       <CardContent>{isLoading ? <LoadingWithoutModal /> : isError ? <ErrorView /> : (<>
           <AppRecharts>
             <div className="bs-[350px]">
@@ -92,7 +92,7 @@ const RechartsPieChart = () => {
                     innerRadius={80}
                     dataKey="value"
                     label={renderCustomizedLabel}
-                    labelLine={true}
+                    labelLine={false}
                     stroke="none"
                   >
                     {stats?.map((entry, index) => (
