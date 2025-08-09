@@ -14,7 +14,15 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copier tous les fichiers du projet (pour les scripts post-install)
-COPY . .
+COPY package.json .
+COPY pnpm-lock.yaml .
+COPY pnpm-workspace.yaml .
+COPY .npmrc .
+COPY tsconfig.json .
+COPY tailwind.config.ts .
+COPY next.config.js .
+COPY public/ public/
+COPY src/ src/
 
 # Changer les permissions pour l'utilisateur nextjs
 RUN chown -R nextjs:nodejs /app
@@ -29,7 +37,7 @@ RUN pnpm install --frozen-lockfile
 RUN pnpm build
 
 # Nettoyer les dépendances de dev (optionnel, pour réduire la taille)
-# RUN pnpm prune --prod
+RUN pnpm prune --prod
 
 EXPOSE 3000
 

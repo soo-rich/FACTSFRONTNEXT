@@ -11,6 +11,7 @@ node_modules
 out
 
 # Environnements locaux
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -51,3 +52,6 @@ docs/
 
 # Autres
 *.tgz
+.deploy
+.idea
+.vscode
