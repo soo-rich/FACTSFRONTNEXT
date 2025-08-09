@@ -4,7 +4,7 @@ cd ..
 
 # Configuration
 DOCKER_USERNAME="sooulrich933"
-IMAGE_NAME="facts"
+IMAGE_NAME="soosmart-facts-front"
 VERSION=${1:-$(date +%Y%m%d-%H%M%S)}  # Version basée sur timestamp ou argument
 LATEST_TAG="latest"
 
