@@ -1,47 +1,64 @@
-# Approche 2: Copie tout et build dans le conteneur (avec pnpm)
-FROM node:18-alpine
+# Utilise l'image Node.js officielle
+FROM node:current-alpine3.21 AS base
 
-WORKDIR /app
-
-# Installer les dépendances système si nécessaire
-RUN apk add --no-cache libc6-compat
-
-# Installer pnpm globalement
+# Installation de pnpm
 RUN npm install -g pnpm
 
-# Ajouter un utilisateur non-root
+# Installation des dépendances seulement quand nécessaire
+FROM base AS deps
+WORKDIR /app
+
+# Copie des fichiers de dépendances pnpm
+COPY package.json pnpm-lock.yaml ./
+
+# Installation avec pnpm
+RUN pnpm install --frozen-lockfile --prod
+
+# Installation des dev dependencies pour le build
+FROM base AS builder
+WORKDIR /app
+
+# Copie des fichiers de dépendances
+COPY package.json pnpm-lock.yaml ./
+
+# Copie du code source
+COPY . .
+
+# Installation de toutes les dépendances (prod + dev)
+RUN pnpm install --frozen-lockfile
+
+# Désactive la télémétrie Next.js pendant le build
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Build de l'application
+RUN pnpm run build
+
+# Image de production
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copier tous les fichiers du projet (pour les scripts post-install)
-COPY package.json .
-COPY pnpm-lock.yaml .
-COPY pnpm-workspace.yaml .
-COPY .npmrc .
-COPY tsconfig.json .
-COPY tailwind.config.ts .
-COPY next.config.js .
-COPY public/ public/
-COPY src/ src/
+# Copie des fichiers publics
+COPY --from=builder /app/public ./public
 
-# Changer les permissions pour l'utilisateur nextjs
-RUN chown -R nextjs:nodejs /app
+# Création du dossier .next avec les bonnes permissions
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
 
-# Passer à l'utilisateur nextjs pour l'installation et le build
+# Copie des fichiers de build (standalone)
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
 USER nextjs
-
-# Installer toutes les dépendances avec pnpm
-RUN pnpm install --frozen-lockfile
-
-# Build de l'application
-RUN pnpm build
-
-# Nettoyer les dépendances de dev (optionnel, pour réduire la taille)
-RUN pnpm prune --prod
 
 EXPOSE 3000
 
-ENV NODE_ENV=production
 ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
-CMD ["pnpm", "start"]
+CMD ["node", "server.js"]
