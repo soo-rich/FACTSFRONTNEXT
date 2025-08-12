@@ -31,7 +31,8 @@ export const userCreateSchema = object({
     minLength(4, 'Le nom d\'utilisateur doit contenir au moins 4 caractères'),
     maxLength(9, 'Le nom d\'utilisateur doit contenir au maximum 9 caractères')
   ),
-  password: pipe(string(), minLength(1, 'Le mot de passe est requis'))
+
+  // password: pipe(string(), minLength(1, 'Le mot de passe est requis'))
 })
 
 export const userUpdateSchema = object({

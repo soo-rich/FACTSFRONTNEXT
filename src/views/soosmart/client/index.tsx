@@ -176,6 +176,9 @@ const ClientIndex = () => {
       <DefaultDialog
         open={isModalOpen}
         setOpen={setIsModalOpen}
+        onClose={()=>{
+          setClientSelect(undefined)
+        }}
         title={clientSelect ? ` Mettre a jour ${clientSelect?.nom}` : 'Ajouter un Client'}
       >
         <AddEditClient data={clientSelect} onSuccess={() => {

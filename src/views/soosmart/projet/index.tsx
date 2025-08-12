@@ -182,6 +182,9 @@ const ProjetIndex = () => {
       <DefaultDialog
         open={isModalOpen}
         setOpen={setIsModalOpen}
+        onClose={()=>{
+          setProjetSelect(undefined)
+        }}
         title={projetSelect ? ` Mettre a jour ${projetSelect?.projet_type}` : 'Ajouter un Projet'}
       >
         <AddEditProjet data={projetSelect} onSuccess={() => {

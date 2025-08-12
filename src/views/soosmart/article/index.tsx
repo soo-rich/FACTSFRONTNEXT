@@ -117,17 +117,24 @@ const ArticleIndex = () => {
         }}
       />
 
-      <DefaultDialog open={isModalOpen} setOpen={setIsModalOpen}
-                     title={selectedArticle ? `Mettre a jour ${selectedArticle.libelle}` : 'Ajouter un article'}
-                     children={<AddEditArticle data={selectedArticle}
-                                               onSuccess={() => {
-                                                 setSelectedArticle(undefined)
-                                                 setIsModalOpen(false)
-                                               }}
-                                               onCancel={() => {
-                                                 setSelectedArticle(undefined)
-                                                 setIsModalOpen(false)
-                                               }} />} />
+      <DefaultDialog
+        open={isModalOpen} setOpen={setIsModalOpen}
+        onClose={() => {
+          setSelectedArticle(undefined)
+        }}
+        title={selectedArticle ? `Mettre a jour ${selectedArticle.libelle}` : 'Ajouter un article'}
+        children={
+          <AddEditArticle
+            data={selectedArticle}
+            onSuccess={() => {
+              setSelectedArticle(undefined)
+              setIsModalOpen(false)
+            }}
+            onCancel={() => {
+              setSelectedArticle(undefined)
+              setIsModalOpen(false)
+            }} />
+        } />
     </>
   )
 }

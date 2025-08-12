@@ -226,6 +226,9 @@ const UserIndex = () => {
     <DefaultDialog
       open={isModalOpen}
       setOpen={setIsModalOpen}
+      onClose={()=>{
+        setUserSelect(undefined)
+      }}
       title={userselect ? ` Mettre a jour ${userselect.username}` : 'Ajouter un Utilisateur'}
     >
       <AddEditUser data={userselect} onSuccess={() => {

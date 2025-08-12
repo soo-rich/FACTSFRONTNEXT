@@ -40,7 +40,6 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
       numero: String(user?.telephone ?? 0) ?? '',
       username: user?.username ?? '',
       prenom: user?.prenom ?? '',
-      password: 'user1234'
     }
   })
 
@@ -55,7 +54,6 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
           email: '',
           nom: '',
           prenom: '',
-          password: '',
           username: '',
           numero: ''
         }
@@ -117,7 +115,6 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
         email: '',
         nom: '',
         prenom: '',
-        password: '',
         username: ''
       }
     )
@@ -161,7 +158,7 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
 
               label={'Prenom'}
               error={!!errors.prenom}
-              {...(errors.password && {
+              {...(errors.prenom && {
                 error: true,
                 helperText: errors?.prenom?.message
               })}
@@ -203,7 +200,7 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
           alignItems: 'center'
         }}>
 
-          <Grid2 hidden={!!user} size={6}>
+          <Grid2 hidden={!!user} size={12}>
 
             <Controller render={
               ({ field }) => (
@@ -221,40 +218,7 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
             } name={'username'} control={control} />
           </Grid2>
 
-          <Grid2 hidden={!!user} size={6}>
-            <Controller
-              name="password"
-              control={control}
 
-              render={({ field }) => (<CustomTextField
-                {...field}
-                fullWidth
-                label="Password"
-                disabled={true}
-                placeholder="············"
-                id="outlined-adornment-password"
-                type={isPasswordShown ? 'text' : 'password'}
-                onChange={e => {
-                  field.onChange(e.target.value)
-
-                }}
-                {...((errors.password) && {
-                  error: true,
-                  helperText: errors?.password?.message
-                })}
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton edge="end" onClick={handleClickShowPassword} onMouseDown={e => e.preventDefault()}>
-                          <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
-                        </IconButton>
-                      </InputAdornment>
-                    )
-                  }
-                }}
-              />)} />
-          </Grid2>
         </Grid2>
       </Grid2>
 

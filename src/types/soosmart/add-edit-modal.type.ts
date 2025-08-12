@@ -7,6 +7,7 @@ import type { ChildrenType } from '@/types/soosmart/types'
 export type AddEditModalType = ChildrenType & {
   open: boolean
   setOpen: (open: boolean) => void,
+  onClose?: () => void
   title?: ReactNode
   subtitle?: ReactNode
   OnSuccess?: () => void
