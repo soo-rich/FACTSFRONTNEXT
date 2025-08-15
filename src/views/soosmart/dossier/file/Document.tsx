@@ -52,7 +52,7 @@ const DocumentViews = () => {
 
   return (
     <Grid container spacing={6}>
-      <Grid size={{ xs: 12, md: 9 }}>
+      <Grid size={{ xs: 12, md: 9, lg: 8 }}>
         {
           isLoading ? (
             <LoadingWithoutModal />
@@ -62,7 +62,7 @@ const DocumentViews = () => {
             (<div ref={compoenentRef} className={'print-only'}><DefaultDesignFact docs={data} signe={signed} role={role} /></div>) : null
         }
       </Grid>
-      <Grid size={{ xs: 12, md: 3 }}>
+      <Grid size={{ xs: 12, md: 3, lg: 4 }}>
         <DocumentsActions id_facture={data?.id} UpdateSignature={setSigned} UpdateRole={setRole} paied={data?.paied}
                           printFonction={()=>window.print()} />
       </Grid>
