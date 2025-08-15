@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 
@@ -12,8 +10,6 @@ import { Grid2 } from '@mui/material'
 
 
 import Button from '@mui/material/Button'
-import InputAdornment from '@mui/material/InputAdornment'
-import IconButton from '@mui/material/IconButton'
 
 import CustomTextField from '@core/components/mui/TextField'
 import type { UtilisateurDto, UtilisateurUpdate, UtilsateurRegister } from '@/types/soosmart/utilisateur.type'
@@ -24,8 +20,6 @@ import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 
 const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<UtilisateurDto>) => {
   const queryClient = useQueryClient()
-  const [isPasswordShown, setIsPasswordShown] = useState(false)
-  const handleClickShowPassword = () => setIsPasswordShown(show => !show)
 
   const {
     control,
@@ -39,7 +33,7 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
       nom: user?.nom ?? '',
       numero: String(user?.telephone ?? 0) ?? '',
       username: user?.username ?? '',
-      prenom: user?.prenom ?? '',
+      prenom: user?.prenom ?? ''
     }
   })
 

@@ -8,132 +8,12 @@ import Button from '@mui/material/Button'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
 
-
-
-
-// MUI Imports
-import Divider from '@mui/material/Divider'
-
-// Third-party imports
-import { useEditor, EditorContent } from '@tiptap/react'
-import { StarterKit } from '@tiptap/starter-kit'
-import { Underline } from '@tiptap/extension-underline'
-import { Placeholder } from '@tiptap/extension-placeholder'
-import { TextAlign } from '@tiptap/extension-text-align'
-import type { Editor } from '@tiptap/core'
-
 import { ArticleService } from '@/service/article/article.service'
-import { articleSchema } from '@/types/soosmart/article.type'
 import type { ArticleType, SaveArticleType } from '@/types/soosmart/article.type'
+import { articleSchema } from '@/types/soosmart/article.type'
 import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 import CustomTextField from '@/@core/components/mui/TextField'
-
-
-// Components Imports
-import CustomIconButton from '@core/components/mui/IconButton'
-
-const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
-  if (!editor) {
-    return null
-  }
-
-  return (
-    <div className='flex flex-wrap gap-x-3 gap-y-1 p-6'>
-      <CustomIconButton
-        {...(editor.isActive('bold') && { color: 'primary' })}
-        variant='outlined'
-        size='small'
-        onClick={() => editor.chain().focus().toggleBold().run()}
-      >
-        <i className='tabler-bold' />
-      </CustomIconButton>
-      <CustomIconButton
-        {...(editor.isActive('underline') && { color: 'primary' })}
-        variant='outlined'
-        size='small'
-        onClick={() => editor.chain().focus().toggleUnderline().run()}
-      >
-        <i className='tabler-underline' />
-      </CustomIconButton>
-      <CustomIconButton
-        {...(editor.isActive('italic') && { color: 'primary' })}
-        variant='outlined'
-        size='small'
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-      >
-        <i className='tabler-italic' />
-      </CustomIconButton>
-      <CustomIconButton
-        {...(editor.isActive('strike') && { color: 'primary' })}
-        variant='outlined'
-        size='small'
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-      >
-        <i className='tabler-strikethrough' />
-      </CustomIconButton>
-      <CustomIconButton
-        {...(editor.isActive({ textAlign: 'left' }) && { color: 'primary' })}
-        variant='outlined'
-        size='small'
-        onClick={() => editor.chain().focus().setTextAlign('left').run()}
-      >
-        <i className='tabler-align-left' />
-      </CustomIconButton>
-      <CustomIconButton
-        {...(editor.isActive({ textAlign: 'center' }) && { color: 'primary' })}
-        variant='outlined'
-        size='small'
-        onClick={() => editor.chain().focus().setTextAlign('center').run()}
-      >
-        <i className='tabler-align-center' />
-      </CustomIconButton>
-      <CustomIconButton
-        {...(editor.isActive({ textAlign: 'right' }) && { color: 'primary' })}
-        variant='outlined'
-        size='small'
-        onClick={() => editor.chain().focus().setTextAlign('right').run()}
-      >
-        <i className='tabler-align-right' />
-      </CustomIconButton>
-      <CustomIconButton
-        {...(editor.isActive({ textAlign: 'justify' }) && { color: 'primary' })}
-        variant='outlined'
-        size='small'
-        onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-      >
-        <i className='tabler-align-justified' />
-      </CustomIconButton>
-    </div>
-  )
-}
-
-const EditorBasic = ({ value, onChange }: { value?: string, onChange?: (val: string) => void }) => {
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        placeholder: 'Écris la description ici...'
-      }),
-      TextAlign.configure({
-        types: ['heading', 'paragraph']
-      }),
-      Underline
-    ],
-
-    content: value,
-    onUpdate: ({ editor }) => {
-      onChange?.(editor.getHTML())
-    }
-  })
-
-  return (
-    <div className='border rounded-md'>
-      <EditorToolbar editor={editor} />
-      <Divider />
-      <EditorContent editor={editor} className='bs-[200px] overflow-y-auto flex' />
-    </div>
-  )
-}
+import EditorBasic from '@components/editor/EditorBasic'
 
 const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<ArticleType>) => {
   const queryClient = useQueryClient()
@@ -284,7 +164,7 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<
             control={control}
           />
         </Grid2>
-        <Grid2>
+        <Grid2 container>
           <Controller
             name="description"
             control={control}
