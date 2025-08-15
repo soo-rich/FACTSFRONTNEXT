@@ -1,4 +1,4 @@
-import { forwardRef, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { useParams } from 'next/navigation'
 
@@ -18,15 +18,15 @@ import themeConfig from '@configs/themeConfig'
 
 // import CustomIconButton from "@core/components/mui/IconButton";
 
-const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe: string, role: string }>(({
-                                                                                                            docs,
-                                                                                                            signe,
-                                                                                                            role
-                                                                                                          }: {
+const DefaultDesignFact = ({
+                             docs,
+                             signe,
+                             role
+                           }: {
   docs: DocumentDTO,
   signe: string,
   role: string
-}, ref) => {
+}) => {
 
   const { numero } = useParams()
 
@@ -48,7 +48,7 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe:
   }, [numero])
 
   return (
-    <Card sx={{ position: 'relative', overflow: 'hidden' }} ref={ref} className={'!border-none !shadow-none'}>
+    <Card sx={{ position: 'relative', overflow: 'hidden' }} className={'!border-none !shadow-none'}>
       <div
         style={{
           position: 'absolute',
@@ -304,7 +304,7 @@ const DefaultDesignFact = forwardRef<HTMLDivElement, { docs: DocumentDTO, signe:
       </CardContent>
     </Card>
   )
-})
+}
 
 
 export default DefaultDesignFact

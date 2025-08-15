@@ -8,8 +8,6 @@ import Grid from '@mui/material/Grid2'
 
 import { useQuery } from '@tanstack/react-query'
 
-import { toast } from 'react-toastify'
-
 import { useReactToPrint } from 'react-to-print'
 
 import DocumentsActions from '@views/soosmart/dossier/file/DocumentsActions'
@@ -23,7 +21,7 @@ const DocumentViews = () => {
 
   const [signed, setSigned] = useState<string>('')
   const [role, setRole] = useState<string>('Directeur')
-  const compoenentRef = useRef<any>()
+  const compoenentRef = useRef(null)
 
   const { numero } = useParams()
   const querykey = useMemo(() => [DocumentService.REPORT_KEY, numero], [numero])
@@ -38,27 +36,13 @@ const DocumentViews = () => {
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleClickToPrint = useReactToPrint({
-    contentRef: compoenentRef.current,
-    onBeforePrint: () => {
-      if (!compoenentRef.current) {
-        toast('Aucun document à imprimer', {
-          type: 'warning',
-          position: 'top-right',
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true
-        })
+    contentRef: compoenentRef,
 
-        return Promise.reject(new Error('No document to print'))
-      }
-
-
-      return Promise.resolve()
-    }
   })
+
+
 
   useEffect(() => {
     if (data) {
@@ -75,12 +59,12 @@ const DocumentViews = () => {
           ) : isError ? (
             <ErrorView />
           ) : data ?
-            (<div><DefaultDesignFact ref={compoenentRef} docs={data} signe={signed} role={role} /></div>) : null
+            (<div ref={compoenentRef} className={'print-only'}><DefaultDesignFact docs={data} signe={signed} role={role} /></div>) : null
         }
       </Grid>
       <Grid size={{ xs: 12, md: 3 }}>
         <DocumentsActions id_facture={data?.id} UpdateSignature={setSigned} UpdateRole={setRole} paied={data?.paied}
-                          printFonction={handleClickToPrint} />
+                          printFonction={()=>window.print()} />
       </Grid>
     </Grid>
   )
