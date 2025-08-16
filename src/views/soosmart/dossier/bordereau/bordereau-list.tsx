@@ -134,20 +134,22 @@ const BordereauList = () => {
         header: 'Actions',
         cell: ({ row }) => (
           <div className="flex gap-2">
+            <Tooltip title={'Voir le PDF'}>
             <CustomIconButton
               href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
               className="cursor-pointer text-green-600 hover:text-green-800"
             >
               <i className="tabler-file-type-pdf" />
             </CustomIconButton>
-            {!row.original.adopte ? (<CustomIconButton
+            </Tooltip>
+            {!row.original.adopte && ( <Tooltip title={'Adopter'}><CustomIconButton
               onClick={() => {
                 AdoptMutation.mutate(row.original.id)
               }}
               className="cursor-pointer text-primary"
             >
               <i className="tabler-check" />
-            </CustomIconButton>) : null}
+            </CustomIconButton></Tooltip>)}
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
               iconClassName="text-textSecondary"

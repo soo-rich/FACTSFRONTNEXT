@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 
 import { useParams } from 'next/navigation'
 
-import { Typography } from '@mui/material'
+import { Tooltip, Typography } from '@mui/material'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
@@ -101,13 +101,14 @@ const FactureList = () => {
         header: 'Actions',
         cell: ({ row }) => (
           <div className="flex gap-2">
+            <Tooltip title={'Voir le PDF'}>
             <CustomIconButton
               href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
               className="cursor-pointer text-green-600 hover:text-green-800"
             >
               <i className="tabler-file-type-pdf" />
             </CustomIconButton>
-
+            </Tooltip>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
               iconClassName="text-textSecondary"

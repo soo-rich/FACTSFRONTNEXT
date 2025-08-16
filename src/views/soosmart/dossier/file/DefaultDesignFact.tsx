@@ -17,7 +17,6 @@ import UtiliMetod from '@/utils/utilsmethod'
 import themeConfig from '@configs/themeConfig'
 import HtmlRenderer from '@components/HtmlRenderer'
 
-// import CustomIconButton from "@core/components/mui/IconButton";
 
 const DefaultDesignFact = ({
                              docs,
@@ -50,7 +49,8 @@ const DefaultDesignFact = ({
 
   return (
     <Card sx={{ position: 'relative', overflow: 'hidden' }} className={'!border-none !shadow-none printable-area'}>
-      {/* <div
+       <div
+         className={'no-print'}
         style={{
           position: 'absolute',
           top: '35%',
@@ -65,7 +65,7 @@ const DefaultDesignFact = ({
         }}
       >
         <SoosmartLogo width="100%" height="100%" />
-      </div>*/}
+      </div>
 
       {/*<div
         style={{
@@ -163,7 +163,7 @@ const DefaultDesignFact = ({
 
             {/* Tableau principal */}
             <table className="w-full border border-collapse  text-sm">
-              <thead className="bg-gray-300 text-center font-semibold">
+              <thead className="bg-gray-300 text-center font-semibold text-[13px]">
               <tr>
                 <th className="border  px-2 py-1 w-12">Réf.</th>
                 <th className="border  px-2 py-1 w-44">Désignation</th>
@@ -206,13 +206,13 @@ const DefaultDesignFact = ({
 
                     </td>
                     <td className="border  text-center px-2 py-1">{
-                      UtiliMetod.formatDevise(item.prix_article)
+                      documenttype === DocumentTypes.BORDERAU ?item.quantite: UtiliMetod.formatDevise(item.prix_article)
                     }</td>
                     <td className="border  text-center px-2 py-1">{
                       item.quantite
                     }</td>
                     <td
-                      className="border  px-2 py-1">{Number(item.prix_article) * Number(item.quantite)}</td>
+                      className="border  px-2 py-1">{ documenttype === DocumentTypes.BORDERAU ?'':Number(item.prix_article) * Number(item.quantite)}</td>
                   </tr>
                 ))
               }

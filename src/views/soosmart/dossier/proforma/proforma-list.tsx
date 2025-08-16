@@ -147,29 +147,35 @@ const ProformaList = () => {
         header: 'Actions',
         cell: ({ row }) => (
           <div className="flex gap-2">
-            <CustomIconButton
-              href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
-              className="cursor-pointer text-green-600 hover:text-green-800"
-            >
-              <i className="tabler-file-type-pdf" />
-            </CustomIconButton>
-            <CustomIconButton
-              onClick={() => {
-                setProformaSelect(row.original)
-                setIsModalOpen(true)
-              }}
-              className="cursor-pointer text-yellow-600 hover:text-yellow-800"
-            >
-              <i className="tabler-edit" />
-            </CustomIconButton>
-            {!row.original.adopted ? (<CustomIconButton
+            <Tooltip title={'Voir le PDF'}>
+              <CustomIconButton
+
+                href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
+                className="cursor-pointer text-green-600 hover:text-green-800"
+              >
+                <i className="tabler-file-type-pdf" />
+              </CustomIconButton>
+            </Tooltip>
+
+            <Tooltip title={'mettre a jour'}>
+              <CustomIconButton
+                onClick={() => {
+                  setProformaSelect(row.original)
+                  setIsModalOpen(true)
+                }}
+                className="cursor-pointer text-yellow-600 hover:text-yellow-800"
+              >
+                <i className="tabler-edit" />
+              </CustomIconButton></Tooltip>
+            {!row.original.adopted ? (<Tooltip title={'Adopter'}><CustomIconButton
               onClick={() => {
                 AdoptMutation.mutate(row.original.id)
               }}
               className="cursor-pointer text-primary"
             >
               <i className="tabler-check" />
-            </CustomIconButton>) : null}
+            </CustomIconButton></Tooltip>) : null}
+
 
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
