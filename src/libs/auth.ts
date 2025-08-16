@@ -43,6 +43,8 @@ export const authOptions: NextAuthOptions = {
             password: credentials.password,
           });
 
+          console.log(res)
+
           if (res.bearer && res.refresh) {
             const userInfo = JwtUtils.decode(res.bearer);
 
