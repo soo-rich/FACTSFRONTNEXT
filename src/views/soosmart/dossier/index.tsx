@@ -2,6 +2,8 @@
 
 import type { ReactElement, SyntheticEvent } from 'react'
 
+import { parseAsString, useQueryState } from 'nuqs'
+
 import Tab from '@mui/material/Tab'
 import TabPanel from '@mui/lab/TabPanel'
 import TabContext from '@mui/lab/TabContext'
@@ -11,7 +13,6 @@ import CustomTabList from '@core/components/mui/TabList'
 import ProformaList from '@views/soosmart/dossier/proforma/proforma-list'
 import BordereauList from '@views/soosmart/dossier/bordereau/bordereau-list'
 import FactureList from '@views/soosmart/dossier/facture/facture-list'
-import { parseAsString, useQueryState } from 'nuqs'
 
 const dossierDate: { id: string; label: string; icon: ReactElement; position?: 'top' | 'bottom' | 'start' | 'end' }[] =
   [

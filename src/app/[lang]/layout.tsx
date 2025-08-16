@@ -7,9 +7,12 @@ import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
 // Third-party Imports
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
+
 // Type Imports
 import type { ChildrenType } from '@core/types'
 import type { Locale } from '@configs/i18n'
+
 // Config Imports
 import { i18n } from '@configs/i18n'
 
@@ -25,7 +28,6 @@ import '@/app/globals.css'
 
 // Generated Icon CSS Imports
 import '@assets/iconify-icons/generated-icons.css'
-import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 export const metadata = {
   title: 'SOOSMART FACTS',

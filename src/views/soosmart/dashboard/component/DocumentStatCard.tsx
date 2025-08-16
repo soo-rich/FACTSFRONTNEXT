@@ -1,6 +1,9 @@
 'use client'
 
+import { useParams, useRouter } from 'next/navigation'
+
 import type { CardProps } from '@mui/material/Card'
+
 // MUI Imports
 import MuiCard from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -14,6 +17,7 @@ import classnames from 'classnames'
 import Divider from '@mui/material/Divider'
 
 import Grid from '@mui/material/Grid2'
+
 
 import { useQuery } from '@tanstack/react-query'
 
@@ -31,7 +35,7 @@ import Utilsmethod from '@/utils/utilsmethod'
 import DashCardStatsSquare from '@views/soosmart/dashboard/component/DashCardStatsSquare'
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
-import { useParams, useRouter } from 'next/navigation'
+
 
 type Props = CardProps & {
   color: ThemeColor

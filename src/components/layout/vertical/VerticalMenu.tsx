@@ -1,14 +1,21 @@
 'use client'
+
 // Next Imports
 // import { useParams } from 'next/navigation'
 
 // MUI Imports
+import { useState } from 'react'
+
 import { useTheme } from '@mui/material/styles'
 
 // Third-party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // Type Imports
+import Button from '@mui/material/Button'
+
+import { useQueryClient } from '@tanstack/react-query'
+
 import type { getDictionary } from '@/utils/getDictionary'
 import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
 
@@ -29,11 +36,10 @@ import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
 
 // Menu Data Imports
 import menuData from '@/data/navigation/verticalMenuData'
-import Button from '@mui/material/Button'
 import AddProforma from '@views/soosmart/dossier/proforma/add-proforma'
-import { useState } from 'react'
 import { ProformaService } from '@/service/dossier/proforma.service'
-import { useQueryClient } from '@tanstack/react-query'
+
+
 import { StatAPIService } from '@/service/statistique/stat-api.service'
 
 type RenderExpandIconProps = {
@@ -72,41 +78,42 @@ const VerticalMenu = ({ dictionary, scrollMenu }: Props) => {
     // eslint-disable-next-line lines-around-comment
     /* Custom scrollbar instead of browser scroll, remove if you want browser scroll only */
     <>
-    <ScrollWrapper
-      {...(isBreakpointReached
-        ? {
-          className: 'bs-full overflow-y-auto overflow-x-hidden',
-          onScroll: container => scrollMenu(container, false)
-        }
-        : {
-          options: { wheelPropagation: false, suppressScrollX: true },
-          onScrollY: container => scrollMenu(container, true)
-        })}
-    >
-      <Menu
-        popoutMenuOffset={{ mainAxis: 23 }}
-        menuItemStyles={menuItemStyles(verticalNavOptions, theme)}
-        renderExpandIcon={({ open }) => <RenderExpandIcon open={open} transitionDuration={transitionDuration} />}
-        renderExpandedMenuItemIcon={{ icon: <i className="tabler-circle text-xs" /> }}
-        menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
+      <ScrollWrapper
+        {...(isBreakpointReached
+          ? {
+            className: 'bs-full overflow-y-auto overflow-x-hidden',
+            onScroll: container => scrollMenu(container, false)
+          }
+          : {
+            options: { wheelPropagation: false, suppressScrollX: true },
+            onScrollY: container => scrollMenu(container, true)
+          })}
       >
+        <Menu
+          popoutMenuOffset={{ mainAxis: 23 }}
+          menuItemStyles={menuItemStyles(verticalNavOptions, theme)}
+          renderExpandIcon={({ open }) => <RenderExpandIcon open={open} transitionDuration={transitionDuration} />}
+          renderExpandedMenuItemIcon={{ icon: <i className="tabler-circle text-xs" /> }}
+          menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
+        >
 
-        <Button variant={'contained'} startIcon={<i className="tabler-plus" />} className={'w-full'} onClick={() => setIsModalOpen(true)}>
-          {dictionary['navigation'].addproforma}
-        </Button>
+          <Button variant={'contained'} startIcon={<i className="tabler-plus" />} className={'w-full'}
+                  onClick={() => setIsModalOpen(true)}>
+            {dictionary['navigation'].addproforma}
+          </Button>
 
-      </Menu>
-      <Menu
-        popoutMenuOffset={{ mainAxis: 23 }}
-        menuItemStyles={menuItemStyles(verticalNavOptions, theme)}
-        renderExpandIcon={({ open }) => <RenderExpandIcon open={open} transitionDuration={transitionDuration} />}
-        renderExpandedMenuItemIcon={{ icon: <i className="tabler-circle text-xs" /> }}
-        menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
-      >
+        </Menu>
+        <Menu
+          popoutMenuOffset={{ mainAxis: 23 }}
+          menuItemStyles={menuItemStyles(verticalNavOptions, theme)}
+          renderExpandIcon={({ open }) => <RenderExpandIcon open={open} transitionDuration={transitionDuration} />}
+          renderExpandedMenuItemIcon={{ icon: <i className="tabler-circle text-xs" /> }}
+          menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
+        >
 
-        <GenerateVerticalMenu menuData={menuData(dictionary)} />
-      </Menu>
-    </ScrollWrapper>
+          <GenerateVerticalMenu menuData={menuData(dictionary)} />
+        </Menu>
+      </ScrollWrapper>
       <AddProforma open={isModalOpen} handleClose={() => setIsModalOpen(false)} onSucces={() => {
         Promise.all(
           [
@@ -124,8 +131,8 @@ const VerticalMenu = ({ dictionary, scrollMenu }: Props) => {
           })
           .then(r => r)
       }} />
-  </>
-      )
+    </>
+  )
 }
 
 export default VerticalMenu
