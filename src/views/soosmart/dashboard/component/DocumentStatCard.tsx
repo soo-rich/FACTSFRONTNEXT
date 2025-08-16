@@ -53,7 +53,7 @@ const Card = styled(MuiCard)<Props>(({ color }) => ({
 const DashCard = ({ props, data }: { props: DashComponementType, data: FactStat }) => {
   // Props
   const { title, avatarIcon, color } = props
-  const { total, total_today, adopted_false, adopted_true } = data
+  const { total=0, total_today=0, adopted_false=0, adopted_true=0 } = data
 
   return (
     <Card color={color || 'primary'}>
