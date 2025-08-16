@@ -1,7 +1,6 @@
 'use client'
 
 import type { CardProps } from '@mui/material/Card'
-
 // MUI Imports
 import MuiCard from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -30,6 +29,9 @@ import LoadingWithoutModal from '@components/LoadingWithoutModal'
 import ErrorView from '@components/ErrorView'
 import Utilsmethod from '@/utils/utilsmethod'
 import DashCardStatsSquare from '@views/soosmart/dashboard/component/DashCardStatsSquare'
+import { getLocalizedUrl } from '@/utils/i18n'
+import type { Locale } from '@configs/i18n'
+import { useParams, useRouter } from 'next/navigation'
 
 type Props = CardProps & {
   color: ThemeColor
@@ -50,13 +52,23 @@ const Card = styled(MuiCard)<Props>(({ color }) => ({
   }
 }))
 
-const DashCard = ({ props, data }: { props: DashComponementType, data: FactStat }) => {
+const DashCard = ({ props, data, link }: { props: DashComponementType, data: FactStat, link?: string }) => {
+
+  const router = useRouter()
+
+  const { lang: locale } = useParams()
+
   // Props
   const { title, avatarIcon, color } = props
-  const { total=0, total_today=0, adopted_false=0, adopted_true=0 } = data
+  const { total = 0, total_today = 0, adopted_false = 0, adopted_true = 0 } = data
+
+  const handleClick = () => {
+    router.replace(getLocalizedUrl(link ?? '', locale as Locale))
+  }
 
   return (
-    <Card color={color || 'primary'}>
+    <Card color={color || 'primary'} onClick={handleClick}
+          className={classnames('cursor-pointer', 'h-full', 'flex', 'flex-col', 'justify-between', 'border-b-2', 'border-b-primary-darkerOpacity', 'hover:border-b-3', 'hover:border-b-primary-main')}>
       <Typography variant={'h5'} className={'pt-5 pl-5'}>{title}</Typography>
       <CardContent className="flex flex-row gap-1">
         <div className={'flex flex-col gap-6'}>
@@ -121,27 +133,29 @@ export const DocumentStatCard = () => {
               isLoading ? (<LoadingWithoutModal />) :
                 (
                   <DashCard props={{ title: 'Proforma', avatarIcon: 'tabler-file', color: 'secondary' }}
-                            data={data?.proforma} />)}
+                            data={data?.proforma} link={'dossier?file=proforma'} />)}
           </Grid>)
-      }{data &&
-      (
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          {
-            isLoading ? (<LoadingWithoutModal />) :
-              (
-                <DashCard props={{ title: 'Borderau', avatarIcon: 'tabler-file-report', color: 'info' }}
-                          data={data?.bordeau} />)}
-        </Grid>)
-    }{data &&
-      (
-        <Grid size={{ xs: 12, sm: 6, md: 2 }}>
-          {
-            isLoading ? (<LoadingWithoutModal />) :
-              (
-                <DashCard props={{ title: 'Facture', avatarIcon: 'tabler-file-description', color: 'success' }}
-                          data={data?.facture} />)}
-        </Grid>)
-    }
+      }
+      {data &&
+        (
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            {
+              isLoading ? (<LoadingWithoutModal />) :
+                (
+                  <DashCard props={{ title: 'Borderau', avatarIcon: 'tabler-file-report', color: 'info' }}
+                            data={data?.bordeau} link={'dossier?file=bordereau'} />)}
+          </Grid>)
+      }
+      {data &&
+        (
+          <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+            {
+              isLoading ? (<LoadingWithoutModal />) :
+                (
+                  <DashCard props={{ title: 'Facture', avatarIcon: 'tabler-file-description', color: 'success' }}
+                            data={data?.facture} link={'dossier?file=facture'} />)}
+          </Grid>)
+      }
       {
         isFacture
           ? <LoadingWithoutModal />
@@ -149,12 +163,14 @@ export const DocumentStatCard = () => {
             ? (
               <>
                 <Grid size={{ xs: 12, sm: 6, md: 2 }}>
-                  <DashCardStatsSquare avatarIcon={'tabler-file-description'} avatarColor={'primary'} stats={String(Utilsmethod.formatDevise(facture.Paid))+' FCFA'}
-                                   statsTitle={'Facture Payer'} />
+                  <DashCardStatsSquare avatarIcon={'tabler-file-description'} avatarColor={'primary'}
+                                       stats={String(Utilsmethod.formatDevise(facture.Paid)) + ' FCFA'}
+                                       statsTitle={'Facture Payer'} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, md: 2 }}>
-                  <DashCardStatsSquare avatarIcon={'tabler-file-description'} avatarColor={'warning'} stats={String(Utilsmethod.formatDevise(facture.Unpaid))+' FCFA'}
-                                   statsTitle={'Facture Inpayer'} />
+                  <DashCardStatsSquare avatarIcon={'tabler-file-description'} avatarColor={'warning'}
+                                       stats={String(Utilsmethod.formatDevise(facture.Unpaid)) + ' FCFA'}
+                                       statsTitle={'Facture Inpayer'} />
                 </Grid>
               </>
             )

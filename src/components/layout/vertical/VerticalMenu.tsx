@@ -1,3 +1,4 @@
+'use client'
 // Next Imports
 // import { useParams } from 'next/navigation'
 
@@ -28,6 +29,12 @@ import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
 
 // Menu Data Imports
 import menuData from '@/data/navigation/verticalMenuData'
+import Button from '@mui/material/Button'
+import AddProforma from '@views/soosmart/dossier/proforma/add-proforma'
+import { useState } from 'react'
+import { ProformaService } from '@/service/dossier/proforma.service'
+import { useQueryClient } from '@tanstack/react-query'
+import { StatAPIService } from '@/service/statistique/stat-api.service'
 
 type RenderExpandIconProps = {
   open?: boolean
@@ -55,13 +62,16 @@ const VerticalMenu = ({ dictionary, scrollMenu }: Props) => {
   // Vars
   const { isBreakpointReached, transitionDuration } = verticalNavOptions
 
-  // const { lang: locale } = params
+// États pour le modal
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const queryClient = useQueryClient()
 
   const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
 
   return (
     // eslint-disable-next-line lines-around-comment
     /* Custom scrollbar instead of browser scroll, remove if you want browser scroll only */
+    <>
     <ScrollWrapper
       {...(isBreakpointReached
         ? {
@@ -73,7 +83,6 @@ const VerticalMenu = ({ dictionary, scrollMenu }: Props) => {
           onScrollY: container => scrollMenu(container, true)
         })}
     >
-
       <Menu
         popoutMenuOffset={{ mainAxis: 23 }}
         menuItemStyles={menuItemStyles(verticalNavOptions, theme)}
@@ -81,10 +90,42 @@ const VerticalMenu = ({ dictionary, scrollMenu }: Props) => {
         renderExpandedMenuItemIcon={{ icon: <i className="tabler-circle text-xs" /> }}
         menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
       >
+
+        <Button variant={'contained'} startIcon={<i className="tabler-plus" />} className={'w-full'} onClick={() => setIsModalOpen(true)}>
+          {dictionary['navigation'].addproforma}
+        </Button>
+
+      </Menu>
+      <Menu
+        popoutMenuOffset={{ mainAxis: 23 }}
+        menuItemStyles={menuItemStyles(verticalNavOptions, theme)}
+        renderExpandIcon={({ open }) => <RenderExpandIcon open={open} transitionDuration={transitionDuration} />}
+        renderExpandedMenuItemIcon={{ icon: <i className="tabler-circle text-xs" /> }}
+        menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
+      >
+
         <GenerateVerticalMenu menuData={menuData(dictionary)} />
       </Menu>
     </ScrollWrapper>
-  )
+      <AddProforma open={isModalOpen} handleClose={() => setIsModalOpen(false)} onSucces={() => {
+        Promise.all(
+          [
+            queryClient.invalidateQueries({
+              queryKey: [ProformaService.PROFORMA_KEY]
+            }),
+            queryClient.invalidateQueries({
+              queryKey: [StatAPIService.STAT_KEY]
+            })
+          ]
+        )
+        queryClient
+          .invalidateQueries({
+            queryKey: [ProformaService.PROFORMA_KEY]
+          })
+          .then(r => r)
+      }} />
+  </>
+      )
 }
 
 export default VerticalMenu
