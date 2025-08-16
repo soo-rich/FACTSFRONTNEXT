@@ -3,6 +3,7 @@ import * as v from 'valibot'
 export type Article_Quantite = {
   id: string;
   article: string;
+  description: string;
   quantite: number;
   prix_article: number;
 };

@@ -15,6 +15,7 @@ import { DocumentTypes } from '@/types/soosmart/dossier/DocumentDTO'
 import SoosmartLogo from '@components/layout/shared/SoosmartLogo'
 import UtiliMetod from '@/utils/utilsmethod'
 import themeConfig from '@configs/themeConfig'
+import HtmlRenderer from '@components/HtmlRenderer'
 
 // import CustomIconButton from "@core/components/mui/IconButton";
 
@@ -48,8 +49,8 @@ const DefaultDesignFact = ({
   }, [numero])
 
   return (
-    <Card sx={{ position: 'relative', overflow: 'hidden' }} className={'!border-none !shadow-none'}>
-      <div
+    <Card sx={{ position: 'relative', overflow: 'hidden' }} className={'!border-none !shadow-none printable-area'}>
+      {/* <div
         style={{
           position: 'absolute',
           top: '35%',
@@ -64,7 +65,7 @@ const DefaultDesignFact = ({
         }}
       >
         <SoosmartLogo width="100%" height="100%" />
-      </div>
+      </div>*/}
 
       {/*<div
         style={{
@@ -82,7 +83,7 @@ const DefaultDesignFact = ({
       </div>*/}
       <CardContent className="sm:!p-12">
 
-        <Grid container spacing={0} direction={'column'} gap={0}>
+        <Grid container spacing={0} direction={'column'} gap={0} className={'no-print'}>
           <Grid size={12} gap={0} spacing={0} container direction={'row'} sx={{
             justifyContent: 'flex-start',
             alignItems: 'center'
@@ -109,7 +110,7 @@ const DefaultDesignFact = ({
         }}> <Grid container spacing={0} direction={'column'} gap={0} sx={{
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
-          marginRight: '10rem'
+          marginRight: '1rem'
         }}>
           {
             documenttype === DocumentTypes.BORDERAU ? (
@@ -119,10 +120,10 @@ const DefaultDesignFact = ({
             ) : null
           }
           <Typography
-            className={'text-md font-medium'}>{`${docs.client.nom}${docs.client.sigle ? docs.client.sigle : ''}`}</Typography>
+            className={'text-md font-medium'}>{docs.client.nom}</Typography>
           <Typography
-            className={'text-md font-medium'}>{`${docs.client.nom}${docs.client.sigle ? docs.client.sigle : ''}`}</Typography>
-          <Typography className={'text-md font-medium'}>{`${docs.client.lieu}`}</Typography>
+            className={'text-md font-medium'}>{docs.client.sigle ? docs.client.sigle : ''}</Typography>
+          <Typography className={'text-md font-medium'}>{docs.client.lieu}</Typography>
 
         </Grid>
         </Grid>
@@ -137,45 +138,45 @@ const DefaultDesignFact = ({
                 <Grid size={12} gap={0} spacing={0} container direction={'row'}
                       sx={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
                   <Typography
-                    className={'font-bold text-start text-xl uppercase'}>FACTURE {documenttype === DocumentTypes.PROFORMA ?? ''}</Typography>
+                    className={'font-bold text-start text-xl uppercase'}>FACTURE {documenttype === DocumentTypes.PROFORMA ? DocumentTypes.PROFORMA : ''}</Typography>
                 </Grid>
               ) : null
             }
           </Grid>
           <Grid size={12}>
-            <table className="w-[70%] border border-gray-500 border-collapse text-sm mb-4">
+            <table className="w-[70%] border  border-collapse text-sm mb-4">
               <thead>
               <tr className="bg-gray-300 text-center font-semibold">
-                <th className="border border-gray-500 px-2 py-1 w-12">Numéro</th>
-                <th className="border border-gray-500 px-2 py-1 w-12">Date</th>
-                <th className="border border-gray-500 px-2 py-1">Références</th>
+                <th className="border  px-2 py-1 w-12">Numéro</th>
+                <th className="border  px-2 py-1 w-12">Date</th>
+                <th className="border  px-2 py-1">Références</th>
               </tr>
               </thead>
               <tbody>
               <tr className="text-center font-medium">
-                <td className="border border-gray-500 px-2 py-1">{docs.numero}</td>
-                <td className="border border-gray-500 px-2 py-1">{UtiliMetod.formatDate(docs.date, 'dd/MM/yyyy')}</td>
-                <td className="border border-gray-500 text-red-600  px-2 py-1">{docs.reference}</td>
+                <td className="border  px-2 py-1">{docs.numero}</td>
+                <td className="border  px-2 py-1">{UtiliMetod.formatDate(docs.date, 'dd/MM/yyyy')}</td>
+                <td className="border  text-red-600  px-2 py-1">{docs.reference}</td>
               </tr>
               </tbody>
             </table>
 
             {/* Tableau principal */}
-            <table className="w-full border border-collapse border-gray-500 text-sm">
+            <table className="w-full border border-collapse  text-sm">
               <thead className="bg-gray-300 text-center font-semibold">
               <tr>
-                <th className="border border-gray-500 px-2 py-1 w-12">Réf.</th>
-                <th className="border border-gray-500 px-2 py-1">Désignation</th>
+                <th className="border  px-2 py-1 w-12">Réf.</th>
+                <th className="border  px-2 py-1 w-44">Désignation</th>
                 {
                   documenttype === DocumentTypes.BORDERAU ? (<>
-                      <th className="border border-gray-500 px-2 py-1 w-28">Qté Commandée</th>
-                      <th className="border border-gray-500 px-2 py-1 w-28">Qté Livrée</th>
-                      <th className="border border-gray-500 px-2 py-1 w-32">Observations</th>
+                      <th className="border  px-2 py-1 w-28">Qté Commandée</th>
+                      <th className="border  px-2 py-1 w-28">Qté Livrée</th>
+                      <th className="border  px-2 py-1 w-32">Observations</th>
                     </>
                   ) : (<>
-                      <th className="border border-gray-500 px-2 py-1 w-28">PU</th>
-                      <th className="border border-gray-500 px-2 py-1 w-28">QTE</th>
-                      <th className="border border-gray-500 px-2 py-1 w-32">TOTAL</th>
+                      <th className="border  px-2 py-1 w-28">PU</th>
+                      <th className="border  px-2 py-1 w-28">QTE</th>
+                      <th className="border  px-2 py-1 w-28">TOTAL</th>
                     </>
 
                   )
@@ -188,20 +189,30 @@ const DefaultDesignFact = ({
               {
                 docs.articleQuantiteslist.map((item, index) => (
                   <tr key={index} className="align-top">
-                    <td className="border border-gray-500 text-center px-2 py-1">{index + 1}</td>
-                    <td className="border border-gray-500 px-2 py-1 font-bold">
-                      {
-                        item.article
-                      }
+                    <td className="border  text-center px-2 py-1">{index + 1}</td>
+                    <td className="border  px-2 py-1 ">
+                      <div className={'flex flex-col gap-2'}>
+                        <div className={'font-bold'}>
+                          {
+                            item.article
+                          }
+
+                        </div>
+                        {
+                          item.description&& (<HtmlRenderer content={item.description}/>)
+                        }
+
+                      </div>
+
                     </td>
-                    <td className="border border-gray-500 text-center px-2 py-1">{
+                    <td className="border  text-center px-2 py-1">{
                       UtiliMetod.formatDevise(item.prix_article)
                     }</td>
-                    <td className="border border-gray-500 text-center px-2 py-1">{
+                    <td className="border  text-center px-2 py-1">{
                       item.quantite
                     }</td>
                     <td
-                      className="border border-gray-500 px-2 py-1">{Number(item.prix_article) * Number(item.quantite)}</td>
+                      className="border  px-2 py-1">{Number(item.prix_article) * Number(item.quantite)}</td>
                   </tr>
                 ))
               }
@@ -285,8 +296,8 @@ const DefaultDesignFact = ({
         <Grid container spacing={0} direction={'column'} gap={0} sx={{
           justifyContent: 'flex-end',
           alignItems: 'flex-end',
-          marginTop: '10rem'
-        }}> <Grid container spacing={0} direction={'column'} gap={0} sx={{
+          marginTop: '5rem'
+        }} className={'no-print'}> <Grid container spacing={0} direction={'column'} gap={0} sx={{
           justifyContent: 'flex-end',
           alignItems: 'flex-end'
         }}>

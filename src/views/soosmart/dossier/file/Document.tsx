@@ -15,6 +15,7 @@ import { DocumentService } from '@/service/document/document.service'
 import LoadingWithoutModal from '@components/LoadingWithoutModal'
 import ErrorView from '@components/ErrorView'
 import DefaultDesignFact from '@views/soosmart/dossier/file/DefaultDesignFact'
+import usePrint from "@/hooks/usePrint"
 
 
 const DocumentViews = () => {
@@ -43,6 +44,17 @@ const DocumentViews = () => {
   })
 
 
+  const { printComponent } = usePrint();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handlePrint = () => {
+    printComponent('mon-element-a-imprimer', {
+      title: 'Mon Document',
+      onBeforePrint: () => console.log('Début impression'),
+      onAfterPrint: () => console.log('Fin impression')
+    });
+  };
+
 
   useEffect(() => {
     if (data) {
@@ -59,10 +71,17 @@ const DocumentViews = () => {
           ) : isError ? (
             <ErrorView />
           ) : data ?
-            (<div ref={compoenentRef} className={'print-only'}><DefaultDesignFact docs={data} signe={signed} role={role} /></div>) : null
+            (
+
+              // <div ref={compoenentRef} className="printable-area">
+              <DefaultDesignFact docs={data} signe={signed} role={role} />
+
+            // </div>
+
+            ) : null
         }
       </Grid>
-      <Grid size={{ xs: 12, md: 3, lg: 4 }}>
+      <Grid size={{ xs: 12, md: 3, lg: 4 }} className={'no-print'}>
         <DocumentsActions id_facture={data?.id} UpdateSignature={setSigned} UpdateRole={setRole} paied={data?.paied}
                           printFonction={()=>window.print()} />
       </Grid>

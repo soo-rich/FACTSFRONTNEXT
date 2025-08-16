@@ -132,11 +132,70 @@ code {
   border: 0;
 }
 
+/* À ajouter dans votre global.css ou globals.css */
+
 @media print {
+  /* ÉTAPE 1: Cache tout par défaut */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* ÉTAPE 2: Réaffiche uniquement l'élément à imprimer et tous ses enfants */
+  .printable-area,
+  .printable-area * {
+    visibility: visible !important;
+  }
+
+  /* ÉTAPE 3: Positionne l'élément à imprimer pour qu'il prenne toute la page */
+  .printable-area {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    background: white !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* ÉTAPE 4: Cache explicitement certains éléments même s'ils sont dans la zone imprimable */
   .no-print {
     display: none !important;
+    visibility: hidden !important;
   }
-  .print-only {
-    display: block !important;
+
+  /* ÉTAPE 5: Optimisations pour l'impression */
+  @page {
+    margin: 0.5in;
+    size: A4;
+  }
+
+  /* Préserve les couleurs et les backgrounds */
+  .printable-area,
+  .printable-area * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Évite les coupures de page dans les éléments importants */
+  .printable-area h1,
+  .printable-area h2,
+  .printable-area h3,
+  .printable-area .no-page-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Force les sauts de page si nécessaire */
+  .page-break-before {
+    page-break-before: always !important;
+    break-before: always !important;
+  }
+
+  .page-break-after {
+    page-break-after: always !important;
+    break-after: always !important;
   }
 }
