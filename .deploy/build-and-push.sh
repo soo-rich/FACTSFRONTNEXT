@@ -14,8 +14,8 @@ echo "🚀 Début du processus de build et push..."
 
 # Build de l'image Docker
 echo "📦 Build de l'image Docker..."
-docker build -f Dockerfile -t $DOCKER_USERNAME/$IMAGE_NAME:"$VERSION" .
-docker build -f Dockerfile -t $DOCKER_USERNAME/$IMAGE_NAME:$LATEST_TAG .
+docker build -f --no-cache Dockerfile -t $DOCKER_USERNAME/$IMAGE_NAME:"$VERSION" .
+docker build -f --no-cache Dockerfile -t $DOCKER_USERNAME/$IMAGE_NAME:$LATEST_TAG .
 
 if [ $? -eq 0 ]; then
     echo "✅ Build Docker réussi !"
