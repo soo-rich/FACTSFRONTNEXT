@@ -27,8 +27,7 @@ import Button, { type ButtonProps } from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import type { MenuProps } from '@mui/material/Menu'
 import MuiMenu from '@mui/material/Menu'
-import type { MenuItemProps } from '@mui/material/MenuItem'
-import MuiMenuItem from '@mui/material/MenuItem'
+import MenuItem from '@mui/material/MenuItem'
 import Checkbox from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography'
 
@@ -72,16 +71,6 @@ const Menu = styled(MuiMenu)<MenuProps>({
   }
 })
 
-// Styled MenuItem component
-const MenuItem = styled(MuiMenuItem)<MenuItemProps>({
-  '&:focus': {
-    backgroundColor: 'var(--mui-palette-primary-main)',
-    '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-      color: 'var(--mui-palette-common-white)'
-    }
-  }
-})
-
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value)
@@ -95,29 +84,29 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
-const TableGeneric = <T,>({
-                            tabledata: table_data,
-                            columns,
-                            title,
-                            page,
-                            totalElements,
-                            pageSize,
-                            SetPage,
-                            SetPageSize,
-                            globalFilter,
-                            setGlobalFilter,
-                            ComponentOther: FilterComponent,
-                            isError,
-                            isLoading,
-                            pagination = true,
-                            renderHeaderCell,
-                            displayTableHeaderSession = true,
-                            cardProps,
-                            visibleColumns,
-                            buttonadd
-                          }: TableProps<T>) => {
+const TableGeneric = <T, >({
+                             tabledata: table_data,
+                             columns,
+                             title,
+                             page,
+                             totalElements,
+                             pageSize,
+                             SetPage,
+                             SetPageSize,
+                             globalFilter,
+                             setGlobalFilter,
+                             ComponentOther: FilterComponent,
+                             isError,
+                             isLoading,
+                             pagination = true,
+                             renderHeaderCell,
+                             displayTableHeaderSession = true,
+                             cardProps,
+                             visibleColumns,
+                             buttonadd
+                           }: TableProps<T>) => {
   const buttonProps: ButtonProps = {
-    startIcon: <i className='tabler-plus' />,
+    startIcon: <i className="tabler-plus" />,
     variant: 'contained',
     children: 'Enregistrer'
   }
@@ -173,35 +162,35 @@ const TableGeneric = <T,>({
   return (
     <>
       <Card {...cardProps}>
-        {title && <CardHeader title={title ?? 'Table'} className='pbe-4' />}
+        {title && <CardHeader title={title ?? 'Table'} className="pbe-4" />}
 
         {displayTableHeaderSession && (
-          <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
-            {!pagination || pageSize ? (
+          <div className="flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4">
+            {!pagination || pageSize && (
               <CustomTextField
                 select
                 value={pagination ? (pageSize ?? 10) : table.getState().pagination.pageSize}
                 onChange={e => handlePageSizeChange(e)}
-                className='max-sm:is-full sm:is-[70px]'
+                className="max-sm:is-full sm:is-[70px]"
               >
-                <MenuItem value='5'>5</MenuItem>
-                <MenuItem value='10'>10</MenuItem>
-                <MenuItem value='25'>25</MenuItem>
-                <MenuItem value='50'>50</MenuItem>
+                <MenuItem value="5">5</MenuItem>
+                <MenuItem value="10">10</MenuItem>
+                <MenuItem value="25">25</MenuItem>
+                <MenuItem value="50">50</MenuItem>
               </CustomTextField>
-            ) : null}
-            <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
+            )}
+            <div className="flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4">
               {FilterComponent}
               {visibleColumns && (
                 <>
-                  <Button variant='outlined' aria-haspopup='true' onClick={handleClick} aria-controls='customized-menu'>
+                  <Button variant="outlined" aria-haspopup="true" onClick={handleClick} aria-controls="customized-menu">
                     Colonnes
                   </Button>
                   <Menu
                     keepMounted
                     elevation={0}
                     anchorEl={anchorEl}
-                    id='customized-menu'
+                    id="customized-menu"
                     onClose={handleClose}
                     open={Boolean(anchorEl)}
                     anchorOrigin={{
@@ -228,7 +217,7 @@ const TableGeneric = <T,>({
                               e.preventDefault()
                               column.toggleVisibility()
                             }}
-                            className='flex items-center gap-2'
+                            className="flex items-center gap-2"
                           >
                             <Checkbox
                               checked={column.getIsVisible()}
@@ -248,8 +237,8 @@ const TableGeneric = <T,>({
                 <DebouncedInput
                   value={globalFilter ?? ''}
                   onChange={value => setGlobalFilter && setGlobalFilter(String(value))}
-                  placeholder='Recherche'
-                  className='max-sm:is-full'
+                  placeholder="Recherche"
+                  className="max-sm:is-full"
                 />
               )}
 
@@ -267,7 +256,7 @@ const TableGeneric = <T,>({
             </div>
           </div>
         )}
-        <div className='overflow-x-auto'>
+        <div className="overflow-x-auto">
           <table className={tableStyles.table}>
             <thead>
             {table.getHeaderGroups().map(headerGroup => (
@@ -286,8 +275,8 @@ const TableGeneric = <T,>({
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())}
                         {{
-                          asc: <i className='tabler-chevron-up text-xl' />,
-                          desc: <i className='tabler-chevron-down text-xl' />
+                          asc: <i className="tabler-chevron-up text-xl" />,
+                          desc: <i className="tabler-chevron-down text-xl" />
                         }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
                       </div>
                     )}
@@ -299,15 +288,15 @@ const TableGeneric = <T,>({
             {isLoading ? (
               <tbody>
               <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                  <LoadingWithoutModal padding='p-4' />
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                  <LoadingWithoutModal padding="p-4" />
                 </td>
               </tr>
               </tbody>
             ) : isError ? (
               <tbody>
               <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
                   <ErrorView />
                 </td>
               </tr>
@@ -315,7 +304,7 @@ const TableGeneric = <T,>({
             ) : table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
               <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
                   Aucune Données à afficher
                 </td>
               </tr>
