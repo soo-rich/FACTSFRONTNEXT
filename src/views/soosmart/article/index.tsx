@@ -76,7 +76,7 @@ const ArticleIndex = () => {
               }}
               className="text-yellow-600 hover:text-yellow-800"
             >
-              <i className="tabler-alert-square-rounded-filled" />
+              <i className="tabler-edit" />
             </CustomIconButton>
 
             <CustomIconButton

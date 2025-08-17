@@ -57,7 +57,7 @@ const themeConfig: Config = {
   templateName: 'SOOSMART',
   homePageUrl: '/dashboard',
   settingsCookieName: 'soosmart',
-  mode: 'system', // 'system', 'light', 'dark'
+  mode: 'light', // 'system', 'light', 'dark'
   skin: 'default', // 'default', 'bordered'
   semiDark: false, // true, false
   layout: 'vertical', // 'vertical', 'collapsed', 'horizontal'
