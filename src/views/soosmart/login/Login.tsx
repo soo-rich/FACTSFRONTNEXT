@@ -112,10 +112,10 @@ const Login = () => {
             <Logo />
           </Link>
           <div className="flex flex-col gap-1 mbe-6">
-            <Typography variant="h4">{`Bienvenue a ${themeConfig.templateName}! 👋🏻`}</Typography>
-            <Typography>
+            <Typography variant="h6" className={'text-center'}>Bienvenue sur votre plateforme de gestion! 👋🏻</Typography>
+           {/* <Typography>
               Veuillez vous connecter pour continuer
-            </Typography>
+            </Typography>*/}
           </div>
           <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
             <Controller
@@ -127,7 +127,7 @@ const Login = () => {
                   {...field}
                   autoFocus
                   fullWidth
-                  label="Username"
+                  label="Nom d'utilsateur"
                   onChange={e => {
                     field.onChange(e.target.value)
 
@@ -145,7 +145,7 @@ const Login = () => {
               render={({ field }) => (<CustomTextField
                 {...field}
                 fullWidth
-                label="Password"
+                label="Mot de passe"
                 placeholder="············"
                 id="outlined-adornment-password"
                 type={isPasswordShown ? 'text' : 'password'}
@@ -169,7 +169,7 @@ const Login = () => {
                   }
                 }}
               />)} />
-            <div className="flex justify-between items-center gap-x-3 gap-y-1 flex-wrap">
+            {/*<div className="flex justify-between items-center gap-x-3 gap-y-1 flex-wrap">
               <FormControlLabel control={<Checkbox />} label="Remember me" />
               <Typography
                 className="text-end"
@@ -179,7 +179,7 @@ const Login = () => {
               >
                 Forgot password?
               </Typography>
-            </div>
+            </div>*/}
             <Button fullWidth variant="contained" type="submit">
               {isSubmitting ? 'En cours' : 'Connexion'}
             </Button>
