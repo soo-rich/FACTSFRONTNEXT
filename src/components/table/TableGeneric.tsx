@@ -108,7 +108,7 @@ const TableGeneric = <T, >({
   const buttonProps: ButtonProps = {
     startIcon: <i className="tabler-plus" />,
     variant: 'contained',
-    children: 'Enregistrer'
+    children: 'Nouveau'
   }
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
