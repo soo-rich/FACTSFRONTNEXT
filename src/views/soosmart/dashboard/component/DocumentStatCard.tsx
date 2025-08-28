@@ -30,9 +30,10 @@ import type { DashComponementType } from '@/types/componentTypes'
 
 import { StatAPIService } from '@/service/statistique/stat-api.service'
 import LoadingWithoutModal from '@components/LoadingWithoutModal'
-import ErrorView from '@components/ErrorView'
-import Utilsmethod from '@/utils/utilsmethod'
-import DashCardStatsSquare from '@views/soosmart/dashboard/component/DashCardStatsSquare'
+
+// import ErrorView from '@components/ErrorView'
+// import Utilsmethod from '@/utils/utilsmethod'
+// import DashCardStatsSquare from '@views/soosmart/dashboard/component/DashCardStatsSquare'
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
 
@@ -56,7 +57,12 @@ const Card = styled(MuiCard)<Props>(({ color }) => ({
   }
 }))
 
-const DashCard = ({ props, data, link , adopteSession=false}: { props: DashComponementType, data: FactStat, link?: string, adopteSession?:boolean }) => {
+const DashCard = ({ props, data, link, adopteSession = false }: {
+  props: DashComponementType,
+  data: FactStat,
+  link?: string,
+  adopteSession?: boolean
+}) => {
 
   const router = useRouter()
 
@@ -117,42 +123,42 @@ export const DocumentStatCard = () => {
     refetchOnReconnect: true
   })
 
-  const { data: facture, isLoading: isFacture } = useQuery({
-    queryKey: [StatAPIService.STAT_KEY + '/facte'],
-    queryFn: async () => {
-      return await StatAPIService.getTotalFacture()
-    },
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
-    refetchOnReconnect: true
-  })
+  /*  const { data: facture, isLoading: isFacture } = useQuery({
+      queryKey: [StatAPIService.STAT_KEY + '/facte'],
+      queryFn: async () => {
+        return await StatAPIService.getTotalFacture()
+      },
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
+      refetchOnReconnect: true
+    })*/
 
   return (
     <Grid container spacing={6}>
 
       {data &&
         (
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             {
               isLoading ? (<LoadingWithoutModal />) :
                 (
                   <DashCard props={{ title: 'Proforma', avatarIcon: 'tabler-file', color: 'secondary' }}
-                            data={data?.proforma} link={'dossier?file=proforma'} adopteSession={true}/>)}
+                            data={data?.proforma} link={'dossier?file=proforma'} adopteSession={true} />)}
           </Grid>)
       }
       {data &&
         (
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             {
               isLoading ? (<LoadingWithoutModal />) :
                 (
                   <DashCard props={{ title: 'BL', avatarIcon: 'tabler-file-report', color: 'info' }}
-                            data={data?.bordeau} link={'dossier?file=bordereau'} adopteSession={true}/>)}
+                            data={data?.bordeau} link={'dossier?file=bordereau'} adopteSession={true} />)}
           </Grid>)
       }
       {data &&
         (
-          <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             {
               isLoading ? (<LoadingWithoutModal />) :
                 (
@@ -160,7 +166,7 @@ export const DocumentStatCard = () => {
                             data={data?.facture} link={'dossier?file=facture'} />)}
           </Grid>)
       }
-      {
+      {/*{
         isFacture
           ? <LoadingWithoutModal />
           : facture
@@ -179,7 +185,7 @@ export const DocumentStatCard = () => {
               </>
             )
             : <ErrorView />
-      }
+      }*/}
     </Grid>
   )
 }
