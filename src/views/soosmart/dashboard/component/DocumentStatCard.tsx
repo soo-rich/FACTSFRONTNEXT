@@ -169,12 +169,12 @@ export const DocumentStatCard = () => {
                 <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                   <DashCardStatsSquare avatarIcon={'tabler-file-description'} avatarColor={'primary'}
                                        stats={String(Utilsmethod.formatDevise(facture.Paid)) + ' FCFA'}
-                                       statsTitle={'Facture Payée'} />
+                                       statsTitle={'Factures Payée'} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                   <DashCardStatsSquare avatarIcon={'tabler-file-description'} avatarColor={'warning'}
                                        stats={String(Utilsmethod.formatDevise(facture.Unpaid)) + ' FCFA'}
-                                       statsTitle={'Facture Impayée'} />
+                                       statsTitle={'Factures Impayée'} />
                 </Grid>
               </>
             )
