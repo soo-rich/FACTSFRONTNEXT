@@ -54,7 +54,7 @@ export type Config = {
 }
 
 const themeConfig: Config = {
-  templateName: 'SOOSMART',
+  templateName: 'SOOSMART GROUP',
   homePageUrl: '/dashboard',
   settingsCookieName: 'soosmart',
   mode: 'light', // 'system', 'light', 'dark'
