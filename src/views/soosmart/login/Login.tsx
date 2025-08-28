@@ -13,9 +13,11 @@ import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
-import Checkbox from '@mui/material/Checkbox'
+
+// import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button'
-import FormControlLabel from '@mui/material/FormControlLabel'
+
+// import FormControlLabel from '@mui/material/FormControlLabel'
 
 // Type Imports
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
@@ -35,7 +37,7 @@ import Logo from '@components/layout/shared/Logo'
 import CustomTextField from '@core/components/mui/TextField'
 
 // Config Imports
-import themeConfig from '@configs/themeConfig'
+// import themeConfig from '@configs/themeConfig'
 
 // Util Imports
 import { getLocalizedUrl } from '@/utils/i18n'
