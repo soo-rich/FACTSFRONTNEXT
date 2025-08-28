@@ -56,7 +56,7 @@ const Card = styled(MuiCard)<Props>(({ color }) => ({
   }
 }))
 
-const DashCard = ({ props, data, link }: { props: DashComponementType, data: FactStat, link?: string }) => {
+const DashCard = ({ props, data, link , adopteSession=false}: { props: DashComponementType, data: FactStat, link?: string, adopteSession?:boolean }) => {
 
   const router = useRouter()
 
@@ -87,7 +87,7 @@ const DashCard = ({ props, data, link }: { props: DashComponementType, data: Fac
           </div>
         </div>
         {
-          adopted_true && (<>
+          adopteSession && (<>
               <div>
                 <Divider className={'mx-2'} orientation={'vertical'} />
               </div>
@@ -137,7 +137,7 @@ export const DocumentStatCard = () => {
               isLoading ? (<LoadingWithoutModal />) :
                 (
                   <DashCard props={{ title: 'Proforma', avatarIcon: 'tabler-file', color: 'secondary' }}
-                            data={data?.proforma} link={'dossier?file=proforma'} />)}
+                            data={data?.proforma} link={'dossier?file=proforma'} adopteSession={true}/>)}
           </Grid>)
       }
       {data &&
@@ -146,8 +146,8 @@ export const DocumentStatCard = () => {
             {
               isLoading ? (<LoadingWithoutModal />) :
                 (
-                  <DashCard props={{ title: 'Borderau', avatarIcon: 'tabler-file-report', color: 'info' }}
-                            data={data?.bordeau} link={'dossier?file=bordereau'} />)}
+                  <DashCard props={{ title: 'BL', avatarIcon: 'tabler-file-report', color: 'info' }}
+                            data={data?.bordeau} link={'dossier?file=bordereau'} adopteSession={true}/>)}
           </Grid>)
       }
       {data &&
@@ -169,12 +169,12 @@ export const DocumentStatCard = () => {
                 <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                   <DashCardStatsSquare avatarIcon={'tabler-file-description'} avatarColor={'primary'}
                                        stats={String(Utilsmethod.formatDevise(facture.Paid)) + ' FCFA'}
-                                       statsTitle={'Facture Payer'} />
+                                       statsTitle={'Facture Payée'} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                   <DashCardStatsSquare avatarIcon={'tabler-file-description'} avatarColor={'warning'}
                                        stats={String(Utilsmethod.formatDevise(facture.Unpaid)) + ' FCFA'}
-                                       statsTitle={'Facture Inpayer'} />
+                                       statsTitle={'Facture Impayée'} />
                 </Grid>
               </>
             )
