@@ -4,6 +4,7 @@ export type BorderauType = {
   id: string;
   reference: string;
   numero: string;
+  numeroProforma?: string;
   articleQuantiteslist: Article_Quantite[];
   total_ht: number;
   total_ttc: number;

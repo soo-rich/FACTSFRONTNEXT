@@ -1,27 +1,43 @@
-import { Controller, useForm } from 'react-hook-form'
+'use client'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
-import { Grid2 } from '@mui/material'
+import {useState} from "react";
+
+import {Controller, useForm} from 'react-hook-form'
+
+import {useMutation, useQueryClient} from '@tanstack/react-query'
+import {toast} from 'react-toastify'
+import {Grid2} from '@mui/material'
 
 import Button from '@mui/material/Button'
 
-import { valibotResolver } from '@hookform/resolvers/valibot'
+import {valibotResolver} from '@hookform/resolvers/valibot'
 
-import { ArticleService } from '@/service/article/article.service'
-import type { ArticleType, SaveArticleType } from '@/types/soosmart/article.type'
-import { articleSchema } from '@/types/soosmart/article.type'
-import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
+import Chip from "@mui/material/Chip";
+
+import FormControlLabel from "@mui/material/FormControlLabel";
+
+import Checkbox from "@mui/material/Checkbox";
+
+import Tooltip from "@mui/material/Tooltip";
+
+import {ArticleService} from '@/service/article/article.service'
+import type {ArticleType, SaveArticleType} from '@/types/soosmart/article.type'
+import {articleSchema} from '@/types/soosmart/article.type'
+import type {AddEditFormType} from '@/types/soosmart/add-edit-modal.type'
 import CustomTextField from '@/@core/components/mui/TextField'
 import EditorBasic from '@components/editor/EditorBasic'
+import UtiliMetod from "@/utils/utilsmethod";
 
-const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<ArticleType>) => {
+const AddEditArticle = ({data: article, onSuccess, onCancel}: AddEditFormType<ArticleType>) => {
   const queryClient = useQueryClient()
+  const [list, setList] = useState<boolean>(false)
+  const [articlelist, setArticlelist] = useState<SaveArticleType[]>([])
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    getValues,
+    formState: {errors},
     reset
   } = useForm<SaveArticleType>(
     {
@@ -35,7 +51,7 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<
   )
 
   const AddMutation = useMutation({
-    mutationFn: async (data: SaveArticleType) => {
+    mutationFn: async (data: SaveArticleType | SaveArticleType[]) => {
       return await ArticleService.addArticle(data)
     },
     onSuccess: () => {
@@ -78,6 +94,10 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<
         queryKey: [ArticleService.ARTICLE_KEY]
       })
 
+      if (list) {
+        setArticlelist([])
+      }
+
 
       // Appeler le callback de succès si fourni
       if (onSuccess) {
@@ -97,6 +117,34 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<
     }
   }
 
+  const submitFormList = () => {
+    AddMutation.mutate(articlelist)
+  }
+
+  const handleListChange = () => {
+    setList(!list)
+  }
+
+  const addArticleToList = () => {
+    const values = getValues()
+
+    if (!values.libelle || values.prix_unitaire <= 0) {
+      toast.warning('Veuillez remplir le libellé et le prix unitaire avant d\'ajouter à la liste')
+
+      return
+    }
+
+    setArticlelist(
+      [...articlelist, values]
+    )
+    reset(
+      {
+        libelle: '',
+        prix_unitaire: 0
+      }
+    )
+  }
+
   const handleCancel = () => {
     reset(
       {
@@ -110,12 +158,34 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<
     }
   }
 
+
   return (
     <form onSubmit={handleSubmit(submitForm)} className="space-y-4">
       <Grid2 container direction={'column'} spacing={3}>
+        <Grid2 size={12} alignItems={'end'} justifyContent={'flex-end'}>
+          <FormControlLabel
+            label='Liste'
+            control={<Checkbox checked={list} onChange={handleListChange} name='controlled'/>}
+          />
+        </Grid2>
+        {list && (<Grid2 container size={12} direction={'row'} alignItems={'center'} justifyContent={'justify-start'}>
+          {
+            articlelist.map((i, j) => {
+              const color = UtiliMetod.randomThemeColor()
+
+              return (
+                <Grid2 container size={3} key={i.libelle + j} justifyContent={'center'} alignItems={'center'}>
+                  <Tooltip placement={'top'} title={'' + i.libelle + ' - ' + i.prix_unitaire + ' FCFA'}>
+                    <Chip label={i.libelle} color={color}/>
+                  </Tooltip>
+                </Grid2>
+              )
+            })
+          }
+        </Grid2>)}
         <Grid2>
           <Controller
-            render={({ field }) => (
+            render={({field}) => (
               <CustomTextField
                 fullWidth
                 label={'Libellé'}
@@ -135,7 +205,7 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<
 
         <Grid2>
           <Controller
-            render={({ field }) => (
+            render={({field}) => (
               <CustomTextField
                 {...field}
                 fullWidth
@@ -168,15 +238,39 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<
           <Controller
             name="description"
             control={control}
-            render={({ field }) => (
-              <EditorBasic value={field.value} onChange={field.onChange} />
+            render={({field}) => (
+              <EditorBasic value={field.value} onChange={field.onChange}/>
             )}
           />
         </Grid2>
 
         <Grid2>
           <div className="flex justify-center gap-4 mt-6">
-            <Button
+            {list && (
+              <>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  type="button"
+                  onClick={() => addArticleToList()}
+                >
+                  Ajouter à la liste
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="button"
+                  onClick={submitFormList}
+                  disabled={AddMutation.isPending || UpdateMutation.isPending || articlelist.length < 2}
+                >
+                  {AddMutation.isPending || UpdateMutation.isPending
+                    ? 'Traitement...'
+                    : article ? 'Mettre à jour' : 'Ajouter'
+                  }
+                </Button>
+              </>
+            )}
+            {!list && (<Button
               variant="contained"
               color="primary"
               type="submit"
@@ -186,7 +280,8 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<
                 ? 'Traitement...'
                 : article ? 'Mettre à jour' : 'Ajouter'
               }
-            </Button>
+            </Button>)}
+
             <Button
               variant="outlined"
               color="error"

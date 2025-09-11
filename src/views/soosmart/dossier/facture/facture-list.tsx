@@ -109,6 +109,14 @@ const FactureList = () => {
               <i className="tabler-file-type-pdf" />
             </CustomIconButton>
             </Tooltip>
+            <Tooltip title={'Hieriachie'}>
+            <CustomIconButton
+              href={getLocalizedUrl(`/dossier/tree/${row.original.numero}`, locale as Locale)}
+              className="cursor-pointer text-info hover:text-green-800"
+            >
+              <i className="tabler-hierarchy-3" />
+            </CustomIconButton>
+            </Tooltip>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
               iconClassName="text-textSecondary"

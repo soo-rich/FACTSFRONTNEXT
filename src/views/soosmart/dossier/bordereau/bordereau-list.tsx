@@ -28,6 +28,7 @@ import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
 import CustomIconButton from '@core/components/mui/IconButton'
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
+import Link from "@components/Link";
 
 
 const columnHelper = createColumnHelper<BorderauType>()
@@ -98,8 +99,10 @@ const BordereauList = () => {
     () => [
       columnHelper.accessor('adopte', {
         header: 'Adoptée',
-        cell: ({ row }) => <Tooltip placement={'top'} title={row.original.adopte ? 'Adopter' : 'Nom Adopter'}><Checkbox
-          checked={row.original.adopte} /></Tooltip>
+        cell: ({ row }) => <Tooltip placement={'top'} title={row.original.adopte ? 'Adopter' : 'Nom Adopter'}>{
+          row.original.adopte? <i className={' bg-success text-2xl tabler-square-rounded-check-filled'}></i> :
+            <i className={'bg-error text-2xl tabler-square-rounded-x'}></i>
+        }</Tooltip>
       }),
       columnHelper.accessor('reference', {
         header: 'Reference',
@@ -128,6 +131,10 @@ const BordereauList = () => {
       columnHelper.accessor('total_tva', {
         header: 'Total TVA',
         cell: info => info.getValue()
+      }),
+      columnHelper.accessor('numeroProforma', {
+        header: 'Numero Proforma',
+        cell: ({row}) =>(<Link href={getLocalizedUrl(`/dossier/${row.original.numeroProforma}`, locale as Locale)}>{row.original.numeroProforma}</Link>)
       }),
       columnHelper.display({
         id: 'actions', // Important: donner un ID à la colonne display
