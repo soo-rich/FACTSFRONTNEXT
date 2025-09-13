@@ -11,7 +11,7 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { FormControlLabel, Grid2, RadioGroup } from '@mui/material'
 
@@ -32,13 +32,6 @@ import CustomTextField from '@core/components/mui/TextField'
 import { ClientService } from '@/service/client/client.service'
 import CustomAutocomplete from '@core/components/mui/Autocomplete'
 import { ProjetService } from '@/service/projet/projet.service'
-import AddEditClient from '../../client/add-edit-client'
-import DefaultDialog from '@/components/dialogs/unique-modal/DefaultDialog'
-import AddEditProjet from '../../projet/add-edit-projet'
-import AddEditArticle from '../../article/add-edit-article'
-import type { ClientType } from '@/types/soosmart/client.type'
-import type { ProjetType } from '@/types/soosmart/projet.type'
-import type { ArticleType } from '@/types/soosmart/article.type'
 
 type Props = {
   open: boolean
@@ -47,8 +40,6 @@ type Props = {
 }
 
 const AddProforma = ({ open, handleClose, onSucces }: Props) => {
-  const queryClient = useQueryClient()
-
   const [value, setValue] = useState<string>('projet')
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -66,14 +57,10 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
   const [clientName, setClientName] = useState<string>('')
   const [projetName, setProjetName] = useState<string>('')
   const [clientorprojet, setClientOrProjet] = useState<boolean>(false)
-  const [openArticleModal, setOpenArticleModal] = useState<boolean>(false)
-  const [openClientModal, setOpenClientModal] = useState<boolean>(false)
-  const [openProjetModal, setOpenPorjetModel] = useState<boolean>(false)
 
   const {
     handleSubmit,
     control,
-    setValue: setValueForm,
     reset,
     formState: { errors }
   } = useForm<ProformaSave>({
@@ -82,7 +69,13 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
       reference: '',
       projet_id: '',
       client_id: '',
-      articleQuantiteslist: []
+      articleQuantiteslist: [
+        {
+          article_id: '',
+          quantite: 0,
+          prix_article: 0
+        }
+      ]
     }
   })
 
@@ -92,7 +85,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
   })
 
   const { data: articleList } = useQuery({
-    queryKey: [ArticleService.ARTICLE_KEY],
+    queryKey: ['articlelist'],
     queryFn: async () => {
       return await ArticleService.searchArticles()
     },
@@ -101,7 +94,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
   })
 
   const { data: client } = useQuery({
-    queryKey: [ClientService.CLIENT_KEY, clientName],
+    queryKey: ['clientlist', clientName],
     queryFn: async () => {
       return await ClientService.getClientsByNom(clientName)
     },
@@ -110,7 +103,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
   })
 
   const { data: projet } = useQuery({
-    queryKey: [ProjetService.PROJT_KEY, projetName],
+    queryKey: ['projetlist', projetName],
     queryFn: async () => {
       return await ProjetService.searchProjet(projetName)
     },
@@ -134,7 +127,13 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
         reference: '',
         projet_id: '',
         client_id: '',
-        articleQuantiteslist: []
+        articleQuantiteslist: [
+          {
+            article_id: '',
+            quantite: 0,
+            prix_article: 0
+          }
+        ]
       })
       handleClose()
     },
@@ -145,7 +144,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
   })
 
   const SubmitData = (data: ProformaSave) => {
-    console.log(data)
+    // console.log(data)
     AddMutation.mutate(data)
   }
 
@@ -153,452 +152,284 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
     handleClose()
   }
 
-  // Fonction pour rafraîchir les données du cache
-  const refreshCacheData = () => {
-    // Invalide toutes les queries des clients
-    queryClient.invalidateQueries({
-      queryKey: [ClientService.CLIENT_KEY],
-      exact: false
-    })
-
-    // Invalide toutes les queries des projets
-    queryClient.invalidateQueries({
-      queryKey: [ProjetService.PROJT_KEY],
-      exact: false
-    })
-
-    // Invalide les articles aussi
-    queryClient.invalidateQueries({
-      queryKey: [ArticleService.ARTICLE_KEY],
-      exact: false
-    })
-  }
-
-  const handleSuccesAddClient = (data?: ClientType | ClientType[]) => {
-    if (!data) return
-
-    // Invalider le cache des clients
-    refreshCacheData()
-
-    if (Array.isArray(data)) {
-      if (data.length > 0) {
-        setValueForm('client_id', data[0].id)
-
-        // Optionnel: mettre à jour le nom pour la recherche
-        setClientName(data[0].nom)
-      }
-    } else {
-      setValueForm('client_id', data.id)
-
-      // Optionnel: mettre à jour le nom pour la recherche
-      setClientName(data.nom)
-    }
-
-    setOpenClientModal(false)
-  }
-
-  const handlehandleSuccesAddProjet = (data?: ProjetType | ProjetType[]) => {
-    if (!data) return
-
-    // Invalider le cache des projets
-    refreshCacheData()
-
-    if (Array.isArray(data)) {
-      if (data.length > 0) {
-        setValueForm('projet_id', data[0].id)
-
-        // Optionnel: mettre à jour le nom pour la recherche
-        setProjetName(data[0].projet_type)
-      }
-    } else {
-      setValueForm('projet_id', data.id)
-
-      // Optionnel: mettre à jour le nom pour la recherche
-      setProjetName(data.projet_type)
-    }
-
-    setOpenPorjetModel(false)
-  }
-
-  const handleSuccesAddArticles = (data?: ArticleType | ArticleType[]) => {
-    if (!data) return
-
-    // Invalider le cache des articles
-    refreshCacheData()
-
-    if (Array.isArray(data)) {
-      const ids = data.map(item => item.id)
-
-      setArticleSelect(prev => [...prev, ...ids])
-      ids.forEach(id => {
-        append({
-          article_id: id,
-          quantite: 0,
-          prix_article: 0
-        })
-      })
-    } else {
-      setArticleSelect(prev => [...prev, data.id])
-      append({
-        article_id: data.id,
-        quantite: 0,
-        prix_article: 0
-      })
-    }
-
-    setOpenArticleModal(false)
-  }
-
   return (
-    <>
-      <Drawer
-        open={open}
-        anchor='right'
-        variant={'temporary'}
-        onClose={handleReset}
-        ModalProps={{ keepMounted: true }}
-        sx={{ '& .MuiDrawer-paper': { width: { xs: 350, sm: 550 } } }}
-      >
-        <div className='flex items-center justify-between plb-5 pli-6'>
-          <Typography variant='h5'>Construire un Proforma</Typography>
-          <IconButton size='small' onClick={handleReset}>
-            <i className='tabler-x text-2xl text-textPrimary' />
-          </IconButton>
-        </div>
-        <Divider />
-        <div className='p-6'>
-          <form noValidate onSubmit={handleSubmit(SubmitData)} className='flex flex-col items-start gap-6'>
-            <Typography variant={'h5'}>Information de la Proforma</Typography>
+    <Drawer
+      open={open}
+      anchor='right'
+      variant={'temporary'}
+      onClose={handleReset}
+      ModalProps={{ keepMounted: true }}
+      sx={{ '& .MuiDrawer-paper': { width: { xs: 350, sm: 550 } } }}
+    >
+      <div className='flex items-center justify-between plb-5 pli-6'>
+        <Typography variant='h5'>Construire un Proforma</Typography>
+        <IconButton size='small' onClick={handleReset}>
+          <i className='tabler-x text-2xl text-textPrimary' />
+        </IconButton>
+      </div>
+      <Divider />
+      <div className='p-6'>
+        <form noValidate onSubmit={handleSubmit(SubmitData)} className='flex flex-col items-start gap-6'>
+          <Typography variant={'h5'}>Information de la Proforma</Typography>
+          <Controller
+            render={({ field }) => (
+              <CustomTextField
+                {...field}
+                label={'Reference'}
+                fullWidth
+                error={!!errors.reference}
+                {...(errors.reference && {
+                  error: true,
+                  helperText: errors?.reference?.message
+                })}
+              />
+            )}
+            name={'reference'}
+            control={control}
+          />
+          <Grid2
+            container
+            size={12}
+            direction={'row'}
+            spacing={3}
+            sx={{
+              justifyContent: 'flex-end',
+              alignItems: 'center'
+            }}
+          >
+            <RadioGroup row aria-label='controlled' name='controlled' value={value} onChange={handleChange}>
+              <FormControlLabel value='projet' control={<Radio />} label='Projet' />
+              <FormControlLabel value='client' control={<Radio />} label='Client' />
+            </RadioGroup>
+          </Grid2>
+
+          <div className='w-full flex flex-row justify-between align-middle items-center gap-4'>
             <Controller
-              render={({ field }) => (
-                <CustomTextField
-                  {...field}
-                  label={'Reference'}
-                  fullWidth
-                  error={!!errors.reference}
-                  {...(errors.reference && {
-                    error: true,
-                    helperText: errors?.reference?.message
-                  })}
-                />
-              )}
-              name={'reference'}
+              render={({ field }) => {
+                return (
+                  <CustomAutocomplete
+                    disabled={clientorprojet}
+                    options={projet || []}
+                    fullWidth
+                    onChange={(event, newvalue) => {
+                      if (newvalue) {
+                        field.onChange(newvalue.id)
+                      } else {
+                        field.onChange('')
+                      }
+                    }}
+                    getOptionKey={option => option.id}
+                    getOptionLabel={option => {
+                      return option.projet_type
+                    }}
+                    renderInput={params => {
+                      return (
+                        <CustomTextField
+                          {...params}
+                          label={'Projet'}
+                          fullWidth
+                          onChange={event => {
+                            const value = event.target.value
+
+                            setProjetName(value)
+                          }}
+                          error={!!errors.projet_id}
+                          {...(errors.projet_id && {
+                            error: true,
+                            helperText: errors?.projet_id?.message
+                          })}
+                        />
+                      )
+                    }}
+                  />
+                )
+              }}
+              name={'projet_id'}
               control={control}
             />
-            <Grid2
-              container
-              size={12}
-              direction={'row'}
-              spacing={3}
-              sx={{
-                justifyContent: 'flex-end',
-                alignItems: 'center'
+          </div>
+          <div className='w-full flex flex-row justify-between align-middle items-center gap-4'>
+            <Controller
+              render={({ field }) => {
+                return (
+                  <CustomAutocomplete
+                    disabled={!clientorprojet}
+                    options={client || []}
+                    fullWidth
+                    onChange={(event, newvalue) => {
+                      if (newvalue) {
+                        field.onChange(newvalue.id)
+                      } else {
+                        field.onChange('')
+                      }
+                    }}
+                    getOptionKey={option => option.id}
+                    getOptionLabel={option => {
+                      return option.nom + ' - ' + option.sigle
+                    }}
+                    renderInput={params => {
+                      return (
+                        <CustomTextField
+                          {...params}
+                          label={'Client'}
+                          fullWidth
+                          onChange={event => {
+                            const value = event.target.value
+
+                            setClientName(value)
+                          }}
+                          error={!!errors.client_id}
+                          {...(errors.client_id && {
+                            error: true,
+                            helperText: errors?.client_id?.message
+                          })}
+                        />
+                      )
+                    }}
+                  />
+                )
               }}
-            >
-              <RadioGroup row aria-label='controlled' name='controlled' value={value} onChange={handleChange}>
-                <FormControlLabel value='projet' control={<Radio />} label='Projet' />
-                <FormControlLabel value='client' control={<Radio />} label='Client' />
-              </RadioGroup>
-            </Grid2>
+              name={'client_id'}
+              control={control}
+            />
+          </div>
+          <Divider className='w-full' />
+          <Typography variant={'h5'}>Article-Quantite</Typography>
 
-            {!clientorprojet && (
-              <div className='w-full flex flex-row justify-between align-middle items-end gap-4'>
-                <Button
-                  disabled={clientorprojet}
-                  onClick={() => setOpenPorjetModel(true)}
-                  color={'inherit'}
-                  variant={'contained'}
-                  startIcon={<i className={'tabler-plus'}></i>}
-                >
-                  Projet
-                </Button>
-                <Controller
-                  render={({ field }) => {
-                    return (
+          <div className='w-full flex flex-col gap-4'>
+            {fields.map((item, index) => (
+              <Grid2 container key={item.id} spacing={2} alignItems='center'>
+                <Grid2 size={{ xs: 4, sm: 4 }}>
+                  <Controller
+                    render={({ field }) => (
                       <CustomAutocomplete
-                        disabled={clientorprojet}
-                        options={projet || []}
+                        options={article || []}
                         fullWidth
-                        value={projet?.find(p => p.id === field.value) || null}
                         onChange={(event, newvalue) => {
                           if (newvalue) {
                             field.onChange(newvalue.id)
+                            setArticleSelect(prev => {
+                              const newSelect = [...prev]
+
+                              newSelect[index] = newvalue.id
+
+                              return newSelect
+                            })
                           } else {
                             field.onChange('')
                           }
                         }}
                         getOptionKey={option => option.id}
-                        getOptionLabel={option => {
-                          return option.projet_type
-                        }}
-                        renderInput={params => {
-                          return (
-                            <CustomTextField
-                              {...params}
-                              label={'Projet'}
-                              fullWidth
-                              onChange={event => {
-                                const value = event.target.value
-
-                                setProjetName(value)
-                              }}
-                              error={!!errors.projet_id}
-                              {...(errors.projet_id && {
-                                error: true,
-                                helperText: errors?.projet_id?.message
-                              })}
-                            />
-                          )
-                        }}
+                        getOptionLabel={option => option.libelle}
+                        renderInput={params => (
+                          <CustomTextField
+                            {...params}
+                            label={'Article'}
+                            fullWidth
+                            error={!!errors.articleQuantiteslist?.[index]?.article_id}
+                            {...(errors.articleQuantiteslist?.[index]?.article_id && {
+                              error: true,
+                              helperText: errors?.articleQuantiteslist?.[index]?.article_id?.message
+                            })}
+                          />
+                        )}
                       />
-                    )
-                  }}
-                  name={'projet_id'}
-                  control={control}
-                />
-              </div>
-            )}
-            {clientorprojet && (
-              <div className='w-full flex flex-row justify-between align-middle items-end gap-4'>
-                <Button
-                  disabled={!clientorprojet}
-                  onClick={() => setOpenClientModal(true)}
-                  color={'inherit'}
-                  variant={'contained'}
-                  startIcon={<i className={'tabler-plus'}></i>}
-                >
-                  Client
-                </Button>
-                <Controller
-                  render={({ field }) => {
-                    return (
-                      <CustomAutocomplete
-                        disabled={!clientorprojet}
-                        options={client || []}
-                        fullWidth
-                        value={client?.find(c => c.id === field.value) || null}
-                        onChange={(event, newvalue) => {
-                          if (newvalue) {
-                            field.onChange(newvalue.id)
-                          } else {
-                            field.onChange('')
-                          }
-                        }}
-                        getOptionKey={option => option.id}
-                        getOptionLabel={option => {
-                          return option.nom + ' - ' + option.sigle
-                        }}
-                        renderInput={params => {
-                          return (
-                            <CustomTextField
-                              {...params}
-                              label={'Client'}
-                              fullWidth
-                              onChange={event => {
-                                const value = event.target.value
-
-                                setClientName(value)
-                              }}
-                              error={!!errors.client_id}
-                              {...(errors.client_id && {
-                                error: true,
-                                helperText: errors?.client_id?.message
-                              })}
-                            />
-                          )
-                        }}
-                      />
-                    )
-                  }}
-                  name={'client_id'}
-                  control={control}
-                />
-              </div>
-            )}
-            <Divider className='w-full' />
-
-            <div className='w-full flex flex-col gap-4'>
-              <Grid2
-                size={12}
-                container
-                direction='row'
-                sx={{
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
-                spacing={2}
-                gap={6}
-              >
-                <Button
-                  onClick={() => setOpenArticleModal(true)}
-                  color={'inherit'}
-                  variant={'contained'}
-                  startIcon={<i className={'tabler-plus'}></i>}
-                >
-                  Articles
-                </Button>
-                <Typography variant={'h5'}>Article-Quantite</Typography>
-              </Grid2>
-              {fields.map((item, index) => (
-                <Grid2 container key={item.id} spacing={2} alignItems='center'>
-                  <Grid2 size={{ xs: 4, sm: 4 }}>
-                    <Controller
-                      render={({ field }) => (
-                        <CustomAutocomplete
-                          options={article || []}
-                          fullWidth
-                          value={article?.find(a => a.id === field.value) || null}
-                          onChange={(event, newvalue) => {
-                            if (newvalue) {
-                              field.onChange(newvalue.id)
-                              setArticleSelect(prev => {
-                                const newSelect = [...prev]
-
-                                newSelect[index] = newvalue.id
-
-                                return newSelect
-                              })
-                            } else {
-                              field.onChange('')
-                            }
-                          }}
-                          getOptionKey={option => option.id}
-                          getOptionLabel={option => option.libelle}
-                          renderInput={params => (
-                            <CustomTextField
-                              {...params}
-                              label={'Article'}
-                              fullWidth
-                              error={!!errors.articleQuantiteslist?.[index]?.article_id}
-                              {...(errors.articleQuantiteslist?.[index]?.article_id && {
-                                error: true,
-                                helperText: errors?.articleQuantiteslist?.[index]?.article_id?.message
-                              })}
-                            />
-                          )}
-                        />
-                      )}
-                      name={`articleQuantiteslist.${index}.article_id`}
-                      control={control}
-                    />
-                  </Grid2>
-                  <Grid2 size={{ xs: 3, sm: 3 }}>
-                    <Controller
-                      render={({ field }) => (
-                        <CustomTextField
-                          {...field}
-                          label={'Quantité'}
-                          fullWidth
-                          onChange={event => {
-                            const value = parseFloat(event.target.value)
-
-                            field.onChange(isNaN(value) ? 0 : value)
-                          }}
-                          error={!!errors.articleQuantiteslist?.[index]?.quantite}
-                          {...(errors.articleQuantiteslist?.[index]?.quantite && {
-                            error: true,
-                            helperText: errors?.articleQuantiteslist?.[index]?.quantite?.message
-                          })}
-                        />
-                      )}
-                      name={`articleQuantiteslist.${index}.quantite`}
-                      control={control}
-                    />
-                  </Grid2>
-                  <Grid2 size={{ xs: 3, sm: 4 }}>
-                    <Controller
-                      render={({ field }) => (
-                        <CustomTextField
-                          {...field}
-                          type='number'
-                          label={'Prix Article'}
-                          fullWidth
-                          onChange={event => {
-                            const value = parseFloat(event.target.value)
-
-                            field.onChange(isNaN(value) ? 0 : value)
-                          }}
-                          error={!!errors.articleQuantiteslist?.[index]?.prix_article}
-                          {...(errors.articleQuantiteslist?.[index]?.prix_article && {
-                            error: true,
-                            helperText: errors?.articleQuantiteslist?.[index]?.prix_article?.message
-                          })}
-                        />
-                      )}
-                      name={`articleQuantiteslist.${index}.prix_article`}
-                      control={control}
-                    />
-                  </Grid2>
-                  <Grid2 size={{ xs: 1, sm: 1 }} container justifyContent='center' alignItems='center'>
-                    <IconButton
-                      color='error'
-                      onClick={() => {
-                        remove(index)
-                        setArticleSelect(prev => {
-                          return prev.filter((_, i) => i !== index)
-                        })
-                      }}
-                      disabled={AddMutation.isPending}
-                    >
-                      <i className='tabler-trash text-2xl' />
-                    </IconButton>
-                  </Grid2>
+                    )}
+                    name={`articleQuantiteslist.${index}.article_id`}
+                    control={control}
+                  />
                 </Grid2>
-              ))}
-              <Button
-                variant='outlined'
-                color='primary'
-                onClick={() =>
-                  append({
-                    article_id: '',
-                    quantite: 0,
-                    prix_article: 0
-                  })
-                }
-              >
-                Ajouter un Article
-              </Button>
-            </div>
+                <Grid2 size={{ xs: 3, sm: 3 }}>
+                  <Controller
+                    render={({ field }) => (
+                      <CustomTextField
+                        {...field}
+                        label={'Quantité'}
+                        fullWidth
+                        onChange={event => {
+                          const value = parseFloat(event.target.value)
 
-            <div className='w-full flex items-center gap-4'>
-              <Button variant='contained' color='primary' type='submit' disabled={AddMutation.isPending}>
-                {AddMutation.isPending ? 'Traitement...' : 'Ajouter'}
-              </Button>
-              <Button variant='outlined' color='error' onClick={handleReset} disabled={AddMutation.isPending}>
-                Annuler
-              </Button>
-            </div>
-          </form>
-        </div>
-      </Drawer>
-      <DefaultDialog
-        open={openClientModal}
-        setOpen={setOpenClientModal}
-        onClose={() => {
-          setOpenClientModal(false)
-        }}
-        title={'Ajouter un client'}
-        children={<AddEditClient onSuccess={handleSuccesAddClient} onCancel={() => setOpenClientModal(false)} />}
-      />
-      <DefaultDialog
-        open={openProjetModal}
-        setOpen={setOpenPorjetModel}
-        onClose={() => {
-          setOpenPorjetModel(false)
-        }}
-        title={'Ajouter un projet'}
-        children={<AddEditProjet onSuccess={handlehandleSuccesAddProjet} onCancel={() => setOpenPorjetModel(false)} />}
-      />
-      <DefaultDialog
-        open={openArticleModal}
-        setOpen={setOpenArticleModal}
-        onClose={() => {
-          setOpenArticleModal(false)
-        }}
-        title={'Ajouter des article'}
-        children={<AddEditArticle onSuccess={handleSuccesAddArticles} onCancel={() => setOpenArticleModal(false)} />}
-      />
-    </>
+                          field.onChange(isNaN(value) ? 0 : value)
+                        }}
+                        error={!!errors.articleQuantiteslist?.[index]?.quantite}
+                        {...(errors.articleQuantiteslist?.[index]?.quantite && {
+                          error: true,
+                          helperText: errors?.articleQuantiteslist?.[index]?.quantite?.message
+                        })}
+                      />
+                    )}
+                    name={`articleQuantiteslist.${index}.quantite`}
+                    control={control}
+                  />
+                </Grid2>
+                <Grid2 size={{ xs: 3, sm: 4 }}>
+                  <Controller
+                    render={({ field }) => (
+                      <CustomTextField
+                        {...field}
+                        type='number'
+                        label={'Prix Article'}
+                        fullWidth
+                        onChange={event => {
+                          const value = parseFloat(event.target.value)
+
+                          field.onChange(isNaN(value) ? 0 : value)
+                        }}
+                        error={!!errors.articleQuantiteslist?.[index]?.prix_article}
+                        {...(errors.articleQuantiteslist?.[index]?.prix_article && {
+                          error: true,
+                          helperText: errors?.articleQuantiteslist?.[index]?.prix_article?.message
+                        })}
+                      />
+                    )}
+                    name={`articleQuantiteslist.${index}.prix_article`}
+                    control={control}
+                  />
+                </Grid2>
+                <Grid2 size={{ xs: 1, sm: 1 }} container justifyContent='center' alignItems='center'>
+                  <IconButton
+                    color='error'
+                    onClick={() => {
+                      remove(index)
+
+                      // Retire l'article de la liste des articles sélectionnés
+                      setArticleSelect(prev => {
+                        return prev.filter((_, i) => i !== index)
+                      })
+                    }}
+                    disabled={AddMutation.isPending}
+                  >
+                    <i className='tabler-trash text-2xl' />
+                  </IconButton>
+                </Grid2>
+              </Grid2>
+            ))}
+            <Button
+              variant='outlined'
+              color='primary'
+              onClick={() =>
+                append({
+                  article_id: '',
+                  quantite: 0,
+                  prix_article: 0
+                })
+              }
+            >
+              Ajouter un Article
+            </Button>
+          </div>
+
+          <div className='w-full flex items-center gap-4'>
+            <Button variant='contained' color='primary' type='submit' disabled={AddMutation.isPending}>
+              {AddMutation.isPending ? 'Traitement...' : 'Ajouter'}
+            </Button>
+            <Button variant='outlined' color='error' onClick={handleReset} disabled={AddMutation.isPending}>
+              Annuler
+            </Button>
+          </div>
+        </form>
+      </div>
+    </Drawer>
   )
 }
 
