@@ -11,7 +11,7 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
 
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { FormControlLabel, Grid2, RadioGroup } from '@mui/material'
 
@@ -47,6 +47,8 @@ type Props = {
 }
 
 const AddProforma = ({ open, handleClose, onSucces }: Props) => {
+  const queryClient = useQueryClient()
+
   const [value, setValue] = useState<string>('projet')
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -118,7 +120,6 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
 
   const article = useMemo(() => {
     // retire les articles déjà sélectionnés
-
     return articleList?.filter(item => !articleSelect.includes(item.id)) || []
   }, [articleList, articleSelect])
 
@@ -145,23 +146,52 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
 
   const SubmitData = (data: ProformaSave) => {
     console.log(data)
-
-    // AddMutation.mutate(data)
+    AddMutation.mutate(data)
   }
 
   const handleReset = () => {
     handleClose()
   }
 
+  // Fonction pour rafraîchir les données du cache
+  const refreshCacheData = () => {
+    // Invalide toutes les queries des clients
+    queryClient.invalidateQueries({
+      queryKey: [ClientService.CLIENT_KEY],
+      exact: false
+    })
+
+    // Invalide toutes les queries des projets
+    queryClient.invalidateQueries({
+      queryKey: [ProjetService.PROJT_KEY],
+      exact: false
+    })
+
+    // Invalide les articles aussi
+    queryClient.invalidateQueries({
+      queryKey: [ArticleService.ARTICLE_KEY],
+      exact: false
+    })
+  }
+
   const handleSuccesAddClient = (data?: ClientType | ClientType[]) => {
     if (!data) return
+
+    // Invalider le cache des clients
+    refreshCacheData()
 
     if (Array.isArray(data)) {
       if (data.length > 0) {
         setValueForm('client_id', data[0].id)
+
+        // Optionnel: mettre à jour le nom pour la recherche
+        setClientName(data[0].nom)
       }
     } else {
       setValueForm('client_id', data.id)
+
+      // Optionnel: mettre à jour le nom pour la recherche
+      setClientName(data.nom)
     }
 
     setOpenClientModal(false)
@@ -170,12 +200,21 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
   const handlehandleSuccesAddProjet = (data?: ProjetType | ProjetType[]) => {
     if (!data) return
 
+    // Invalider le cache des projets
+    refreshCacheData()
+
     if (Array.isArray(data)) {
       if (data.length > 0) {
         setValueForm('projet_id', data[0].id)
+
+        // Optionnel: mettre à jour le nom pour la recherche
+        setProjetName(data[0].projet_type)
       }
     } else {
       setValueForm('projet_id', data.id)
+
+      // Optionnel: mettre à jour le nom pour la recherche
+      setProjetName(data.projet_type)
     }
 
     setOpenPorjetModel(false)
@@ -183,6 +222,9 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
 
   const handleSuccesAddArticles = (data?: ArticleType | ArticleType[]) => {
     if (!data) return
+
+    // Invalider le cache des articles
+    refreshCacheData()
 
     if (Array.isArray(data)) {
       const ids = data.map(item => item.id)
@@ -277,6 +319,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
                         disabled={clientorprojet}
                         options={projet || []}
                         fullWidth
+                        value={projet?.find(p => p.id === field.value) || null}
                         onChange={(event, newvalue) => {
                           if (newvalue) {
                             field.onChange(newvalue.id)
@@ -333,6 +376,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
                         disabled={!clientorprojet}
                         options={client || []}
                         fullWidth
+                        value={client?.find(c => c.id === field.value) || null}
                         onChange={(event, newvalue) => {
                           if (newvalue) {
                             field.onChange(newvalue.id)
@@ -403,6 +447,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
                         <CustomAutocomplete
                           options={article || []}
                           fullWidth
+                          value={article?.find(a => a.id === field.value) || null}
                           onChange={(event, newvalue) => {
                             if (newvalue) {
                               field.onChange(newvalue.id)
@@ -489,8 +534,6 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
                       color='error'
                       onClick={() => {
                         remove(index)
-
-                        // Retire l'article de la liste des articles sélectionnés
                         setArticleSelect(prev => {
                           return prev.filter((_, i) => i !== index)
                         })

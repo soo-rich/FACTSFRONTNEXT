@@ -58,7 +58,7 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
     mutationFn: async (data: SaveProjet) => {
       return await ProjetService.saveProjet(data)
     },
-    onSuccess: () => {
+    onSuccess: data => {
       toast.success('Ajout OK')
       reset({
         projet_type: '',
@@ -74,7 +74,7 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
 
       // Appeler le callback de succès si fourni
       if (onSuccess) {
-        onSuccess()
+        onSuccess(data)
       }
     },
     onError: () => {
