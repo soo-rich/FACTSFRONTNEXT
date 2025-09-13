@@ -80,13 +80,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
       reference: '',
       projet_id: '',
       client_id: '',
-      articleQuantiteslist: [
-        {
-          article_id: '',
-          quantite: 0,
-          prix_article: 0
-        }
-      ]
+      articleQuantiteslist: []
     }
   })
 
@@ -124,6 +118,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
 
   const article = useMemo(() => {
     // retire les articles déjà sélectionnés
+
     return articleList?.filter(item => !articleSelect.includes(item.id)) || []
   }, [articleList, articleSelect])
 
@@ -138,13 +133,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
         reference: '',
         projet_id: '',
         client_id: '',
-        articleQuantiteslist: [
-          {
-            article_id: '',
-            quantite: 0,
-            prix_article: 0
-          }
-        ]
+        articleQuantiteslist: []
       })
       handleClose()
     },
@@ -164,17 +153,37 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
     handleClose()
   }
 
-  const handleSuccesAddClient = (data: ClientType) => {
-    console.log(data)
-    setValueForm('client_id', data.id)
+  const handleSuccesAddClient = (data?: ClientType | ClientType[]) => {
+    if (!data) return
+
+    if (Array.isArray(data)) {
+      if (data.length > 0) {
+        setValueForm('client_id', data[0].id)
+      }
+    } else {
+      setValueForm('client_id', data.id)
+    }
+
+    setOpenClientModal(false)
   }
 
-  const handlehandleSuccesAddProjet = (data: ProjetType) => {
-    console.log(data)
-    setValueForm('projet_id', data.id)
+  const handlehandleSuccesAddProjet = (data?: ProjetType | ProjetType[]) => {
+    if (!data) return
+
+    if (Array.isArray(data)) {
+      if (data.length > 0) {
+        setValueForm('projet_id', data[0].id)
+      }
+    } else {
+      setValueForm('projet_id', data.id)
+    }
+
+    setOpenPorjetModel(false)
   }
 
-  const handleSuccesAddArticles = (data: ArticleType | ArticleType[]) => {
+  const handleSuccesAddArticles = (data?: ArticleType | ArticleType[]) => {
+    if (!data) return
+
     if (Array.isArray(data)) {
       const ids = data.map(item => item.id)
 
@@ -186,7 +195,6 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
           prix_article: 0
         })
       })
-      setOpenArticleModal(false)
     } else {
       setArticleSelect(prev => [...prev, data.id])
       append({
@@ -195,6 +203,8 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
         prix_article: 0
       })
     }
+
+    setOpenArticleModal(false)
   }
 
   return (
@@ -250,7 +260,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
             </Grid2>
 
             {!clientorprojet && (
-              <div className='w-full flex flex-row justify-between align-middle items-center gap-4'>
+              <div className='w-full flex flex-row justify-between align-middle items-end gap-4'>
                 <Button
                   disabled={clientorprojet}
                   onClick={() => setOpenPorjetModel(true)}
@@ -262,12 +272,9 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
                 </Button>
                 <Controller
                   render={({ field }) => {
-                    // const projetselect = projet?.find(item => item.projet_type.toLowerCase().includes(projetName.toLowerCase())) ?? null
-
                     return (
                       <CustomAutocomplete
                         disabled={clientorprojet}
-                        // value={projetselect}
                         options={projet || []}
                         fullWidth
                         onChange={(event, newvalue) => {
@@ -309,7 +316,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
               </div>
             )}
             {clientorprojet && (
-              <div className='w-full flex flex-row justify-between align-middle items-center gap-4'>
+              <div className='w-full flex flex-row justify-between align-middle items-end gap-4'>
                 <Button
                   disabled={!clientorprojet}
                   onClick={() => setOpenClientModal(true)}
@@ -321,13 +328,10 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
                 </Button>
                 <Controller
                   render={({ field }) => {
-                    // Trouve le client sélectionné en fonction du nom
-                    // const clientselect = client?.find(item => item.nom.toLowerCase().includes(clientName.toLowerCase())) ?? null
                     return (
                       <CustomAutocomplete
                         disabled={!clientorprojet}
                         options={client || []}
-                        // value={clientselect}
                         fullWidth
                         onChange={(event, newvalue) => {
                           if (newvalue) {
@@ -531,12 +535,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
           setOpenClientModal(false)
         }}
         title={'Ajouter un client'}
-        children={
-          <AddEditClient
-            onSuccess={(data: ClientType) => handleSuccesAddClient(data)}
-            onCancel={() => setOpenClientModal(false)}
-          />
-        }
+        children={<AddEditClient onSuccess={handleSuccesAddClient} onCancel={() => setOpenClientModal(false)} />}
       />
       <DefaultDialog
         open={openProjetModal}
