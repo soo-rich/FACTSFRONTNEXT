@@ -23,8 +23,8 @@ const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>)
   },
   {
     label: dictionary['navigation'].cl_pr,
-    isSection:true,
-    children:[
+    isSection: true,
+    children: [
       {
         label: "Projet",
         href: "/projet",
