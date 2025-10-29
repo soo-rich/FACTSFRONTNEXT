@@ -35,10 +35,12 @@ export class ArticleService {
     const isArray = Array.isArray(article)
     const list = isArray && article.length > 1
 
-    console.log(list)
+
 
     if (list) {
-      return (await instance.post<ArticleType[]>(`${url}/all`, article)).data
+      return await Promise.all(article.map(async (item) => {
+        return (await instance.post<ArticleType>(`${url}`, item)).data
+      }))
     } else {
       return (await instance.post<ArticleType>(`${url}`, article)).data
     }

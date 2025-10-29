@@ -1,41 +1,34 @@
 'use client'
 
-import {useState} from "react";
-
 // Component Imports
+import { Controller } from 'react-hook-form'
+
+import Typography from '@mui/material/Typography'
+
 import CustomTextField from '@core/components/mui/TextField'
-
-const RefConponent = ({onchange}: {
-  onchange:
-    (value: string) => void
-}) => {
-
-  const [value, setValue] = useState<string>('')
+import type { AddGlobalProformaType } from '@views/soosmart/dossier/new-proforma-form/type/AddGlobalProformaType'
+import SectionTitle from '@views/soosmart/dossier/new-proforma-form/component/SectionTitle'
 
 
-  const handleChange = (newValue: string) => {
-    setValue(newValue)
-    onchange(newValue)
-  }
+const RefConponent = ({ control, errors }: AddGlobalProformaType) => {
 
-  const verificationRef = () => {
-    return value !== '' && value.length >= 3
-  }
 
-  return <CustomTextField
-    label={'Référence'}
-    placeholder={'Référence'}
-    fullWidth
-    required
-    error={verificationRef()}
-    {...(verificationRef() && {
-      error: true,
-      helperText: "Entrez au moins 3 caractères",
-    })}
-
-    onChange={(e) => handleChange(e.target.value)}
-
-  />
+  return <div className={'flex flex-col gap-4 '}>
+    <SectionTitle title={'Réference'} sub={'Entre la reference de la proforma'}
+                  icon={<i className={'tabler-file-text text-3xl text-white m-1'} />} />
+    <Controller rules={{ required: true }} render={({ field }) => (<CustomTextField
+      {...field}
+      label={'Référence'}
+      placeholder={'Référence'}
+      fullWidth
+      required
+      error={!!errors.reference}
+      {...(errors.reference && {
+        error: true,
+        helperText: errors?.reference?.message
+      })}
+    />)} name={'reference'} control={control} />
+  </div>
 }
 
 export default RefConponent
