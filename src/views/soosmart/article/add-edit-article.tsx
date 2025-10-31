@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { Controller, useForm } from 'react-hook-form'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { Grid2 } from '@mui/material'
 
@@ -26,11 +26,11 @@ import { articleSchema } from '@/types/soosmart/article.type'
 import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 import CustomTextField from '@/@core/components/mui/TextField'
 import EditorBasic from '@components/editor/EditorBasic'
-import UtiliMetod from '@/utils/utilsmethod'
 
-const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<ArticleType>) => {
-  const queryClient = useQueryClient()
-  const [list, setList] = useState<boolean>(false)
+
+const AddEditArticle = ({ data: article, onSuccess, onCancel, defaultlist=false }: AddEditFormType<ArticleType>&{defaultlist?:boolean}) => {
+
+  const [list, setList] = useState<boolean>(defaultlist)
   const [articlelist, setArticlelist] = useState<SaveArticleType[]>([])
 
   const {
@@ -56,11 +56,6 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<
       toast.success('Ajout OK')
       reset()
 
-      // Invalider le cache pour rafraîchir la liste
-      queryClient.invalidateQueries({
-        queryKey: [ArticleService.ARTICLE_KEY]
-      })
-
       // Appeler le callback de succès si fourni
       if (onSuccess) {
         onSuccess(data)
@@ -84,11 +79,6 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<
     onSuccess: () => {
       toast.success('Mise à jour OK')
       reset()
-
-      // Invalider le cache pour rafraîchir la liste
-      queryClient.invalidateQueries({
-        queryKey: [ArticleService.ARTICLE_KEY]
-      })
 
       if (list) {
         setArticlelist([])
@@ -153,18 +143,17 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel }: AddEditFormType<
         <Grid2 size={12} alignItems={'end'} justifyContent={'flex-end'}>
           <FormControlLabel
             label='Liste'
-            control={<Checkbox checked={list} onChange={handleListChange} name='controlled' />}
+            control={<Checkbox checked={list} onChange={handleListChange} name='controlled' disabled={defaultlist} />}
           />
         </Grid2>
         {list && (
           <Grid2 container size={12} direction={'row'} alignItems={'center'} justifyContent={'justify-start'}>
             {articlelist.map((i, j) => {
-              const color = UtiliMetod.randomThemeColor()
 
               return (
-                <Grid2 container size={3} key={i.libelle + j} justifyContent={'center'} alignItems={'center'}>
+                <Grid2 container size={4} key={i.libelle + j} justifyContent={'center'} alignItems={'center'}>
                   <Tooltip placement={'top'} title={'' + i.libelle + ' - ' + i.prix_unitaire + ' FCFA'}>
-                    <Chip label={i.libelle} color={color} />
+                    <Chip label={i.libelle} color={'info'} />
                   </Tooltip>
                 </Grid2>
               )
