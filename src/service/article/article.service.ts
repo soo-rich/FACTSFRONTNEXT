@@ -16,6 +16,10 @@ export class ArticleService {
     ).data
   }
 
+  static getArticlesWithoutpage = async () => {
+    return (await instance.get<ArticleType[]>(`${url}/all`)).data
+  }
+
   static searchArticles = async (search?: string) => {
     return (
       await instance.get<ArticleType[]>(`${url}/search`, {
@@ -35,12 +39,12 @@ export class ArticleService {
     const isArray = Array.isArray(article)
     const list = isArray && article.length > 1
 
-
-
     if (list) {
-      return await Promise.all(article.map(async (item) => {
-        return (await instance.post<ArticleType>(`${url}`, item)).data
-      }))
+      return await Promise.all(
+        article.map(async item => {
+          return (await instance.post<ArticleType>(`${url}`, item)).data
+        })
+      )
     } else {
       return (await instance.post<ArticleType>(`${url}`, article)).data
     }

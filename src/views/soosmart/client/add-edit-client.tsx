@@ -110,7 +110,7 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
     <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
       <Grid2 container direction={'column'} spacing={3}>
         <Grid2 container direction={'row'} spacing={3}>
-          <Grid2 size={client ? 12 : 10}>
+          <Grid2 size={{md: client ? 12 : 10, xl: client ? 12 : 10,sm:  12 ,xs: 10 }}>
             <Controller
               rules={{ required: true }}
               render={({ field }) => (

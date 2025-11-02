@@ -26,6 +26,10 @@ export class ClientService {
     ).data
   }
 
+  static async getClientsAll() {
+    return (await instance.get<ClientType[]>(`${api}/all`)).data
+  }
+
   static async saveClient(client: ClientSave) {
     return (await instance.post<ClientType>(api, client)).data
   }

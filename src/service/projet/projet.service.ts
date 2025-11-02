@@ -3,7 +3,6 @@ import type { ProjetType, SaveProjet, UpdateProjet } from '@/types/soosmart/proj
 import type { ParamRequests } from '@/types/soosmart/pagination/paramrequestion.type'
 import type { CustomresponseType } from '@/types/soosmart/customresponse.type'
 
-
 const url = `projet`
 
 export class ProjetService {
@@ -19,6 +18,9 @@ export class ProjetService {
         params
       })
     ).data
+  }
+  static async getAll() {
+    return (await instance.get<ProjetType[]>(url + `/all`)).data
   }
 
   static async searchProjet(search?: string) {

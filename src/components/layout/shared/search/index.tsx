@@ -25,8 +25,6 @@ import { useSettings } from '@core/hooks/useSettings'
 import AddProforma from '@/views/soosmart/dossier/proforma/add-proforma'
 import { ProformaService } from '@/service/dossier/proforma.service'
 import { StatAPIService } from '@/service/statistique/stat-api.service'
-import DefaultDialog from "@components/dialogs/unique-modal/DefaultDialog";
-import NewProformaWithAllInfo from "@views/soosmart/dossier/new-proforma-form/NewProformaWithAllInfo";
 
 
 const ShurtCutProforma = () => {
@@ -71,9 +69,6 @@ const ShurtCutProforma = () => {
           <div className="whitespace-nowrap select-none text-textDisabled">Proforma Crtl + K</div>
         </div>
       )}
-      <DefaultDialog open={open} setOpen={setOpen} dialogMaxWidth={'md'} title={'Nouveau proforma'}>
-        <NewProformaWithAllInfo/>
-      </DefaultDialog>
       <AddProforma open={open} handleClose={() => setOpen(false)} onSucces={() => {
         Promise.all(
           [
