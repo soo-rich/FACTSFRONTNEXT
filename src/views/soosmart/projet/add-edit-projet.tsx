@@ -23,16 +23,19 @@ import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 import { ClientService } from '@/service/client/client.service'
 
 import CustomAutocomplete from '@core/components/mui/Autocomplete'
+import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
+import AddEditClient from '@views/soosmart/client/add-edit-client'
 
 const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<ProjetType>) => {
   const queryClient = useQueryClient()
-  const [clientName, setClientName] = useState<string>('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
+    setValue
   } = useForm<SaveProjet>({
     resolver: valibotResolver(schemaProjetSave),
     defaultValues: {
@@ -43,16 +46,26 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
     }
   })
 
-  const querykey = useMemo(() => [`${ClientService.CLIENT_KEY}+search`, clientName], [clientName])
+
+  const querykey = useMemo(() => [`${ClientService.CLIENT_KEY}+all`], [])
 
   const { data } = useQuery({
     queryKey: querykey,
     queryFn: async () => {
-      return await ClientService.getClientsByNom(clientName)
+      return await ClientService.getClientsAll()
     },
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
+
+  const handlesuccess = (id: string) => {
+    queryClient.invalidateQueries({ queryKey: querykey }).then(() => {
+      console.log('ok')
+    })
+    setTimeout(() => {
+      setValue('client_id', id)
+    }, 500)
+  }
 
   const AddMutation = useMutation({
     mutationFn: async (data: SaveProjet) => {
@@ -67,10 +80,6 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
         offre: false
       })
 
-      // Invalider le cache pour rafraîchir la liste
-      queryClient.invalidateQueries({
-        queryKey: [ProjetService.PROJT_KEY]
-      })
 
       // Appeler le callback de succès si fourni
       if (onSuccess) {
@@ -78,7 +87,7 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
       }
     },
     onError: () => {
-      toast.error("Erreur lors de l'ajout du projet")
+      toast.error('Erreur lors de l\'ajout du projet')
     }
   })
 
@@ -101,10 +110,6 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
         offre: false
       })
 
-      // Invalider le cache pour rafraîchir la liste
-      queryClient.invalidateQueries({
-        queryKey: [ProjetService.PROJT_KEY]
-      })
 
       // Appeler le callback de succès si fourni
       if (onSuccess) {
@@ -141,165 +146,176 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={'space-y-4'}>
-      <Grid2 container direction={'column'} spacing={3}>
-        <Grid2 container direction={'row'} spacing={3}>
-          <Grid2 size={10}>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)} className={'space-y-4'}>
+        <Grid2 container direction={'column'} spacing={3}>
+          <Grid2 container direction={'row'} spacing={3}>
+            <Grid2 size={10}>
+              <Controller
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <CustomTextField
+                    {...field}
+                    fullWidth
+                    label={'Nom'}
+                    error={!!errors.projet_type}
+                    {...(errors.projet_type && {
+                      error: true,
+                      helperText: errors?.projet_type?.message
+                    })}
+                  />
+                )}
+                name={'projet_type'}
+                control={control}
+              />
+            </Grid2>
+
+            <Grid2
+              size={2}
+              container
+              sx={{
+                alignItems: 'flex-end',
+                justifyContent: 'center'
+              }}
+            >
+              <Controller
+                render={({ field }) => (
+                  <div className={'flex items-center gap-2 sm:flex-col'}>
+                    <Typography>Offre</Typography>
+                    <Checkbox {...field} checked={field.value} />
+                  </div>
+                )}
+                name={'offre'}
+                control={control}
+              />
+            </Grid2>
+          </Grid2>
+          {!projet && (<Grid2 container direction={'row'} spacing={3}>
+            <Grid2 size={10}>
+              <Controller
+                render={({ field }) => (
+                  <CustomAutocomplete
+                    options={data || []}
+                    hidden={!!projet}
+                    fullWidth
+                    onChange={(_event, newvalue) => {
+                      field.onChange(newvalue?.id)
+                    }}
+                    getOptionKey={option => option.id}
+                    getOptionLabel={option => {
+                      return option.nom + ' - ' + option.sigle
+                    }}
+                    error={!!errors.client_id}
+                    {...(errors.client_id && {
+                      error: true,
+                      helperText: errors?.client_id?.message
+                    })}
+                    renderInput={params => {
+                      return (
+                        <CustomTextField
+                          {...params}
+                          label={'Client'}
+                          fullWidth
+                        />
+                      )
+                    }}
+                  />
+                )}
+                name={'client_id'}
+                control={control}
+              />
+            </Grid2>
+            <Grid2
+              container
+              sx={{
+                justifyContent: 'center',
+                alignItems: 'flex-end'
+              }}
+              size={2}
+            >
+              <Button
+                onClick={() => setIsModalOpen(true)}
+                color={'inherit'}
+                variant={'contained'}
+                startIcon={<i className={'tabler-plus'}></i>}
+              >
+                Client
+              </Button>
+            </Grid2>
+          </Grid2>)}
+          <Grid2
+            size={12}
+            container
+            direction={'column'}
+            sx={{
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start'
+            }}
+          >
+            <Typography>Description</Typography>
             <Controller
-              rules={{ required: true }}
               render={({ field }) => (
-                <CustomTextField
+                <TextareaAutosize
                   {...field}
-                  fullWidth
-                  label={'Nom'}
-                  error={!!errors.projet_type}
-                  {...(errors.projet_type && {
+                  style={{ height: '20%' }}
+                  className={
+                    'border-2 border-gray-400 rounded-md p-2 w-full focus:outline-none focus:border-primary h-32'
+                  }
+                  placeholder={'Description du projet'}
+                  error={!!errors.description}
+                  {...(errors.description && {
                     error: true,
-                    helperText: errors?.projet_type?.message
+                    helperText: errors?.description?.message
                   })}
                 />
               )}
-              name={'projet_type'}
-              control={control}
-            />
-          </Grid2>
-
-          <Grid2
-            size={2}
-            container
-            sx={{
-              alignItems: 'flex-end',
-              justifyContent: 'center'
-            }}
-          >
-            <Controller
-              render={({ field }) => (
-                <div className={'flex items-center gap-2 sm:flex-col'}>
-                  <Typography>Offre</Typography>
-                  <Checkbox {...field} checked={field.value} />
-                </div>
-              )}
-              name={'offre'}
+              name={'description'}
               control={control}
             />
           </Grid2>
         </Grid2>
-        <Grid2 container direction={'row'} spacing={3}>
-          <Grid2 size={10}>
-            <Controller
-              render={({ field }) => (
-                <CustomAutocomplete
-                  options={data || []}
-                  hidden={!!projet}
-                  fullWidth
-                  onChange={(event, newvalue) => {
-                    field.onChange(event)
-
-                    if (newvalue) {
-                      field.onChange(newvalue.id)
-                    } else {
-                      field.onChange('')
-                    }
-                  }}
-                  getOptionKey={option => option.id}
-                  getOptionLabel={option => {
-                    return option.nom + ' - ' + option.sigle
-                  }}
-                  renderInput={params => {
-                    return (
-                      <CustomTextField
-                        {...params}
-                        label={'Client'}
-                        fullWidth
-                        onChange={event => {
-                          const value = event.target.value
-
-                          setClientName(value)
-                        }}
-                        error={!!errors.client_id}
-                        {...(errors.client_id && {
-                          error: true,
-                          helperText: errors?.client_id?.message
-                        })}
-                      />
-                    )
-                  }}
-                />
-              )}
-              name={'client_id'}
-              control={control}
-            />
-          </Grid2>
-          <Grid2
-            container
-            sx={{
-              justifyContent: 'center',
-              alignItems: 'flex-end'
-            }}
-            size={2}
-          >
+        <Grid2>
+          <div className="flex justify-center gap-4 mt-6">
             <Button
-              onClick={() => {}}
-              color={'inherit'}
-              variant={'contained'}
-              startIcon={<i className={'tabler-plus'}></i>}
+              variant="contained"
+              color="primary"
+              type="submit"
+              disabled={AddMutation.isPending || UpdateMutation.isPending}
             >
-              Client
+              {AddMutation.isPending || UpdateMutation.isPending ? 'Traitement...' : projet ? 'Mettre à jour' : 'Ajouter'}
             </Button>
-          </Grid2>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={handleCancel}
+              disabled={AddMutation.isPending || UpdateMutation.isPending}
+            >
+              Annuler
+            </Button>
+          </div>
         </Grid2>
-        <Grid2
-          size={12}
-          container
-          direction={'column'}
-          sx={{
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start'
-          }}
-        >
-          <Typography>Description</Typography>
-          <Controller
-            render={({ field }) => (
-              <TextareaAutosize
-                {...field}
-                style={{ height: '20%' }}
-                className={
-                  'border-2 border-gray-400 rounded-md p-2 w-full focus:outline-none focus:border-primary h-32'
-                }
-                placeholder={'Description du projet'}
-                error={!!errors.description}
-                {...(errors.description && {
-                  error: true,
-                  helperText: errors?.description?.message
-                })}
-              />
-            )}
-            name={'description'}
-            control={control}
-          />
-        </Grid2>
-      </Grid2>
-      <Grid2>
-        <div className='flex justify-center gap-4 mt-6'>
-          <Button
-            variant='contained'
-            color='primary'
-            type='submit'
-            disabled={AddMutation.isPending || UpdateMutation.isPending}
-          >
-            {AddMutation.isPending || UpdateMutation.isPending ? 'Traitement...' : projet ? 'Mettre à jour' : 'Ajouter'}
-          </Button>
-          <Button
-            variant='outlined'
-            color='error'
-            onClick={handleCancel}
-            disabled={AddMutation.isPending || UpdateMutation.isPending}
-          >
-            Annuler
-          </Button>
-        </div>
-      </Grid2>
-    </form>
+      </form>
+      <DefaultDialog
+        open={isModalOpen}
+        setOpen={setIsModalOpen}
+        onClose={() => {
+          setIsModalOpen(false)
+        }}
+        title={'Ajouter un Client'}
+      >
+        <AddEditClient onSuccess={(data) => {
+          setIsModalOpen(false)
+
+          if ((data && (!Array.isArray(data)))) {
+            handlesuccess(data?.id)
+          }
+
+        }} onCancel={() => {
+          setIsModalOpen(false)
+        }} />
+      </DefaultDialog>
+    </>
+
   )
 }
 

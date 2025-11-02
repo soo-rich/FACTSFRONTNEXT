@@ -41,8 +41,10 @@ const ProjetIndex = () => {
 
   const columnHelper = createColumnHelper<ProjetType>()
 
+  const querykey= useMemo(() => [ProjetService.PROJT_KEY, pageIndex, pageSize], [pageIndex, pageSize])
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: [ProjetService.PROJT_KEY, pageIndex, pageSize],
+    queryKey:querykey,
     queryFn: async () => {
       // Remplacez par votre service pour récupérer les utilisateurs
       return await ProjetService.getAllProjet({
@@ -112,7 +114,7 @@ const ProjetIndex = () => {
       cell: ({ row }) => (<Typography>{UtiliMetod.formatDate(row.original.update_at)}</Typography>)
     }),
     columnHelper.display({
-      id: 'actions', // Important: donner un ID à la colonne display
+      id: 'actions', // Important : donner un ID à la colonne display
       header: 'Actions',
       cell: ({ row }) => (
         <div className="flex gap-2">
@@ -188,6 +190,9 @@ const ProjetIndex = () => {
         title={projetSelect ? ` Mettre a jour ${projetSelect?.projet_type}` : 'Ajouter un Projet'}
       >
         <AddEditProjet data={projetSelect} onSuccess={() => {
+          queryClient.invalidateQueries({
+            queryKey: querykey
+          })
           setIsModalOpen(false)
           setProjetSelect(undefined)
         }} onCancel={() => {
