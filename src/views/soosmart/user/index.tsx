@@ -7,11 +7,14 @@ import { createColumnHelper } from '@tanstack/react-table'
 
 import Typography from '@mui/material/Typography'
 
-import Chip from '@mui/material/Chip'
 
 import { toast } from 'react-toastify'
 
 import Tooltip from '@mui/material/Tooltip'
+
+
+
+import { styled } from '@mui/material/styles'
 
 import TableGeneric from '@components/table/TableGeneric'
 
@@ -25,24 +28,22 @@ import { getInitials } from '@/utils/getInitials'
 import CustomAvatar from '@/@core/components/mui/Avatar'
 
 
-import type { ThemeColor } from '@core/types'
 import UtiliMetod from '@/utils/utilsmethod'
 
 
 import CustomIconButton from '@/@core/components/mui/IconButton'
 import AddEditUser from '@views/soosmart/user/add-edit-user'
 
+const Icon = styled('i')({})
 
-type UserStatusType = {
-  [key: string]: ThemeColor
+type UserRoleType = {
+  [key: string]: { icon: string; color: string }
 }
 const columnHelper = createColumnHelper<UtilisateurDto>()
 
-const userStatusObj: UserStatusType = {
-  super_admin: 'success',
-  admin: 'info',
-  user: 'secondary'
-}
+
+
+
 
 const UserIndex = () => {
   const queryClient = useQueryClient()
@@ -53,6 +54,11 @@ const UserIndex = () => {
   // États pour le modal
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [userselect, setUserSelect] = useState<UtilisateurDto | undefined>(undefined)
+
+  const userRoleObj: UserRoleType = {
+    admin: { icon: 'tabler-crown', color: 'success' },
+    user: { icon: 'tabler-user', color: 'info' },
+  }
 
 
   const { data, isLoading, isError } = useQuery({
@@ -113,7 +119,7 @@ const UserIndex = () => {
         header: 'User',
         cell: ({ row }) => (
           <div className="flex items-center gap-4">
-            <CustomAvatar size={34}>{getInitials(row.original.username)}</CustomAvatar>
+            <CustomAvatar size={34}>{getInitials(row.original.username.toUpperCase())}</CustomAvatar>
             <div className="flex flex-col">
               <Typography color="text.primary" className="font-medium">
                 {row.original.nom}{' '}{row.original.prenom}
@@ -132,13 +138,15 @@ const UserIndex = () => {
       columnHelper.accessor('role', {
         header: 'Role',
         cell: ({ row }) => (
-          <Chip
-            variant="tonal"
-            label={row.original.role}
-            size="small"
-            color={userStatusObj[row.original.role.toLowerCase()]}
-            className="capitalize"
-          />
+          <div className='flex items-center gap-2'>
+            <Icon
+              className={userRoleObj[row.original.role?.toString().toLowerCase()]?.icon}
+              sx={{ color: `var(--mui-palette-${userRoleObj[row.original?.role?.toLowerCase()]?.color}-main)` }}
+            />
+            <Typography className='capitalize' color='text.primary'>
+              {row.original.role.toLocaleLowerCase()}
+            </Typography>
+          </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
       }),
@@ -183,7 +191,8 @@ const UserIndex = () => {
       })
 
     ],
-    [ActivateMutation, DeleteMutation]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   )
 
 
