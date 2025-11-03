@@ -127,7 +127,6 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
         ...data
       })
     } else {
-      console.log(data)
       AddMutation.mutate(data)
     }
   }

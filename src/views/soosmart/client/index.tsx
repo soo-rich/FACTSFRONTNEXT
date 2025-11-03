@@ -7,15 +7,17 @@ import { toast } from 'react-toastify'
 import { createColumnHelper } from '@tanstack/react-table'
 
 import Typography from '@mui/material/Typography'
-import Chip from '@mui/material/Chip'
+
 import { Grid2 } from '@mui/material'
+
+import Tooltip from "@mui/material/Tooltip";
 
 import TableGeneric from '@components/table/TableGeneric'
 import type { ClientType } from '@/types/soosmart/client.type'
 import { ClientService } from '@/service/client/client.service'
 import CustomIconButton from '@core/components/mui/IconButton'
 import UtiliMetod from '@/utils/utilsmethod'
-import OptionMenu from '@core/components/option-menu'
+
 import DefaultDialog from '@/components/dialogs/unique-modal/DefaultDialog'
 import AddEditClient from '@views/soosmart/client/add-edit-client'
 
@@ -65,7 +67,7 @@ const ClientIndex = () => {
       queryClient.invalidateQueries({
         queryKey: [ClientService.CLIENT_KEY]
       })
-      toast.success(`Changement de potentiel ${data ? 'activé' : 'désactivé'} avec succès`)
+      toast.success(`Cette Entité ${data?'est maintenant un potentiel': 'n\'est plus un potentiel'} client`)
     },
     onError: () => {
       toast.error('Erreur lors du changement de potentiel du client')
@@ -74,7 +76,12 @@ const ClientIndex = () => {
 
 
   const columns = useMemo(() => [
-
+    columnHelper.accessor('potentiel', {
+      header: 'Potentiel',
+      cell: ({row}) => <Tooltip placement={'top'} title={row.original.potentiel ? 'Oui' : 'Non'}>{
+        row.original.potentiel ? <i className={' bg-success text-2xl tabler-square-rounded-check-filled cursor-pointer'} onClick={() => ChangePotentielMutation.mutate(row.original.id)}></i> :
+            <i className={'bg-error text-2xl tabler-square-rounded-x cursor-pointer'} onClick={() => ChangePotentielMutation.mutate(row.original.id)}></i>}</Tooltip>
+    }),
     columnHelper.accessor('nom', {
       header: 'Nom',
       cell: ({ row }) => (
@@ -99,13 +106,7 @@ const ClientIndex = () => {
         <Typography> {row.original.telephone}</Typography>
       )
     }),
-    columnHelper.accessor('potentiel', {
-      header: 'Potentiel',
-      cell: ({ row }) => (
-        <Chip variant={row.original.potentiel ? 'tonal' : 'outlined'}
-              color={row.original.potentiel ? 'success' : 'warning'} label={row.original.potentiel ? 'Oui' : 'Nom'} />
-      )
-    }),
+
     columnHelper.display({
       id: 'actions',
       header: 'Actions',
@@ -129,7 +130,7 @@ const ClientIndex = () => {
           >
             <i className="tabler-trash" />
           </CustomIconButton>
-          <OptionMenu
+        {/*  <OptionMenu
             iconButtonProps={{ size: 'medium' }}
             iconClassName="text-textSecondary"
             options={[
@@ -147,7 +148,7 @@ const ClientIndex = () => {
                 }
               }
             ]}
-          />
+          />*/}
         </Grid2>
       )
     })

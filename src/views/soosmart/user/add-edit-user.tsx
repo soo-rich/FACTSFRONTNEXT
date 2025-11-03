@@ -11,6 +11,12 @@ import { Grid2 } from '@mui/material'
 
 import Button from '@mui/material/Button'
 
+import Typography from '@mui/material/Typography'
+
+import { PhoneInput } from 'react-international-phone'
+
+import MenuItem from '@mui/material/MenuItem'
+
 import CustomTextField from '@core/components/mui/TextField'
 import type { UtilisateurDto, UtilisateurUpdate, UtilsateurRegister } from '@/types/soosmart/utilisateur.type'
 import { userCreateSchema } from '@/types/soosmart/utilisateur.type'
@@ -31,9 +37,10 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
     defaultValues: {
       email: user?.email ?? '',
       nom: user?.nom ?? '',
-      numero: String(user?.telephone ?? 0) ?? '',
+      numero: user?.telephone ?? '288',
       username: user?.username ?? '',
-      prenom: user?.prenom ?? ''
+      prenom: user?.prenom ?? '',
+      role: user?.role.toUpperCase() ?? 'USER',
     }
   })
 
@@ -49,7 +56,8 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
           nom: '',
           prenom: '',
           username: '',
-          numero: ''
+          numero: '',
+          role: 'USER',
         }
       )
 
@@ -109,7 +117,8 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
         email: '',
         nom: '',
         prenom: '',
-        username: ''
+        username: '',
+        role: 'USER',
       }
     )
 
@@ -174,31 +183,28 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
             />
           )
         } name={'email'} control={control} />
-        <Controller render={
-          ({ field }) => (
-            <CustomTextField
-              {...field}
-              fullWidth
-              label={'Numero'}
-              error={!!errors.numero}
-              {...(errors.numero && {
-                error: true,
-                helperText: errors?.numero?.message
-              })}
-            />
-          )
-        } name={'numero'} control={control} />
+        <Controller
+          render={({ field }) => (
+            <div className={'w-full flex flex-col gap-2 focus:text-primary'}>
+              <Typography variant={'body2'}> Telephone </Typography>
+              <PhoneInput className={'w-full'} inputClassName={'w-full'} {...field} defaultCountry={'tg'} />
+            </div>
+          )}
+          name={'numero'}
+          control={control}
+        />
 
         <Grid2 size={12} direction={'row'} container spacing={2} sx={{
           justifyContent: 'space-evenly',
           alignItems: 'center'
         }}>
 
-          <Grid2 hidden={!!user} size={12}>
+          <Grid2 hidden={!!user} size={6}>
 
             <Controller render={
               ({ field }) => (
                 <CustomTextField
+
                   {...field}
                   fullWidth
                   label={'Username'}
@@ -210,6 +216,27 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
                 />
               )
             } name={'username'} control={control} />
+          </Grid2>
+          <Grid2 size={user?12:6}>
+
+          <Controller render={
+              ({ field }) => (
+                <CustomTextField
+                  select
+                  {...field}
+                  fullWidth
+                  label={'Role'}
+                  error={!!errors.role}
+                  {...(errors.role && {
+                    error: true,
+                    helperText: errors?.role?.message
+                  })}
+                >
+                  <MenuItem value={'USER'}>Utilisateur</MenuItem>
+                  <MenuItem value={'ADMIN'}>Administrateur</MenuItem>
+                </CustomTextField>
+              )
+            } name={'role'} control={control} />
           </Grid2>
 
 

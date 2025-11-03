@@ -15,7 +15,7 @@ const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>)
     isSection: true,
     children: [
       {
-        label: dictionary['navigation'].invoice,
+        label: dictionary['navigation'].dossier,
         href: '/dossier',
         icon: 'tabler-file-description'
       },

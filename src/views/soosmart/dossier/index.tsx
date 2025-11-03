@@ -9,6 +9,8 @@ import TabPanel from '@mui/lab/TabPanel'
 import TabContext from '@mui/lab/TabContext'
 
 // Component Imports
+import { FileArchive, FileBadge, FileDigit, FilePlus } from 'lucide-react'
+
 import CustomTabList from '@core/components/mui/TabList'
 import ProformaList from '@views/soosmart/dossier/proforma/proforma-list'
 import BordereauList from '@views/soosmart/dossier/bordereau/bordereau-list'
@@ -19,17 +21,22 @@ const dossierDate: { id: string; label: string; icon: ReactElement; position?: '
     {
       id: 'proforma',
       label: 'Proforma',
-      icon: <i className={'tabler-file'}></i>
+      icon: <FilePlus />
+    },
+    {
+      id: 'bc',
+      label: 'Bon de Commande',
+      icon: <FileDigit />
     },
     {
       id: 'bordereau',
       label: 'Bordereau',
-      icon: <i className={'tabler-file'}></i>
+      icon: <FileArchive />
     },
     {
       id: 'facture',
       label: 'Facture',
-      icon: <i className={'tabler-file'}></i>
+      icon: <FileBadge />
     }
   ]
 
@@ -58,6 +65,9 @@ const DossierIndex = () => {
       </CustomTabList>
       <TabPanel value="proforma">
         <ProformaList />
+      </TabPanel>
+      <TabPanel value="bc">
+        <BordereauList />
       </TabPanel>
       <TabPanel value="bordereau">
         <BordereauList />

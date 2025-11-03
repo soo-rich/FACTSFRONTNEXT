@@ -11,7 +11,7 @@ import Chip from '@mui/material/Chip'
 
 import { toast } from 'react-toastify'
 
-import Checkbox from '@mui/material/Checkbox'
+import Tooltip from '@mui/material/Tooltip'
 
 import TableGeneric from '@components/table/TableGeneric'
 
@@ -31,7 +31,6 @@ import UtiliMetod from '@/utils/utilsmethod'
 
 import CustomIconButton from '@/@core/components/mui/IconButton'
 import AddEditUser from '@views/soosmart/user/add-edit-user'
-import OptionMenu from '@core/components/option-menu'
 
 
 type UserStatusType = {
@@ -104,6 +103,12 @@ const UserIndex = () => {
 
   const columns = useMemo(
     () => [
+      columnHelper.accessor('actif', {
+        header: 'Actif',
+        cell: ({row}) => <Tooltip placement={'top'} title={row.original.actif ? 'Actif' : 'Non actif'}>{
+          row.original.actif ? <i className={' bg-success text-2xl tabler-square-rounded-check-filled cursor-pointer'}  onClick={ () => ActivateMutation.mutate(row.original.id)}></i> :
+            <i className={'bg-error text-2xl tabler-square-rounded-x cursor-pointer'} onClick={ () => ActivateMutation.mutate(row.original.id)} ></i>}</Tooltip>
+      }),
       columnHelper.accessor('nom', {
         header: 'User',
         cell: ({ row }) => (
@@ -147,13 +152,7 @@ const UserIndex = () => {
         ),
         enableHiding: true // Permet de cacher cette colonne
       }),
-      columnHelper.accessor('actif', {
-        header: 'Active',
-        cell: ({ row }) => (
-          <Checkbox checked={row.original.actif} />
-        ),
-        enableHiding: true // Permet de cacher cette colonne
-      }),
+
       columnHelper.display({
         id: 'actions', // Important: donner un ID à la colonne display
         header: 'Actions',
@@ -177,25 +176,7 @@ const UserIndex = () => {
             >
               <i className="tabler-trash" />
             </CustomIconButton>
-            <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
-              iconClassName="text-textSecondary"
-              options={[
-                {
-                  text: 'Details',
-                  icon: 'tabler-eye',
-                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
-                },
-                {
-                  text: row.original.actif ? 'Désactiver' : 'Activer',
-                  icon: row.original.actif ? 'tabler-lock-open' : 'tabler-lock',
-                  menuItemProps: {
-                    className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => ActivateMutation.mutate(row.original.id)
-                  }
-                }
-              ]}
-            />
+
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
@@ -219,7 +200,10 @@ const UserIndex = () => {
     setGlobalFilter={setFilter}
     totalElements={data?.totalElements}
     buttonadd={{
-      action: () => setIsModalOpen(true)
+      action: () => {
+        setIsModalOpen(true)
+        setUserSelect(undefined)
+      }
     }}
   />
 

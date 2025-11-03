@@ -1,11 +1,12 @@
-import type { InferInput } from 'valibot'
-import { custom, email, maxLength, minLength, object, pipe, regex, string } from 'valibot'
+import type { InferInput} from 'valibot';
+import { picklist , custom, email, maxLength, minLength, object, pipe, regex, string } from 'valibot'
+
 
 export type UtilisateurDto = {
   id: string;
   nom: string;
   prenom: string;
-  telephone: number;
+  telephone: string;
   email: string;
   username: string;
   role: string;
@@ -24,13 +25,13 @@ export const userCreateSchema = object({
   numero: pipe(
     string(),
     minLength(1, 'Le numéro est requis'),
-    regex(/^[0-9]*$/, 'Le numéro doit contenir uniquement des chiffres')
   ),
   username: pipe(
     string(),
     minLength(4, 'Le nom d\'utilisateur doit contenir au moins 4 caractères'),
     maxLength(9, 'Le nom d\'utilisateur doit contenir au maximum 9 caractères')
   ),
+  role: pipe(string(), picklist(['ADMIN', 'USER'],"Ce role n'existe pas"))
 
   // password: pipe(string(), minLength(1, 'Le mot de passe est requis'))
 })

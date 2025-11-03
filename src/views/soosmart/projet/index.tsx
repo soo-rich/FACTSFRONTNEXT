@@ -9,7 +9,9 @@ import Typography from '@mui/material/Typography'
 
 import { toast } from 'react-toastify'
 
-import Chip from '@mui/material/Chip'
+
+
+import Tooltip from "@mui/material/Tooltip";
 
 import TableGeneric from '@components/table/TableGeneric'
 
@@ -23,7 +25,7 @@ import UtiliMetod from '@/utils/utilsmethod'
 
 
 import CustomIconButton from '@core/components/mui/IconButton'
-import OptionMenu from '@core/components/option-menu'
+
 import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
 import AddEditProjet from '@views/soosmart/projet/add-edit-projet'
 
@@ -60,11 +62,11 @@ const ProjetIndex = () => {
     mutationFn: async (id: string) => {
       return await ProjetService.changeOffre(id)
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [ProjetService.PROJT_KEY]
       })
-      toast.success('Projet mis à jour avec succès')
+      toast.success(data?'Ce Projet devient un offre': 'Ce Projet n\'est plus un offre')
     },
     onError: () => {
       toast.error('Erreur lors de la mise à jour du projet')
@@ -88,6 +90,12 @@ const ProjetIndex = () => {
 
 
   const columns = useMemo(() => [
+    columnHelper.accessor('offre', {
+      header: 'Offre',
+      cell: ({row}) => <Tooltip placement={'top'} title={row.original.offre ? 'Oui' : 'Non'}>{
+        row.original.offre ? <i className={' bg-success text-2xl tabler-square-rounded-check-filled cursor-pointer'} onClick={() => ActivateMutation.mutate(row.original.id)}></i> :
+            <i className={'bg-error text-2xl tabler-square-rounded-x cursor-pointer'} onClick={() => ActivateMutation.mutate(row.original.id)}></i>}</Tooltip>
+    }),
     columnHelper.accessor('projet_type', {
       header: 'Type de projet',
       cell: info => info.getValue()
@@ -103,11 +111,6 @@ const ProjetIndex = () => {
     columnHelper.accessor('createdat', {
       header: 'Créé le',
       cell: ({ row }) => (<Typography>{UtiliMetod.formatDate(row.original.createdat)}</Typography>)
-    }),
-    columnHelper.accessor('offre', {
-      header: 'Offre',
-      cell: ({ row }) => (
-        <Chip color={row.original.offre ? 'primary' : 'secondary'} label={row.original.offre ? 'Oui' : 'Nom'} />)
     }),
     columnHelper.accessor('update_at', {
       header: 'Mis à jour le',
@@ -136,7 +139,7 @@ const ProjetIndex = () => {
           >
             <i className="tabler-trash" />
           </CustomIconButton>
-          <OptionMenu
+         {/* <OptionMenu
             iconButtonProps={{ size: 'medium' }}
             iconClassName="text-textSecondary"
             options={[
@@ -154,7 +157,7 @@ const ProjetIndex = () => {
                 }
               }
             ]}
-          />
+          />*/}
         </div>
       ),
       enableHiding: true // Permet de cacher cette colonne
