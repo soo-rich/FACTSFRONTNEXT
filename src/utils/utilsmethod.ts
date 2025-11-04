@@ -1,20 +1,26 @@
-import {format as formatter} from 'date-fns'
-import Swal from 'sweetalert2';
-import {fr} from 'date-fns/locale';
+import { format as formatter } from 'date-fns'
+import Swal from 'sweetalert2'
+import { fr } from 'date-fns/locale'
 
-import type {SweetconfirmProps} from "@/types/soosmart/sweetAlertProps";
+import axios from 'axios'
+
+import { toast } from 'react-toastify'
+
+import type { SweetconfirmProps } from '@/types/soosmart/sweetAlertProps'
+import instance from '@/service/axios-manager/instance'
+import type { FileObject } from '@/types/soosmart/dossier/purchaseOrder.type'
 
 class UtiliMetod {
 
   static formatDevise = (value: number, format?: string) => {
-    return new Intl.NumberFormat(format ?? 'fr-FR').format(value);
-  };
-
-  static formatDate = (date: Date, format?: string) => {
-    return formatter(date, format ?? 'yyyy-MM-dd', {locale: fr})
+    return new Intl.NumberFormat(format ?? 'fr-FR').format(value)
   }
 
-  static confirmDialog = async ({icon, title, subtitle, confirmAction, cancelAction}: SweetconfirmProps) => {
+  static formatDate = (date: Date, format?: string) => {
+    return formatter(date, format ?? 'yyyy-MM-dd', { locale: fr })
+  }
+
+  static confirmDialog = async ({ icon, title, subtitle, confirmAction, cancelAction }: SweetconfirmProps) => {
     await Swal.fire({
       title: title ?? 'Vous êtes sûr(e) ?',
       text: subtitle,
@@ -32,7 +38,7 @@ class UtiliMetod {
       }
     })
   }
-  static SuppressionConfirmDialog = async ({data, confirmAction, cancelAction}: SweetconfirmProps & {
+  static SuppressionConfirmDialog = async ({ data, confirmAction, cancelAction }: SweetconfirmProps & {
     data: string
   }) => {
     await Swal.fire({
@@ -65,7 +71,39 @@ class UtiliMetod {
     return colors[Math.floor(Math.random() * colors.length)]
   }
 
+  static getFileFormApi = async (url: string, provider?: 'minio' | 'local') => {
+    return provider === 'minio'
+      ? (await (instance.get<string>('file/presigned', { params: { url } }))).data : this.getImagefromLocal(url)
+  }
+
+  static getImagefromLocal = async (url: string) => {
+    return process.env.NEXT_PUBLIC_SOOSMART_API_URL?.replace('/api', '') + url
+  }
+
+  static download = async (uri: string, file?: FileObject) => {
+    const id = toast('Telechargement en cours')
+
+    await axios.get(uri).then(
+      response => {
+        const blob = file ? new Blob([response.data], { type: file.contentType }) : new Blob([response.data])
+        const link = document.createElement('a')
+
+        link.href = URL.createObjectURL(blob)
+        link.download = file ? file.filename : 'file'
+        link.click()
+
+        URL.revokeObjectURL(link.href)
+
+        toast('Fichier Telecharger', { toastId: id, type: 'success' })
+      },
+      error => {
+        console.error(error)
+        toast('Erreur de telechargement', { toastId: id, type: 'error' })
+      }
+    )
+
+  }
 
 }
 
-export default UtiliMetod;
+export default UtiliMetod

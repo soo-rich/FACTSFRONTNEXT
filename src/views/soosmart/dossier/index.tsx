@@ -15,6 +15,7 @@ import CustomTabList from '@core/components/mui/TabList'
 import ProformaList from '@views/soosmart/dossier/proforma/proforma-list'
 import BordereauList from '@views/soosmart/dossier/bordereau/bordereau-list'
 import FactureList from '@views/soosmart/dossier/facture/facture-list'
+import PurchaseOrderList from '@views/soosmart/dossier/bc/pusrchase-order'
 
 const dossierDate: { id: string; label: string; icon: ReactElement; position?: 'top' | 'bottom' | 'start' | 'end' }[] =
   [
@@ -67,7 +68,7 @@ const DossierIndex = () => {
         <ProformaList />
       </TabPanel>
       <TabPanel value="bc">
-        <BordereauList />
+        <PurchaseOrderList />
       </TabPanel>
       <TabPanel value="bordereau">
         <BordereauList />

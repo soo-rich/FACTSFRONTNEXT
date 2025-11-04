@@ -1,16 +1,16 @@
 'use client'
 
-import {useMemo, useState} from 'react'
+import { useMemo, useState } from 'react'
 
-import {useParams} from 'next/navigation'
+import { useParams } from 'next/navigation'
 
-import {Typography} from '@mui/material'
+import { Typography } from '@mui/material'
 
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import {createColumnHelper} from '@tanstack/react-table'
+import { createColumnHelper } from '@tanstack/react-table'
 
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
 // MUI Imports
 
@@ -20,15 +20,18 @@ import UtiliMetod from '@/utils/utilsmethod'
 import CustomIconButton from '@core/components/mui/IconButton'
 import OptionMenu from '@core/components/option-menu'
 import TableGeneric from '@/components/table/TableGeneric'
-import {BorderauService} from '@/service/dossier/borderau.service'
-import {ProformaService} from '@/service/dossier/proforma.service'
-import type {ProformaType} from '@/types/soosmart/dossier/proforma.type'
+import { BorderauService } from '@/service/dossier/borderau.service'
+import { ProformaService } from '@/service/dossier/proforma.service'
+import type { ProformaType } from '@/types/soosmart/dossier/proforma.type'
 import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
 import AddProforma from '@views/soosmart/dossier/proforma/add-proforma'
 
 
-import {getLocalizedUrl} from '@/utils/i18n'
-import type {Locale} from '@configs/i18n'
+import { getLocalizedUrl } from '@/utils/i18n'
+import type { Locale } from '@configs/i18n'
+import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
+import AdoptForm from '@views/soosmart/dossier/proforma/component/adopt-form'
+import { PurchaseOrderService } from '@/service/dossier/purchaseOrder.service'
 
 
 const columnHelper = createColumnHelper<ProformaType>()
@@ -42,13 +45,14 @@ const ProformaList = () => {
 
   // États pour le modal
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpenAdopt, setIsModalOpenAdopt] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [proformaselect, setProformaSelect] = useState<ProformaType | undefined>(undefined)
 
   // hooks
-  const {lang: locale} = useParams()
+  const { lang: locale } = useParams()
 
-  const {data, isLoading, isError} = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize, notadopted],
     queryFn: async () => {
       return notadopted
@@ -106,13 +110,22 @@ const ProformaList = () => {
     }
   })
 
+  const handleClickToAdopt = (data: ProformaType) => {
+    setProformaSelect(data)
+
+    setTimeout(() => {
+      setIsModalOpenAdopt(true)
+    }, 500)
+  }
+
   const columns = useMemo(
     () => [
       columnHelper.accessor('adopted', {
         header: 'Adoptée',
-        cell: ({row}) => <Tooltip placement={'top'} title={row.original.adopted ? 'Adopter' : 'Nom Adopter'}>{
+        cell: ({ row }) => <Tooltip placement={'top'} title={row.original.adopted ? 'Adopter' : 'Nom Adopter'}>{
           row.original.adopted ? <i className={' bg-success text-2xl tabler-square-rounded-check-filled'}></i> :
-            <i className={'bg-error text-2xl tabler-square-rounded-x'}></i>}</Tooltip>
+            <i className={'bg-error text-2xl tabler-square-rounded-x cursor-pointer'}
+               onClick={() => handleClickToAdopt(row.original)}></i>}</Tooltip>
       }),
       columnHelper.accessor('reference', {
         header: 'Reference',
@@ -128,7 +141,7 @@ const ProformaList = () => {
       }),
       columnHelper.accessor('date', {
         header: 'Créé le',
-        cell: ({row}) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
+        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
       }),
       columnHelper.accessor('total_ht', {
         header: 'Total HT',
@@ -145,7 +158,7 @@ const ProformaList = () => {
       columnHelper.display({
         id: 'actions', // Important: donner un ID à la colonne display
         header: 'Actions',
-        cell: ({row}) => (
+        cell: ({ row }) => (
           <div className="flex gap-2">
             <Tooltip title={'Voir le PDF'}>
               <CustomIconButton
@@ -153,7 +166,7 @@ const ProformaList = () => {
                 href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
                 className="cursor-pointer text-green-600 hover:text-green-800"
               >
-                <i className="tabler-file-type-pdf"/>
+                <i className="tabler-file-type-pdf" />
               </CustomIconButton>
             </Tooltip>
 
@@ -165,7 +178,7 @@ const ProformaList = () => {
                 }}
                 className="cursor-pointer text-yellow-600 hover:text-yellow-800"
               >
-                <i className="tabler-edit"/>
+                <i className="tabler-edit" />
               </CustomIconButton></Tooltip>
             {!row.original.adopted ? (<Tooltip title={'Adopter'}><CustomIconButton
               onClick={() => {
@@ -173,18 +186,18 @@ const ProformaList = () => {
               }}
               className="cursor-pointer text-primary"
             >
-              <i className="tabler-check"/>
+              <i className="tabler-check" />
             </CustomIconButton></Tooltip>) : null}
 
 
             <OptionMenu
-              iconButtonProps={{size: 'medium'}}
+              iconButtonProps={{ size: 'medium' }}
               iconClassName="text-textSecondary"
               options={[
                 {
                   text: 'Details',
                   icon: 'tabler-eye',
-                  menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
+                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
                 },
                 {
                   text: 'Supprimer',
@@ -216,7 +229,7 @@ const ProformaList = () => {
         columns={columns}
         isLoading={isLoading}
         isError={isError}
-        ComponentOther={<AdoptedSwitchComponent checked={notadopted} handleChange={setNotadopte}/>}
+        ComponentOther={<AdoptedSwitchComponent checked={notadopted} handleChange={setNotadopte} />}
         page={pageIndex}
         visibleColumns={true}
         SetPage={setPageIndex}
@@ -235,7 +248,33 @@ const ProformaList = () => {
             queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize]
           })
           .then(r => r)
-      }}/>
+      }} />
+
+      <DefaultDialog open={isModalOpenAdopt} setOpen={setIsModalOpenAdopt} onClose={() => {
+        setIsModalOpen(false)
+        setProformaSelect(undefined)
+      }} title={'Adopter la proforma'}>
+        <AdoptForm data={proformaselect} onCancel={() => {
+          setProformaSelect(undefined)
+          setIsModalOpenAdopt(false)
+        }} onSuccess={() => {
+          queryClient
+            .invalidateQueries({
+              queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize]
+            })
+            .then(r => r)
+          queryClient
+            .invalidateQueries({
+              queryKey: [BorderauService.BORDERAU_KEY]
+            })
+            .then(r => r)
+          queryClient
+            .invalidateQueries({
+              queryKey: [PurchaseOrderService.PURCHASE_ORDER_KEY]
+            })
+            .then(r => r)
+        }} />
+      </DefaultDialog>
     </>
   )
 }
