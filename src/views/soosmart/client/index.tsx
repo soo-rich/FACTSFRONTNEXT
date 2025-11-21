@@ -33,9 +33,10 @@ const ClientIndex = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [clientSelect, setClientSelect] = useState<ClientType | undefined>(undefined)
 
+  const querykey = useMemo(() => [ClientService.CLIENT_KEY, pageIndex, pageSize], [pageIndex, pageSize])
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: [ClientService.CLIENT_KEY, pageIndex, pageSize],
+    queryKey:querykey,
     queryFn: async () => {
       return await ClientService.getClients({ page: pageIndex, pagesize: pageSize })
     },
@@ -50,7 +51,7 @@ const ClientIndex = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [ClientService.CLIENT_KEY]
+        queryKey: querykey
       })
       toast.success('Client supprimé avec succès')
     },
@@ -65,7 +66,7 @@ const ClientIndex = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: [ClientService.CLIENT_KEY]
+        queryKey: querykey
       })
       toast.success(`Cette Entité ${data?'est maintenant un potentiel': 'n\'est plus un potentiel'} client`)
     },
@@ -183,6 +184,9 @@ const ClientIndex = () => {
         title={clientSelect ? ` Mettre a jour ${clientSelect?.nom}` : 'Ajouter un Client'}
       >
         <AddEditClient data={clientSelect} onSuccess={() => {
+          queryClient.invalidateQueries({
+            queryKey: querykey
+          })
           setIsModalOpen(false)
           setClientSelect(undefined)
         }} onCancel={() => {

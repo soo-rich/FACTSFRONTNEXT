@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { Controller, useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
@@ -22,7 +22,7 @@ import { ClientService } from '@/service/client/client.service'
 import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 
 const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<ClientType>) => {
-  const queryclient = useQueryClient()
+
 
   const {
     control,
@@ -47,9 +47,6 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
     onSuccess: data => {
       toast.success('Client ajouté avec succès')
       reset()
-      queryclient.invalidateQueries({
-        queryKey: [ClientService.CLIENT_KEY]
-      })
 
       if (onSuccess) {
         onSuccess(data)
@@ -71,9 +68,6 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
     onSuccess: () => {
       toast.success('Client mis à jour avec succès')
       reset()
-      queryclient.invalidateQueries({
-        queryKey: [ClientService.CLIENT_KEY]
-      })
 
       if (onSuccess) {
         onSuccess()

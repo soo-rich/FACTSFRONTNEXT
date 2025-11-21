@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { Controller, useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
@@ -27,7 +27,7 @@ import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
 import AddEditClient from '@views/soosmart/client/add-edit-client'
 
 const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<ProjetType>) => {
-  const queryClient = useQueryClient()
+
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const {
