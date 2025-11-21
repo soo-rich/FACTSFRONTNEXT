@@ -69,10 +69,10 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
 
   const AddMutation = useMutation({
     mutationFn: async (data: SaveProjet) => {
-      return await ProjetService.saveProjet(data)
+      return (await ProjetService.saveProjet(data))
     },
     onSuccess: data => {
-      toast.success('Ajout OK')
+      toast.success(`Le Projet ${data.projet_type} a été ajouter`)
       reset({
         projet_type: '',
         description: '',
@@ -101,8 +101,8 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
 
       return await ProjetService.updateProjet(data, projet?.id)
     },
-    onSuccess: () => {
-      toast.success('Mise à jour OK')
+    onSuccess: (data) => {
+      toast.success(`Mise à jour du projet ${data.projet_type}`)
       reset({
         projet_type: '',
         description: '',

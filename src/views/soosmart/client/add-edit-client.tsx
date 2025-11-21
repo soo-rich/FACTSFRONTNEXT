@@ -42,10 +42,10 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
 
   const addMutation = useMutation({
     mutationFn: async (data: ClientSave) => {
-      return await ClientService.saveClient(data)
+      return( await ClientService.saveClient(data))
     },
     onSuccess: data => {
-      toast.success('Client ajouté avec succès')
+      toast.success(`Client ${data.nom} ajouté avec succès`)
       reset()
 
       if (onSuccess) {
@@ -66,7 +66,7 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
       return await ClientService.updateClient(client.id, data)
     },
     onSuccess: () => {
-      toast.success('Client mis à jour avec succès')
+      toast.success(`Client ${data.nom} mis à jour avec succès`)
       reset()
 
       if (onSuccess) {
