@@ -103,7 +103,7 @@ const FactureList = () => {
           <div className="flex gap-2">
             <Tooltip title={'Voir le PDF'}>
             <CustomIconButton
-              href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
+              href={getLocalizedUrl(`/docs/${row.original.numero}`, locale as Locale)}
               className="cursor-pointer text-green-600 hover:text-green-800"
             >
               <i className="tabler-file-type-pdf" />
@@ -111,7 +111,7 @@ const FactureList = () => {
             </Tooltip>
             <Tooltip title={'Hieriachie'}>
             <CustomIconButton
-              href={getLocalizedUrl(`/dossier/tree/${row.original.numero}`, locale as Locale)}
+              href={getLocalizedUrl(`/tree/${row.original.numero}`, locale as Locale)}
               className="cursor-pointer text-info hover:text-green-800"
             >
               <i className="tabler-hierarchy-3" />

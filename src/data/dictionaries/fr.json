@@ -2,6 +2,11 @@
   "navigation": {
     "dashboards": "Tableaux de bord",
     "dossier": "Dossiers",
+    "case": {
+      "proforma": "Proforma",
+      "purchase_order": "Bon de commande",
+      "order_slip": "Bordereau de livraison"
+    },
     "article": "Articles",
     "cl_pr": "Client-Projet",
     "crm": "GRC",

@@ -21,7 +21,11 @@ import Button from '@mui/material/Button'
 
 import { toast } from 'react-toastify'
 
-import type { ProformaSaveV2 } from '@/types/soosmart/dossier/proforma.type'
+import CardContent from '@mui/material/CardContent'
+
+import Card from '@mui/material/Card'
+
+import type { ProformaSaveV2, ProformaType } from '@/types/soosmart/dossier/proforma.type'
 import { schemaProformaV2 } from '@/types/soosmart/dossier/proforma.type'
 
 import { ProformaService } from '@/service/dossier/proforma.service'
@@ -44,9 +48,10 @@ type Props = {
   open: boolean
   handleClose: () => void
   onSucces?: () => void
+  data?: ProformaType
 }
 
-const AddProforma = ({ open, handleClose, onSucces }: Props) => {
+const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
   const [isModalOpenClient, setIsModalOpenClient] = useState<boolean>(false)
   const [isModalOpenProjet, setIsModalOpenProjet] = useState<boolean>(false)
   const [isModalOpenArticle, setIsModalOpenArticle] = useState<boolean>(false)
@@ -69,11 +74,14 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
   } = useForm<ProformaSaveV2>({
     resolver: valibotResolver(schemaProformaV2),
     defaultValues: {
-      reference: '',
-      projet_id: '',
-      client_id: '',
-      articleQuantiteslist: [
-      ]
+      reference: p?.reference ?? '',
+
+      articleQuantiteslist: p?.articleQuantiteslist.map(item => ({
+        libelle: item.article,
+        description: item.description,
+        prix_unitaire: item.prix_article,
+        quantite: item.quantite
+      }))
     }
   })
 
@@ -83,8 +91,6 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
     control,
     name: 'articleQuantiteslist'
   })
-
-
 
 
   const { data: client } = useQuery({
@@ -106,7 +112,6 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
   })
 
 
-
   const AddMutation = useMutation({
     mutationFn: async (data: ProformaSaveV2) => {
       return await ProformaService.PostDataWithArticle(data)
@@ -114,18 +119,27 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
     onSuccess: () => {
       toast.success('Proforma cree')
       onSucces?.()
-      reset({
-        reference: '',
-        projet_id: '',
-        client_id: '',
-        articleQuantiteslist: [
-
-        ]
-      })
-      handleClose()
+      handleReset()
     },
     onError: error => {
       toast.error('Erreur d\'ajout de la proforma')
+      console.error('Error adding proforma:', error)
+    }
+  })
+
+  const EditMutation = useMutation({
+    mutationFn: async (data: ProformaSaveV2) => {
+      if (p)
+
+        return await ProformaService.Updatedata(p?.id, data)
+    },
+    onSuccess: () => {
+      toast.success('Proforma cree')
+      onSucces?.()
+      handleReset()
+    },
+    onError: error => {
+      toast.error(`Erreur de la mise a jour de la proforma ${p?.numero}`)
       console.error('Error adding proforma:', error)
     }
   })
@@ -135,9 +149,12 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
 
     data.articleQuantiteslist = [...data.articleQuantiteslist, ...articlenew]
 
-    console.log(data)
+    if (p) {
+      EditMutation.mutate(data)
+    } else {
+      AddMutation.mutate(data)
+    }
 
-    AddMutation.mutate(data)
   }
 
   const handleAddClient = async (data: ClientType) => {
@@ -170,7 +187,13 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
 
 
   const handleReset = () => {
-    handleClose()
+    handleClose();
+    reset({
+      reference: '',
+      projet_id: '',
+      client_id: '',
+      articleQuantiteslist: []
+    });
   }
 
   useEffect(
@@ -209,7 +232,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
         sx={{ '& .MuiDrawer-paper': { width: { xs: 350, sm: 550 } } }}
       >
         <div className="flex items-center justify-between plb-5 pli-6">
-          <Typography variant="h5">Construire un Proforma</Typography>
+          <Typography variant="h5">Construire un Proforma {p&&`à partir de ${p.numero}`}</Typography>
           <IconButton size="small" onClick={handleReset}>
             <i className="tabler-x text-2xl text-textPrimary" />
           </IconButton>
@@ -234,7 +257,7 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
               name={'reference'}
               control={control}
             />
-            <Grid2
+            {!p && (<><Grid2
               container
               size={12}
               direction={'row'}
@@ -248,48 +271,49 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
               <FormControlLabel
                 label="(Oui: client / Nom : projet )"
                 control={<Checkbox checked={choixclient}
-                  onChange={(e) => setchoixclient(e.target.checked)}
-                  name="controlled" />}
+                                   onChange={(e) => setchoixclient(e.target.checked)}
+                                   name="controlled" />}
               />
             </Grid2>
-            <div
-              className="w-full flex flex-row justify-between align-middle items-end place-content-center gap-4">
-              {choixclient ? (
-                <CustomAutocomplete
+              <div
+                className="w-full flex flex-row justify-between align-middle items-end place-content-center gap-4">
+                {choixclient ? (
+                    <CustomAutocomplete
 
-                  options={client || []}
-                  fullWidth
+                      options={client || []}
+                      fullWidth
 
-                  filterOptions={filterOptionsClient}
-                  onChange={handleSelectClient}
-                  getOptionLabel={option => option.nom || ''}
+                      filterOptions={filterOptionsClient}
+                      onChange={handleSelectClient}
+                      getOptionLabel={option => option.nom || ''}
 
-                  renderInput={params => <CustomTextField {...params} label="Choix du Client" />}
-                />
-              ) :
-                (
-                  <CustomAutocomplete
+                      renderInput={params => <CustomTextField {...params} label="Choix du Client" />}
+                    />
+                  ) :
+                  (
+                    <CustomAutocomplete
+                      options={projet || []}
+                      fullWidth
+                      filterOptions={filterOptionsProjet}
+                      onChange={handleSelectProjet}
+                      getOptionLabel={option => option.projet_type || ''}
 
-                    options={projet || []}
-                    fullWidth
-                    filterOptions={filterOptionsProjet}
-                    onChange={handleSelectProjet}
-                    getOptionLabel={option => option.projet_type || ''}
-
-                    renderInput={params => <CustomTextField {...params} label="Choix du Projet " />}
-                  />
-                )}
-              <Button variant={'contained'} color={'inherit'} endIcon={<i className="tabler-plus" />}
-                onClick={() => {
-                  if (choixclient) {
-                    setIsModalOpenClient(true)
-                  } else {
-                    setIsModalOpenProjet(true)
-                  }
-                }}>
-                {choixclient ? 'Client' : 'Projet'}
-              </Button>
-            </div>
+                      renderInput={params => <CustomTextField {...params} label="Choix du Projet " />}
+                    />
+                  )}
+                <Button variant={'contained'} color={'inherit'} endIcon={<i className="tabler-plus" />}
+                        onClick={() => {
+                          if (choixclient) {
+                            setIsModalOpenClient(true)
+                          } else {
+                            setIsModalOpenProjet(true)
+                          }
+                        }}>
+                  {choixclient ? 'Client' : 'Projet'}
+                </Button>
+              </div>
+            </>)
+            }
 
             <Divider className="w-full" />
             <Typography variant={'h5'}>Article-Quantite</Typography>
@@ -307,78 +331,85 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
                 Ajouter des Articles
               </Button>
             </div>
-            <div className={'flex flex-col justify-center align-baseline w-full'}>
+            <div className={'flex flex-col justify-center align-baseline w-full gap-6'}>
               {
                 fields.map((item, index) => (
-                  <Grid2 container key={index} spacing={2} sx={{
-                    justifyContent: "center",
-                    alignItems: "flex-end",
-                  }}>
-                    <Grid2 size={{ xs: 4, sm: 4, md: 11 }}>
-                      <Controller
-                        render={({ field }) => (
-                          <CustomTextField {...field} label={'Article'}
-                            fullWidth error={!!errors.articleQuantiteslist?.[index]?.libelle}
-                            {...(errors.articleQuantiteslist?.[index]?.libelle && {
-                              error: true,
-                              helperText: errors?.articleQuantiteslist?.[index]?.libelle?.message
-                            })} />)}
-                        name={`articleQuantiteslist.${index}.libelle`}
-                        control={control}
-                      />
-                    </Grid2>
-                    <Grid2 size={{ xs: 1, sm: 1 }} >
+
+                  <Card key={index}>
+                    <CardContent className={'relative flex flex-col justify-center align-baseline w-full gap-6'}>
+
                       <IconButton
-                        color='error'
+                        className={'absolute -top-px -right-px'}
+                        color="error"
                         onClick={() => {
                           remove(index)
                         }}
                         disabled={AddMutation.isPending}
                       >
-                        <i className='tabler-trash text-2xl' />
+                        <i className="tabler-trash text-2xl" />
                       </IconButton>
-                    </Grid2>
-                    <Grid2 size={{ xs: 4, sm: 4, md: 6 }}>
-                      <Controller
-                        render={({ field }) => (
-                          <CustomTextField {...field}
-                            label={'Prix'}
-                            fullWidth
-                            onChange={(e) => {
-                              const value = Number(e.target.value)
 
-                              field.onChange(isNaN(value) ? null : value)
-                            }}
-                            error={!!errors.articleQuantiteslist?.[index]?.prix_unitaire}
-                            {...(errors.articleQuantiteslist?.[index]?.prix_unitaire && {
-                              error: true,
-                              helperText: errors?.articleQuantiteslist?.[index]?.prix_unitaire?.message
-                            })} />)}
-                        name={`articleQuantiteslist.${index}.prix_unitaire`}
-                        control={control}
-                      />
-                    </Grid2>
-                    <Grid2 size={{ xs: 4, sm: 4, md: 6 }}>
-                      <Controller
-                        render={({ field }) => (
-                          <CustomTextField {...field} type={'number'} label={'Quantité'}
-                            fullWidth
-                            onChange={(e) => {
-                              const value = Number(e.target.value)
+                      <Grid2 container spacing={2} sx={{
+                        justifyContent: 'center',
+                        alignItems: 'flex-end'
+                      }}>
+                        <Grid2 size={12}>
+                          <Controller
+                            render={({ field }) => (
+                              <CustomTextField {...field} label={'Article'}
+                                               fullWidth error={!!errors.articleQuantiteslist?.[index]?.libelle}
+                                               {...(errors.articleQuantiteslist?.[index]?.libelle && {
+                                                 error: true,
+                                                 helperText: errors?.articleQuantiteslist?.[index]?.libelle?.message
+                                               })} />)}
+                            name={`articleQuantiteslist.${index}.libelle`}
+                            control={control}
+                          />
+                        </Grid2>
+                        <Grid2 size={6}>
+                          <Controller
+                            render={({ field }) => (
+                              <CustomTextField {...field}
+                                               label={'Prix'}
+                                               fullWidth
+                                               onChange={(e) => {
+                                                 const value = Number(e.target.value)
 
-                              field.onChange(isNaN(value) ? null : value)
-                            }}
-                            error={!!errors.articleQuantiteslist?.[index]?.quantite}
-                            {...(errors.articleQuantiteslist?.[index]?.quantite && {
-                              error: true,
-                              helperText: errors?.articleQuantiteslist?.[index]?.quantite?.message
-                            })}
-                          />)}
-                        name={`articleQuantiteslist.${index}.quantite`}
-                        control={control}
-                      />
-                    </Grid2>
-                  </Grid2>
+                                                 field.onChange(isNaN(value) ? null : value)
+                                               }}
+                                               error={!!errors.articleQuantiteslist?.[index]?.prix_unitaire}
+                                               {...(errors.articleQuantiteslist?.[index]?.prix_unitaire && {
+                                                 error: true,
+                                                 helperText: errors?.articleQuantiteslist?.[index]?.prix_unitaire?.message
+                                               })} />)}
+                            name={`articleQuantiteslist.${index}.prix_unitaire`}
+                            control={control}
+                          />
+                        </Grid2>
+                        <Grid2 size={6}>
+                          <Controller
+                            render={({ field }) => (
+                              <CustomTextField {...field} type={'number'} label={'Quantité'}
+                                               fullWidth
+                                               onChange={(e) => {
+                                                 const value = Number(e.target.value)
+
+                                                 field.onChange(isNaN(value) ? null : value)
+                                               }}
+                                               error={!!errors.articleQuantiteslist?.[index]?.quantite}
+                                               {...(errors.articleQuantiteslist?.[index]?.quantite && {
+                                                 error: true,
+                                                 helperText: errors?.articleQuantiteslist?.[index]?.quantite?.message
+                                               })}
+                              />)}
+                            name={`articleQuantiteslist.${index}.quantite`}
+                            control={control}
+                          />
+                        </Grid2>
+                      </Grid2>
+                    </CardContent>
+                  </Card>
+
                 ))
               }
             </div>
@@ -386,13 +417,12 @@ const AddProforma = ({ open, handleClose, onSucces }: Props) => {
             <Divider className="w-full" />
 
 
-
             <div className="w-full flex items-center gap-4">
               <Button variant="contained" color="primary" type="submit" disabled={AddMutation.isPending}>
                 {AddMutation.isPending ? 'Traitement...' : 'Ajouter'}
               </Button>
               <Button variant="outlined" color="error" onClick={handleReset}
-                disabled={AddMutation.isPending}>
+                      disabled={AddMutation.isPending}>
                 Annuler
               </Button>
             </div>

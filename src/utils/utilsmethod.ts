@@ -85,10 +85,10 @@ class UtiliMetod {
 
     await axios.get(uri).then(
       response => {
-        const blob = file ? new Blob([response.data], { type: file.contentType }) : new Blob([response.data])
+
         const link = document.createElement('a')
 
-        link.href = URL.createObjectURL(blob)
+        link.href = response.data
         link.download = file ? file.filename : 'file'
         link.click()
 

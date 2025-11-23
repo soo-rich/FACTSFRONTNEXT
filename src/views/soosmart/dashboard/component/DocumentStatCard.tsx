@@ -143,7 +143,7 @@ export const DocumentStatCard = () => {
               isLoading ? (<LoadingWithoutModal />) :
                 (
                   <DashCard props={{ title: 'Proforma', avatarIcon: 'tabler-file', color: 'secondary' }}
-                            data={data?.proforma} link={'dossier?file=proforma'} adopteSession={true} />)}
+                            data={data?.proforma} link={'proforma'} adopteSession={true} />)}
           </Grid>)
       }
       {data &&
@@ -153,7 +153,7 @@ export const DocumentStatCard = () => {
               isLoading ? (<LoadingWithoutModal />) :
                 (
                   <DashCard props={{ title: 'BL', avatarIcon: 'tabler-file-report', color: 'info' }}
-                            data={data?.bordeau} link={'dossier?file=bordereau'} adopteSession={true} />)}
+                            data={data?.bordeau} link={'order_slip'} adopteSession={true} />)}
           </Grid>)
       }
       {data &&
@@ -163,7 +163,7 @@ export const DocumentStatCard = () => {
               isLoading ? (<LoadingWithoutModal />) :
                 (
                   <DashCard props={{ title: 'Facture', avatarIcon: 'tabler-file-description', color: 'success' }}
-                            data={data?.facture} link={'dossier?file=facture'} />)}
+                            data={data?.facture} link={'facture'} />)}
           </Grid>)
       }
       {/*{

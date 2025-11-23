@@ -113,7 +113,7 @@ const AddArticle = ({ onSuccess }: { onSuccess: (data: Article_QuantiteListV2[])
                         return
                       }
 
-                      field.onChange(isNaN(value) ? 0 : value) // Assure que le prix est un nombre
+                      field.onChange(value) // Assure que le prix est un nombre
                     }}
                     error={!!errors.prix_unitaire}
                     {...(errors.prix_unitaire && {
@@ -162,7 +162,7 @@ const AddArticle = ({ onSuccess }: { onSuccess: (data: Article_QuantiteListV2[])
             <Controller
               name="description"
               control={control}
-              render={({ field }) => <EditorBasic value={field.value} onChange={field.onChange} />}
+              render={({ field }) => <EditorBasic value={field.value}  onChange={field.onChange} />}
             />
           </Grid2>
 

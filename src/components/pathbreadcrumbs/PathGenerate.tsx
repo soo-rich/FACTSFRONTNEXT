@@ -14,6 +14,8 @@ import { toast } from 'react-toastify'
 import type { ComponentDictonaryParamsType } from '@/types/componentTypes'
 
 const PathGenerate = ({ dictionary }: ComponentDictonaryParamsType) => {
+  const trad = ['order_slip','purchase_order']
+
   //hook to get the current path
   const { pathname } = useLocation()
 
@@ -52,6 +54,10 @@ const PathGenerate = ({ dictionary }: ComponentDictonaryParamsType) => {
           if (item === '') return null // Skip empty segments
           if (item === 'dashboard') return null
 
+
+          const folder = item.replace(/-/g, ' ').replace(/_/g, ' ')
+          const folderName = folder.charAt(0).toUpperCase() + folder.slice(1)
+
           if (item === 'fr' || item === 'en' || item === 'dashboard') {
             if (table[2] === 'dashboard') {
               return <Typography key={index}>{dictionary['navigation'].dashboard}</Typography>
@@ -65,12 +71,23 @@ const PathGenerate = ({ dictionary }: ComponentDictonaryParamsType) => {
           }
 
           if (index === table.length - 1) {
-            return <Typography key={index}>{item.charAt(0).toUpperCase() + item.slice(1)}</Typography>
+            if (trad.includes(item)) {
+              // @ts-ignore
+              return <Typography key={index}>{dictionary['navigation'].case[String(item)]}</Typography>
+            }
+
+            if (item==='invoice') {
+              // @ts-ignore
+              return <Typography key={index}>{dictionary['navigation'][String(item)]}</Typography>
+            }
+
+
+            return <Typography key={index}>{folderName}</Typography>
           }
 
           return (
             <Typography key={index} component={Link} underline={'hover'} color={'secondary'} href={`/${item}`}>
-              {item.charAt(0).toUpperCase() + item.slice(1)} {/* Capitalize first letter */}
+              {folderName}
             </Typography>
           )
         })}

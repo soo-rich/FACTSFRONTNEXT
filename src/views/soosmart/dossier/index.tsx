@@ -52,9 +52,10 @@ const DossierIndex = () => {
 
   return (
     <TabContext value={value}>
-      <CustomTabList pill="true" onChange={handleChange}>
+      <CustomTabList className={'flex flex-row  '} pill="true" onChange={handleChange}>
         {dossierDate.map(item => (
           <Tab
+            className={'flex'}
             key={item.id}
             onClick={() => setValue(item.id)}
             value={item.id}

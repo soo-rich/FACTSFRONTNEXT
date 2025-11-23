@@ -14,11 +14,6 @@ import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 
-// import Checkbox from '@mui/material/Checkbox'
-import Button from '@mui/material/Button'
-
-// import FormControlLabel from '@mui/material/FormControlLabel'
-
 // Type Imports
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 
@@ -46,6 +41,7 @@ import { getLocalizedUrl } from '@/utils/i18n'
 import AuthIllustrationWrapper from './AuthIllustrationWrapper'
 
 import { schemaLogin } from '@/service/auth/auth-service'
+import LoadingButton from '@components/button/LoadingButton'
 
 
 type formdata = InferInput<typeof schemaLogin>
@@ -182,9 +178,9 @@ const Login = () => {
                 Forgot password?
               </Typography>
             </div>*/}
-            <Button fullWidth variant="contained" type="submit">
+            <LoadingButton loading={isSubmitting} fullWidth variant="contained" type="submit">
               {isSubmitting ? 'En cours' : 'Connexion'}
-            </Button>
+            </LoadingButton>
 
           </form>
         </CardContent>

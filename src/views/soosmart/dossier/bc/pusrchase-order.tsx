@@ -67,16 +67,17 @@ const PurchaseOrderList = () => {
 
   return (
     <>
-      <Grid container spacing={2} size={12} direction={'row'} sx={{
+      <Grid container spacing={2} size={{ xs:12, sm:3 }} direction={'row'} sx={{
         justifyContent: 'flex-end',
         alignItems: 'center'
       }}>
-        <DebouncedInput value={filter} onChange={(data) => setFilter(String(data))} label={'Rechercher par proforma'}
+        <DebouncedInput  className={'md:w-1/3 w-full'} value={filter} onChange={(data) => setFilter(String(data))} label={'Rechercher par proforma'}
                         placeholder={'Rechercher'} />
       </Grid>
       <Grid container spacing={2} size={12} direction={'row'} sx={{
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'flex-start',
+        marginTop: '1rem'
       }}>
 
         {

@@ -2,6 +2,11 @@
   "navigation": {
     "dashboards": "Dashboards",
     "dossier": "Cases",
+    "case": {
+      "proforma": "Proforma",
+      "purchase_order": "Purchase Order",
+      "order_slip": "Order Slip"
+    },
     "article": "Articles",
     "cl_pr": "Customers-Project",
     "crm": "CRM",

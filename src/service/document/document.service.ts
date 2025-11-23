@@ -7,9 +7,7 @@ export class DocumentService {
   static REPORT_KEY = url
 
   static async genereateReport(numero: string) {
-    return (
-      await instance.get(`${url}/${numero}`, { responseType: 'arraybuffer' })
-    ).data
+    return (await instance.get(`${url}/${numero}`, { responseType: 'arraybuffer' })).data
   }
 
   static async signDocument(numero: string, signedBy: string) {
@@ -23,8 +21,10 @@ export class DocumentService {
   }
 
   static async getDocumentDate(numero: string) {
-    return (
-      await instance.get<DocumentDTO>(`${url}/data/${numero}`)
-    ).data
+    return (await instance.get<DocumentDTO>(`${url}/data/${numero}`)).data
+  }
+
+  static async generatePdf(numero: string) {
+    return (await instance.get<DocumentDTO>(`${url}/generate/${numero}`)).data
   }
 }

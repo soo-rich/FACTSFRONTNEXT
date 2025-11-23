@@ -12,10 +12,10 @@ import { createColumnHelper } from '@tanstack/react-table'
 
 import { toast } from 'react-toastify'
 
-// MUI Imports
-import Checkbox from '@mui/material/Checkbox'
 
 import Tooltip from '@mui/material/Tooltip'
+
+import Button from '@mui/material/Button'
 
 import UtiliMetod from '@/utils/utilsmethod'
 import OptionMenu from '@core/components/option-menu'
@@ -97,13 +97,6 @@ const BordereauList = () => {
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('adopte', {
-        header: 'Adoptée',
-        cell: ({ row }) => <Tooltip placement={'top'} title={row.original.adopte ? 'Adopter' : 'Nom Adopter'}>{
-          row.original.adopte? <i className={' bg-success text-2xl tabler-square-rounded-check-filled'}></i> :
-            <i className={'bg-error text-2xl tabler-square-rounded-x'}></i>
-        }</Tooltip>
-      }),
       columnHelper.accessor('reference', {
         header: 'Reference',
         cell: info => info.getValue()
@@ -136,64 +129,37 @@ const BordereauList = () => {
         header: 'Numero Proforma',
         cell: ({row}) =>(<Link href={getLocalizedUrl(`/dossier/${row.original.numeroProforma}`, locale as Locale)}>{row.original.numeroProforma}</Link>)
       }),
+      columnHelper.accessor('adopte', {
+        header: 'Status',
+        cell: ({ row }) =>
+          row.original.adopte?  'Adoptée' :
+            <Button color={'primary'} variant={'outlined'} className={'hover:bg-primary hover:text-white'}
+                    onClick={() =>  AdoptMutation.mutate(row.original.id)}>Adopter</Button>
+
+      }),
       columnHelper.display({
-        id: 'actions', // Important: donner un ID à la colonne display
+        id: 'actions', // Important : donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
           <div className="flex gap-2">
             <Tooltip title={'Voir le PDF'}>
             <CustomIconButton
-              href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
+              href={getLocalizedUrl(`/docs/${row.original.numero}`, locale as Locale)}
               className="cursor-pointer text-green-600 hover:text-green-800"
             >
               <i className="tabler-file-type-pdf" />
             </CustomIconButton>
             </Tooltip>
-            {!row.original.adopte && ( <Tooltip title={'Adopter'}><CustomIconButton
-              onClick={() => {
-                AdoptMutation.mutate(row.original.id)
-              }}
-              className="cursor-pointer text-primary"
-            >
-              <i className="tabler-check" />
-            </CustomIconButton></Tooltip>)}
-            <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
-              iconClassName="text-textSecondary"
-              options={[
-                {
-                  text: 'Details',
-                  icon: 'tabler-eye',
-                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
-                },
-                {
-                  text: 'Adapter',
-                  icon: 'tabler-check',
-                  menuItemProps: {
-                    disabled: row.original.adopte,
-                    className: row.original.adopte ? 'flex items-center gap-2 text-text Secondary line-through' :
-                      'flex items-center gap-2 text-textSecondary',
+            <Tooltip title={`Supprimer ${row.original.numero}`} placement={'top'}>
+            <CustomIconButton
 
-                    onClick: () => {
-                      AdoptMutation.mutate(row.original.id)
-                    }
-                  }
-                },
-                {
-                  text: 'Supprimer',
-                  icon: 'tabler-trash text-red-600',
-                  menuItemProps: {
-                    onClick: () =>
-                      UtiliMetod.SuppressionConfirmDialog({
-                        data: row.original.reference,
-                        confirmAction: () => DeleteMutation.mutate(row.original.id)
-                      })
-                    ,
-                    className: 'flex items-center gap-2 text-textSecondary '
-                  }
-                }
-              ]}
-            />
+              className="cursor-pointer flex items-center gap-2 text-textSecondary"
+            >
+              <i className="tabler-trash text-red-600" />
+            </CustomIconButton>
+            </Tooltip>
+
+
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne

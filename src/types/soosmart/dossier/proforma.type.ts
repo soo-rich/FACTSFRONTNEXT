@@ -8,6 +8,7 @@ export type ProformaType = {
   id: string;
   reference: string;
   numero: string;
+  uniqueIdDossier: string;
   articleQuantiteslist: Article_Quantite[];
   total_ht: number;
   total_ttc: number;
@@ -16,6 +17,7 @@ export type ProformaType = {
   date: Date;
   signby: string;
   adopted: boolean;
+  old: boolean;
 };
 
 export const schemaProforma = v.object({

@@ -16,8 +16,22 @@ const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>)
     children: [
       {
         label: dictionary['navigation'].dossier,
-        href: '/dossier',
-        icon: 'tabler-file-description'
+        icon: 'tabler-file-description',
+        children:[
+          {
+            label: dictionary['navigation'].case.proforma,
+            href: '/proforma',
+          },{
+            label: dictionary['navigation'].case.purchase_order,
+            href: '/purchase_order',
+          },{
+            label: dictionary['navigation'].case.order_slip,
+            href: '/order_slip',
+          },{
+            label: dictionary['navigation'].invoice,
+            href: '/invoice',
+          },
+        ]
       },
     ]
   },

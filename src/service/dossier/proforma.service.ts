@@ -41,7 +41,7 @@ export class ProformaService {
     return (await instance.get<ProformaType>(url + `/${numero}`)).data
   }
 
-  static async Updatedata(id: string, article_quantite: Article_QuantiteSave[]) {
+  static async Updatedata(id: string, article_quantite: ProformaSaveV2) {
     return (await instance.put<ProformaType>(url + `/${id}`, article_quantite)).data
   }
 
