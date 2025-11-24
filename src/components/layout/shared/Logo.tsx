@@ -2,7 +2,7 @@
 
 // React Imports
 import { useEffect, useRef } from 'react'
-import type { CSSProperties } from 'react'
+import type { CSSProperties, SVGAttributes } from 'react'
 
 // Third-party Imports
 import styled from '@emotion/styled'
@@ -44,7 +44,7 @@ const LogoText = styled.span<LogoTextProps>`
       : 'opacity: 1; margin-inline-start: 12px;'}
 `
 
-const Logo = ({ color }: { color?: CSSProperties['color'] }) => {
+const Logo = ({ color, svg }: { color?: CSSProperties['color'], svg?: SVGAttributes<SVGElement> }) => {
   // Refs
   const logoTextRef = useRef<HTMLSpanElement>(null)
 
@@ -72,7 +72,7 @@ const Logo = ({ color }: { color?: CSSProperties['color'] }) => {
 
   return (
     <div className='flex items-center'>
-      <SoosmartLogo className='text-2xl text-primary' />
+      <SoosmartLogo className='text-2xl' {...svg} />
       <LogoText
         color={color}
         ref={logoTextRef}

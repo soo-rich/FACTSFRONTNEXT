@@ -68,11 +68,6 @@ const Login = () => {
         username: '',
         password: ''
       },
-      mode: 'onSubmit',
-      reValidateMode: 'onChange',
-      criteriaMode: 'all',
-      shouldFocusError: true,
-      shouldUnregister: true
     }
   )
 
@@ -111,7 +106,7 @@ const Login = () => {
           </Link>
           <div className="flex flex-col gap-1 mbe-6">
             <Typography variant="h6" className={'text-center'}>Bienvenue sur votre plateforme de gestion! 👋🏻</Typography>
-           {/* <Typography>
+            {/* <Typography>
               Veuillez vous connecter pour continuer
             </Typography>*/}
           </div>
@@ -126,10 +121,7 @@ const Login = () => {
                   autoFocus
                   fullWidth
                   label="Nom d'utilsateur"
-                  onChange={e => {
-                    field.onChange(e.target.value)
 
-                  }}
                   {...((errors.username) && {
                     error: true,
                     helperText: errors?.password?.message
@@ -147,10 +139,7 @@ const Login = () => {
                 placeholder="············"
                 id="outlined-adornment-password"
                 type={isPasswordShown ? 'text' : 'password'}
-                onChange={e => {
-                  field.onChange(e.target.value)
 
-                }}
                 {...((errors.password) && {
                   error: true,
                   helperText: errors?.password?.message

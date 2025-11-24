@@ -1,14 +1,15 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import type { SyntheticEvent } from 'react';
+import { useEffect, useMemo, useState } from 'react'
 
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { Controller, useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 
 import { toast } from 'react-toastify'
-import { Grid2, TextareaAutosize } from '@mui/material'
+import { createFilterOptions, Grid2, TextareaAutosize } from '@mui/material'
 
 import Typography from '@mui/material/Typography'
 import Checkbox from '@mui/material/Checkbox'
@@ -26,9 +27,18 @@ import CustomAutocomplete from '@core/components/mui/Autocomplete'
 import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
 import AddEditClient from '@views/soosmart/client/add-edit-client'
 
-const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<ProjetType>) => {
 
+type SelectType = {
+  id: string
+  value: string
+}
+
+const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<ProjetType>) => {
+  const queryClient = useQueryClient()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [clientadded, setClientAdded] = useState<string | null>(null)
+
+  const [clientSelected, setClientSelected] = useState<SelectType | null>(null)
 
   const {
     control,
@@ -58,14 +68,7 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
-  const handlesuccess = (id: string) => {
-    queryClient.invalidateQueries({ queryKey: querykey }).then(() => {
-      console.log('ok')
-    })
-    setTimeout(() => {
-      setValue('client_id', id)
-    }, 500)
-  }
+
 
   const AddMutation = useMutation({
     mutationFn: async (data: SaveProjet) => {
@@ -102,7 +105,7 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
       return await ProjetService.updateProjet(data, projet?.id)
     },
     onSuccess: (data) => {
-      toast.success(`Mise à jour du projet ${data.projet_type}`)
+      toast.success(`Mise à jour du projet ${data?.projet_type}`)
       reset({
         projet_type: '',
         description: '',
@@ -143,6 +146,32 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
       onCancel()
     }
   }
+
+  const handleAddClient = async (id: string) => {
+    await queryClient.invalidateQueries({ queryKey: querykey })
+    console.log('after refetch')
+    setClientSelected(client?.find(item => item.id === id) || null)
+    setClientAdded(id)
+    setIsModalOpen(false)
+  }
+
+  const filterOptionsClient = createFilterOptions({
+    matchFrom: 'any',
+    stringify: (option: SelectType) => option.value
+  })
+
+  const client = useMemo(() => data?.map(item => ({ id: item.id, value: item.nom + ' - ' + item.sigle })) || [], [data]);
+
+  const handleSelectClient = (event: SyntheticEvent, newValue: SelectType | null) => {
+    setClientSelected(newValue)
+    setValue('client_id', newValue?.id || '')
+
+  }
+
+  useEffect(() => {
+    setClientSelected(client?.find(item => item.id === clientadded) || null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projet, clientadded])
 
   return (
     <>
@@ -192,17 +221,16 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
           {!projet && (<Grid2 container direction={'row'} spacing={3}>
             <Grid2 size={10}>
               <Controller
-                render={({ field }) => (
+                render={() => (
                   <CustomAutocomplete
-                    options={data || []}
+                    options={client || []}
                     hidden={!!projet}
+                    value={clientSelected}
+                    filterOptions={filterOptionsClient}
                     fullWidth
-                    onChange={(_event, newvalue) => {
-                      field.onChange(newvalue?.id)
-                    }}
-                    getOptionKey={option => option.id}
+                    onChange={handleSelectClient}
                     getOptionLabel={option => {
-                      return option.nom + ' - ' + option.sigle
+                      return option.value || ''
                     }}
                     error={!!errors.client_id}
                     {...(errors.client_id && {
@@ -303,10 +331,10 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
         title={'Ajouter un Client'}
       >
         <AddEditClient onSuccess={(data) => {
-          setIsModalOpen(false)
+
 
           if ((data && (!Array.isArray(data)))) {
-            handlesuccess(data?.id)
+            handleAddClient(data.id)
           }
 
         }} onCancel={() => {

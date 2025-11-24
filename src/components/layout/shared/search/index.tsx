@@ -22,9 +22,10 @@ import { useSettings } from '@core/hooks/useSettings'
 // Style Imports
 
 // Data Imports
-import AddProforma from '@/views/soosmart/dossier/proforma/add-proforma'
 import { ProformaService } from '@/service/dossier/proforma.service'
 import { StatAPIService } from '@/service/statistique/stat-api.service'
+import DefaultDialog from '@/components/dialogs/unique-modal/DefaultDialog'
+import AddProformaModal from '@/views/soosmart/dossier/proforma/form/add-proforma-modal'
 
 
 const ShurtCutProforma = () => {
@@ -69,19 +70,27 @@ const ShurtCutProforma = () => {
           <div className="whitespace-nowrap select-none text-textDisabled">Proforma Crtl + K</div>
         </div>
       )}
-      <AddProforma open={open} handleClose={() => setOpen(false)} onSucces={() => {
-        Promise.all(
-          [
-            queryClient.invalidateQueries({
-              queryKey: [ProformaService.PROFORMA_KEY]
-            }),
-            queryClient.invalidateQueries({
-              queryKey: [StatAPIService.STAT_KEY]
-            })
-          ]
-        ).then(r => r)
+      <DefaultDialog dialogMaxWidth={'md'} open={open} setOpen={setOpen} onClose={() => {
+        setOpen(false)
 
-      }} />
+      }} title={`Construire un Proforma`}>
+        <AddProformaModal onCancel={() => {
+          setOpen(false)
+        }} onSuccess={() => {
+          setOpen(false)
+          Promise.all(
+            [
+              queryClient.invalidateQueries({
+                queryKey: [ProformaService.PROFORMA_KEY]
+              }),
+              queryClient.invalidateQueries({
+                queryKey: [StatAPIService.STAT_KEY]
+              })
+            ]
+          ).then(r => r)
+        }} />
+      </DefaultDialog>
+
     </>
   )
 }
