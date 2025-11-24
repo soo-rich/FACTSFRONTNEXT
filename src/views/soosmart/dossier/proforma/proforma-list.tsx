@@ -25,7 +25,6 @@ import TableGeneric from '@/components/table/TableGeneric'
 import { ProformaService } from '@/service/dossier/proforma.service'
 import type { ProformaType } from '@/types/soosmart/dossier/proforma.type'
 import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
-import AddProforma from '@views/soosmart/dossier/proforma/add-proforma'
 
 
 import { getLocalizedUrl } from '@/utils/i18n'
@@ -129,9 +128,9 @@ const ProformaList = () => {
       }),
       columnHelper.accessor('adopted', {
         header: 'Status',
-        cell: ({ row }) =>row.original.old?<Chip label={'Rejétée'} variant='tonal' color={'error'}/>: row.original.adopted ? <Chip label={'Adoptée'} variant='tonal' color={'success'}/> :
+        cell: ({ row }) => row.original.old ? <Chip label={'Rejétée'} variant='tonal' color={'error'} /> : row.original.adopted ? <Chip label={'Adoptée'} variant='tonal' color={'success'} /> :
           <Button disabled={row.original.old} color={'primary'} variant={'outlined'} className={'hover:bg-primary hover:text-white'}
-                  onClick={() => handleClickToAdopt(row.original)}>Adopter</Button>
+            onClick={() => handleClickToAdopt(row.original)}>Adopter</Button>
       }),
       columnHelper.display({
         id: 'actions', // Important : donner un ID à la colonne display
@@ -148,7 +147,7 @@ const ProformaList = () => {
               </CustomIconButton>
             </Tooltip>
 
-            {!row.original.old&&!row.original.adopted&&(<Tooltip title={'mettre a jour'}>
+            {!row.original.old && !row.original.adopted && (<Tooltip title={'mettre a jour'}>
               <CustomIconButton
                 onClick={() => {
                   setProformaSelect(row.original)
@@ -198,7 +197,7 @@ const ProformaList = () => {
           action: () => setIsModalOpen(true)
         }}
       />
-     {/* <AddProforma data={proformaselect} open={isModalOpen} handleClose={() => {
+      {/* <AddProforma data={proformaselect} open={isModalOpen} handleClose={() => {
         setIsModalOpen(false)
         setProformaSelect(undefined)
       }} onSucces={() => {
@@ -228,7 +227,7 @@ const ProformaList = () => {
       <DefaultDialog dialogMaxWidth={'md'} open={isModalOpen} setOpen={setIsModalOpen} onClose={() => {
         setIsModalOpen(false)
         setProformaSelect(undefined)
-      }} title={`Construire un Proforma ${proformaselect?`à partir de ${proformaselect.numero}`:''}`}>
+      }} title={`Construire un Proforma ${proformaselect ? `à partir de ${proformaselect.numero}` : ''}`}>
         <AddProformaModal data={proformaselect} onCancel={() => {
           setIsModalOpenAdopt(false)
         }} onSuccess={() => {

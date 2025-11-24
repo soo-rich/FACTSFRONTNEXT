@@ -1,6 +1,6 @@
 import type { StepIconProps } from '@mui/material/StepIcon'
 
-import { BadgeInfo, BaggageClaim, CircleDot, Hash, Split, ToyBrick } from 'lucide-react'
+import { BadgeInfo, BaggageClaim, CircleDot, Hash, Split } from 'lucide-react'
 
 import ColorlibStepIconRoot from '@views/soosmart/dossier/proforma/form/components/ColorlibStepIconRoot'
 
