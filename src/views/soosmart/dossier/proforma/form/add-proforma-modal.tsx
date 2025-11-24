@@ -309,25 +309,18 @@ const AddProformaModal = ({ onCancel, onSuccess, data: proforma }: AddEditFormTy
             Précédent
           </Button>
           {steps.length - 1 === activeStep ? (<Button
-
-
+            variant='contained'
             type={'submit'}
-            endIcon={steps.length - 1 === activeStep ? <Send size={24} /> : <ArrowRightIcon size={24} />}
-            onClick={() => handleChangeStep('next')}
-
-            className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            endIcon={<Send size={24} />}
           >
-            {steps.length - 1 === activeStep ? 'Soumettre' : 'Suivant'}
+            {proforma ? `Modifier` : 'Soumettre'}
           </Button>) :
             (<Button
-
               type={'button'}
-              endIcon={steps.length - 1 === activeStep ? <Send size={24} /> : <ArrowRightIcon size={24} />}
+              endIcon={<ArrowRightIcon size={24} />}
               onClick={() => handleChangeStep('next')}
-
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-              {steps.length - 1 === activeStep ? 'Soumettre' : 'Suivant'}
+              Suivant
             </Button>)}
         </div>
 
