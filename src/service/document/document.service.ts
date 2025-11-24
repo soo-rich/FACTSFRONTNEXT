@@ -36,8 +36,22 @@ export class DocumentService {
       const fileURL = URL.createObjectURL(file)
       const link = document.createElement('a')
 
+      // Extraire le nom du fichier depuis le header content-disposition
+      const contentDisposition = res.headers['Content-Disposition'] || res.headers['content-disposition']
+      let fileName = `${numero}.pdf` // Nom par défaut
+
+      console.log('Content-Disposition Header:', res.headers)
+
+      if (contentDisposition) {
+        const fileNameMatch = contentDisposition.match(/filename="?([^"]+)"?/)
+
+        if (fileNameMatch && fileNameMatch[1]) {
+          fileName = fileNameMatch[1]
+        }
+      }
+
       link.href = fileURL
-      link.download = res.data.fileName
+      link.download = fileName
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
