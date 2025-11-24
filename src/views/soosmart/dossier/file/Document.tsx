@@ -76,14 +76,14 @@ const DocumentViews = () => {
               // <div ref={compoenentRef} className="printable-area">
               <DefaultDesignFact docs={data} signe={signed} role={role} />
 
-            // </div>
+              // </div>
 
             ) : null
         }
       </Grid>
       <Grid size={{ xs: 12, md: 3, lg: 4 }} className={'no-print'}>
         <DocumentsActions id_facture={data?.id} UpdateSignature={setSigned} UpdateRole={setRole} paied={data?.paied}
-                          printFonction={()=>window.print()} />
+          printFonction={() => DocumentService.generatePdf(data?.numero || '')} />
       </Grid>
     </Grid>
   )

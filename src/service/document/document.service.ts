@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify'
+
 import instance from '@/service/axios-manager/instance'
 import type { DocumentDTO } from '@/types/soosmart/dossier/DocumentDTO'
 
@@ -25,6 +27,27 @@ export class DocumentService {
   }
 
   static async generatePdf(numero: string) {
-    return (await instance.get<DocumentDTO>(`${url}/generate/${numero}`)).data
+    const response = instance.get(`${url}/generate/${numero}`, { responseType: 'arraybuffer' })
+
+    //telecharger le document PDF
+
+    response.then(res => {
+      const file = new Blob([res.data], { type: 'application/pdf' })
+      const fileURL = URL.createObjectURL(file)
+      const link = document.createElement('a')
+
+      link.href = fileURL
+      link.download = res.data.fileName
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(fileURL)
+    })
+
+    toast.promise(response, {
+      pending: 'Génération du PDF en cours...',
+      success: 'PDF généré avec succès !',
+      error: 'Erreur lors de la génération du PDF.'
+    })
   }
 }
