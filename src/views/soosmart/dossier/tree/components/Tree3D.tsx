@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 
-import type { TreeNodeType } from "@/types/soosmart/dossier/TreeNode.type";
+import type { TreeNodeType, TreeNodeEnumType } from "@/types/soosmart/dossier/TreeNode.type";
 import { Node3D } from "./Node3D";
 
 export function Tree3D({
@@ -11,13 +11,23 @@ export function Tree3D({
   depth = 0,
   angle = 0,
   radius = 4,
-  onNodeClick
+  onNodeClick,
+  collapsedNodes,
+  onToggleCollapse,
+  searchQuery,
+  filterType,
+  matchesSearch
 }: {
   node: TreeNodeType;
   depth?: number;
   angle?: number;
   radius?: number;
   onNodeClick?: (node: TreeNodeType) => void;
+  collapsedNodes?: Set<string>;
+  onToggleCollapse?: (nodeId: string) => void;
+  searchQuery?: string;
+  filterType?: TreeNodeEnumType | "ALL";
+  matchesSearch?: (node: TreeNodeType) => boolean;
 }) {
   const groupRef = useRef<any>();
 
@@ -26,6 +36,15 @@ export function Tree3D({
   const z = Math.sin(angle) * radius;
 
   const childCount = node.children?.length || 0;
+  const isCollapsed = collapsedNodes?.has(node.id) || false;
+
+  // Vérifier si le nœud correspond au filtre
+  const matchesFilter = !filterType || filterType === "ALL" || node.type === filterType;
+  const matchesSearchQuery = !matchesSearch || matchesSearch(node);
+  const isVisible = matchesFilter && matchesSearchQuery;
+
+  // Taille dynamique selon le nombre d'enfants
+  const nodeSize = 0.5 + Math.min(childCount * 0.05, 0.3);
 
   // Animation de rotation douce
   useFrame((state) => {
@@ -34,13 +53,24 @@ export function Tree3D({
     }
   });
 
+  if (!isVisible) return null;
+
   return (
     <group ref={groupRef}>
       {/* Nœud principal */}
-      <Node3D node={node} position={[x, y, z]} onNodeClick={onNodeClick} />
+      <Node3D
+        node={node}
+        position={[x, y, z]}
+        onNodeClick={onNodeClick}
+        isCollapsed={isCollapsed}
+        onToggleCollapse={onToggleCollapse}
+        hasChildren={childCount > 0}
+        nodeSize={nodeSize}
+        highlightSearch={!!searchQuery && matchesSearchQuery}
+      />
 
-      {/* Lignes de connexion vers les enfants avec animation */}
-      {node.children?.map((child, i) => {
+      {/* Lignes de connexion et enfants (masqués si collapsed) */}
+      {!isCollapsed && node.children?.map((child, i) => {
         const step = (Math.PI * 2) / childCount;
         const childAngle = angle + (i - childCount / 2) * step;
         const childRadius = radius + 3;
@@ -77,6 +107,11 @@ export function Tree3D({
               angle={childAngle}
               radius={childRadius}
               onNodeClick={onNodeClick}
+              collapsedNodes={collapsedNodes}
+              onToggleCollapse={onToggleCollapse}
+              searchQuery={searchQuery}
+              filterType={filterType}
+              matchesSearch={matchesSearch}
             />
           </group>
         );
