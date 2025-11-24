@@ -47,10 +47,11 @@ const AddProformaModal = ({ onCancel, onSuccess, data: proforma }: AddEditFormTy
     reset,
     setValue,
     getValues,
+    watch,
     formState: { errors }
   } = useForm<ProformaSaveV2>({
     resolver: valibotResolver(schemaProformaV2),
-
+    mode: 'onChange',
     defaultValues: {
       articleQuantiteslist: proforma?.articleQuantiteslist.map(item => ({
         libelle: item.article,
@@ -234,15 +235,7 @@ const AddProformaModal = ({ onCancel, onSuccess, data: proforma }: AddEditFormTy
 
   useEffect(() => {
     if (proforma) {
-      // reset({
-      //   reference: proforma.reference,
-      //   articleQuantiteslist: proforma.articleQuantiteslist.map(item => ({
-      //     libelle: item.article,
-      //     description: item.description,
-      //     prix_unitaire: item.prix_article,
-      //     quantite: item.quantite
-      //   }))
-      // })
+
       setValue('reference', proforma.reference)
 
       setValue('articleQuantiteslist', proforma.articleQuantiteslist.map(item => ({
@@ -255,10 +248,36 @@ const AddProformaModal = ({ onCancel, onSuccess, data: proforma }: AddEditFormTy
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proforma])
 
+  const validateCurrentStep = () => {
+    switch (activeStep) {
+      case 0: { // Référence
+        const reference = watch('reference')
+
+        return reference && reference.length >= 3 && !errors.reference
+      }
+
+      case 2: {// Projet/Client
+
+        return projet ? watch('projet_id') !== null : watch('client_id') !== null
+      }
+
+      case 3: // Articles
+        return fields.length > 0
+
+      default:
+        return true
+    }
+  }
+
   const handleChangeStep = (action: 'next' | 'back') => {
     if (action === 'next') {
 
       if (activeStep === steps.length - 1) {
+        return
+      }
+
+      // Valider l'étape courante avant de continuer
+      if (!validateCurrentStep()) {
         return
       }
 
@@ -285,7 +304,7 @@ const AddProformaModal = ({ onCancel, onSuccess, data: proforma }: AddEditFormTy
 
 
   return (
-    <form noValidate className="w-full h-full p-8" onSubmit={handleSubmit(handleSubmitForm)}>
+    <form noValidate className="w-full h-full p-8" >
       <Stack sx={{ width: '100%' }} spacing={4}>
         <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
           {steps.map((label, index) => (
@@ -308,20 +327,16 @@ const AddProformaModal = ({ onCancel, onSuccess, data: proforma }: AddEditFormTy
           >
             Précédent
           </Button>
-          {steps.length - 1 === activeStep ? (<Button
+
+          <Button
+            type={'button'}
             variant='contained'
-            type={'submit'}
-            endIcon={<Send size={24} />}
+            endIcon={steps.length - 1 === activeStep ? <Send size={24} /> : <ArrowRightIcon size={24} />}
+            onClick={() => { steps.length - 1 === activeStep ? handleSubmit(handleSubmitForm)() : handleChangeStep('next') }}
+            disabled={!validateCurrentStep()}
           >
-            {proforma ? `Modifier` : 'Soumettre'}
-          </Button>) :
-            (<Button
-              type={'button'}
-              endIcon={<ArrowRightIcon size={24} />}
-              onClick={() => handleChangeStep('next')}
-            >
-              Suivant
-            </Button>)}
+            {steps.length - 1 === activeStep ? 'Valider' : 'Suivant'}
+          </Button>
         </div>
 
       </Stack>

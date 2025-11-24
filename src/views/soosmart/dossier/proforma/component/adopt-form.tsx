@@ -77,19 +77,16 @@ const AdoptForm = (props: AddEditFormType<any>) => {
   })
 
   const handleSubmitForm = (data: PurchaseOrderSave) => {
-    console.log(data)
-
     AdoptMutation.mutate(data)
-
   }
 
   const handleCancel = () => {
 
-     reset({
-       filename: '',
-       numeroProforma: '',
-       file: undefined
-     })
+    reset({
+      filename: '',
+      numeroProforma: '',
+      file: undefined
+    })
 
     if (onCancel) {
       onCancel()
@@ -131,13 +128,13 @@ const AdoptForm = (props: AddEditFormType<any>) => {
       gap: 1
     }}>
       <Button size={'small'} className={'rounded-2xl hover:bg-green-500/50 hover:text-green-600'} variant="contained"
-              color="primary" type="submit"
-              endIcon={<ThumbsUp size={20} className={'text-sm'} />} disabled={AdoptMutation.isPending}>
+        color="primary" type="submit"
+        endIcon={<ThumbsUp size={20} className={'text-sm'} />} disabled={AdoptMutation.isPending}>
         Adopter
       </Button>
       <Button size={'small'} className={'rounded-2xl hover:bg-red-500/50 hover:text-red-600'} variant="tonal"
-              color="inherit"
-              endIcon={<CloseIcon/>} disabled={AdoptMutation.isPending} onClick={handleCancel}>
+        color="inherit"
+        endIcon={<CloseIcon />} disabled={AdoptMutation.isPending} onClick={handleCancel}>
         Annuler
       </Button>
     </Grid2>
