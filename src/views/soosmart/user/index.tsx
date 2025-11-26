@@ -16,6 +16,8 @@ import Tooltip from '@mui/material/Tooltip'
 
 import { styled } from '@mui/material/styles'
 
+import classNames from 'classnames'
+
 import TableGeneric from '@components/table/TableGeneric'
 
 
@@ -68,7 +70,7 @@ const UserIndex = () => {
       return await UserService.getAllorOnebyEmail({
         params: {
           page: pageIndex, pagesize:
-          pageSize
+            pageSize
         }
       })
     },
@@ -106,15 +108,26 @@ const UserIndex = () => {
     }
   })
 
+  const iconStyleActive = classNames(
+    'tabler-square-rounded-check-filled',
+    'text-2xl text-green-600',
+    'cursor-pointer',
+    'hover:text-green-800'
+  );
+
+  const iconStyleInactive = classNames(
+    'tabler-square-rounded-x',
+    'text-2xl',
+    'cursor-pointer',
+    'hover:text-red-800',
+  );
+
+
+
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('actif', {
-        header: 'Actif',
-        cell: ({row}) => <Tooltip placement={'top'} title={row.original.actif ? 'Actif' : 'Non actif'}>{
-          row.original.actif ? <i className={' bg-success text-2xl tabler-square-rounded-check-filled cursor-pointer'}  onClick={ () => ActivateMutation.mutate(row.original.id)}></i> :
-            <i className={'bg-error text-2xl tabler-square-rounded-x cursor-pointer'} onClick={ () => ActivateMutation.mutate(row.original.id)} ></i>}</Tooltip>
-      }),
+
       columnHelper.accessor('nom', {
         header: 'User',
         cell: ({ row }) => (
@@ -154,8 +167,8 @@ const UserIndex = () => {
         header: 'Creer le .',
         cell: ({ row }) => (
           <Typography variant="body2"
-                      color={'info'}
-                      className="capitalize"
+            color={'info'}
+            className="capitalize"
           >{UtiliMetod.formatDate(row.original.dateCreation)}</Typography>
         ),
         enableHiding: true // Permet de cacher cette colonne
@@ -175,9 +188,24 @@ const UserIndex = () => {
             >
               <i className="tabler-edit" />
             </CustomIconButton>
+            <Tooltip placement={'top'} title={row.original.actif ? 'Désactiver utilisateur' : 'Activer utilisateur'}>
+              <CustomIconButton
+                onClick={() => {
+                  UtiliMetod.confirmDialog({
+                    title: row.original.nom,
+                    subtitle: `Voulez-vous ${row.original.actif ? 'désactiver' : 'activer'} cet utilisateur ?`,
+                    confirmAction: () =>
+                      ActivateMutation.mutate(row.original.id)
+                  })
+                }}
+              >
+                <i className={classNames(!row.original.actif ? iconStyleActive : iconStyleInactive)} />
+              </CustomIconButton>
+            </Tooltip>
             <CustomIconButton
-              onClick={() => UtiliMetod.SuppressionConfirmDialog({
-                data: row.original.nom,
+              onClick={() => UtiliMetod.confirmDialog({
+                title: row.original.nom,
+                subtitle: 'Voulez-vous supprimer cet utilisateur ?',
                 confirmAction: () => DeleteMutation.mutate(row.original.id)
               })}
               className="cursor-pointer text-red-600 hover:text-red-800"
@@ -219,7 +247,7 @@ const UserIndex = () => {
     <DefaultDialog
       open={isModalOpen}
       setOpen={setIsModalOpen}
-      onClose={()=>{
+      onClose={() => {
         setUserSelect(undefined)
       }}
       title={userselect ? ` Mettre a jour ${userselect.username}` : 'Ajouter un Utilisateur'}

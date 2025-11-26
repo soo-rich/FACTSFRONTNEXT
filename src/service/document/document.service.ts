@@ -12,11 +12,12 @@ export class DocumentService {
     return (await instance.get(`${url}/${numero}`, { responseType: 'arraybuffer' })).data
   }
 
-  static async signDocument(numero: string, signedBy: string) {
+  static async signDocument(numero: string, signedBy: string, role?: string) {
     return (
       await instance.patch<boolean>(`${url}/signe/${numero}`, null, {
         params: {
-          signedBy: signedBy
+          signedBy: signedBy,
+          signedByRole: role
         }
       })
     ).data

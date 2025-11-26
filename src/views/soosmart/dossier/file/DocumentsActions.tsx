@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Next Imports
 import { useParams } from 'next/navigation'
@@ -22,21 +22,24 @@ import { toast } from 'react-toastify'
 import DebounceInput from '@components/CustomInput/DebounceInput'
 import { DocumentTypes } from '@/types/soosmart/dossier/DocumentDTO'
 import { DocumentService } from '@/service/document/document.service'
-
 import { FactureService } from '@/service/dossier/facture.service'
+
 
 type DocumentsActionsType = {
   id_facture?: string,
   paied?: boolean,
+  signby?: string,
+  role?: string,
   UpdateSignature?: (signature: string) => void
   UpdateRole?: (role: string) => void
   printFonction?: () => void
 }
 
-const DocumentsActions = ({ id_facture, UpdateSignature, UpdateRole, paied, printFonction }: DocumentsActionsType) => {
+const DocumentsActions = ({ id_facture, UpdateSignature, UpdateRole, paied, printFonction, signby, role }: DocumentsActionsType) => {
   // States
-  const [signature, setSignature] = useState<string>('')
-  const [signaturerole, setSignatureRole] = useState<string>('')
+  const [signature, setSignature] = useState<string>(signby || '')
+  const [signaturerole, setSignatureRole] = useState<string>(role || '')
+  const [isSigning, setIsSigning] = useState<boolean>(false)
 
   // Hooks
   const { numero } = useParams()
@@ -60,8 +63,8 @@ const DocumentsActions = ({ id_facture, UpdateSignature, UpdateRole, paied, prin
   }, [numero])
 
   const SignatureMutation = useMutation({
-    mutationFn: async (signature: string) => {
-      return await DocumentService.signDocument(numero as string, signature)
+    mutationFn: async ({ signature, signaturerole }: { signature: string, signaturerole: string }) => {
+      return await DocumentService.signDocument(numero as string, signature, signaturerole)
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
@@ -125,6 +128,17 @@ const DocumentsActions = ({ id_facture, UpdateSignature, UpdateRole, paied, prin
     }
   })
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      UpdateSignature && UpdateSignature(signature)
+      UpdateRole && UpdateRole(signaturerole)
+      SignatureMutation.mutate({ signature, signaturerole })
+    }, 1000)
+
+    return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSigning])
+
   return (
     <Grid container spacing={6}>
       <Grid size={{ xs: 12 }}>
@@ -163,30 +177,28 @@ const DocumentsActions = ({ id_facture, UpdateSignature, UpdateRole, paied, prin
       <Grid size={{ xs: 12 }}>
         {
           documenttype !== DocumentTypes.BORDERAU ? (<Grid container spacing={6}>
-            <DebounceInput fullWidth label={`Signer par ${signature} `} value={signature} onChange={(value) => {
+            <DebounceInput onBlur={() => setIsSigning(!isSigning)} fullWidth label={`Signer par ${signature} `} value={signature} onChange={(value) => {
               if (value && typeof value !== 'number' && value?.length > 0) {
                 setSignature(value as string)
 
                 if (UpdateSignature) {
-                  SignatureMutation.mutate(value as string)
                   UpdateSignature(value)
                 }
               }
             }} debounce={2000} />
-            <DebounceInput fullWidth label={`Role`} value={signaturerole} onChange={(value) => {
+            <DebounceInput onBlur={() => setIsSigning(!isSigning)} fullWidth label={`Role`} value={signaturerole} onChange={(value) => {
               if (value && typeof value !== 'number' && value?.length > 0) {
                 setSignatureRole(value as string)
 
                 if (UpdateRole) {
                   UpdateRole(value)
                 }
+
               }
             }} />
           </Grid>
           ) : null
         }
-
-
       </Grid>
     </Grid>
   )
