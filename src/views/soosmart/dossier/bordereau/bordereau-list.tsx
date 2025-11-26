@@ -116,18 +116,20 @@ const BordereauList = () => {
         header: 'Créé le',
         cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
       }),
-      columnHelper.accessor('total_ht', {
-        header: 'Total HT',
-        cell: info => info.getValue()
-      }),
+
+      // columnHelper.accessor('total_ht', {
+      //   header: 'Total HT',
+      //   cell: info => info.getValue()
+      // }),
       columnHelper.accessor('total_ttc', {
-        header: 'Total TTC',
+        header: 'Total TTC (Fcfa)',
         cell: info => info.getValue()
       }),
-      columnHelper.accessor('total_tva', {
-        header: 'Total TVA',
-        cell: info => info.getValue()
-      }),
+
+      // columnHelper.accessor('total_tva', {
+      //   header: 'Total TVA',
+      //   cell: info => info.getValue()
+      // }),
       columnHelper.accessor('numeroProforma', {
         header: 'Numero Proforma',
         cell: ({ row }) => (<Link href={getLocalizedUrl(`/dossier/${row.original.numeroProforma}`, locale as Locale)}>{row.original.numeroProforma}</Link>)

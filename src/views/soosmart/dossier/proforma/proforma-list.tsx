@@ -115,18 +115,20 @@ const ProformaList = () => {
         header: 'Date de création',
         cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
       }),
-      columnHelper.accessor('total_ht', {
-        header: 'Total HT',
-        cell: info => info.getValue()
-      }),
+
+      // columnHelper.accessor('total_ht', {
+      //   header: 'Total HT',
+      //   cell: info => info.getValue()
+      // }),
       columnHelper.accessor('total_ttc', {
-        header: 'Total TTC',
+        header: 'Total TTC (Fcfa)',
         cell: info => info.getValue()
       }),
-      columnHelper.accessor('total_tva', {
-        header: 'Total TVA',
-        cell: info => info.getValue()
-      }),
+
+      // columnHelper.accessor('total_tva', {
+      //   header: 'Total TVA',
+      //   cell: info => info.getValue()
+      // }),
       columnHelper.accessor('adopted', {
         header: 'Status',
         cell: ({ row }) => row.original.old ? <Chip label={'Rejétée'} variant='tonal' color={'error'} /> : row.original.adopted ? <Chip label={'Adoptée'} variant='tonal' color={'success'} /> :

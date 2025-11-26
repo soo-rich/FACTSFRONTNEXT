@@ -99,18 +99,21 @@ const FactureList = () => {
         header: 'Créé le',
         cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
       }),
-      columnHelper.accessor('total_ht', {
-        header: 'Total HT',
-        cell: info => info.getValue()
-      }),
+
+      // columnHelper.accessor('total_ht', {
+      //   header: 'Total HT',
+      //   cell: info => info.getValue()
+      // }),
       columnHelper.accessor('total_ttc', {
-        header: 'Total TTC',
-        cell: info => info.getValue()
+        header: 'Total TTC (Fcfa)',
+        cell: info => info.getValue(),
+
       }),
-      columnHelper.accessor('total_tva', {
-        header: 'Total TVA',
-        cell: info => info.getValue()
-      }),
+
+      // columnHelper.accessor('total_tva', {
+      //   header: 'Total TVA',
+      //   cell: info => info.getValue()
+      // }),
       columnHelper.display({
         id: 'actions', // Important: donner un ID à la colonne display
         header: 'Actions',
