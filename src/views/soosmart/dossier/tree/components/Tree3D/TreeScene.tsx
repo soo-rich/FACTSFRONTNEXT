@@ -11,7 +11,7 @@ export default function TreeScene({ tree }: { tree: TreeNodeType }) {
   const [collapsedNodes, setCollapsedNodes] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<TreeNodeEnumType | "ALL">("ALL");
-  const [showStats, setShowStats] = useState(false);
+  const [showStats, setShowStats] = useState(true);
 
   // Calculer les statistiques de l'arbre
   const stats = useMemo(() => {
