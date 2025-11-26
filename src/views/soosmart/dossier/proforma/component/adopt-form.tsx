@@ -29,7 +29,7 @@ import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 import type { PurchaseOrderSave } from '@/types/soosmart/dossier/purchaseOrder.type'
 import { schemaPurchaseOrder } from '@/types/soosmart/dossier/purchaseOrder.type'
 import { PurchaseOrderService } from '@/service/dossier/purchaseOrder.service'
-import FileUploaderRestrictions from '@components/CustomInput/FileUploader'
+import { FileUploaderRestrictions } from '@components/CustomInput/FileUploader'
 
 
 const AdoptForm = (props: AddEditFormType<any>) => {

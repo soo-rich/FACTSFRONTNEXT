@@ -1,4 +1,3 @@
-import type { Article_QuantiteSave } from '@/types/soosmart/dossier/Article_Quantite'
 import type { ProformaSave, ProformaSaveV2, ProformaType } from '@/types/soosmart/dossier/proforma.type'
 import instance from '@/service/axios-manager/instance'
 import type { CustomresponseType } from '@/types/soosmart/customresponse.type'
