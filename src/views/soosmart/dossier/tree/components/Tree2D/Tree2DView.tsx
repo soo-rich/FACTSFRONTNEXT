@@ -112,15 +112,18 @@ export const Tree2DView = ({ tree }: Tree2DProps) => {
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault()
       const delta = e.deltaY * -0.001
-      const newScale = Math.min(Math.max(0.5, scale + delta), 2)
 
-      setScale(newScale)
+      setScale((prevScale) => {
+        const newScale = Math.min(Math.max(0.5, prevScale + delta), 2)
+
+        return newScale
+      })
     }
 
     container.addEventListener('wheel', handleWheel, { passive: false })
 
     return () => container.removeEventListener('wheel', handleWheel)
-  }, [scale])
+  }, [])
 
   // Gestion du drag
   const handleMouseDown = (e: React.MouseEvent) => {
