@@ -59,7 +59,8 @@ const BordereauList = () => {
           pagesize: pageSize
         })
     },
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
