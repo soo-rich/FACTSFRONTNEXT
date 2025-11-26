@@ -32,6 +32,7 @@ import type { Locale } from '@configs/i18n'
 import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
 import AdoptForm from '@views/soosmart/dossier/proforma/component/adopt-form'
 import AddProformaModal from '@views/soosmart/dossier/proforma/form/add-proforma-modal'
+import { DocumentService } from '@/service/document/document.service'
 
 
 const columnHelper = createColumnHelper<ProformaType>()
@@ -144,6 +145,14 @@ const ProformaList = () => {
                 className="cursor-pointer text-green-600 hover:text-green-800"
               >
                 <i className="tabler-file-type-pdf" />
+              </CustomIconButton>
+            </Tooltip>
+            <Tooltip title={'Télécharger le PDF'}>
+              <CustomIconButton
+                onClick={() => DocumentService.generatePdf(row.original.numero)}
+                className="cursor-pointer  hover:text-green-800"
+              >
+                <i className="tabler-download" />
               </CustomIconButton>
             </Tooltip>
 

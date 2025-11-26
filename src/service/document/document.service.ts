@@ -40,8 +40,6 @@ export class DocumentService {
       const contentDisposition = res.headers['Content-Disposition'] || res.headers['content-disposition']
       let fileName = `${numero}.pdf` // Nom par défaut
 
-      console.log('Content-Disposition Header:', res.headers)
-
       if (contentDisposition) {
         const fileNameMatch = contentDisposition.match(/filename="?([^"]+)"?/)
 
