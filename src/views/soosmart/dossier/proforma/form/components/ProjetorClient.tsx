@@ -30,7 +30,7 @@ const data: CustomInputVerticalData[] = [
   }
 ]
 
-const CustomVerticalRadioIcon = ({ handleChange: change, state }: { handleChange: (value: boolean) => void, state: boolean }) => {
+const CustomVerticalRadioIcon = ({ handleChange: change, state }: { handleChange?: (value: boolean) => void, state?: boolean }) => {
 
   // States
   const [selected, setSelected] = useState<string>(state ? 'projet' : 'client')

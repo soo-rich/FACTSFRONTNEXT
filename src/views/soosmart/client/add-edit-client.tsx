@@ -9,6 +9,8 @@ import { Grid2 } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 
 import Typography from '@mui/material/Typography'
+
+// @ts-ignore
 import 'react-international-phone/style.css'
 import { PhoneInput } from 'react-international-phone'
 import Button from '@mui/material/Button'
@@ -42,7 +44,7 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
 
   const addMutation = useMutation({
     mutationFn: async (data: ClientSave) => {
-      return( await ClientService.saveClient(data))
+      return (await ClientService.saveClient(data))
     },
     onSuccess: data => {
       toast.success(`Client ${data.nom} ajouté avec succès`)
@@ -66,7 +68,7 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
       return await ClientService.updateClient(client.id, data)
     },
     onSuccess: () => {
-      toast.success(`Client ${data.nom} mis à jour avec succès`)
+      toast.success(`Client ${client?.nom} mis à jour avec succès`)
       reset()
 
       if (onSuccess) {
@@ -104,7 +106,7 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
     <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
       <Grid2 container direction={'column'} spacing={3}>
         <Grid2 container direction={'row'} spacing={3}>
-          <Grid2 size={{md: client ? 12 : 10, xl: client ? 12 : 10,sm:  12 ,xs: 10 }}>
+          <Grid2 size={{ md: client ? 12 : 10, xl: client ? 12 : 10, sm: 12, xs: 10 }}>
             <Controller
               rules={{ required: true }}
               render={({ field }) => (
