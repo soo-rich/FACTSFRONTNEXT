@@ -8,18 +8,9 @@ const url = `user`
 export class UserService {
   static USER_KEY = 'user'
 
-  static async getAllorOnebyEmail({
-                                    email,
-                                    params
-                                  }: {
-    email?: string;
-    params?: ParamRequests;
-  }) {
+  static async getAllorOnebyEmail({ email, params }: { email?: string; params?: ParamRequests }) {
     return (
-      await instance.get<CustomresponseType<UtilisateurDto>>(
-        url + (email ? `/${email}` : ''),
-        { params: params }
-      )
+      await instance.get<CustomresponseType<UtilisateurDto>>(url + (email ? `/${email}` : ''), { params: params })
     ).data
   }
 
@@ -28,10 +19,10 @@ export class UserService {
   }
 
   static async useConnect() {
-    return (await instance.get<UtilisateurDto>(url+'/me')).data
+    return (await instance.get<UtilisateurDto>(url + '/me')).data
   }
 
-  static async update({ id, user }: { id: string, user: UtilisateurUpdate }) {
+  static async update({ id, user }: { id: string; user: UtilisateurUpdate }) {
     return (await instance.put<UtilisateurDto>(url + `/${id}`, user)).data
   }
 
@@ -43,10 +34,11 @@ export class UserService {
     return (await instance.get<boolean>(url + `/${id}/activate`)).data
   }
 
-  static async changepassword(value: {
-    oldPassword: string;
-    newPassword: string;
-  }) {
+  static async changepassword(value: { oldPassword: string; newPassword: string }) {
     return (await instance.post<boolean>(url + `/change-password`, value)).data
+  }
+
+  static async forgotUserPassword(email: string) {
+    return (await instance.post<boolean>(url + `/forgot-password`, { email })).data
   }
 }
