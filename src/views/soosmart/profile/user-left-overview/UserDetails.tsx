@@ -8,12 +8,22 @@ import Chip from '@mui/material/Chip'
 import Divider from '@mui/material/Divider'
 
 
+import { useQuery } from '@tanstack/react-query'
+
 import CustomAvatar from '@core/components/mui/Avatar'
 import Utilsmethod from '@/utils/utilsmethod'
 import type { UtilisateurDto } from '@/types/soosmart/utilisateur.type'
 
 //
 const UserDetails = ({ user: userData }: { user: UtilisateurDto }) => {
+
+  const { data } = useQuery({
+    queryKey: [userData.image + '-file'],
+    queryFn: async () => {
+      return (await Utilsmethod.getFileFormApi(userData.image ?? '', 'minio'))
+    },
+    enabled: !!userData.image
+  })
 
   return (
 
@@ -23,7 +33,7 @@ const UserDetails = ({ user: userData }: { user: UtilisateurDto }) => {
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-center flex-col gap-4">
               <div className="flex flex-col items-center gap-4">
-                <CustomAvatar alt="user-profile" src="https://picsum.photos/200" variant="rounded" size={120} />
+                <CustomAvatar alt="user-profile" src={data?.presigned || "https://picsum.photos/200"} variant="rounded" size={120} />
                 <Typography variant="h5">{`${userData.nom} ${userData.prenom}`}</Typography>
               </div>
               <Chip label={userData.role} color="info" size="small" variant="tonal" />
