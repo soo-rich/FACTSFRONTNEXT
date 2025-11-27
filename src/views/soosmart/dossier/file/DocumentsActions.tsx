@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 // Next Imports
 import { useParams } from 'next/navigation'
@@ -128,16 +128,6 @@ const DocumentsActions = ({ id_facture, UpdateSignature, UpdateRole, paied, prin
     }
   })
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      UpdateSignature && UpdateSignature(signature)
-      UpdateRole && UpdateRole(signaturerole)
-      SignatureMutation.mutate({ signature, signaturerole })
-    }, 1000)
-
-    return () => clearTimeout(timeout)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSigning])
 
   return (
     <Grid container spacing={6}>
@@ -196,6 +186,13 @@ const DocumentsActions = ({ id_facture, UpdateSignature, UpdateRole, paied, prin
 
               }
             }} />
+            <Button fullWidth variant="outlined" disabled={isSigning || signature.length === 0 || signaturerole.length === 0} onClick={() => {
+              UpdateSignature && UpdateSignature(signature)
+              UpdateRole && UpdateRole(signaturerole)
+              SignatureMutation.mutate({ signature, signaturerole })
+            }}>
+              Signer le {documenttype ? `${documenttype}  ${numero}` : 'Document non Reconnu '}
+            </Button>
           </Grid>
           ) : null
         }
