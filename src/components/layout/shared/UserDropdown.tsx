@@ -25,6 +25,8 @@ import Button from '@mui/material/Button'
 import { signOut, useSession } from 'next-auth/react'
 
 // Type Imports
+import { useQuery } from '@tanstack/react-query'
+
 import type { Locale } from '@configs/i18n'
 
 // Hook Imports
@@ -32,6 +34,7 @@ import { useSettings } from '@core/hooks/useSettings'
 
 // Util Imports
 import { getLocalizedUrl } from '@/utils/i18n'
+import UtiliMetod from '@/utils/utilsmethod'
 
 // Styled component for badge content
 const BadgeContentSpan = styled('span')({
@@ -84,7 +87,16 @@ const UserDropdown = () => {
     }
   }
 
-  console.log('session user dropdown', session)
+
+  const { data } = useQuery({
+    queryKey: [session?.user?.image + '-file'],
+    queryFn: async () => {
+      return (session?.user?.image && await UtiliMetod.getFileFormApi(session?.user?.image ?? '', 'minio'))
+    },
+    refetchOnMount: false,
+    enabled: !!session?.user?.image
+  })
+
 
   return (
     <>
@@ -98,7 +110,7 @@ const UserDropdown = () => {
         <Avatar
           ref={anchorRef}
           alt={session?.user?.name || ''}
-          src={session?.user?.image || ''}
+          src={data?.presigned || ''}
           onClick={handleDropdownOpen}
           className='cursor-pointer bs-[38px] is-[38px]'
         />
@@ -122,7 +134,7 @@ const UserDropdown = () => {
               <ClickAwayListener onClickAway={e => handleDropdownClose(e as MouseEvent | TouchEvent)}>
                 <MenuList>
                   <div className='flex items-center plb-2 pli-6 gap-2' tabIndex={-1}>
-                    <Avatar alt={session?.user?.name || ''} src={session?.user?.image || ''} />
+                    <Avatar alt={session?.user?.name || ''} src={data?.presigned || ''} />
                     <div className='flex items-start flex-col'>
                       <Typography className='font-medium' color='text.primary'>
                         {session?.user?.name || ''}
