@@ -3,12 +3,13 @@ import Grid from '@mui/material/Grid2'
 
 // Component Imports
 import UserDetails from './UserDetails'
+import type { UtilisateurDto } from '@/types/soosmart/utilisateur.type'
 
-const ProfileUserLeftOverview = () => {
+const ProfileUserLeftOverview = ({ userData }: { userData: UtilisateurDto }) => {
   return (
     <Grid container spacing={6}>
       <Grid size={{ xs: 12 }}>
-        <UserDetails />
+        <UserDetails user={userData} />
       </Grid>
     </Grid>
   )

@@ -1,14 +1,11 @@
 // Third-party Imports
 import CredentialProvider from 'next-auth/providers/credentials'
-import type {NextAuthOptions} from 'next-auth'
+import type { NextAuthOptions } from 'next-auth'
 
-import {AuthService} from "@/service/auth/auth-service";
-import {JwtUtils} from "@/service/jwt/JwtUtils";
-
+import { AuthService } from '@/service/auth/auth-service'
+import { JwtUtils } from '@/service/jwt/JwtUtils'
 
 export const authOptions: NextAuthOptions = {
-
-
   // ** Configure one or more authentication providers
   // ** Please refer to https://next-auth.js.org/configuration/options#providers for more `providers` options
   providers: [
@@ -23,8 +20,8 @@ export const authOptions: NextAuthOptions = {
        * username or password attributes manually in following credentials object.
        */
       credentials: {
-        username: {label: "Username", type: "text"},
-        password: {label: "Password", type: "password"},
+        username: { label: 'Username', type: 'text' },
+        password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
         /*
@@ -36,35 +33,34 @@ export const authOptions: NextAuthOptions = {
 
         try {
           // ** Login API Call to match the user credentials and receive user data in response along with his role
-          if (!credentials) return null;
+          if (!credentials) return null
 
           const res = await AuthService.login({
             username: credentials.username,
-            password: credentials.password,
-          });
+            password: credentials.password
+          })
 
           if (res.bearer && res.refresh) {
-            const userInfo = JwtUtils.decode(res.bearer);
+            const userInfo = JwtUtils.decode(res.bearer)
 
             return {
               id: userInfo?.sub,
               email: userInfo?.email,
-              name: userInfo?.nom || "Utilisateur",
+              name: userInfo?.nom + ' ' + userInfo?.prenom || 'Utilisateur',
               numero: userInfo?.numero,
               role: userInfo?.role,
+              image: userInfo?.image,
               bearer: res.bearer,
-              refresh: res.refresh,
-            };
+              refresh: res.refresh
+            }
           }
 
-          return null;
+          return null
         } catch (e: any) {
           throw new Error(e.message)
         }
       }
-    }),
-
-
+    })
 
     // ** ...add more providers here
   ],
@@ -99,11 +95,11 @@ export const authOptions: NextAuthOptions = {
      * the `session()` callback. So we have to add custom parameters in `token`
      * via `jwt()` callback to make them accessible in the `session()` callback
      */
-    async jwt({token, user}) {
-      return {...token, ...user}
+    async jwt({ token, user }) {
+      return { ...token, ...user }
     },
-    async session({session, token}) {
-      return {...session, ...token}
+    async session({ session, token }) {
+      return { ...session, ...token }
     }
   }
 }

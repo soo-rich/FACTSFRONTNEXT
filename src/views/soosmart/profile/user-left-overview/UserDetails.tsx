@@ -7,30 +7,15 @@ import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
 import Divider from '@mui/material/Divider'
 
-// Type Imports
-import { useQuery } from '@tanstack/react-query'
-
 
 import CustomAvatar from '@core/components/mui/Avatar'
-import { UserService } from '@/service/user/user.service'
-import LoadingWithoutModal from '@components/LoadingWithoutModal'
 import Utilsmethod from '@/utils/utilsmethod'
+import type { UtilisateurDto } from '@/types/soosmart/utilisateur.type'
 
 //
-const UserDetails = () => {
+const UserDetails = ({ user: userData }: { user: UtilisateurDto }) => {
 
-
-  const { data: userData, isLoading } = useQuery(
-    {
-      queryKey: [UserService.USER_KEY + 'info'],
-      queryFn: UserService.useConnect,
-      refetchOnWindowFocus: true,
-      refetchOnReconnect: false,
-      refetchOnMount: false
-    }
-  )
-
-  return isLoading ? <LoadingWithoutModal /> : userData ? (
+  return (
 
     <>
       <Card>
@@ -65,7 +50,7 @@ const UserDetails = () => {
                   Status
                 </Typography>
                 <Chip label={userData.actif ? 'Activer' : 'Desactiver'} color={userData.actif ? 'success' : 'error'}
-                      size="small" variant="tonal" />
+                  size="small" variant="tonal" />
               </div>
               <div className="flex items-center flex-wrap gap-x-1.5">
                 <Typography className="font-medium" color="text.primary">
@@ -84,7 +69,7 @@ const UserDetails = () => {
         </CardContent>
       </Card>
     </>
-  ) : null
+  )
 }
 
 export default UserDetails
