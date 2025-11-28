@@ -18,6 +18,8 @@ import { styled } from '@mui/material/styles'
 
 import classNames from 'classnames'
 
+import { KeyRound } from 'lucide-react'
+
 import TableGeneric from '@components/table/TableGeneric'
 
 
@@ -105,6 +107,18 @@ const UserIndex = () => {
     },
     onError: () => {
       toast.error('Erreur lors de l\'activation/désactivation de l\'utilisateur')
+    }
+  })
+
+  const ResetPasswordMutation = useMutation({
+    mutationFn: async (email: string) => {
+      return await UserService.forgotUserPassword(email)
+    },
+    onSuccess: () => {
+      toast.success('Réinitialisation du mot de passe effectuée. le Mail sera envoyé.')
+    },
+    onError: () => {
+      toast.error('Erreur lors de la réinitialisation du mot de passe')
     }
   })
 
@@ -200,6 +214,20 @@ const UserIndex = () => {
                 }}
               >
                 <i className={classNames(!row.original.actif ? iconStyleActive : iconStyleInactive)} />
+              </CustomIconButton>
+            </Tooltip>
+            <Tooltip placement={'top'} title={'reinitialiser le mot de passe'}>
+              <CustomIconButton
+                onClick={() => {
+                  UtiliMetod.confirmDialog({
+                    title: row.original.nom,
+                    subtitle: `Voulez-vous réinitialiser le mot de passe de ${row.original.nom} ?`,
+                    confirmAction: () =>
+                      ResetPasswordMutation.mutate(row.original.email)
+                  })
+                }}
+              >
+                <KeyRound className="text-2xl cursor-pointer hover:text-blue-800" />
               </CustomIconButton>
             </Tooltip>
             <CustomIconButton

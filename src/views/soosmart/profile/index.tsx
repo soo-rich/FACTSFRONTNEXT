@@ -19,7 +19,7 @@ const ProfilIndex = () => {
     {
       queryKey: [UserService.USER_KEY + 'info'],
       queryFn: UserService.useConnect,
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       refetchOnMount: false
     }
