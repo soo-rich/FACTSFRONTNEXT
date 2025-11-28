@@ -5,8 +5,8 @@ $VERSION = if ($args[0]) { $args[0] } else { Get-Date -Format "yyyyMMdd-HHmmss" 
 $LATEST_TAG = "latest"
 
 # Remonter au répertoire racine du projet
-$scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
-Set-Location "$scriptPath\.."
+# $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
+# Set-Location "$scriptPath\.."
 
 Write-Host "🚀 Début du processus de build et push..." -ForegroundColor Cyan
 Write-Host "📍 Répertoire: $(Get-Location)" -ForegroundColor Gray
