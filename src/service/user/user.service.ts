@@ -15,7 +15,18 @@ export class UserService {
   }
 
   static async create(user: UtilsateurRegister) {
-    return (await instance.post<UtilisateurDto>(url, user)).data
+    const formdata = new FormData()
+
+    if (user.image) {
+      formdata.append('image', user.image)
+    }
+
+    const userData = { ...user }
+
+    delete userData.image
+    formdata.append('user', new Blob([JSON.stringify(userData)], { type: 'application/json' }))
+
+    return (await instance.post<UtilisateurDto>(url, formdata)).data
   }
 
   static async useConnect() {
@@ -23,7 +34,18 @@ export class UserService {
   }
 
   static async update({ id, user }: { id: string; user: UtilisateurUpdate }) {
-    return (await instance.put<UtilisateurDto>(url + `/${id}`, user)).data
+    const formdata = new FormData()
+
+    if (user.image) {
+      formdata.append('image', user.image)
+    }
+
+    const userData = { ...user }
+
+    delete userData.image
+    formdata.append('user', new Blob([JSON.stringify(userData)], { type: 'application/json' }))
+
+    return (await instance.put<UtilisateurDto>(url + `/${id}`, formdata)).data
   }
 
   static async delete(id: string) {
@@ -39,6 +61,6 @@ export class UserService {
   }
 
   static async forgotUserPassword(email: string) {
-    return (await instance.post<boolean>(url + `/forgot-password`, { email })).data
+    return (await instance.get<boolean>(url + `/forget-password`, { params: { email } })).data
   }
 }

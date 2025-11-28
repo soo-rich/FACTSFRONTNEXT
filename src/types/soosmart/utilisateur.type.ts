@@ -1,5 +1,5 @@
 import type { InferInput } from 'valibot'
-import { picklist, custom, email, maxLength, minLength, object, pipe, regex, string, file, nullable } from 'valibot'
+import { picklist, custom, email, maxLength, minLength, object, pipe, regex, string, file, optional } from 'valibot'
 
 export type UtilisateurDto = {
   id: string
@@ -15,7 +15,7 @@ export type UtilisateurDto = {
 }
 
 export const userCreateSchema = object({
-  image: nullable(file()),
+  image: optional(file()),
   nom: pipe(string(), minLength(1, 'Le nom est requis')),
   prenom: pipe(string(), minLength(1, 'Le prénom est requis')),
   email: pipe(string(), minLength(1, "L'email est requis"), email('Email invalide')),
@@ -32,7 +32,7 @@ export const userCreateSchema = object({
 
 export const userUpdateSchema = object({
   id: pipe(string(), minLength(1, "L'id est requis")),
-  image: nullable(file()),
+  image: optional(file()),
   nom: pipe(string(), minLength(1, 'Le nom est requis')),
   prenom: pipe(string(), minLength(1, 'Le prénom est requis')),
   email: pipe(string(), minLength(1, "L'email est requis")),
