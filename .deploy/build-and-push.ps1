@@ -11,31 +11,6 @@ $LATEST_TAG = "latest"
 Write-Host "🚀 Début du processus de build et push..." -ForegroundColor Cyan
 Write-Host "📍 Répertoire: $(Get-Location)" -ForegroundColor Gray
 
-# # Nettoyage
-# Write-Host "🧹 Nettoyage des fichiers de build précédents..." -ForegroundColor Yellow
-# if (Test-Path ".next") {
-#     Remove-Item -Recurse -Force .next
-# }
-
-# # Installation des dépendances (avec script postinstall)
-# Write-Host "📦 Installation des dépendances..." -ForegroundColor Cyan
-# pnpm install
-
-# if ($LASTEXITCODE -ne 0) {
-#     Write-Host "❌ Échec de l'installation des dépendances" -ForegroundColor Red
-#     exit 1
-# }
-
-# # Build Next.js en local
-# Write-Host "🔨 Build de l'application Next.js..." -ForegroundColor Cyan
-# pnpm run build
-
-# if ($LASTEXITCODE -ne 0) {
-#     Write-Host "❌ Échec du build Next.js" -ForegroundColor Red
-#     exit 1
-# }
-
-# Write-Host "✅ Build Next.js réussi !" -ForegroundColor Green
 
 # Build de l'image Docker (le build Next.js se fait dans Docker)
 Write-Host "📦 Build de l'image Docker avec le build local..." -ForegroundColor Cyan
@@ -74,6 +49,20 @@ if ($LASTEXITCODE -eq 0) {
 } else {
     Write-Host "❌ Échec du push" -ForegroundColor Red
     exit 1
+}
+
+
+# Afficher la taille des images
+Write-Host "`n📊 Taille des images:" "Cyan"
+docker images | Select-String "$IMAGE_NAME"
+
+# Proposer de nettoyer les images de build
+Write-Host "`n🧹 Voulez-vous nettoyer les images de build intermédiaires? (O/N)" "Yellow"
+$response = Read-Host
+if ($response -eq "O" -or $response -eq "o") {
+    docker image prune -f --filter label=stage=builder
+    docker image prune -f --filter label=stage=base
+    Write-Host "✅ Images de build nettoyées" "Green"
 }
 
 Write-Host "🏁 Processus terminé avec succès !" -ForegroundColor Green
