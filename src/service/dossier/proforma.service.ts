@@ -1,5 +1,4 @@
-import type { Article_QuantiteSave } from '@/types/soosmart/dossier/Article_Quantite'
-import type { ProformaSave, ProformaType } from '@/types/soosmart/dossier/proforma.type'
+import type { ProformaSave, ProformaSaveV2, ProformaType } from '@/types/soosmart/dossier/proforma.type'
 import instance from '@/service/axios-manager/instance'
 import type { CustomresponseType } from '@/types/soosmart/customresponse.type'
 import type { ParamRequests } from '@/types/soosmart/pagination/paramrequestion.type'
@@ -11,6 +10,10 @@ export class ProformaService {
 
   static async PostData(data: ProformaSave) {
     return (await instance.post<ProformaType>(url, data)).data
+  }
+
+  static async PostDataWithArticle(data: ProformaSaveV2) {
+    return (await instance.post<ProformaType>(`${url}/with-article`, data)).data
   }
 
   static async getAll(params?: ParamRequests) {
@@ -37,7 +40,7 @@ export class ProformaService {
     return (await instance.get<ProformaType>(url + `/${numero}`)).data
   }
 
-  static async Updatedata(id: string, article_quantite: Article_QuantiteSave[]) {
+  static async Updatedata(id: string, article_quantite: ProformaSaveV2) {
     return (await instance.put<ProformaType>(url + `/${id}`, article_quantite)).data
   }
 

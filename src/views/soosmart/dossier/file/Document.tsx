@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useParams } from 'next/navigation'
 
@@ -8,21 +8,19 @@ import Grid from '@mui/material/Grid2'
 
 import { useQuery } from '@tanstack/react-query'
 
-import { useReactToPrint } from 'react-to-print'
 
 import DocumentsActions from '@views/soosmart/dossier/file/DocumentsActions'
 import { DocumentService } from '@/service/document/document.service'
 import LoadingWithoutModal from '@components/LoadingWithoutModal'
 import ErrorView from '@components/ErrorView'
 import DefaultDesignFact from '@views/soosmart/dossier/file/DefaultDesignFact'
-import usePrint from "@/hooks/usePrint"
 
 
 const DocumentViews = () => {
 
   const [signed, setSigned] = useState<string>('')
   const [role, setRole] = useState<string>('Directeur')
-  const compoenentRef = useRef(null)
+
 
   const { numero } = useParams()
   const querykey = useMemo(() => [DocumentService.REPORT_KEY, numero], [numero])
@@ -37,23 +35,6 @@ const DocumentViews = () => {
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleClickToPrint = useReactToPrint({
-    contentRef: compoenentRef,
-
-  })
-
-
-  const { printComponent } = usePrint();
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handlePrint = () => {
-    printComponent('mon-element-a-imprimer', {
-      title: 'Mon Document',
-      onBeforePrint: () => console.log('Début impression'),
-      onAfterPrint: () => console.log('Fin impression')
-    });
-  };
 
 
   useEffect(() => {
@@ -70,20 +51,15 @@ const DocumentViews = () => {
             <LoadingWithoutModal />
           ) : isError ? (
             <ErrorView />
-          ) : data ?
-            (
-
-              // <div ref={compoenentRef} className="printable-area">
-              <DefaultDesignFact docs={data} signe={signed} role={role} />
-
-            // </div>
-
-            ) : null
+          ) : data &&
+          (
+            <DefaultDesignFact docs={data} signe={signed} role={role} />
+          )
         }
       </Grid>
       <Grid size={{ xs: 12, md: 3, lg: 4 }} className={'no-print'}>
         <DocumentsActions id_facture={data?.id} UpdateSignature={setSigned} UpdateRole={setRole} paied={data?.paied}
-                          printFonction={()=>window.print()} />
+          printFonction={() => DocumentService.generatePdf(data?.numero || '')} signby={data?.signby} role={data?.role} />
       </Grid>
     </Grid>
   )

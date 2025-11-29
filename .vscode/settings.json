@@ -49,5 +49,6 @@
     "customizer",
     "iconify",
     "tanstack"
-  ]
+  ],
+  "kiroAgent.configureMCP": "Enabled"
 }

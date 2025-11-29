@@ -1,8 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { Controller, useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-
 
 import { toast } from 'react-toastify'
 
@@ -10,6 +9,8 @@ import { Grid2 } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 
 import Typography from '@mui/material/Typography'
+
+// @ts-ignore
 import 'react-international-phone/style.css'
 import { PhoneInput } from 'react-international-phone'
 import Button from '@mui/material/Button'
@@ -23,7 +24,6 @@ import { ClientService } from '@/service/client/client.service'
 import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 
 const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<ClientType>) => {
-  const queryclient = useQueryClient()
 
 
   const {
@@ -42,43 +42,34 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
     }
   })
 
-
   const addMutation = useMutation({
     mutationFn: async (data: ClientSave) => {
-      return await ClientService.saveClient(data)
+      return (await ClientService.saveClient(data))
     },
-    onSuccess: () => {
-      toast.success('Client ajouté avec succès')
+    onSuccess: data => {
+      toast.success(`Client ${data.nom} ajouté avec succès`)
       reset()
-      queryclient.invalidateQueries({
-        queryKey: [ClientService.CLIENT_KEY]
-      })
 
       if (onSuccess) {
-        onSuccess()
+        onSuccess(data)
       }
     },
     onError: () => {
-      toast.error('Erreur lors de l\'ajout du client')
+      toast.error("Erreur lors de l'ajout du client")
     }
   })
-
 
   const updateMutation = useMutation({
     mutationFn: async (data: ClientSave) => {
       if (!client?.id) {
-        throw new Error('l\'ID du client est requis pour la mise à jour')
+        throw new Error("l'ID du client est requis pour la mise à jour")
       }
-
 
       return await ClientService.updateClient(client.id, data)
     },
     onSuccess: () => {
-      toast.success('Client mis à jour avec succès')
+      toast.success(`Client ${client?.nom} mis à jour avec succès`)
       reset()
-      queryclient.invalidateQueries({
-        queryKey: [ClientService.CLIENT_KEY]
-      })
 
       if (onSuccess) {
         onSuccess()
@@ -89,7 +80,6 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
     }
   })
 
-
   const onSubmit = (data: ClientSave) => {
     if (client) {
       updateMutation.mutate(data)
@@ -99,15 +89,13 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
   }
 
   const handleCancel = () => {
-    reset(
-      {
-        nom: '',
-        lieu: '',
-        telephone: '',
-        sigle: '',
-        potentiel: false
-      }
-    )
+    reset({
+      nom: '',
+      lieu: '',
+      telephone: '',
+      sigle: '',
+      potentiel: false
+    })
 
     if (onCancel) {
       onCancel()
@@ -115,12 +103,13 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
   }
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+    <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
       <Grid2 container direction={'column'} spacing={3}>
         <Grid2 container direction={'row'} spacing={3}>
-          <Grid2 size={client ? 12 : 10}>
-            <Controller rules={{ required: true }} render={
-              ({ field }) => (
+          <Grid2 size={{ md: client ? 12 : 10, xl: client ? 12 : 10, sm: 12, xs: 10 }}>
+            <Controller
+              rules={{ required: true }}
+              render={({ field }) => (
                 <CustomTextField
                   {...field}
                   fullWidth
@@ -131,40 +120,36 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
                     helperText: errors?.nom?.message
                   })}
                 />
-              )
-            } name={'nom'} control={control} />
+              )}
+              name={'nom'}
+              control={control}
+            />
           </Grid2>
 
-          {client ? null : (<Grid2 size={2} container sx={{
-            alignItems: 'flex-end',
-            justifyContent: 'center'
-          }}>
-            <Controller render={
-              ({ field }) => (
-
-                // <CustomTextField
-                //   {...field}
-                //
-                //   type={"checkbox"}
-                //   label={'Potentiel'}
-                //   error={!!errors.potentiel}
-                //   {...(errors.potentiel && {
-                //     error: true,
-                //     helperText: errors?.potentiel?.message
-                //   })}
-                // />
-                <div className={'flex items-center gap-2 sm:flex-col'}>
-                  <Typography>Potentiel</Typography>
-                  <Checkbox  {...field} checked={field.value} />
-                </div>
-
-
-              )
-            } name={'potentiel'} control={control} />
-          </Grid2>)}
+          {client ? null : (
+            <Grid2
+              size={2}
+              container
+              sx={{
+                alignItems: 'flex-end',
+                justifyContent: 'center'
+              }}
+            >
+              <Controller
+                render={({ field }) => (
+                  <div className={'flex items-center gap-2 sm:flex-col'}>
+                    <Typography>Potentiel</Typography>
+                    <Checkbox {...field} checked={field.value} />
+                  </div>
+                )}
+                name={'potentiel'}
+                control={control}
+              />
+            </Grid2>
+          )}
         </Grid2>
-        <Controller render={
-          ({ field }) => (
+        <Controller
+          render={({ field }) => (
             <CustomTextField
               {...field}
               fullWidth
@@ -175,21 +160,24 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
                 helperText: errors?.sigle?.message
               })}
             />
-          )
-        } name={'sigle'} control={control} />
+          )}
+          name={'sigle'}
+          control={control}
+        />
 
-        <Controller render={
-          ({ field }) => (
+        <Controller
+          render={({ field }) => (
             <div className={'w-full flex flex-col gap-2 focus:text-primary'}>
               <Typography variant={'body2'}> Telephone </Typography>
               <PhoneInput className={'w-full'} inputClassName={'w-full'} {...field} defaultCountry={'tg'} />
-
             </div>
-          )
-        } name={'telephone'} control={control} />
+          )}
+          name={'telephone'}
+          control={control}
+        />
 
-        <Controller render={
-          ({ field }) => (
+        <Controller
+          render={({ field }) => (
             <CustomTextField
               {...field}
               fullWidth
@@ -200,25 +188,24 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
                 helperText: errors?.lieu?.message
               })}
             />
-          )
-        } name={'lieu'} control={control} />
+          )}
+          name={'lieu'}
+          control={control}
+        />
       </Grid2>
       <Grid2>
-        <div className="flex justify-center gap-4 mt-6">
+        <div className='flex justify-center gap-4 mt-6'>
           <Button
-            variant="contained"
-            color="primary"
-            type="submit"
+            variant='contained'
+            color='primary'
+            type='submit'
             disabled={addMutation.isPending || updateMutation.isPending}
           >
-            {addMutation.isPending || updateMutation.isPending
-              ? 'Traitement...'
-              : client ? 'Mettre à jour' : 'Ajouter'
-            }
+            {addMutation.isPending || updateMutation.isPending ? 'Traitement...' : client ? 'Mettre à jour' : 'Ajouter'}
           </Button>
           <Button
-            variant="outlined"
-            color="error"
+            variant='outlined'
+            color='error'
             onClick={handleCancel}
             disabled={addMutation.isPending || updateMutation.isPending}
           >
@@ -226,7 +213,6 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
           </Button>
         </div>
       </Grid2>
-
     </form>
   )
 }

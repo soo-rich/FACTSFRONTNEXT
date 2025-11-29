@@ -2,6 +2,11 @@
   "navigation": {
     "dashboards": "Dashboards",
     "dossier": "Cases",
+    "case": {
+      "proforma": "Proforma",
+      "purchase_order": "Purchase Order",
+      "order_slip": "Order Slip"
+    },
     "article": "Articles",
     "cl_pr": "Customers-Project",
     "crm": "CRM",
@@ -104,6 +109,7 @@
     "menuLevel2": "Menu Level 2",
     "menuLevel3": "Menu Level 3",
     "disabledMenu": "Disabled Menu",
-    "addproforma": "Add Proforma"
+    "addproforma": "Add Proforma",
+    "profile": "Profile"
   }
 }

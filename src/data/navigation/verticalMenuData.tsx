@@ -1,6 +1,6 @@
 // Type Imports
-import type {VerticalMenuDataType} from '@/types/menuTypes'
-import type {getDictionary} from '@/utils/getDictionary'
+import type { VerticalMenuDataType } from '@/types/menuTypes'
+import type { getDictionary } from '@/utils/getDictionary'
 
 const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>): VerticalMenuDataType[] => [
   // This is how you will normally render submenu
@@ -15,16 +15,30 @@ const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>)
     isSection: true,
     children: [
       {
-        label: dictionary['navigation'].invoice,
-        href: '/dossier',
-        icon: 'tabler-file-description'
+        label: dictionary['navigation'].dossier,
+        icon: 'tabler-file-description',
+        children: [
+          {
+            label: dictionary['navigation'].case.proforma,
+            href: '/proforma',
+          }, {
+            label: dictionary['navigation'].case.purchase_order,
+            href: '/purchase_order',
+          }, {
+            label: dictionary['navigation'].case.order_slip,
+            href: '/order_slip',
+          }, {
+            label: dictionary['navigation'].invoice,
+            href: '/invoice',
+          },
+        ]
       },
     ]
   },
   {
     label: dictionary['navigation'].cl_pr,
-    isSection:true,
-    children:[
+    isSection: true,
+    children: [
       {
         label: "Projet",
         href: "/projet",
@@ -53,7 +67,7 @@ const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>)
 
       },
       {
-        label: dictionary['navigation'].settings,
+        label: dictionary['navigation'].profile,
         icon: 'tabler-settings',
         href: '/profile',
 

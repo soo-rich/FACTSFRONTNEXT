@@ -13,7 +13,7 @@ import type { NotificationsType } from '@components/layout/shared/NotificationsD
 // Component Imports
 import NavToggle from './NavToggle'
 import Logo from '@components/layout/shared/Logo'
-import NavSearch from '@components/layout/shared/search'
+import ShurtCutProforma from '@components/layout/shared/search'
 import LanguageDropdown from '@components/layout/shared/LanguageDropdown'
 import ModeDropdown from '@components/layout/shared/ModeDropdown'
 import ShortcutsDropdown from '@components/layout/shared/ShortcutsDropdown'
@@ -135,7 +135,7 @@ const NavbarContent = () => {
       </div>
 
       <div className='flex items-center'>
-        <NavSearch />
+        <ShurtCutProforma />
         <LanguageDropdown />
         <ModeDropdown />
         <ShortcutsDropdown shortcuts={shortcuts} />

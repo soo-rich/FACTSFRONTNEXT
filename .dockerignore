@@ -1,57 +1,36 @@
-# Docker et build
-Dockerfile*
-.dockerignore
-build.log
+# Include any files or directories that you don't want to be copied to your
+# container here (e.g., local build artifacts, temporary files, etc.).
+#
+# For more help, visit the .dockerignore file reference guide at
+# https://docs.docker.com/go/build-context-dockerignore/
 
-# Dependencies (seront installées dans le conteneur)
-node_modules
-
-# Build artifacts (seront générés dans le conteneur)
-.next
-out
-
-# Environnements locaux
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-*.log
-
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode
-.idea
-*.swp
-*.swo
-
-# Git
-.git
-.gitignore
-
-# Tests et coverage
-coverage
-.nyc_output
-**/*.test.js
-**/*.test.ts
-**/*.test.tsx
-__tests__
-jest.config.*
-
-# Documentation
+**/.classpath
+**/.dockerignore
+**/.env
+**/.env.*
+**/.git
+**/.gitignore
+**/.project
+**/.settings
+**/.toolstarget
+**/.vs
+**/.vscode
+**/.idea
+**/.next
+**/.cache
+**/*.*proj.user
+**/*.dbmdl
+**/*.jfm
+**/charts
+**/docker-compose*
+**/compose.y*ml
+**/Dockerfile*
+**/node_modules
+**/npm-debug.log
+**/obj
+**/secrets.dev.yaml
+**/values.dev.yaml
+**/build
+**/dist
+LICENSE
 README.md
-docs/
-
-# Autres
-*.tgz
-.deploy
-.idea
-.vscode

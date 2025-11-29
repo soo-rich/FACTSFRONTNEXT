@@ -14,22 +14,29 @@ import { toast } from 'react-toastify'
 
 // MUI Imports
 import UtiliMetod from '@/utils/utilsmethod'
-import OptionMenu from '@core/components/option-menu'
+
 import TableGeneric from '@/components/table/TableGeneric'
 import { FactureService } from '@/service/dossier/facture.service'
 import type { FactureType } from '@/types/soosmart/dossier/facture.type'
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
 import CustomIconButton from '@core/components/mui/IconButton'
+import DefaultDialog from '@/components/dialogs/unique-modal/DefaultDialog'
+import FileTree from '../tree/FileTree'
+import { DocumentService } from '@/service/document/document.service'
+
 
 
 const columnHelper = createColumnHelper<FactureType>()
 
 const FactureList = () => {
+
+  const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize, setPageSize] = useState(10)
   const [filter, setFilter] = useState('')
+  const [numero, setNumero] = useState('')
 
   // hooks
   const { lang: locale } = useParams()
@@ -42,7 +49,8 @@ const FactureList = () => {
         pagesize: pageSize
       })
     },
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
@@ -64,6 +72,14 @@ const FactureList = () => {
     }
   })
 
+  const showTree = (numero: string) => {
+    setNumero(numero)
+    setTimeout(() => {
+      setOpen(true)
+    }, 500);
+
+  }
+
 
   const columns = useMemo(
     () => [
@@ -84,56 +100,65 @@ const FactureList = () => {
         header: 'Créé le',
         cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
       }),
-      columnHelper.accessor('total_ht', {
-        header: 'Total HT',
-        cell: info => info.getValue()
-      }),
+
+      // columnHelper.accessor('total_ht', {
+      //   header: 'Total HT',
+      //   cell: info => info.getValue()
+      // }),
       columnHelper.accessor('total_ttc', {
-        header: 'Total TTC',
-        cell: info => info.getValue()
+        header: 'Total TTC (Fcfa)',
+        cell: info => info.getValue(),
+
       }),
-      columnHelper.accessor('total_tva', {
-        header: 'Total TVA',
-        cell: info => info.getValue()
-      }),
+
+      // columnHelper.accessor('total_tva', {
+      //   header: 'Total TVA',
+      //   cell: info => info.getValue()
+      // }),
       columnHelper.display({
         id: 'actions', // Important: donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
           <div className="flex gap-2">
             <Tooltip title={'Voir le PDF'}>
-            <CustomIconButton
-              href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
-              className="cursor-pointer text-green-600 hover:text-green-800"
-            >
-              <i className="tabler-file-type-pdf" />
-            </CustomIconButton>
+              <CustomIconButton
+                href={getLocalizedUrl(`/docs/${row.original.numero}`, locale as Locale)}
+                className="cursor-pointer text-green-600 hover:text-green-800"
+              >
+                <i className="tabler-file-type-pdf" />
+              </CustomIconButton>
             </Tooltip>
-            <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
-              iconClassName="text-textSecondary"
-              options={[
-                {
-                  text: 'Details',
-                  icon: 'tabler-eye',
-                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
-                },
+            <Tooltip title={'Hieriachie'}>
+              <CustomIconButton
+                onClick={() => showTree(row.original.numero)}
 
-                {
-                  text: 'Supprimer',
-                  icon: 'tabler-trash text-red-600',
-                  menuItemProps: {
-                    onClick: () =>
-                      UtiliMetod.SuppressionConfirmDialog({
-                        data: row.original.reference,
-                        confirmAction: () => DeleteMutation.mutate(row.original.id)
-                      })
-                    ,
-                    className: 'flex items-center gap-2 text-textSecondary '
-                  }
-                }
-              ]}
-            />
+                // href={getLocalizedUrl(`/tree/${row.original.numero}`, locale as Locale)}
+                className="cursor-pointer text-info hover:text-green-800"
+              >
+                <i className="tabler-hierarchy-3" />
+              </CustomIconButton>
+            </Tooltip>
+            <Tooltip title={'Télécharger le PDF'}>
+              <CustomIconButton
+                onClick={() => DocumentService.generatePdf(row.original.numero)}
+                className="cursor-pointer  hover:text-green-800"
+              >
+                <i className="tabler-download" />
+              </CustomIconButton>
+            </Tooltip>
+            <Tooltip title={'Supprimer'}>
+              <CustomIconButton
+                onClick={() =>
+                  UtiliMetod.SuppressionConfirmDialog({
+                    data: row.original.reference,
+                    confirmAction: () => DeleteMutation.mutate(row.original.id)
+                  })}
+                className="cursor-pointer "
+              >
+                <i className="tabler-trash text-red-600 hover:text-red-800" />
+              </CustomIconButton>
+            </Tooltip>
+
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
@@ -159,6 +184,10 @@ const FactureList = () => {
         totalElements={data?.totalElements}
 
       />
+
+      <DefaultDialog dialogMaxWidth="lg" open={open} setOpen={setOpen} title="Hiérarchie du document">
+        <FileTree numero={numero} ></FileTree>
+      </DefaultDialog>
     </>
   )
 }

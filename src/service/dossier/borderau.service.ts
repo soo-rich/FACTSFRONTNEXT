@@ -12,6 +12,7 @@ export class BorderauService {
     return (await instance.post<BorderauType>(`${url}/${id_proforma}`, {})).data
   }
 
+
   static async getAll(params?: ParamRequests) {
     return (
       await instance.get<CustomresponseType<BorderauType>>(`${url}`, {

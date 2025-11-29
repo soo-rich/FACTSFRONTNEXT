@@ -1,3 +1,4 @@
+// @ts-nocheck
 // React imports
 import { forwardRef } from 'react'
 import type { ElementType } from 'react'
@@ -20,6 +21,7 @@ const CustomAutocomplete = forwardRef(
   ) => {
     return (
       // eslint-disable-next-line lines-around-comment
+      // @ts-ignore
       <Autocomplete
         {...props}
         ref={ref}

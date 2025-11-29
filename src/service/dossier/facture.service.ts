@@ -2,6 +2,7 @@ import type { CustomresponseType } from '@/types/soosmart/customresponse.type'
 import type { FactureType } from '@/types/soosmart/dossier/facture.type'
 import type { ParamRequests } from '@/types/soosmart/pagination/paramrequestion.type'
 import instance from '../axios-manager/instance'
+import type { TreeNodeType } from '@/types/soosmart/dossier/TreeNode.type'
 
 const url = `facture`
 
@@ -21,9 +22,11 @@ export class FactureService {
   }
 
   static async paid(id: string) {
-    return (
-      await instance.get<boolean>(url + `/paid/${id}`)
-    ).data
+    return (await instance.get<boolean>(url + `/paid/${id}`)).data
+  }
+
+  static async getThree(numero: string) {
+    return (await instance.get<TreeNodeType>(`${url}/tree/${numero}`)).data
   }
 
   static async DeleteDAta(id: string) {

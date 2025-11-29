@@ -2,6 +2,11 @@
   "navigation": {
     "dashboards": "Tableaux de bord",
     "dossier": "Dossiers",
+    "case": {
+      "proforma": "Proforma",
+      "purchase_order": "Bon de commande",
+      "order_slip": "Bordereau de livraison"
+    },
     "article": "Articles",
     "cl_pr": "Client-Projet",
     "crm": "GRC",
@@ -104,6 +109,7 @@
     "menuLevel2": "Niveau menu 2",
     "menuLevel3": "Niveau menu 3",
     "disabledMenu": "Menu désactivé",
-    "addproforma": "Ajouter une proforma"
+    "addproforma": "Ajouter une proforma",
+    "profile": "Profile"
   }
 }

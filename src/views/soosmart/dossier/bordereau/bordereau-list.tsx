@@ -12,13 +12,13 @@ import { createColumnHelper } from '@tanstack/react-table'
 
 import { toast } from 'react-toastify'
 
-// MUI Imports
-import Checkbox from '@mui/material/Checkbox'
 
 import Tooltip from '@mui/material/Tooltip'
 
+import Button from '@mui/material/Button'
+
 import UtiliMetod from '@/utils/utilsmethod'
-import OptionMenu from '@core/components/option-menu'
+
 import TableGeneric from '@/components/table/TableGeneric'
 import { BorderauService } from '@/service/dossier/borderau.service'
 import type { BorderauType } from '@/types/soosmart/dossier/borderau.type'
@@ -28,6 +28,8 @@ import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
 import CustomIconButton from '@core/components/mui/IconButton'
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
+import Link from "@components/Link";
+import { DocumentService } from '@/service/document/document.service'
 
 
 const columnHelper = createColumnHelper<BorderauType>()
@@ -42,8 +44,10 @@ const BordereauList = () => {
   // hooks
   const { lang: locale } = useParams()
 
+  const querykey = useMemo(() => [BorderauService.BORDERAU_KEY, pageIndex, pageSize, notadopted], [pageIndex, pageSize, notadopted])
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: [BorderauService.BORDERAU_KEY, pageIndex, pageSize, notadopted],
+    queryKey: querykey,
     queryFn: async () => {
       return notadopted
         ? await BorderauService.getAllWhoNoUseTocreateFacture({
@@ -55,7 +59,8 @@ const BordereauList = () => {
           pagesize: pageSize
         })
     },
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
@@ -66,7 +71,7 @@ const BordereauList = () => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey: [BorderauService.BORDERAU_KEY, pageIndex, pageSize]
+          queryKey: querykey
         })
         .then(r => r)
       toast.success('Bordereau supprimée avec succès')
@@ -96,11 +101,6 @@ const BordereauList = () => {
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('adopte', {
-        header: 'Adoptée',
-        cell: ({ row }) => <Tooltip placement={'top'} title={row.original.adopte ? 'Adopter' : 'Nom Adopter'}><Checkbox
-          checked={row.original.adopte} /></Tooltip>
-      }),
       columnHelper.accessor('reference', {
         header: 'Reference',
         cell: info => info.getValue()
@@ -117,82 +117,74 @@ const BordereauList = () => {
         header: 'Créé le',
         cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
       }),
-      columnHelper.accessor('total_ht', {
-        header: 'Total HT',
-        cell: info => info.getValue()
-      }),
+
+      // columnHelper.accessor('total_ht', {
+      //   header: 'Total HT',
+      //   cell: info => info.getValue()
+      // }),
       columnHelper.accessor('total_ttc', {
-        header: 'Total TTC',
+        header: 'Total TTC (Fcfa)',
         cell: info => info.getValue()
       }),
-      columnHelper.accessor('total_tva', {
-        header: 'Total TVA',
-        cell: info => info.getValue()
+
+      // columnHelper.accessor('total_tva', {
+      //   header: 'Total TVA',
+      //   cell: info => info.getValue()
+      // }),
+      columnHelper.accessor('numeroProforma', {
+        header: 'Numero Proforma',
+        cell: ({ row }) => (<Link href={getLocalizedUrl(`/dossier/${row.original.numeroProforma}`, locale as Locale)}>{row.original.numeroProforma}</Link>)
+      }),
+      columnHelper.accessor('adopte', {
+        header: 'Status',
+        cell: ({ row }) =>
+          row.original.adopte ? 'Adoptée' :
+            <Button color={'primary'} variant={'outlined'} className={'hover:bg-primary hover:text-white'}
+              onClick={() => AdoptMutation.mutate(row.original.id)}>Adopter</Button>
+
       }),
       columnHelper.display({
-        id: 'actions', // Important: donner un ID à la colonne display
+        id: 'actions', // Important : donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
           <div className="flex gap-2">
             <Tooltip title={'Voir le PDF'}>
-            <CustomIconButton
-              href={getLocalizedUrl(`/dossier/${row.original.numero}`, locale as Locale)}
-              className="cursor-pointer text-green-600 hover:text-green-800"
-            >
-              <i className="tabler-file-type-pdf" />
-            </CustomIconButton>
+              <CustomIconButton
+                href={getLocalizedUrl(`/docs/${row.original.numero}`, locale as Locale)}
+                className="cursor-pointer text-green-600 hover:text-green-800"
+              >
+                <i className="tabler-file-type-pdf" />
+              </CustomIconButton>
             </Tooltip>
-            {!row.original.adopte && ( <Tooltip title={'Adopter'}><CustomIconButton
-              onClick={() => {
-                AdoptMutation.mutate(row.original.id)
-              }}
-              className="cursor-pointer text-primary"
-            >
-              <i className="tabler-check" />
-            </CustomIconButton></Tooltip>)}
-            <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
-              iconClassName="text-textSecondary"
-              options={[
-                {
-                  text: 'Details',
-                  icon: 'tabler-eye',
-                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
-                },
-                {
-                  text: 'Adapter',
-                  icon: 'tabler-check',
-                  menuItemProps: {
-                    disabled: row.original.adopte,
-                    className: row.original.adopte ? 'flex items-center gap-2 text-text Secondary line-through' :
-                      'flex items-center gap-2 text-textSecondary',
-
-                    onClick: () => {
-                      AdoptMutation.mutate(row.original.id)
-                    }
-                  }
-                },
-                {
-                  text: 'Supprimer',
-                  icon: 'tabler-trash text-red-600',
-                  menuItemProps: {
-                    onClick: () =>
-                      UtiliMetod.SuppressionConfirmDialog({
-                        data: row.original.reference,
-                        confirmAction: () => DeleteMutation.mutate(row.original.id)
-                      })
-                    ,
-                    className: 'flex items-center gap-2 text-textSecondary '
-                  }
+            <Tooltip title={'Télécharger le PDF'}>
+              <CustomIconButton
+                onClick={() => DocumentService.generatePdf(row.original.numero)}
+                className="cursor-pointer  hover:text-green-800"
+              >
+                <i className="tabler-download" />
+              </CustomIconButton>
+            </Tooltip>
+            <Tooltip title={`Supprimer ${row.original.numero}`} placement={'top'}>
+              <CustomIconButton
+                onClick={() => UtiliMetod.SuppressionConfirmDialog({
+                  data: row.original.reference,
+                  confirmAction: () => DeleteMutation.mutate(row.original.id)
+                })
                 }
-              ]}
-            />
+                className="cursor-pointer flex items-center gap-2 text-textSecondary"
+              >
+                <i className="tabler-trash text-red-600" />
+              </CustomIconButton>
+            </Tooltip>
+
+
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
       })
     ],
-    [AdoptMutation, DeleteMutation, locale]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   )
 
   return (

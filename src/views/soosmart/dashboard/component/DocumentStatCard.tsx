@@ -30,9 +30,10 @@ import type { DashComponementType } from '@/types/componentTypes'
 
 import { StatAPIService } from '@/service/statistique/stat-api.service'
 import LoadingWithoutModal from '@components/LoadingWithoutModal'
-import ErrorView from '@components/ErrorView'
-import Utilsmethod from '@/utils/utilsmethod'
-import DashCardStatsSquare from '@views/soosmart/dashboard/component/DashCardStatsSquare'
+
+// import ErrorView from '@components/ErrorView'
+// import Utilsmethod from '@/utils/utilsmethod'
+// import DashCardStatsSquare from '@views/soosmart/dashboard/component/DashCardStatsSquare'
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
 
@@ -56,7 +57,12 @@ const Card = styled(MuiCard)<Props>(({ color }) => ({
   }
 }))
 
-const DashCard = ({ props, data, link }: { props: DashComponementType, data: FactStat, link?: string }) => {
+const DashCard = ({ props, data, link, adopteSession = false }: {
+  props: DashComponementType,
+  data: FactStat,
+  link?: string,
+  adopteSession?: boolean
+}) => {
 
   const router = useRouter()
 
@@ -87,7 +93,7 @@ const DashCard = ({ props, data, link }: { props: DashComponementType, data: Fac
           </div>
         </div>
         {
-          adopted_true && (<>
+          adopteSession && (<>
               <div>
                 <Divider className={'mx-2'} orientation={'vertical'} />
               </div>
@@ -117,50 +123,50 @@ export const DocumentStatCard = () => {
     refetchOnReconnect: true
   })
 
-  const { data: facture, isLoading: isFacture } = useQuery({
-    queryKey: [StatAPIService.STAT_KEY + '/facte'],
-    queryFn: async () => {
-      return await StatAPIService.getTotalFacture()
-    },
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
-    refetchOnReconnect: true
-  })
+  /*  const { data: facture, isLoading: isFacture } = useQuery({
+      queryKey: [StatAPIService.STAT_KEY + '/facte'],
+      queryFn: async () => {
+        return await StatAPIService.getTotalFacture()
+      },
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
+      refetchOnReconnect: true
+    })*/
 
   return (
     <Grid container spacing={6}>
 
       {data &&
         (
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             {
               isLoading ? (<LoadingWithoutModal />) :
                 (
                   <DashCard props={{ title: 'Proforma', avatarIcon: 'tabler-file', color: 'secondary' }}
-                            data={data?.proforma} link={'dossier?file=proforma'} />)}
+                            data={data?.proforma} link={'proforma'} adopteSession={true} />)}
           </Grid>)
       }
       {data &&
         (
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             {
               isLoading ? (<LoadingWithoutModal />) :
                 (
-                  <DashCard props={{ title: 'Borderau', avatarIcon: 'tabler-file-report', color: 'info' }}
-                            data={data?.bordeau} link={'dossier?file=bordereau'} />)}
+                  <DashCard props={{ title: 'BL', avatarIcon: 'tabler-file-report', color: 'info' }}
+                            data={data?.bordeau} link={'order_slip'} adopteSession={true} />)}
           </Grid>)
       }
       {data &&
         (
-          <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             {
               isLoading ? (<LoadingWithoutModal />) :
                 (
                   <DashCard props={{ title: 'Facture', avatarIcon: 'tabler-file-description', color: 'success' }}
-                            data={data?.facture} link={'dossier?file=facture'} />)}
+                            data={data?.facture} link={'facture'} />)}
           </Grid>)
       }
-      {
+      {/*{
         isFacture
           ? <LoadingWithoutModal />
           : facture
@@ -169,17 +175,17 @@ export const DocumentStatCard = () => {
                 <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                   <DashCardStatsSquare avatarIcon={'tabler-file-description'} avatarColor={'primary'}
                                        stats={String(Utilsmethod.formatDevise(facture.Paid)) + ' FCFA'}
-                                       statsTitle={'Facture Payer'} />
+                                       statsTitle={'Factures Payée'} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                   <DashCardStatsSquare avatarIcon={'tabler-file-description'} avatarColor={'warning'}
                                        stats={String(Utilsmethod.formatDevise(facture.Unpaid)) + ' FCFA'}
-                                       statsTitle={'Facture Inpayer'} />
+                                       statsTitle={'Factures Impayée'} />
                 </Grid>
               </>
             )
             : <ErrorView />
-      }
+      }*/}
     </Grid>
   )
 }

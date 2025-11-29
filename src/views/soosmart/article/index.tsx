@@ -26,9 +26,10 @@ const ArticleIndex = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedArticle, setSelectedArticle] = useState<ArticleType | undefined>(undefined)
 
+  const querykey = useMemo(() => [ArticleService.ARTICLE_KEY, pageIndex, pageSize], [pageIndex, pageSize])
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: [ArticleService.ARTICLE_KEY, pageIndex, pageSize],
+    queryKey: querykey,
     queryFn: async () => {
       return await ArticleService.getArticles({ page: pageIndex, pagesize: pageSize })
     },
@@ -76,7 +77,7 @@ const ArticleIndex = () => {
               }}
               className="text-yellow-600 hover:text-yellow-800"
             >
-              <i className="tabler-alert-square-rounded-filled" />
+              <i className="tabler-edit" />
             </CustomIconButton>
 
             <CustomIconButton
@@ -127,6 +128,10 @@ const ArticleIndex = () => {
           <AddEditArticle
             data={selectedArticle}
             onSuccess={() => {
+              // Invalider le cache pour rafraîchir la liste
+              queryClient.invalidateQueries({
+                queryKey: querykey
+              }).then(r =>console.info(r))
               setSelectedArticle(undefined)
               setIsModalOpen(false)
             }}

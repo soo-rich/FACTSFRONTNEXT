@@ -13,9 +13,6 @@ import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
-import Checkbox from '@mui/material/Checkbox'
-import Button from '@mui/material/Button'
-import FormControlLabel from '@mui/material/FormControlLabel'
 
 // Type Imports
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
@@ -35,7 +32,7 @@ import Logo from '@components/layout/shared/Logo'
 import CustomTextField from '@core/components/mui/TextField'
 
 // Config Imports
-import themeConfig from '@configs/themeConfig'
+// import themeConfig from '@configs/themeConfig'
 
 // Util Imports
 import { getLocalizedUrl } from '@/utils/i18n'
@@ -44,6 +41,7 @@ import { getLocalizedUrl } from '@/utils/i18n'
 import AuthIllustrationWrapper from './AuthIllustrationWrapper'
 
 import { schemaLogin } from '@/service/auth/auth-service'
+import LoadingButton from '@components/button/LoadingButton'
 
 
 type formdata = InferInput<typeof schemaLogin>
@@ -70,11 +68,6 @@ const Login = () => {
         username: '',
         password: ''
       },
-      mode: 'onSubmit',
-      reValidateMode: 'onChange',
-      criteriaMode: 'all',
-      shouldFocusError: true,
-      shouldUnregister: true
     }
   )
 
@@ -112,10 +105,10 @@ const Login = () => {
             <Logo />
           </Link>
           <div className="flex flex-col gap-1 mbe-6">
-            <Typography variant="h4">{`Bienvenue a ${themeConfig.templateName}! 👋🏻`}</Typography>
-            <Typography>
+            <Typography variant="h6" className={'text-center'}>Bienvenue sur votre plateforme de gestion! 👋🏻</Typography>
+            {/* <Typography>
               Veuillez vous connecter pour continuer
-            </Typography>
+            </Typography>*/}
           </div>
           <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
             <Controller
@@ -127,11 +120,8 @@ const Login = () => {
                   {...field}
                   autoFocus
                   fullWidth
-                  label="Username"
-                  onChange={e => {
-                    field.onChange(e.target.value)
+                  label="Nom d'utilsateur"
 
-                  }}
                   {...((errors.username) && {
                     error: true,
                     helperText: errors?.password?.message
@@ -145,14 +135,11 @@ const Login = () => {
               render={({ field }) => (<CustomTextField
                 {...field}
                 fullWidth
-                label="Password"
+                label="Mot de passe"
                 placeholder="············"
                 id="outlined-adornment-password"
                 type={isPasswordShown ? 'text' : 'password'}
-                onChange={e => {
-                  field.onChange(e.target.value)
 
-                }}
                 {...((errors.password) && {
                   error: true,
                   helperText: errors?.password?.message
@@ -169,7 +156,7 @@ const Login = () => {
                   }
                 }}
               />)} />
-            <div className="flex justify-between items-center gap-x-3 gap-y-1 flex-wrap">
+            {/*<div className="flex justify-between items-center gap-x-3 gap-y-1 flex-wrap">
               <FormControlLabel control={<Checkbox />} label="Remember me" />
               <Typography
                 className="text-end"
@@ -179,10 +166,10 @@ const Login = () => {
               >
                 Forgot password?
               </Typography>
-            </div>
-            <Button fullWidth variant="contained" type="submit">
+            </div>*/}
+            <LoadingButton loading={isSubmitting} fullWidth variant="contained" type="submit">
               {isSubmitting ? 'En cours' : 'Connexion'}
-            </Button>
+            </LoadingButton>
 
           </form>
         </CardContent>

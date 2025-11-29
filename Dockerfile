@@ -1,44 +1,68 @@
-# Étape base
-FROM node:current-alpine3.21 AS base
-RUN npm install -g pnpm
+# syntax=docker/dockerfile:1
 
-# Étape deps : installation des dépendances
-FROM base AS deps
-WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-COPY src ./src
-RUN pnpm install --frozen-lockfile
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Dockerfile reference guide at
+# https://docs.docker.com/go/dockerfile-reference/
 
-# Étape build : build de l'application
+# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
+
+ARG NODE_VERSION=22.20.0
+ARG PNPM_VERSION=10.18.2
+
+################################################################################
+# Use node image for base image for all stages.
+FROM node:${NODE_VERSION}-alpine AS base
+
+# Set working directory for all build stages.
+WORKDIR /usr/src/app
+
+# Install pnpm.
+RUN --mount=type=cache,target=/root/.npm \
+    npm install -g pnpm@${PNPM_VERSION}
+
+################################################################################
+# Create a stage for installing production dependecies.
 FROM base AS builder
-WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-COPY --from=deps /app/node_modules ./node_modules
-COPY src ./src
-COPY public ./public
-COPY *.ts *.json *.js *.mjs ./
-ENV NEXT_TELEMETRY_DISABLED=1
-RUN pnpm run build
 
-# Étape runner : image finale de production
-FROM base AS runner
-WORKDIR /app
+# Download dependencies as a separate step to take advantage of Docker's caching.
+# Leverage a cache mount to /root/.local/share/pnpm/store to speed up subsequent builds.
 
-#ENV NODE_ENV=production
-#ENV NEXT_TELEMETRY_DISABLED=1
+# Copy all project files
+COPY . .
 
-# Création de l'utilisateur
-RUN addgroup --system --gid 1001 nodejs \
-    && adduser --system --uid 1001 nextjs
+# Install dependencies
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm install
 
-# Copie uniquement ce qui est nécessaire pour la production
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
-COPY --from=deps /app/node_modules ./node_modules
+# Build the application
+RUN pnpm build
+################################################################################
+# Create a stage for building the application.
 
-USER nextjs
 
+################################################################################
+# Create a new stage to run the application with minimal runtime dependencies
+# where the necessary files are copied from the build stage.
+FROM base AS final
+
+# Use production node environment by default.
+ENV NODE_ENV=production
+
+# Run the application as a non-root user.
+USER node
+
+# Copy package.json so that package manager commands can be used.
+# COPY package.json .
+
+# Copy the production dependencies from the deps stage and also
+# the built application from the build stage into the image.
+COPY --from=builder /usr/src/app/.next ./.next
+COPY --from=builder /usr/src/app/public ./public
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/package.json ./package.json
+
+# Expose the port that the application listens on.
 EXPOSE 3000
 
+# Run the application.
 CMD ["pnpm", "start"]

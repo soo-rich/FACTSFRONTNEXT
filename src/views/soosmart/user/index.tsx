@@ -7,11 +7,18 @@ import { createColumnHelper } from '@tanstack/react-table'
 
 import Typography from '@mui/material/Typography'
 
-import Chip from '@mui/material/Chip'
 
 import { toast } from 'react-toastify'
 
-import Checkbox from '@mui/material/Checkbox'
+import Tooltip from '@mui/material/Tooltip'
+
+
+
+import { styled } from '@mui/material/styles'
+
+import classNames from 'classnames'
+
+import { KeyRound } from 'lucide-react'
 
 import TableGeneric from '@components/table/TableGeneric'
 
@@ -25,25 +32,22 @@ import { getInitials } from '@/utils/getInitials'
 import CustomAvatar from '@/@core/components/mui/Avatar'
 
 
-import type { ThemeColor } from '@core/types'
 import UtiliMetod from '@/utils/utilsmethod'
 
 
 import CustomIconButton from '@/@core/components/mui/IconButton'
 import AddEditUser from '@views/soosmart/user/add-edit-user'
-import OptionMenu from '@core/components/option-menu'
 
+const Icon = styled('i')({})
 
-type UserStatusType = {
-  [key: string]: ThemeColor
+type UserRoleType = {
+  [key: string]: { icon: string; color: string }
 }
 const columnHelper = createColumnHelper<UtilisateurDto>()
 
-const userStatusObj: UserStatusType = {
-  super_admin: 'success',
-  admin: 'info',
-  user: 'secondary'
-}
+
+
+
 
 const UserIndex = () => {
   const queryClient = useQueryClient()
@@ -55,6 +59,11 @@ const UserIndex = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [userselect, setUserSelect] = useState<UtilisateurDto | undefined>(undefined)
 
+  const userRoleObj: UserRoleType = {
+    admin: { icon: 'tabler-crown', color: 'success' },
+    user: { icon: 'tabler-user', color: 'info' },
+  }
+
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [UserService.USER_KEY, pageIndex, pageSize],
@@ -63,7 +72,7 @@ const UserIndex = () => {
       return await UserService.getAllorOnebyEmail({
         params: {
           page: pageIndex, pagesize:
-          pageSize
+            pageSize
         }
       })
     },
@@ -101,14 +110,43 @@ const UserIndex = () => {
     }
   })
 
+  const ResetPasswordMutation = useMutation({
+    mutationFn: async (email: string) => {
+      return await UserService.forgotUserPassword(email)
+    },
+    onSuccess: () => {
+      toast.success('Réinitialisation du mot de passe effectuée. le Mail sera envoyé.')
+    },
+    onError: () => {
+      toast.error('Erreur lors de la réinitialisation du mot de passe')
+    }
+  })
+
+  const iconStyleActive = classNames(
+    'tabler-square-rounded-check-filled',
+    'text-2xl text-green-600',
+    'cursor-pointer',
+    'hover:text-green-800'
+  );
+
+  const iconStyleInactive = classNames(
+    'tabler-square-rounded-x',
+    'text-2xl',
+    'cursor-pointer',
+    'hover:text-red-800',
+  );
+
+
+
 
   const columns = useMemo(
     () => [
+
       columnHelper.accessor('nom', {
         header: 'User',
         cell: ({ row }) => (
           <div className="flex items-center gap-4">
-            <CustomAvatar size={34}>{getInitials(row.original.username)}</CustomAvatar>
+            <CustomAvatar size={34}>{getInitials(row.original.username.toUpperCase())}</CustomAvatar>
             <div className="flex flex-col">
               <Typography color="text.primary" className="font-medium">
                 {row.original.nom}{' '}{row.original.prenom}
@@ -127,13 +165,15 @@ const UserIndex = () => {
       columnHelper.accessor('role', {
         header: 'Role',
         cell: ({ row }) => (
-          <Chip
-            variant="tonal"
-            label={row.original.role}
-            size="small"
-            color={userStatusObj[row.original.role.toLowerCase()]}
-            className="capitalize"
-          />
+          <div className='flex items-center gap-2'>
+            <Icon
+              className={userRoleObj[row.original.role?.toString().toLowerCase()]?.icon}
+              sx={{ color: `var(--mui-palette-${userRoleObj[row.original?.role?.toLowerCase()]?.color}-main)` }}
+            />
+            <Typography className='capitalize' color='text.primary'>
+              {row.original.role.toLocaleLowerCase()}
+            </Typography>
+          </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
       }),
@@ -141,19 +181,13 @@ const UserIndex = () => {
         header: 'Creer le .',
         cell: ({ row }) => (
           <Typography variant="body2"
-                      color={'info'}
-                      className="capitalize"
+            color={'info'}
+            className="capitalize"
           >{UtiliMetod.formatDate(row.original.dateCreation)}</Typography>
         ),
         enableHiding: true // Permet de cacher cette colonne
       }),
-      columnHelper.accessor('actif', {
-        header: 'Active',
-        cell: ({ row }) => (
-          <Checkbox checked={row.original.actif} />
-        ),
-        enableHiding: true // Permet de cacher cette colonne
-      }),
+
       columnHelper.display({
         id: 'actions', // Important: donner un ID à la colonne display
         header: 'Actions',
@@ -168,41 +202,53 @@ const UserIndex = () => {
             >
               <i className="tabler-edit" />
             </CustomIconButton>
+            <Tooltip placement={'top'} title={row.original.actif ? 'Désactiver utilisateur' : 'Activer utilisateur'}>
+              <CustomIconButton
+                onClick={() => {
+                  UtiliMetod.confirmDialog({
+                    title: row.original.nom,
+                    subtitle: `Voulez-vous ${row.original.actif ? 'désactiver' : 'activer'} cet utilisateur ?`,
+                    confirmAction: () =>
+                      ActivateMutation.mutate(row.original.id)
+                  })
+                }}
+              >
+                <i className={classNames(!row.original.actif ? iconStyleActive : iconStyleInactive)} />
+              </CustomIconButton>
+            </Tooltip>
+            <Tooltip placement={'top'} title={'reinitialiser le mot de passe'}>
+              <CustomIconButton
+                onClick={() => {
+                  UtiliMetod.confirmDialog({
+                    title: row.original.nom,
+                    subtitle: `Voulez-vous réinitialiser le mot de passe de ${row.original.nom} ?`,
+                    confirmAction: () =>
+                      ResetPasswordMutation.mutate(row.original.email)
+                  })
+                }}
+              >
+                <KeyRound className="text-2xl cursor-pointer hover:text-blue-800" />
+              </CustomIconButton>
+            </Tooltip>
             <CustomIconButton
-              onClick={() => UtiliMetod.SuppressionConfirmDialog({
-                data: row.original.nom,
+              onClick={() => UtiliMetod.confirmDialog({
+                title: row.original.nom,
+                subtitle: 'Voulez-vous supprimer cet utilisateur ?',
                 confirmAction: () => DeleteMutation.mutate(row.original.id)
               })}
               className="cursor-pointer text-red-600 hover:text-red-800"
             >
               <i className="tabler-trash" />
             </CustomIconButton>
-            <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
-              iconClassName="text-textSecondary"
-              options={[
-                {
-                  text: 'Details',
-                  icon: 'tabler-eye',
-                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
-                },
-                {
-                  text: row.original.actif ? 'Désactiver' : 'Activer',
-                  icon: row.original.actif ? 'tabler-lock-open' : 'tabler-lock',
-                  menuItemProps: {
-                    className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => ActivateMutation.mutate(row.original.id)
-                  }
-                }
-              ]}
-            />
+
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
       })
 
     ],
-    [ActivateMutation, DeleteMutation]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   )
 
 
@@ -219,14 +265,17 @@ const UserIndex = () => {
     setGlobalFilter={setFilter}
     totalElements={data?.totalElements}
     buttonadd={{
-      action: () => setIsModalOpen(true)
+      action: () => {
+        setIsModalOpen(true)
+        setUserSelect(undefined)
+      }
     }}
   />
 
     <DefaultDialog
       open={isModalOpen}
       setOpen={setIsModalOpen}
-      onClose={()=>{
+      onClose={() => {
         setUserSelect(undefined)
       }}
       title={userselect ? ` Mettre a jour ${userselect.username}` : 'Ajouter un Utilisateur'}
