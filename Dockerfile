@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1
-
 # Comments are provided throughout this file to help you get started.
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/go/dockerfile-reference/
@@ -14,7 +12,7 @@ ARG PNPM_VERSION=10.18.2
 FROM node:${NODE_VERSION}-alpine AS base
 
 # Set working directory for all build stages.
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Install pnpm.
 RUN --mount=type=cache,target=/root/.npm \
@@ -56,10 +54,11 @@ USER node
 
 # Copy the production dependencies from the deps stage and also
 # the built application from the build stage into the image.
-COPY --from=builder /usr/src/app/.next ./.next
-COPY --from=builder /usr/src/app/public ./public
-COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/package.json ./package.json
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/.env.production.local ./.env.production.local
 
 # Expose the port that the application listens on.
 EXPOSE 3000
