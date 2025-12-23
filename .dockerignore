@@ -7,7 +7,9 @@
 **/.classpath
 **/.dockerignore
 **/.env
-**/.env.*
+# **/.env.*
+# autoriser le fichier .env.production.local pour les variables d'environnement de production
+!**/.env.production.local
 **/.git
 **/.gitignore
 **/.project

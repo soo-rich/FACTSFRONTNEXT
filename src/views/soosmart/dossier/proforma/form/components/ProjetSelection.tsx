@@ -37,7 +37,7 @@ const ProjetSelection = ({ change, value }: { change: (value: string) => void, v
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
-  const projet = useMemo(() => data?.map(item => ({ id: item.id, value: item.projet_type })) || [], [data]);
+  const projet = useMemo(() => data?.map(item => ({ id: item.id, value: item.projet_type })) || [], [data])
 
 
   const [projetSelect, setProjetSelect] = useState<SelectType | null>(null)
@@ -65,7 +65,7 @@ const ProjetSelection = ({ change, value }: { change: (value: string) => void, v
 
   return isError ? <ErrorView /> : isLoading ? <LoadingWithoutModal /> : projet && (<>
     <Grid2 container direction={'row'} spacing={3}>
-      <Grid2 className='flex-grow'>
+      <Grid2 className="flex-grow">
         <CustomAutocomplete
           options={projet || []}
           value={projetSelect}
@@ -77,11 +77,11 @@ const ProjetSelection = ({ change, value }: { change: (value: string) => void, v
           renderInput={params => <CustomTextField {...params} label="Choix du Projet " />}
         />
       </Grid2>
-      <Grid2 className='self-end'>
+      <Grid2 className="self-end">
         <Button variant={'contained'} color={'inherit'} endIcon={<i className="tabler-plus" />}
-          onClick={() => {
-            setIsModalOpenProjet(true)
-          }}>
+                onClick={() => {
+                  setIsModalOpenProjet(true)
+                }}>
           Ajouter un Projet
         </Button>
       </Grid2>
@@ -101,6 +101,8 @@ const ProjetSelection = ({ change, value }: { change: (value: string) => void, v
           handleAddProjet(data.id)
         }
 
+        setIsModalOpenProjet(false)
+      }} onCancel={() => {
         setIsModalOpenProjet(false)
       }} />
 

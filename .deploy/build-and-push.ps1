@@ -37,13 +37,14 @@ if ($LASTEXITCODE -ne 0) {
 
 # Push vers Docker Hub
 Write-Host "📤 Push vers Docker Hub..." -ForegroundColor Cyan
-docker push "${DOCKER_USERNAME}/${IMAGE_NAME}:${VERSION}"
 docker push "${DOCKER_USERNAME}/${IMAGE_NAME}:${LATEST_TAG}"
+docker push "${DOCKER_USERNAME}/${IMAGE_NAME}:${VERSION}"
+
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "✅ Push réussi !" -ForegroundColor Green
     Write-Host "🎉 Images disponibles:" -ForegroundColor Cyan
-    Write-Host "   - ${DOCKER_USERNAME}/${IMAGE_NAME}:${VERSION}" -ForegroundColor Gray
+#     Write-Host "   - ${DOCKER_USERNAME}/${IMAGE_NAME}:${VERSION}" -ForegroundColor Gray
     Write-Host "   - ${DOCKER_USERNAME}/${IMAGE_NAME}:${LATEST_TAG}" -ForegroundColor Gray
     Write-Host "   📍 https://hub.docker.com/r/${DOCKER_USERNAME}/${IMAGE_NAME}" -ForegroundColor Blue
 } else {

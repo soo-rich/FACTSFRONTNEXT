@@ -101,7 +101,7 @@ const ClientSelection = ({ change, value }: { change: (value: string) => void, v
         if (!array && data) {
           handleClientAdd(data.id)
         }
-      }} />
+      }} onCancel={()=>{setIsModalOpenClient(false)}}/>
 
     </DefaultDialog>
   </>)

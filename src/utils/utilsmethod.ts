@@ -101,11 +101,11 @@ class UtiliMetod {
   static getFileFormApi = async (url: string, provider?: 'minio' | 'local') => {
     return provider === 'minio'
       ? (await instance.get('file/presigned', { params: { url } })).data
-      : { presigned: process.env.NEXT_PUBLIC_SOOSMART_API_URL?.replace('/api', '') + url }
+      : { presigned: process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') + url }
   }
 
   static getImagefromLocal = async (url: string) => {
-    return process.env.NEXT_PUBLIC_SOOSMART_API_URL?.replace('/api', '') + url
+    return process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') + url
   }
 
   static download = async (uri: string, file?: FileObject) => {
