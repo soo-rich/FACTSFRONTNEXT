@@ -36,6 +36,8 @@ export const authOptions: NextAuthOptions = {
           // ** Login API Call to match the user credentials and receive user data in response along with his role
           if (!credentials) return null
 
+          console.log('credentials', credentials)
+
           const res = await AuthService.login({
             username: credentials.username,
             password: credentials.password

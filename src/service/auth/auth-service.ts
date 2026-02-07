@@ -10,6 +10,8 @@ export const schemaLogin = object({
 export class AuthService {
   static async login(data: { username: string; password: string }, hostname?: string) {
 
+    console.log('login', hostname)
+
     return (
 
       // await instance.post<{ bearer: string; refresh: string }>(

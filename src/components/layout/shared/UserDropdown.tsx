@@ -76,9 +76,11 @@ const UserDropdown = () => {
   }
 
   const handleUserLogout = async () => {
+    const appbasepath = `http://${window.location.hostname}:${window.location.port}`
+
     try {
       // Sign out from the app
-      await signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL })
+      await signOut({ callbackUrl: appbasepath })
     } catch (error) {
       console.error(error)
 
