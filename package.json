@@ -62,6 +62,7 @@
     "emoji-mart": "5.6.0",
     "fs-extra": "11.2.0",
     "input-otp": "1.4.1",
+    "jsdom": "^27.4.0",
     "jwt-decode": "^4.0.0",
     "keen-slider": "6.8.6",
     "lucide-react": "^0.525.0",
