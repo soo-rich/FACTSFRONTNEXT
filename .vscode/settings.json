@@ -50,5 +50,8 @@
     "iconify",
     "tanstack"
   ],
-  "kiroAgent.configureMCP": "Enabled"
+  "kiroAgent.configureMCP": "Enabled",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

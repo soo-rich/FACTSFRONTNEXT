@@ -35,6 +35,7 @@ import { useSettings } from '@core/hooks/useSettings'
 // Util Imports
 import { getLocalizedUrl } from '@/utils/i18n'
 import UtiliMetod from '@/utils/utilsmethod'
+import { AuthService } from '@/service/auth/auth-service'
 
 // Styled component for badge content
 const BadgeContentSpan = styled('span')({
@@ -79,6 +80,12 @@ const UserDropdown = () => {
     const appbasepath = `http://${window.location.hostname}:${window.location.port}`
 
     try {
+      AuthService.logout()
+    } catch (error) {
+      console.error(error)
+    }
+
+    try {
       // Sign out from the app
       await signOut({ callbackUrl: appbasepath })
     } catch (error) {
@@ -89,16 +96,14 @@ const UserDropdown = () => {
     }
   }
 
-
   const { data } = useQuery({
     queryKey: [session?.user?.image + '-file'],
     queryFn: async () => {
-      return (session?.user?.image && await UtiliMetod.getFileFormApi(session?.user?.image ?? '', 'minio'))
+      return session?.user?.image && (await UtiliMetod.getFileFormApi(session?.user?.image ?? '', 'minio'))
     },
     refetchOnMount: false,
     enabled: !!session?.user?.image
   })
-
 
   return (
     <>
