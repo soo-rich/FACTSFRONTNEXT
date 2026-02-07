@@ -8,12 +8,20 @@ export const schemaLogin = object({
 })
 
 export class AuthService {
-  static async login(data: { username: string; password: string }) {
+  static async login(data: { username: string; password: string }, hostname?: string) {
 
     return (
+
+      // await instance.post<{ bearer: string; refresh: string }>(
+      //   'auth/login',
+      //   data
+      // )
       await instance.post<{ bearer: string; refresh: string }>(
         'auth/login',
-        data
+        data,
+       {
+        baseURL: hostname ? `http://${hostname}:4000/api/` : undefined
+       }
       )
     ).data
   }

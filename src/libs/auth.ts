@@ -21,7 +21,8 @@ export const authOptions: NextAuthOptions = {
        */
       credentials: {
         username: { label: 'Username', type: 'text' },
-        password: { label: 'Password', type: 'password' }
+        password: { label: 'Password', type: 'password' },
+        hostname: { label: 'Hostname', type: 'text' }
       },
       async authorize(credentials) {
         /*
@@ -38,7 +39,7 @@ export const authOptions: NextAuthOptions = {
           const res = await AuthService.login({
             username: credentials.username,
             password: credentials.password
-          })
+          }, credentials.hostname)
 
           if (res.bearer && res.refresh) {
             const userInfo = JwtUtils.decode(res.bearer)

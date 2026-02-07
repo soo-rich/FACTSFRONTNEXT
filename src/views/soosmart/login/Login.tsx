@@ -43,7 +43,6 @@ import AuthIllustrationWrapper from './AuthIllustrationWrapper'
 import { schemaLogin } from '@/service/auth/auth-service'
 import LoadingButton from '@components/button/LoadingButton'
 
-
 type formdata = InferInput<typeof schemaLogin>
 
 const Login = () => {
@@ -55,21 +54,17 @@ const Login = () => {
   const searchParams = useSearchParams()
   const { lang: locale } = useParams()
 
-
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting }
-
-  } = useForm<formdata>(
-    {
-      resolver: valibotResolver(schemaLogin),
-      defaultValues: {
-        username: '',
-        password: ''
-      },
+  } = useForm<formdata>({
+    resolver: valibotResolver(schemaLogin),
+    defaultValues: {
+      username: '',
+      password: ''
     }
-  )
+  })
 
   const handleClickShowPassword = () => setIsPasswordShown(show => !show)
 
@@ -77,11 +72,12 @@ const Login = () => {
     const res = await signIn('credentials', {
       username: data.username,
       password: data.password,
-      redirect: false
+      redirect: false,
+      hostname: window.location.hostname
     })
 
     if (res?.status === 401) {
-      toast.error('Mot de passe ou nom d\'utilisateur incorrect')
+      toast.error("Mot de passe ou nom d'utilisateur incorrect")
 
       return
     }
@@ -92,27 +88,29 @@ const Login = () => {
 
       router.replace(getLocalizedUrl(redirectURL, locale as Locale))
     } else {
-      toast.error('Une erreur s\'est produite lors de la connexion. Veuillez réessayer.')
+      toast.error("Une erreur s'est produite lors de la connexion. Veuillez réessayer.")
       console.error('Login error:', res?.error)
     }
   }
 
   return (
     <AuthIllustrationWrapper>
-      <Card className="flex flex-col sm:is-[450px]">
-        <CardContent className="sm:!p-12">
-          <Link href={getLocalizedUrl('/', locale as Locale)} className="flex justify-center mbe-6">
+      <Card className='flex flex-col sm:is-[450px]'>
+        <CardContent className='sm:!p-12'>
+          <Link href={getLocalizedUrl('/', locale as Locale)} className='flex justify-center mbe-6'>
             <Logo />
           </Link>
-          <div className="flex flex-col gap-1 mbe-6">
-            <Typography variant="h6" className={'text-center'}>Bienvenue sur votre plateforme de gestion! 👋🏻</Typography>
+          <div className='flex flex-col gap-1 mbe-6'>
+            <Typography variant='h6' className={'text-center'}>
+              Bienvenue sur votre plateforme de gestion! 👋🏻
+            </Typography>
             {/* <Typography>
               Veuillez vous connecter pour continuer
             </Typography>*/}
           </div>
-          <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+          <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6'>
             <Controller
-              name="username"
+              name='username'
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
@@ -121,41 +119,48 @@ const Login = () => {
                   autoFocus
                   fullWidth
                   label="Nom d'utilsateur"
-
-                  {...((errors.username) && {
+                  {...(errors.username && {
                     error: true,
                     helperText: errors?.password?.message
                   })}
-                  placeholder="Enter your  username" />)}
+                  placeholder='Enter your  username'
+                />
+              )}
             />
             <Controller
-              name="password"
+              name='password'
               control={control}
               rules={{ required: true }}
-              render={({ field }) => (<CustomTextField
-                {...field}
-                fullWidth
-                label="Mot de passe"
-                placeholder="············"
-                id="outlined-adornment-password"
-                type={isPasswordShown ? 'text' : 'password'}
-
-                {...((errors.password) && {
-                  error: true,
-                  helperText: errors?.password?.message
-                })}
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton edge="end" onClick={handleClickShowPassword} onMouseDown={e => e.preventDefault()}>
-                          <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
-                        </IconButton>
-                      </InputAdornment>
-                    )
-                  }
-                }}
-              />)} />
+              render={({ field }) => (
+                <CustomTextField
+                  {...field}
+                  fullWidth
+                  label='Mot de passe'
+                  placeholder='············'
+                  id='outlined-adornment-password'
+                  type={isPasswordShown ? 'text' : 'password'}
+                  {...(errors.password && {
+                    error: true,
+                    helperText: errors?.password?.message
+                  })}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <IconButton
+                            edge='end'
+                            onClick={handleClickShowPassword}
+                            onMouseDown={e => e.preventDefault()}
+                          >
+                            <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
+                          </IconButton>
+                        </InputAdornment>
+                      )
+                    }
+                  }}
+                />
+              )}
+            />
             {/*<div className="flex justify-between items-center gap-x-3 gap-y-1 flex-wrap">
               <FormControlLabel control={<Checkbox />} label="Remember me" />
               <Typography
@@ -167,10 +172,9 @@ const Login = () => {
                 Forgot password?
               </Typography>
             </div>*/}
-            <LoadingButton loading={isSubmitting} fullWidth variant="contained" type="submit">
+            <LoadingButton loading={isSubmitting} fullWidth variant='contained' type='submit'>
               {isSubmitting ? 'En cours' : 'Connexion'}
             </LoadingButton>
-
           </form>
         </CardContent>
       </Card>

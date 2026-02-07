@@ -9,7 +9,7 @@ import {
 const locationHostname = typeof window !== 'undefined' ? window.location.hostname : ''
 
 const instance = axios.create({
-  baseURL: locationHostname,
+  baseURL: `http://${locationHostname}:4000/api/`,
   timeout: 10000
 })
 
