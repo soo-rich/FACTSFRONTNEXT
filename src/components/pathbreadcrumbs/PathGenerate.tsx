@@ -14,7 +14,7 @@ import { toast } from 'react-toastify'
 import type { ComponentDictonaryParamsType } from '@/types/componentTypes'
 
 const PathGenerate = ({ dictionary }: ComponentDictonaryParamsType) => {
-  const trad = ['order_slip','purchase_order']
+  const trad = ['order_slip', 'purchase_order']
 
   //hook to get the current path
   const { pathname } = useLocation()
@@ -76,13 +76,17 @@ const PathGenerate = ({ dictionary }: ComponentDictonaryParamsType) => {
               return <Typography key={index}>{dictionary['navigation'].case[String(item)]}</Typography>
             }
 
-            if (item==='invoice') {
+            if (item === 'invoice') {
               // @ts-ignore
               return <Typography key={index}>{dictionary['navigation'][String(item)]}</Typography>
             }
 
 
             return <Typography key={index}>{folderName}</Typography>
+          }
+
+          if (item=== 'docs'){
+            return <Typography key={index}>{'documents'}</Typography>
           }
 
           return (

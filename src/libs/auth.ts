@@ -21,7 +21,8 @@ export const authOptions: NextAuthOptions = {
        */
       credentials: {
         username: { label: 'Username', type: 'text' },
-        password: { label: 'Password', type: 'password' }
+        password: { label: 'Password', type: 'password' },
+        hostname: { label: 'Hostname', type: 'text' }
       },
       async authorize(credentials) {
         /*
@@ -38,7 +39,7 @@ export const authOptions: NextAuthOptions = {
           const res = await AuthService.login({
             username: credentials.username,
             password: credentials.password
-          })
+          }, credentials.hostname)
 
           if (res.bearer && res.refresh) {
             const userInfo = JwtUtils.decode(res.bearer)
@@ -95,6 +96,15 @@ export const authOptions: NextAuthOptions = {
      * the `session()` callback. So we have to add custom parameters in `token`
      * via `jwt()` callback to make them accessible in the `session()` callback
      */
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith('/')) return `${baseUrl}${url}`
+
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url
+
+      return baseUrl
+    },
     async jwt({ token, user }) {
       return { ...token, ...user }
     },

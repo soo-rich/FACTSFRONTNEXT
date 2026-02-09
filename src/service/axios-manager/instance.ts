@@ -6,8 +6,10 @@ import {
   InterceptorRemoveParamsNull
 } from '@/service/axios-manager/interceptor'
 
+const locationHostname = typeof window !== 'undefined' ? window.location.hostname : ''
+
 const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: `http://${locationHostname}:4000/api/`,
   timeout: 10000
 })
 

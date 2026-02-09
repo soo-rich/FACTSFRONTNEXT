@@ -30,6 +30,7 @@ import type { PurchaseOrderSave } from '@/types/soosmart/dossier/purchaseOrder.t
 import { schemaPurchaseOrder } from '@/types/soosmart/dossier/purchaseOrder.type'
 import { PurchaseOrderService } from '@/service/dossier/purchaseOrder.service'
 import { FileUploaderRestrictions } from '@components/CustomInput/FileUploader'
+import LoadingButton from '@components/button/LoadingButton'
 
 
 const AdoptForm = (props: AddEditFormType<any>) => {
@@ -108,37 +109,58 @@ const AdoptForm = (props: AddEditFormType<any>) => {
   }, [value])
 
 
-  return <form onSubmit={handleSubmit(handleSubmitForm)} noValidate className={'flex flex-col gap-4 '}>
-    <Grid2 container direction={'column'} size={12} gap={6} spacing={3}>
-      <Grid2 size={{ xs: 12, sm: 6 }}>
-        <Typography color="text.primary">Type de fichier</Typography>
-        <RadioGroup row aria-label="controlled" name="controlled" value={value} onChange={handleChange}>
-          <FormControlLabel value="image" control={<Radio />} label="Imgae" />
-          <FormControlLabel value="pdf" control={<Radio />} label="Pdf" />
-        </RadioGroup>
+  return (
+    <form onSubmit={handleSubmit(handleSubmitForm)} noValidate className={'flex flex-col gap-4 '}>
+      <Grid2 container direction={'column'} size={12} gap={6} spacing={3}>
+        <Grid2 size={{ xs: 12, sm: 6 }}>
+          <Typography color="text.primary">Type de fichier</Typography>
+          <RadioGroup row aria-label="controlled" name="controlled" value={value} onChange={handleChange}>
+            <FormControlLabel value="image" control={<Radio />} label="Imgae" />
+            <FormControlLabel value="pdf" control={<Radio />} label="Pdf" />
+          </RadioGroup>
+        </Grid2>
+        <Controller
+          render={({ field }) => (
+            <FileUploaderRestrictions setFile={field.onChange} controls={control} maxFiles={1} accept={accept} />
+          )}
+          name={'file'}
+          control={control}
+        />
       </Grid2>
-      <Controller render={({ field }) => (
-        <FileUploaderRestrictions setFile={field.onChange} controls={control} maxFiles={1} accept={accept} />
-      )} name={'file'} control={control} />
-    </Grid2>
 
-    <Grid2 container direction={'row'} size={12} spacing={3} sx={{
-      justifyContent: 'space-evenly',
-      alignItems: 'center',
-      gap: 1
-    }}>
-      <Button size={'small'} className={'rounded-2xl hover:bg-green-500/50 hover:text-green-600'} variant="contained"
-        color="primary" type="submit"
-        endIcon={<ThumbsUp size={20} className={'text-sm'} />} disabled={AdoptMutation.isPending}>
-        Adopter
-      </Button>
-      <Button size={'small'} className={'rounded-2xl hover:bg-red-500/50 hover:text-red-600'} variant="tonal"
-        color="inherit"
-        endIcon={<CloseIcon />} disabled={AdoptMutation.isPending} onClick={handleCancel}>
-        Annuler
-      </Button>
-    </Grid2>
-  </form>
+      <Grid2
+        container
+        direction={'row'}
+        size={12}
+        spacing={3}
+        sx={{
+          justifyContent: 'space-evenly',
+          alignItems: 'center',
+          gap: 1
+        }}
+      >
+        <LoadingButton
+          variant="contained"
+          color="primary"
+          type="submit"
+          endIcon={<ThumbsUp size={20} className={'text-sm'} />}
+          loading={AdoptMutation.isPending}
+        >
+          Adopter
+        </LoadingButton
+        >
+        <Button
+          variant="tonal"
+          color="inherit"
+          endIcon={<CloseIcon />}
+          disabled={AdoptMutation.isPending}
+          onClick={handleCancel}
+        >
+          Annuler
+        </Button>
+      </Grid2>
+    </form>
+  )
 }
 
 export default AdoptForm

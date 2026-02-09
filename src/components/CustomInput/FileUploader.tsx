@@ -99,7 +99,8 @@ export const FileUploaderRestrictions = (props: FileUploaderSingleProps) => {
           <div className={'flex flex-row justify-between items-center gap-2 w-full'}>
             <Typography className="file-name">{filename?`${filename}.${file.name.split('.').reverse()[0]}`:file.name}</Typography>
             <Controller
-              render={({ field }) => (<CustomTextField autoFocus={true} {...field} onBlur={(e) => setFilename(e.target.value)} />)}
+              render={({ field }) => (<CustomTextField
+                label={'Nom du fichier'} autoFocus={true} {...field} onBlur={(e) => setFilename(e.target.value)} />)}
               name={'filename'} control={con} />
           </div>
 

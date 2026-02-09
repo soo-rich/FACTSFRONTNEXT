@@ -173,7 +173,7 @@ const ProformaList = () => {
               color={'error'}
               onClick={() => UtiliMetod.SuppressionConfirmDialog({
                 data: row.original.reference,
-                confirmAction: () => DeleteMutation.mutate(row.original.id)
+                confirmAction: () => DeleteMutation.mutate(row.original.numero)
               })
               }
               className="cursor-pointer "

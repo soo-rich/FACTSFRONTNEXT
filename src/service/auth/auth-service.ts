@@ -1,4 +1,5 @@
 import { minLength, object, pipe, string } from 'valibot'
+import axios from 'axios'
 
 import instance from '@/service/axios-manager/instance'
 
@@ -8,24 +9,21 @@ export const schemaLogin = object({
 })
 
 export class AuthService {
-  static async login(data: { username: string; password: string }) {
+  static async login(data: { username: string; password: string }, hostname?: string) {
 
-    return (
-      await instance.post<{ bearer: string; refresh: string }>(
-        'auth/login',
-        data
-      )
-    ).data
+    const instance_axios = axios.create({
+      baseURL: process.env.NEXT_PUBLIC_API_URL || `http://${hostname}:4000/api/`,
+      timeout: 10000
+    })
+
+    return (await instance_axios.post<{ bearer: string; refresh: string }>('auth/login', data)).data
   }
 
   static async refreshToken(refreshToken: string) {
     return (
-      await instance.post<{ bearer: string; refresh: string }>(
-        'auth/refresh-token',
-        {
-          refresh: refreshToken
-        }
-      )
+      await instance.post<{ bearer: string; refresh: string }>('auth/refresh-token', {
+        refresh: refreshToken
+      })
     ).data
   }
 
