@@ -1,8 +1,9 @@
 'use client'
 
+import type { MouseEvent } from 'react'
+
 // React Imports
 import { useRef, useState } from 'react'
-import type { MouseEvent } from 'react'
 
 // Next Imports
 import { useParams, useRouter } from 'next/navigation'
@@ -77,17 +78,16 @@ const UserDropdown = () => {
   }
 
   const handleUserLogout = async () => {
-    const appbasepath = `http://${window.location.hostname}:${window.location.port}`
 
     try {
-      AuthService.logout()
+      await AuthService.logout()
     } catch (error) {
       console.error(error)
     }
 
     try {
-      // Sign out from the app
-      await signOut({ callbackUrl: appbasepath })
+      await signOut({ redirect: false })
+      router.refresh()
     } catch (error) {
       console.error(error)
 
@@ -109,26 +109,26 @@ const UserDropdown = () => {
     <>
       <Badge
         ref={anchorRef}
-        overlap='circular'
+        overlap="circular"
         badgeContent={<BadgeContentSpan onClick={handleDropdownOpen} />}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        className='mis-2'
+        className="mis-2"
       >
         <Avatar
           ref={anchorRef}
           alt={session?.user?.name || ''}
           src={data?.presigned || ''}
           onClick={handleDropdownOpen}
-          className='cursor-pointer bs-[38px] is-[38px]'
+          className="cursor-pointer bs-[38px] is-[38px]"
         />
       </Badge>
       <Popper
         open={open}
         transition
         disablePortal
-        placement='bottom-end'
+        placement="bottom-end"
         anchorEl={anchorRef.current}
-        className='min-is-[240px] !mbs-3 z-[1]'
+        className="min-is-[240px] !mbs-3 z-[1]"
       >
         {({ TransitionProps, placement }) => (
           <Fade
@@ -140,28 +140,28 @@ const UserDropdown = () => {
             <Paper className={settings.skin === 'bordered' ? 'border shadow-none' : 'shadow-lg'}>
               <ClickAwayListener onClickAway={e => handleDropdownClose(e as MouseEvent | TouchEvent)}>
                 <MenuList>
-                  <div className='flex items-center plb-2 pli-6 gap-2' tabIndex={-1}>
+                  <div className="flex items-center plb-2 pli-6 gap-2" tabIndex={-1}>
                     <Avatar alt={session?.user?.name || ''} src={data?.presigned || ''} />
-                    <div className='flex items-start flex-col'>
-                      <Typography className='font-medium' color='text.primary'>
+                    <div className="flex items-start flex-col">
+                      <Typography className="font-medium" color="text.primary">
                         {session?.user?.name || ''}
                       </Typography>
-                      <Typography variant='caption'>{session?.user?.email || ''}</Typography>
+                      <Typography variant="caption">{session?.user?.email || ''}</Typography>
                     </div>
                   </div>
-                  <Divider className='mlb-1' />
-                  <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/profile')}>
-                    <i className='tabler-settings' />
-                    <Typography color='text.primary'>Profile</Typography>
+                  <Divider className="mlb-1" />
+                  <MenuItem className="mli-2 gap-3" onClick={e => handleDropdownClose(e, '/profile')}>
+                    <i className="tabler-settings" />
+                    <Typography color="text.primary">Profile</Typography>
                   </MenuItem>
 
-                  <div className='flex items-center plb-2 pli-3'>
+                  <div className="flex items-center plb-2 pli-3">
                     <Button
                       fullWidth
-                      variant='contained'
-                      color='error'
-                      size='small'
-                      endIcon={<i className='tabler-logout' />}
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      endIcon={<i className="tabler-logout" />}
                       onClick={handleUserLogout}
                       sx={{ '& .MuiButton-endIcon': { marginInlineStart: 1.5 } }}
                     >

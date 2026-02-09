@@ -10,14 +10,11 @@ export const schemaLogin = object({
 
 export class AuthService {
   static async login(data: { username: string; password: string }, hostname?: string) {
-    console.log('login', hostname)
 
     const instance_axios = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL || `http://${window.location.hostname}:4000/api/`,
+      baseURL: process.env.NEXT_PUBLIC_API_URL || `http://${hostname}:4000/api/`,
       timeout: 10000
     })
-
-    console.log('instance_axios', instance_axios.defaults)
 
     return (await instance_axios.post<{ bearer: string; refresh: string }>('auth/login', data)).data
   }

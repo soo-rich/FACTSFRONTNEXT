@@ -33,7 +33,7 @@ export const InterceptorErrorHandler = (instance: AxiosInstance) => {
 
             if (response) {
                 if (response.status === 403) {
-                    toast.error(`${(response as any)?.data.message} \n Veuillez vous reconnecter`)
+                    toast.error(`${(response as any)?.data.message??''} \n Veuillez vous reconnecter`)
                 } else if (response.status === 401) {
                     toast.error('Mauvais Identifiant');
                 }
