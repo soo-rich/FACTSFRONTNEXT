@@ -26,7 +26,6 @@ import { ProformaService } from '@/service/dossier/proforma.service'
 import type { ProformaType } from '@/types/soosmart/dossier/proforma.type'
 import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
 
-
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
 import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
@@ -34,8 +33,32 @@ import AdoptForm from '@views/soosmart/dossier/proforma/component/adopt-form'
 import AddProformaModal from '@views/soosmart/dossier/proforma/form/add-proforma-modal'
 import { DocumentService } from '@/service/document/document.service'
 
-
 const columnHelper = createColumnHelper<ProformaType>()
+
+const RenderClientOrProject = ({ for_who }: { for_who: Pick<ProformaType, 'client' | 'projet'> }) => {
+  const isclient = !!for_who.client
+  const isprojet = !!for_who.projet
+
+  return (
+    <div className='flex flex-col gap-1'>
+      <Typography>
+        {isclient
+          ? `${for_who?.client?.nom} - ${for_who.client?.sigle}`
+          : isprojet
+            ? `${for_who.projet?.projet_type}`
+            : 'N\A'}
+      </Typography>
+      <div>
+        <Chip
+          size='small'
+          variant={'tonal'}
+          color={isclient ? 'primary' : isprojet ? 'info' : 'secondary'}
+          label={isclient ? 'Client' : isprojet ? 'Projet' : 'N/A'}
+        />
+      </div>
+    </div>
+  )
+}
 
 const ProformaList = () => {
   const queryClient = useQueryClient()
@@ -57,13 +80,13 @@ const ProformaList = () => {
     queryFn: async () => {
       return notadopted
         ? await ProformaService.getAllnotAdopted({
-          page: pageIndex,
-          pagesize: pageSize
-        })
+            page: pageIndex,
+            pagesize: pageSize
+          })
         : await ProformaService.getAll({
-          page: pageIndex,
-          pagesize: pageSize
-        })
+            page: pageIndex,
+            pagesize: pageSize
+          })
     },
     refetchOnWindowFocus: true,
     refetchOnMount: true,
@@ -88,7 +111,6 @@ const ProformaList = () => {
     }
   })
 
-
   const handleClickToAdopt = (data: ProformaType) => {
     setProformaSelect(data)
 
@@ -107,10 +129,12 @@ const ProformaList = () => {
         header: 'Numéro',
         cell: info => info.getValue()
       }),
-      columnHelper.accessor('client', {
+      columnHelper.display({
+        id: 'Client',
         header: 'Client',
-        cell: ({ row }) =>
-          <Typography>{row.original.client?.nom + ' - ' + row.original.client?.sigle || 'N/A'}</Typography>
+        cell: ({ row }) => (
+          <RenderClientOrProject for_who={{ client: row.original.client, projet: row.original.projet }} />
+        )
       }),
       columnHelper.accessor('createdat', {
         header: 'Date de création',
@@ -134,9 +158,9 @@ const ProformaList = () => {
         header: 'Status',
         cell: ({ row }) =>
           row.original.oldVersion ? (
-            <Chip label={'Rejétée'} variant="tonal" color={'error'} />
+            <Chip label={'Rejétée'} variant='tonal' color={'error'} />
           ) : row.original.adopted ? (
-            <Chip label={'Adoptée'} variant="tonal" color={'success'} />
+            <Chip label={'Adoptée'} variant='tonal' color={'success'} />
           ) : (
             <Button
               disabled={row.original.oldVersion}
@@ -153,21 +177,21 @@ const ProformaList = () => {
         id: 'actions', // Important : donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             <Tooltip title={'Voir le PDF'}>
               <CustomIconButton
                 href={getLocalizedUrl(`/docs/${row.original.numero}`, locale as Locale)}
-                className="cursor-pointer text-green-600 hover:text-green-800"
+                className='cursor-pointer text-green-600 hover:text-green-800'
               >
-                <i className="tabler-file-type-pdf" />
+                <i className='tabler-file-type-pdf' />
               </CustomIconButton>
             </Tooltip>
             <Tooltip title={'Télécharger le PDF'}>
               <CustomIconButton
                 onClick={() => DocumentService.generatePdf(row.original.numero)}
-                className="cursor-pointer  hover:text-green-800"
+                className='cursor-pointer  hover:text-green-800'
               >
-                <i className="tabler-download" />
+                <i className='tabler-download' />
               </CustomIconButton>
             </Tooltip>
 
@@ -178,9 +202,9 @@ const ProformaList = () => {
                     setProformaSelect(row.original)
                     setIsModalOpen(true)
                   }}
-                  className="cursor-pointer text-yellow-600 hover:text-yellow-800"
+                  className='cursor-pointer text-yellow-600 hover:text-yellow-800'
                 >
-                  <i className="tabler-edit" />
+                  <i className='tabler-edit' />
                 </CustomIconButton>
               </Tooltip>
             )}
@@ -193,9 +217,9 @@ const ProformaList = () => {
                     confirmAction: () => DeleteMutation.mutate(row.original.numero)
                   })
                 }
-                className="cursor-pointer "
+                className='cursor-pointer '
               >
-                <i className="tabler-trash" />
+                <i className='tabler-trash' />
               </CustomIconButton>
             </Tooltip>
           </div>
@@ -239,39 +263,57 @@ const ProformaList = () => {
           .then(r => r)
       }} />*/}
 
-      <DefaultDialog open={isModalOpenAdopt} setOpen={setIsModalOpenAdopt} onClose={() => {
-        setIsModalOpen(false)
-        setProformaSelect(undefined)
-      }} title={'Adopter la proforma'}>
-        <AdoptForm data={proformaselect} onCancel={() => {
-          setProformaSelect(undefined)
-          setIsModalOpenAdopt(false)
-        }} onSuccess={() => {
-          queryClient
-            .invalidateQueries({
-              queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize]
-            })
-            .then(r => r)
-        }} />
-      </DefaultDialog>
-      <DefaultDialog dialogMaxWidth={'md'} open={isModalOpen} setOpen={setIsModalOpen} onClose={() => {
-        setIsModalOpen(false)
-        setProformaSelect(undefined)
-      }} title={`Construire un Proforma ${proformaselect ? `à partir de ${proformaselect.numero}` : ''}`}>
-        <AddProformaModal data={proformaselect} onCancel={() => {
-          setIsModalOpenAdopt(false)
-        }} onSuccess={() => {
+      <DefaultDialog
+        open={isModalOpenAdopt}
+        setOpen={setIsModalOpenAdopt}
+        onClose={() => {
           setIsModalOpen(false)
-          queryClient
-            .invalidateQueries({
-              queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize]
-            })
-            .then(r => r)
-        }} />
+          setProformaSelect(undefined)
+        }}
+        title={'Adopter la proforma'}
+      >
+        <AdoptForm
+          data={proformaselect}
+          onCancel={() => {
+            setProformaSelect(undefined)
+            setIsModalOpenAdopt(false)
+          }}
+          onSuccess={() => {
+            queryClient
+              .invalidateQueries({
+                queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize]
+              })
+              .then(r => r)
+          }}
+        />
+      </DefaultDialog>
+      <DefaultDialog
+        dialogMaxWidth={'md'}
+        open={isModalOpen}
+        setOpen={setIsModalOpen}
+        onClose={() => {
+          setIsModalOpen(false)
+          setProformaSelect(undefined)
+        }}
+        title={`Construire un Proforma ${proformaselect ? `à partir de ${proformaselect.numero}` : ''}`}
+      >
+        <AddProformaModal
+          data={proformaselect}
+          onCancel={() => {
+            setIsModalOpenAdopt(false)
+          }}
+          onSuccess={() => {
+            setIsModalOpen(false)
+            queryClient
+              .invalidateQueries({
+                queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize]
+              })
+              .then(r => r)
+          }}
+        />
       </DefaultDialog>
     </>
   )
 }
-
 
 export default ProformaList

@@ -30,14 +30,28 @@ export const InterceptorErrorHandler = (instance: AxiosInstance) => {
     response => {
       return response
     },
-    (error: AxiosError) => {
-      const { response } = error
+    async (error: AxiosError) => {
+      const { response, config } = error
 
       if (response) {
-        if (response.status === 403) {
+        if (response.status === 401 && config && !(config as any).__isRetry) {
+          // Marquer la requête comme un retry pour éviter les boucles infinies
+          ;(config as any).__isRetry = true
+
+          // Récupérer la session mise à jour (le callback jwt aura fait le refresh)
+          const session = await getSession()
+
+          if (session?.bearer && !session?.error) {
+            config.headers.Authorization = `Bearer ${session.bearer}`
+
+            // Re-exécuter la requête avec le nouveau token
+            return instance(config)
+          }
+
+          // Si le refresh a échoué, on redirige vers le login
+          toast.error('Session expirée, veuillez vous reconnecter')
+        } else if (response.status === 403) {
           toast.error(`${(response as any)?.data.message ?? ''} \n Veuillez vous reconnecter`)
-        } else if (response.status === 401) {
-          toast.error('Mauvais Identifiant')
         }
       }
 
