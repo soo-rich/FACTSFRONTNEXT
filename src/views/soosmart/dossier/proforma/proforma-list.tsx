@@ -19,6 +19,12 @@ import Button from '@mui/material/Button'
 
 import Chip from '@mui/material/Chip'
 
+import Card from '@mui/material/Card'
+
+import CardContent from '@mui/material/CardContent'
+
+import CardHeader from '@mui/material/CardHeader'
+
 import UtiliMetod from '@/utils/utilsmethod'
 import CustomIconButton from '@core/components/mui/IconButton'
 import TableGeneric from '@/components/table/TableGeneric'
@@ -32,6 +38,8 @@ import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
 import AdoptForm from '@views/soosmart/dossier/proforma/component/adopt-form'
 import AddProformaModal from '@views/soosmart/dossier/proforma/form/add-proforma-modal'
 import { DocumentService } from '@/service/document/document.service'
+import CustomTextField from '@core/components/mui/TextField'
+import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 
 const columnHelper = createColumnHelper<ProformaType>()
 
@@ -40,7 +48,7 @@ const RenderClientOrProject = ({ for_who }: { for_who: Pick<ProformaType, 'clien
   const isprojet = !!for_who.projet
 
   return (
-    <div className='flex flex-col gap-1'>
+    <div className="flex flex-col gap-1">
       <Typography>
         {isclient
           ? `${for_who?.client?.nom} - ${for_who.client?.sigle}`
@@ -50,7 +58,7 @@ const RenderClientOrProject = ({ for_who }: { for_who: Pick<ProformaType, 'clien
       </Typography>
       <div>
         <Chip
-          size='small'
+          size="small"
           variant={'tonal'}
           color={isclient ? 'primary' : isprojet ? 'info' : 'secondary'}
           label={isclient ? 'Client' : isprojet ? 'Projet' : 'N/A'}
@@ -67,6 +75,9 @@ const ProformaList = () => {
   const [notadopted, setNotadopte] = useState<boolean>(false)
   const [filter, setFilter] = useState('')
 
+  const [startDate, setStartDate] = useState<Date | null>(null)
+  const [endDate, setEndDate] = useState<Date | null>(null)
+
   // États pour le modal
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalOpenAdopt, setIsModalOpenAdopt] = useState(false)
@@ -74,19 +85,19 @@ const ProformaList = () => {
 
   // hooks
   const { lang: locale } = useParams()
+  const queryKey = useMemo(() => [ProformaService.PROFORMA_KEY, pageIndex, pageSize, notadopted, filter, startDate, endDate], [filter, pageIndex, pageSize, notadopted, startDate, endDate])
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize, notadopted],
+    queryKey,
     queryFn: async () => {
-      return notadopted
-        ? await ProformaService.getAllnotAdopted({
-            page: pageIndex,
-            pagesize: pageSize
-          })
-        : await ProformaService.getAll({
-            page: pageIndex,
-            pagesize: pageSize
-          })
+      return await ProformaService.getAll({
+        page: pageIndex,
+        pagesize: pageSize,
+        adopted: notadopted,
+        search: filter,
+        end: endDate,
+        start: startDate
+      })
     },
     refetchOnWindowFocus: true,
     refetchOnMount: true,
@@ -158,9 +169,9 @@ const ProformaList = () => {
         header: 'Status',
         cell: ({ row }) =>
           row.original.oldVersion ? (
-            <Chip label={'Rejétée'} variant='tonal' color={'error'} />
+            <Chip label={'Rejétée'} variant="tonal" color={'error'} />
           ) : row.original.adopted ? (
-            <Chip label={'Adoptée'} variant='tonal' color={'success'} />
+            <Chip label={'Adoptée'} variant="tonal" color={'success'} />
           ) : (
             <Button
               disabled={row.original.oldVersion}
@@ -177,21 +188,21 @@ const ProformaList = () => {
         id: 'actions', // Important : donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
-          <div className='flex gap-2'>
+          <div className="flex gap-2">
             <Tooltip title={'Voir le PDF'}>
               <CustomIconButton
                 href={getLocalizedUrl(`/docs/${row.original.numero}`, locale as Locale)}
-                className='cursor-pointer text-green-600 hover:text-green-800'
+                className="cursor-pointer text-green-600 hover:text-green-800"
               >
-                <i className='tabler-file-type-pdf' />
+                <i className="tabler-file-type-pdf" />
               </CustomIconButton>
             </Tooltip>
             <Tooltip title={'Télécharger le PDF'}>
               <CustomIconButton
                 onClick={() => DocumentService.generatePdf(row.original.numero)}
-                className='cursor-pointer  hover:text-green-800'
+                className="cursor-pointer  hover:text-green-800"
               >
-                <i className='tabler-download' />
+                <i className="tabler-download" />
               </CustomIconButton>
             </Tooltip>
 
@@ -202,9 +213,9 @@ const ProformaList = () => {
                     setProformaSelect(row.original)
                     setIsModalOpen(true)
                   }}
-                  className='cursor-pointer text-yellow-600 hover:text-yellow-800'
+                  className="cursor-pointer text-yellow-600 hover:text-yellow-800"
                 >
-                  <i className='tabler-edit' />
+                  <i className="tabler-edit" />
                 </CustomIconButton>
               </Tooltip>
             )}
@@ -217,9 +228,9 @@ const ProformaList = () => {
                     confirmAction: () => DeleteMutation.mutate(row.original.numero)
                   })
                 }
-                className='cursor-pointer '
+                className="cursor-pointer "
               >
-                <i className='tabler-trash' />
+                <i className="tabler-trash" />
               </CustomIconButton>
             </Tooltip>
           </div>
@@ -233,6 +244,32 @@ const ProformaList = () => {
 
   return (
     <>
+      <Card>
+        <CardHeader>Filtre</CardHeader>
+        <CardContent className={'grid grid-cols-2 gap-4'}>
+          <AppReactDatepicker
+            showYearDropdown
+            isClearable={true}
+            showMonthDropdown
+            selected={startDate}
+            id='picker-open-date'
+            openToDate={new Date()}
+            onChange={(date: Date | null) => setStartDate(date)}
+            customInput={<CustomTextField label='Date de Debut' fullWidth />}
+          />
+          <AppReactDatepicker
+            showYearDropdown
+            showMonthDropdown
+            selected={endDate}
+            isClearable={true}
+            id='picker-open-date'
+            openToDate={new Date()}
+            onChange={(date: Date | null) => setEndDate(date)}
+            customInput={<CustomTextField label='Date de Fin' fullWidth />}
+          />
+        </CardContent>
+      </Card>
+
       <TableGeneric
         tabledata={data?.content}
         columns={columns}

@@ -6,23 +6,14 @@ import type { ClientType } from '@/types/soosmart/client.type'
 import type { ProjetType } from '@/types/soosmart/projet.type'
 import type { BaseType } from '@/types/soosmart/api-default,type'
 
+
+export type ProformaQuery = {
+  end?: Date|null
+  start?: Date|null
+  adopted?: boolean
+}
+
 export type ProformaType = {
-
-  /*  id: string
-  reference: string
-  numero: string
-  uniqueIdDossier: string
-  articleQuantiteslist: Article_Quantite[]
-  total_ht: number
-  total_ttc: number
-  total_tva: number
-  client: string
-  date: Date
-  signby: string
-  role?: string
-  adopted: boolean
-  old: boolean*/
-
   isdeleted: boolean
   numero: string
   uniqueIdDossier: string
