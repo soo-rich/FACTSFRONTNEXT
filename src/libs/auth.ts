@@ -36,11 +36,13 @@ export const authOptions: NextAuthOptions = {
           // ** Login API Call to match the user credentials and receive user data in response along with his role
           if (!credentials) return null
 
-          const res = await AuthService.login({
-            username: credentials.username,
-            password: credentials.password
-          }, credentials.hostname)
-
+          const res = await AuthService.login(
+            {
+              username: credentials.username,
+              password: credentials.password
+            },
+            credentials.hostname
+          )
 
           if (res.access_token && res.refresh_token) {
             const userInfo = JwtUtils.decode(res.access_token)
@@ -53,7 +55,8 @@ export const authOptions: NextAuthOptions = {
               role: userInfo?.role,
               image: userInfo?.image,
               bearer: res.access_token,
-              refresh: res.refresh_token
+              refresh: res.refresh_token,
+              expires_in: res.expires_in
             }
           }
 

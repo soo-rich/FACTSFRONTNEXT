@@ -11,7 +11,7 @@ type LoginResponse = {
   user: User
 }
 
-export interface User {
+interface User {
   id: string
   isdeleted: boolean
   email: string
