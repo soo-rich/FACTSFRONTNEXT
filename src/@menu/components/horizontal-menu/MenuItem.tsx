@@ -49,7 +49,7 @@ export type MenuItemProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'prefi
     disabled?: boolean
     target?: string
     rel?: string
-    component?: string | ReactElement
+    component?: string | ReactElement<{ href?: string; [key: string]: unknown }>
     onActiveChange?: (active: boolean) => void
 
     /**

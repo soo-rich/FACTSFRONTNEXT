@@ -1,8 +1,6 @@
 import type { ChangeEvent } from 'react'
 import { useEffect, useState } from 'react'
 
-import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon'
-
 import { Controller, useForm } from 'react-hook-form'
 
 import { useMutation } from '@tanstack/react-query'
@@ -11,7 +9,7 @@ import { toast } from 'react-toastify'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
 
-import { Grid2, RadioGroup } from '@mui/material'
+import { Grid as Grid2, RadioGroup } from '@mui/material'
 
 import Typography from '@mui/material/Typography'
 
@@ -23,7 +21,7 @@ import type { Accept } from 'react-dropzone'
 
 import Button from '@mui/material/Button'
 
-import { ThumbsUp } from 'lucide-react'
+import { CircleX, ThumbsUp } from 'lucide-react'
 
 import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 import type { PurchaseOrderSave } from '@/types/soosmart/dossier/purchaseOrder.type'
@@ -31,7 +29,6 @@ import { schemaPurchaseOrder } from '@/types/soosmart/dossier/purchaseOrder.type
 import { PurchaseOrderService } from '@/service/dossier/purchaseOrder.service'
 import { FileUploaderRestrictions } from '@components/CustomInput/FileUploader'
 import LoadingButton from '@components/button/LoadingButton'
-
 
 const AdoptForm = (props: AddEditFormType<any>) => {
   const { onSuccess, onCancel, data } = props
@@ -44,12 +41,7 @@ const AdoptForm = (props: AddEditFormType<any>) => {
     setValue((event.target as any).value)
   }
 
-
-  const {
-    control,
-    handleSubmit,
-    reset
-  } = useForm<PurchaseOrderSave>({
+  const { control, handleSubmit, reset } = useForm<PurchaseOrderSave>({
     resolver: valibotResolver(schemaPurchaseOrder),
     defaultValues: {
       filename: '',
@@ -71,9 +63,9 @@ const AdoptForm = (props: AddEditFormType<any>) => {
 
       toast.success('Proforma adoptée avec succès')
     },
-    onError: (error) => {
-      toast.error((error as any).reponse.data.message || 'Erreur lors de l\'adoption de la proforma')
-      console.error('Erreur lors de l\'adoption de la proforma')
+    onError: error => {
+      toast.error((error as any).reponse.data.message || "Erreur lors de l'adoption de la proforma")
+      console.error("Erreur lors de l'adoption de la proforma")
     }
   })
 
@@ -82,7 +74,6 @@ const AdoptForm = (props: AddEditFormType<any>) => {
   }
 
   const handleCancel = () => {
-
     reset({
       filename: '',
       numeroProforma: '',
@@ -92,7 +83,6 @@ const AdoptForm = (props: AddEditFormType<any>) => {
     if (onCancel) {
       onCancel()
     }
-
   }
 
   useEffect(() => {
@@ -108,15 +98,14 @@ const AdoptForm = (props: AddEditFormType<any>) => {
     }
   }, [value])
 
-
   return (
     <form onSubmit={handleSubmit(handleSubmitForm)} noValidate className={'flex flex-col gap-4 '}>
       <Grid2 container direction={'column'} size={12} gap={6} spacing={3}>
         <Grid2 size={{ xs: 12, sm: 6 }}>
-          <Typography color="text.primary">Type de fichier</Typography>
-          <RadioGroup row aria-label="controlled" name="controlled" value={value} onChange={handleChange}>
-            <FormControlLabel value="image" control={<Radio />} label="Imgae" />
-            <FormControlLabel value="pdf" control={<Radio />} label="Pdf" />
+          <Typography color='text.primary'>Type de fichier</Typography>
+          <RadioGroup row aria-label='controlled' name='controlled' value={value} onChange={handleChange}>
+            <FormControlLabel value='image' control={<Radio />} label='Imgae' />
+            <FormControlLabel value='pdf' control={<Radio />} label='Pdf' />
           </RadioGroup>
         </Grid2>
         <Controller
@@ -140,19 +129,18 @@ const AdoptForm = (props: AddEditFormType<any>) => {
         }}
       >
         <LoadingButton
-          variant="contained"
-          color="primary"
-          type="submit"
+          variant='contained'
+          color='primary'
+          type='submit'
           endIcon={<ThumbsUp size={20} className={'text-sm'} />}
           loading={AdoptMutation.isPending}
         >
           Adopter
-        </LoadingButton
-        >
+        </LoadingButton>
         <Button
-          variant="tonal"
-          color="inherit"
-          endIcon={<CloseIcon />}
+          variant='tonal'
+          color='inherit'
+          endIcon={<CircleX />}
           disabled={AdoptMutation.isPending}
           onClick={handleCancel}
         >

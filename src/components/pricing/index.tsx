@@ -7,7 +7,7 @@ import Chip from '@mui/material/Chip'
 import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
 import InputLabel from '@mui/material/InputLabel'
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import { useTheme } from '@mui/material/styles'
 
 // Third-party Imports

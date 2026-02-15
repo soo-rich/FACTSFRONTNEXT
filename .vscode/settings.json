@@ -49,9 +49,5 @@
     "customizer",
     "iconify",
     "tanstack"
-  ],
-  "kiroAgent.configureMCP": "Enabled",
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  ]
 }

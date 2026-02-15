@@ -12,7 +12,7 @@ import AppReactToastify from '@/libs/styles/AppReactToastify'
 
 // Util Imports
 import { getMode, getSettingsFromCookie, getSystemMode } from '@core/utils/serverHelpers'
-import QueryProvider from "@components/queryprovider/QueryProvider";
+import QueryProvider from '@components/queryprovider/QueryProvider'
 
 type Props = ChildrenType & {
   direction: Direction

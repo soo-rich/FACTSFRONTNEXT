@@ -117,7 +117,7 @@ async function generateIconsCSS() {
     await fs.mkdir(dir, {
       recursive: true
     })
-  } catch (err) {
+  } catch {
     //
   }
 

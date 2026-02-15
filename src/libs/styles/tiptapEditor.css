@@ -45,12 +45,13 @@
     padding-inline: 1rem;
     border-radius: 0.5rem;
 
-    code {
-      color: inherit;
-      padding: 0;
-      background: none;
-      font-size: 0.8rem;
-    }
+  }
+  
+  pre > code {
+    color: inherit;
+    padding: 0;
+    background: none;
+    font-size: 0.8rem;
   }
 
   img {

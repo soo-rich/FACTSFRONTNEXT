@@ -34,9 +34,13 @@ const Layout = async (props: ChildrenType & { params: Promise<{ lang: Locale }> 
 
   const { children } = props
 
+  // Type guard to ensure lang is a valid Locale
+  const lang: Locale = i18n.locales.includes(params.lang as Locale) ? (params.lang as Locale) : i18n.defaultLocale
+
+
   // Vars
-  const direction = i18n.langDirection[params.lang]
-  const dictionary = await getDictionary(params.lang)
+  const direction = i18n.langDirection[lang]
+  const dictionary = await getDictionary(lang)
   const mode = await getMode()
   const systemMode = await getSystemMode()
 

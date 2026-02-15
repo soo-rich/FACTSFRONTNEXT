@@ -2,7 +2,7 @@
 import type { ChangeEvent, ReactNode } from 'react'
 
 // MUI Imports
-import type { Grid2Props } from '@mui/material/Grid2'
+import type { GridProps } from '@mui/material/Grid'
 
 // Type Imports
 import type { ThemeColor } from '@core/types'
@@ -29,7 +29,7 @@ export type CustomInputHorizontalData = {
 export type CustomInputHorizontalProps = {
   name: string
   color?: ThemeColor
-  gridProps?: Grid2Props
+  gridProps?: GridProps
   data: CustomInputHorizontalData
 } & (
   | {
@@ -55,7 +55,7 @@ export type CustomInputVerticalData = {
 export type CustomInputVerticalProps = {
   name: string
   color?: ThemeColor
-  gridProps?: Grid2Props
+  gridProps?: GridProps
   data: CustomInputVerticalData
 } & (
   | {
@@ -80,7 +80,7 @@ export type CustomInputImgData = {
 export type CustomInputImgProps = {
   name: string
   color?: ThemeColor
-  gridProps: Grid2Props
+  gridProps: GridProps
   data: CustomInputImgData
 } & (
   | {

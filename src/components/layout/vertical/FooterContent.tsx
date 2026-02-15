@@ -5,7 +5,7 @@ import classnames from 'classnames'
 
 
 // Util Imports
-import {verticalLayoutClasses} from '@layouts/utils/layoutClasses'
+import { verticalLayoutClasses } from '@layouts/utils/layoutClasses'
 
 const FooterContent = () => {
 

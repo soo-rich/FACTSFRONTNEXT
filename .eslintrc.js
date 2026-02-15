@@ -1,5 +1,6 @@
 module.exports = {
   extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended', 'plugin:import/recommended', 'prettier'],
+  ignorePatterns: ['next-env.d.ts', '.next/**', 'node_modules/**'],
   rules: {
     'jsx-a11y/alt-text': 'off',
     'react/display-name': 'off',
@@ -11,6 +12,8 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/no-unused-expressions': 'off',
+    'import/no-named-as-default': 'off',
     'lines-around-comment': [
       'error',
       {
@@ -83,22 +86,6 @@ module.exports = {
         ],
         pathGroupsExcludedImportTypes: ['react', 'type'],
         'newlines-between': 'always-and-inside-groups'
-      }
-    ],
-    '@typescript-eslint/ban-types': [
-      'error',
-      {
-        extendDefaults: true,
-        types: {
-          Function: 'Use a specific function type instead',
-          Object: 'Use object instead',
-          Boolean: 'Use boolean instead',
-          Number: 'Use number instead',
-          String: 'Use string instead',
-          Symbol: 'Use symbol instead',
-          any: false,
-          '{}': false
-        }
       }
     ]
   },

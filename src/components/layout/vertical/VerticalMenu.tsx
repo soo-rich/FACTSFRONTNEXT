@@ -1,19 +1,15 @@
-'use client'
-
 // Next Imports
 // import { useParams } from 'next/navigation'
 
 // MUI Imports
-
-import {useTheme} from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles'
 
 // Third-party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // Type Imports
-
-import type {getDictionary} from '@/utils/getDictionary'
-import type {VerticalMenuContextProps} from '@menu/components/vertical-menu/Menu'
+import type { getDictionary } from '@/utils/getDictionary'
+import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
 
 // Component Imports
 import {Menu} from '@menu/vertical-menu'
@@ -43,13 +39,13 @@ type Props = {
   scrollMenu: (container: any, isPerfectScrollbar: boolean) => void
 }
 
-const RenderExpandIcon = ({open, transitionDuration}: RenderExpandIconProps) => (
+const RenderExpandIcon = ({ open, transitionDuration }: RenderExpandIconProps) => (
   <StyledVerticalNavExpandIcon open={open} transitionDuration={transitionDuration}>
-    <i className="tabler-chevron-right"/>
+    <i className='tabler-chevron-right' />
   </StyledVerticalNavExpandIcon>
 )
 
-const VerticalMenu = ({dictionary, scrollMenu}: Props) => {
+const VerticalMenu = ({ dictionary, scrollMenu }: Props) => {
   // Hooks
   const theme = useTheme()
   const verticalNavOptions = useVerticalNav()
@@ -72,8 +68,8 @@ const VerticalMenu = ({dictionary, scrollMenu}: Props) => {
             className: 'bs-full overflow-y-auto overflow-x-hidden',
             onScroll: container => scrollMenu(container, false)
           }
-          : {
-            options: {wheelPropagation: false, suppressScrollX: true},
+        : {
+            options: { wheelPropagation: false, suppressScrollX: true },
             onScrollY: container => scrollMenu(container, true)
           })}
       >

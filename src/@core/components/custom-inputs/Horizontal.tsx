@@ -1,5 +1,5 @@
 // MUI Imports
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import Radio from '@mui/material/Radio'
 import Checkbox from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography'
@@ -33,10 +33,10 @@ const Root = styled('div', {
     borderColor: 'var(--mui-palette-action-active)'
   },
   '&.active': {
-    borderColor: 'var(--mui-palette-primary-main)',
-    '& i, & svg': {
-      color: 'var(--mui-palette-primary-main) !important'
-    }
+    borderColor: 'var(--mui-palette-primary-main)'
+  },
+  '&.active i, &.active svg': {
+    color: 'var(--mui-palette-primary-main) !important'
   }
 }))
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Grid2, Typography } from '@mui/material'
+import { Grid as Grid2, Typography } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 
 import Button from '@mui/material/Button'
@@ -17,11 +17,8 @@ import EditorBasic from '@components/editor/EditorBasic'
 import type { Article_QuantiteListV2 } from '@/types/soosmart/dossier/Article_Quantite'
 import { schemaArticleQuantiteListV2 } from '@/types/soosmart/dossier/Article_Quantite'
 
-
 const AddArticle = ({ onSuccess }: { onSuccess: (data: Article_QuantiteListV2[]) => void }) => {
-
   const [articlelist, setArticlelist] = useState<Article_QuantiteListV2[]>([])
-
 
   const {
     handleSubmit,
@@ -30,8 +27,7 @@ const AddArticle = ({ onSuccess }: { onSuccess: (data: Article_QuantiteListV2[])
     formState: { errors }
   } = useForm<Article_QuantiteListV2>({
     resolver: valibotResolver(schemaArticleQuantiteListV2),
-    defaultValues:
-    {
+    defaultValues: {
       libelle: '',
       description: '',
       quantite: 0,
@@ -52,7 +48,6 @@ const AddArticle = ({ onSuccess }: { onSuccess: (data: Article_QuantiteListV2[])
     })
   }
 
-
   const handleCancel = () => {
     reset({
       libelle: '',
@@ -66,10 +61,8 @@ const AddArticle = ({ onSuccess }: { onSuccess: (data: Article_QuantiteListV2[])
     onSuccess(articlelist)
   }
 
-
-
   return (
-    <form onSubmit={handleSubmit(submitForm)} className="space-y-4">
+    <form onSubmit={handleSubmit(submitForm)} className='space-y-4'>
       <Grid2 container direction={'row'} spacing={3}>
         <Grid2 container direction={'column'} spacing={3} size={7.5}>
           <Grid2>
@@ -78,7 +71,7 @@ const AddArticle = ({ onSuccess }: { onSuccess: (data: Article_QuantiteListV2[])
                 <CustomTextField
                   fullWidth
                   label={'Libellé'}
-                  placeholder={'Entrez le libellé de l\'article'}
+                  placeholder={"Entrez le libellé de l'article"}
                   error={!!errors.libelle}
                   {...(errors.libelle && {
                     error: true,
@@ -92,20 +85,25 @@ const AddArticle = ({ onSuccess }: { onSuccess: (data: Article_QuantiteListV2[])
             />
           </Grid2>
 
-          <Grid2 container direction={'row'} size={12} sx={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 1
-          }}>
-            <Grid2 size={6} >
+          <Grid2
+            container
+            direction={'row'}
+            size={12}
+            sx={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 1
+            }}
+          >
+            <Grid2 size={6}>
               <Controller
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
                     label={'Prix Unitaire'}
-                    placeholder={'Entrez le prix de l\'article'}
-                    type="number"
+                    placeholder={"Entrez le prix de l'article"}
+                    type='number'
                     onChange={e => {
                       const value = parseFloat(e.target.value)
 
@@ -126,15 +124,15 @@ const AddArticle = ({ onSuccess }: { onSuccess: (data: Article_QuantiteListV2[])
                 control={control}
               />
             </Grid2>
-            <Grid2 size={6} >
+            <Grid2 size={6}>
               <Controller
                 render={({ field }) => (
                   <CustomTextField
                     {...field}
                     fullWidth
                     label={'Quantire'}
-                    placeholder={'Entrez le prix de l\'article'}
-                    type="number"
+                    placeholder={"Entrez le prix de l'article"}
+                    type='number'
                     onChange={e => {
                       const value = parseFloat(e.target.value)
 
@@ -157,77 +155,59 @@ const AddArticle = ({ onSuccess }: { onSuccess: (data: Article_QuantiteListV2[])
             </Grid2>
           </Grid2>
 
-
           <Grid2 container>
             <Controller
-              name="description"
+              name='description'
               control={control}
-              render={({ field }) => <EditorBasic value={field.value}  onChange={field.onChange} />}
+              render={({ field }) => <EditorBasic value={field.value} onChange={field.onChange} />}
             />
           </Grid2>
 
           <Grid2>
-            <div className="flex justify-center gap-4 mt-6">
-
-
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
+            <div className='flex justify-center gap-4 mt-6'>
+              <Button variant='contained' color='primary' type='submit'>
                 {'Ajouter'}
               </Button>
 
-
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={handleCancel}
-
-              >
+              <Button variant='outlined' color='error' onClick={handleCancel}>
                 Annuler
               </Button>
-              <Button
-                variant="outlined"
-                color="success"
-                onClick={handleFinish}
-                disabled={articlelist.length < 1}
-              >
+              <Button variant='outlined' color='success' onClick={handleFinish} disabled={articlelist.length < 1}>
                 Terminer
               </Button>
             </div>
           </Grid2>
         </Grid2>
 
-        <Divider orientation="vertical" flexItem />
-        <Grid2 container direction={'column'} spacing={3} size={4.3} sx={{
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-
-        }} >
-
-          <Typography className="text-xl font-bold w-full">Liste des articles</Typography>
+        <Divider orientation='vertical' flexItem />
+        <Grid2
+          container
+          direction={'column'}
+          spacing={3}
+          size={4.3}
+          sx={{
+            justifyContent: 'flex-start',
+            alignItems: 'center'
+          }}
+        >
+          <Typography className='text-xl font-bold w-full'>Liste des articles</Typography>
           <div className={'overflow-y-auto max-h-[30rem] flex w-full flex flex-col gap-2 spacing-3'}>
             {articlelist.map((item, index) => (
               <Grid2 key={index} size={12}>
                 <Chip
-
                   className='w-full'
                   label={`${item.libelle} -  ${item.prix_unitaire} FCFA}`}
-                  color="primary"
+                  color='primary'
                   onDelete={() => removeItem(index)}
-                  deleteIcon={<i className="tabler-trash-x text-red-600" />}
+                  deleteIcon={<i className='tabler-trash-x text-red-600' />}
                 />
               </Grid2>
             ))}
           </div>
-
-
         </Grid2>
       </Grid2>
     </form>
   )
 }
-
 
 export default AddArticle

@@ -1,5 +1,5 @@
 // MUI Imports
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import Checkbox from '@mui/material/Checkbox'
 import { styled } from '@mui/material/styles'
 

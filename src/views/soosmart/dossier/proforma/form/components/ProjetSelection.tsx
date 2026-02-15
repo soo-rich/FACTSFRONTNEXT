@@ -4,7 +4,7 @@ import { type SyntheticEvent, useEffect, useMemo, useState } from 'react'
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { Button, createFilterOptions, Grid2 } from '@mui/material'
+import { Button, createFilterOptions, Grid as Grid2 } from '@mui/material'
 
 import { ProjetService } from '@/service/projet/projet.service'
 import CustomTextField from '@core/components/mui/TextField'
@@ -19,10 +19,8 @@ type SelectType = {
   value: string
 }
 
-
-const ProjetSelection = ({ change, value }: { change: (value: string) => void, value: string | null }) => {
+const ProjetSelection = ({ change, value }: { change: (value: string) => void; value: string | null }) => {
   const queryClient = useQueryClient()
-
 
   const [isModalOpenProjet, setIsModalOpenProjet] = useState<boolean>(false)
 
@@ -31,14 +29,13 @@ const ProjetSelection = ({ change, value }: { change: (value: string) => void, v
   const { data, isError, isLoading } = useQuery({
     queryKey: querykeyprojet,
     queryFn: async () => {
-      return (await ProjetService.getAll())
+      return await ProjetService.getAll()
     },
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
   const projet = useMemo(() => data?.map(item => ({ id: item.id, value: item.projet_type })) || [], [data])
-
 
   const [projetSelect, setProjetSelect] = useState<SelectType | null>(null)
 
@@ -63,51 +60,64 @@ const ProjetSelection = ({ change, value }: { change: (value: string) => void, v
     setProjetSelect(projet?.find(item => item.id === value) || null)
   }, [projet, value])
 
-  return isError ? <ErrorView /> : isLoading ? <LoadingWithoutModal /> : projet && (<>
-    <Grid2 container direction={'row'} spacing={3}>
-      <Grid2 className="flex-grow">
-        <CustomAutocomplete
-          options={projet || []}
-          value={projetSelect}
-          fullWidth
-          filterOptions={filterOptionsProjet}
-          onChange={handleSelectProjet}
-          getOptionLabel={option => option.value || ''}
+  return isError ? (
+    <ErrorView />
+  ) : isLoading ? (
+    <LoadingWithoutModal />
+  ) : (
+    projet && (
+      <>
+        <Grid2 container direction={'row'} spacing={3}>
+          <Grid2 className='flex-grow'>
+            <CustomAutocomplete
+              options={projet || []}
+              value={projetSelect}
+              fullWidth
+              filterOptions={filterOptionsProjet}
+              onChange={handleSelectProjet}
+              getOptionLabel={option => option.value || ''}
+              renderInput={params => <CustomTextField {...params} label='Choix du Projet ' />}
+            />
+          </Grid2>
+          <Grid2 className='self-end'>
+            <Button
+              variant={'contained'}
+              color={'inherit'}
+              endIcon={<i className='tabler-plus' />}
+              onClick={() => {
+                setIsModalOpenProjet(true)
+              }}
+            >
+              Ajouter un Projet
+            </Button>
+          </Grid2>
+        </Grid2>
 
-          renderInput={params => <CustomTextField {...params} label="Choix du Projet " />}
-        />
-      </Grid2>
-      <Grid2 className="self-end">
-        <Button variant={'contained'} color={'inherit'} endIcon={<i className="tabler-plus" />}
-                onClick={() => {
-                  setIsModalOpenProjet(true)
-                }}>
-          Ajouter un Projet
-        </Button>
-      </Grid2>
-    </Grid2>
+        <DefaultDialog
+          open={isModalOpenProjet}
+          setOpen={setIsModalOpenProjet}
+          onClose={() => setIsModalOpenProjet(false)}
+          title={'Ajouter un Projet'}
+        >
+          <AddEditProjet
+            onSuccess={data => {
+              setIsModalOpenProjet(false)
+              const array = Array.isArray(data)
 
-    <DefaultDialog
-      open={isModalOpenProjet}
-      setOpen={setIsModalOpenProjet}
-      onClose={() => setIsModalOpenProjet(false)}
-      title={'Ajouter un Projet'}
-    >
-      <AddEditProjet onSuccess={(data) => {
-        setIsModalOpenProjet(false)
-        const array = Array.isArray(data)
+              if (!array && data) {
+                handleAddProjet(data.id)
+              }
 
-        if (!array && data) {
-          handleAddProjet(data.id)
-        }
-
-        setIsModalOpenProjet(false)
-      }} onCancel={() => {
-        setIsModalOpenProjet(false)
-      }} />
-
-    </DefaultDialog></>)
+              setIsModalOpenProjet(false)
+            }}
+            onCancel={() => {
+              setIsModalOpenProjet(false)
+            }}
+          />
+        </DefaultDialog>
+      </>
+    )
+  )
 }
-
 
 export default ProjetSelection

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { useParams } from 'next/navigation'
 
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 
 import { useQuery } from '@tanstack/react-query'
 

@@ -3,7 +3,7 @@ import type { ChangeEvent } from 'react';
 import { useEffect, useState } from 'react'
 
 // MUI Imports
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 
 // Third-party Imports
 import classnames from 'classnames'

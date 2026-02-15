@@ -13,7 +13,7 @@ import type { NotificationsType } from '@components/layout/shared/NotificationsD
 // Component Imports
 import NavToggle from './NavToggle'
 import Logo from '@components/layout/shared/Logo'
-import ShurtCutProforma from '@components/layout/shared/search'
+import NavSearch from '@components/layout/shared/search'
 import LanguageDropdown from '@components/layout/shared/LanguageDropdown'
 import ModeDropdown from '@components/layout/shared/ModeDropdown'
 import ShortcutsDropdown from '@components/layout/shared/ShortcutsDropdown'
@@ -91,8 +91,8 @@ const notifications: NotificationsType[] = [
   },
   {
     avatarIcon: 'tabler-chart-bar',
-    title: 'Monthly document generated',
-    subtitle: 'July month financial document is generated',
+    title: 'Monthly report generated',
+    subtitle: 'July month financial report is generated',
     avatarColor: 'info',
     time: 'Apr 24, 10:30 AM',
     read: true
@@ -135,7 +135,7 @@ const NavbarContent = () => {
       </div>
 
       <div className='flex items-center'>
-        <ShurtCutProforma />
+        <NavSearch />
         <LanguageDropdown />
         <ModeDropdown />
         <ShortcutsDropdown shortcuts={shortcuts} />

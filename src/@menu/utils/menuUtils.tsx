@@ -33,6 +33,16 @@ type RenderMenuIconParams = {
   isBreakpointReached?: boolean
 }
 
+// Type guard for ReactElement with specific props
+type MenuItemElementProps = {
+  component?: string | ReactElement<{ href?: string; [key: string]: unknown }>
+  href?: string
+  exactMatch?: boolean
+  activeUrl?: string
+  children?: ReactNode
+  [key: string]: unknown
+}
+
 export const confirmUrlInChildren = (children: ChildrenType['children'], url: string): boolean => {
   if (!children) {
     return false
@@ -42,17 +52,19 @@ export const confirmUrlInChildren = (children: ChildrenType['children'], url: st
     return children.some((child: ReactNode) => confirmUrlInChildren(child, url))
   }
 
-  if (isValidElement(children)) {
+  if (isValidElement<MenuItemElementProps>(children)) {
     const { component, href, exactMatch, activeUrl, children: subChildren } = children.props
 
-    if (component && component.props.href) {
+    if (component && typeof component !== 'string' && component.props.href) {
       return exactMatch === true || exactMatch === undefined
         ? component.props.href === url
-        : activeUrl && url.includes(activeUrl)
+        : activeUrl !== undefined && url.includes(activeUrl)
     }
 
     if (href) {
-      return exactMatch === true || exactMatch === undefined ? href === url : activeUrl && url.includes(activeUrl)
+      return exactMatch === true || exactMatch === undefined
+        ? href === url
+        : activeUrl !== undefined && url.includes(activeUrl)
     }
 
     if (subChildren) {
@@ -81,11 +93,11 @@ export const confirmUrlInChildren = (children: ChildrenType['children'], url: st
 const processMenuChildren = (children: ReactNode, mapFunction: (child: ReactNode) => ReactNode): ReactNode => {
   return Children.map(children, child => {
     // Skip processing for non-React elements
-    if (!isValidElement(child)) return child
+    if (!isValidElement<{ menuData?: unknown[] }>(child)) return child
 
     // If child has menuData prop, create a GenerateVerticalMenu component
     // Otherwise, apply the transformation function to the child
-    return child.props?.menuData ? <GenerateVerticalMenu menuData={child.props.menuData} /> : mapFunction(child)
+    return child.props.menuData ? <GenerateVerticalMenu menuData={child.props.menuData as never} /> : mapFunction(child)
   })
 }
 
@@ -99,7 +111,12 @@ const processMenuChildren = (children: ReactNode, mapFunction: (child: ReactNode
 export const mapHorizontalToVerticalMenu = (children: ReactNode): ReactNode => {
   return Children.map(children, child => {
     // If the child is not a valid React element, exclude it from the output
-    if (!isValidElement(child)) return null
+    if (
+      !isValidElement<{ children?: ReactNode; verticalMenuProps?: Record<string, unknown>; [key: string]: unknown }>(
+        child
+      )
+    )
+      return null
 
     // Destructure to separate specific props and rest props for further use
     const { children: childChildren, verticalMenuProps, ...rest } = child.props
@@ -111,12 +128,17 @@ export const mapHorizontalToVerticalMenu = (children: ReactNode): ReactNode => {
         return <VerticalMenuItem {...rest}>{childChildren}</VerticalMenuItem>
       case HorizontalSubMenu:
         // Transform HorizontalSubMenu to VerticalSubMenu, recursively transforming its children
-        return <VerticalSubMenu {...rest}>{mapHorizontalToVerticalMenu(childChildren)}</VerticalSubMenu>
+        // The rest props from HorizontalSubMenu include all required VerticalSubMenu props like label
+        return (
+          <VerticalSubMenu {...(rest as unknown as Parameters<typeof VerticalSubMenu>[0])}>
+            {mapHorizontalToVerticalMenu(childChildren)}
+          </VerticalSubMenu>
+        )
       case HorizontalMenu:
         // For HorizontalMenu, process its children specifically, then wrap in VerticalMenu
         const transformedChildren = processMenuChildren(childChildren, mapHorizontalToVerticalMenu)
 
-        return <VerticalMenu {...verticalMenuProps}>{transformedChildren}</VerticalMenu>
+        return <VerticalMenu {...(verticalMenuProps || {})}>{transformedChildren}</VerticalMenu>
       default:
         // For any other type of child, return it without modification
         return child

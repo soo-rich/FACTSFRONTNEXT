@@ -16,7 +16,7 @@ import classnames from 'classnames'
 // Types Imports
 import Divider from '@mui/material/Divider'
 
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 
 
 import { useQuery } from '@tanstack/react-query'

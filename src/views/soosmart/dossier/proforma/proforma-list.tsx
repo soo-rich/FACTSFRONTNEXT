@@ -99,7 +99,6 @@ const ProformaList = () => {
 
   const columns = useMemo(
     () => [
-
       columnHelper.accessor('reference', {
         header: 'Reference',
         cell: info => info.getValue()
@@ -110,11 +109,12 @@ const ProformaList = () => {
       }),
       columnHelper.accessor('client', {
         header: 'Client',
-        cell: info => info.getValue()
+        cell: ({ row }) =>
+          <Typography>{row.original.client?.nom + ' - ' + row.original.client?.sigle || 'N/A'}</Typography>
       }),
-      columnHelper.accessor('date', {
+      columnHelper.accessor('createdat', {
         header: 'Date de création',
-        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
+        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.createdat)}</Typography>
       }),
 
       // columnHelper.accessor('total_ht', {
@@ -132,9 +132,22 @@ const ProformaList = () => {
       // }),
       columnHelper.accessor('adopted', {
         header: 'Status',
-        cell: ({ row }) => row.original.old ? <Chip label={'Rejétée'} variant='tonal' color={'error'} /> : row.original.adopted ? <Chip label={'Adoptée'} variant='tonal' color={'success'} /> :
-          <Button disabled={row.original.old} color={'primary'} variant={'outlined'} className={'hover:bg-primary hover:text-white'}
-            onClick={() => handleClickToAdopt(row.original)}>Adopter</Button>
+        cell: ({ row }) =>
+          row.original.oldVersion ? (
+            <Chip label={'Rejétée'} variant="tonal" color={'error'} />
+          ) : row.original.adopted ? (
+            <Chip label={'Adoptée'} variant="tonal" color={'success'} />
+          ) : (
+            <Button
+              disabled={row.original.oldVersion}
+              color={'primary'}
+              variant={'outlined'}
+              className={'hover:bg-primary hover:text-white'}
+              onClick={() => handleClickToAdopt(row.original)}
+            >
+              Adopter
+            </Button>
+          )
       }),
       columnHelper.display({
         id: 'actions', // Important : donner un ID à la colonne display
@@ -143,7 +156,6 @@ const ProformaList = () => {
           <div className="flex gap-2">
             <Tooltip title={'Voir le PDF'}>
               <CustomIconButton
-
                 href={getLocalizedUrl(`/docs/${row.original.numero}`, locale as Locale)}
                 className="cursor-pointer text-green-600 hover:text-green-800"
               >
@@ -159,27 +171,33 @@ const ProformaList = () => {
               </CustomIconButton>
             </Tooltip>
 
-            {!row.original.old && !row.original.adopted && (<Tooltip title={'mettre a jour'}>
+            {!row.original.oldVersion && !row.original.adopted && (
+              <Tooltip title={'mettre a jour'}>
+                <CustomIconButton
+                  onClick={() => {
+                    setProformaSelect(row.original)
+                    setIsModalOpen(true)
+                  }}
+                  className="cursor-pointer text-yellow-600 hover:text-yellow-800"
+                >
+                  <i className="tabler-edit" />
+                </CustomIconButton>
+              </Tooltip>
+            )}
+            <Tooltip title={'Supprimer'}>
               <CustomIconButton
-                onClick={() => {
-                  setProformaSelect(row.original)
-                  setIsModalOpen(true)
-                }}
-                className="cursor-pointer text-yellow-600 hover:text-yellow-800"
+                color={'error'}
+                onClick={() =>
+                  UtiliMetod.SuppressionConfirmDialog({
+                    data: row.original.reference,
+                    confirmAction: () => DeleteMutation.mutate(row.original.numero)
+                  })
+                }
+                className="cursor-pointer "
               >
-                <i className="tabler-edit" />
-              </CustomIconButton></Tooltip>)}
-            <Tooltip title={'Supprimer'}><CustomIconButton
-              color={'error'}
-              onClick={() => UtiliMetod.SuppressionConfirmDialog({
-                data: row.original.reference,
-                confirmAction: () => DeleteMutation.mutate(row.original.numero)
-              })
-              }
-              className="cursor-pointer "
-            >
-              <i className="tabler-trash" />
-            </CustomIconButton></Tooltip>
+                <i className="tabler-trash" />
+              </CustomIconButton>
+            </Tooltip>
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne

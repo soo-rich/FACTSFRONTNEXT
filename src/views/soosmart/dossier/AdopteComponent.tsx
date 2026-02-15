@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react'
 
 import { Switch, Typography } from '@mui/material'
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 
 const AdoptedSwitchComponent = ({ checked, handleChange: handlechange }: {
   checked: boolean,

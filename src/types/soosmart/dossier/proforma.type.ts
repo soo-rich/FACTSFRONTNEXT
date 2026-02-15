@@ -2,9 +2,13 @@ import * as v from 'valibot'
 
 import type { Article_Quantite } from './Article_Quantite'
 import { schemaArticleQuantiteListV2, schemaArticleQuantiteslist } from './Article_Quantite'
+import type { ClientType } from '@/types/soosmart/client.type'
+import type { ProjetType } from '@/types/soosmart/projet.type'
+import type { BaseType } from '@/types/soosmart/api-default,type'
 
 export type ProformaType = {
-  id: string
+
+  /*  id: string
   reference: string
   numero: string
   uniqueIdDossier: string
@@ -17,8 +21,23 @@ export type ProformaType = {
   signby: string
   role?: string
   adopted: boolean
-  old: boolean
-}
+  old: boolean*/
+
+  isdeleted: boolean
+  numero: string
+  uniqueIdDossier: string
+  reference: string
+  total_ht: number
+  total_ttc: number
+  total_tva: number
+  adopted: boolean
+  role: string
+  signedBy: string
+  articleQuantites: Article_Quantite[]
+  oldVersion: boolean
+  client: ClientType|null
+  projet:ProjetType|null
+}&BaseType
 
 export const schemaProforma = v.object({
   projet_id: v.nullable(v.string()),

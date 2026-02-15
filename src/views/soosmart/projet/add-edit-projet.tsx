@@ -1,6 +1,6 @@
 'use client'
 
-import type { SyntheticEvent } from 'react';
+import type { SyntheticEvent } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -9,7 +9,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 
 import { toast } from 'react-toastify'
-import { createFilterOptions, Grid2, TextareaAutosize } from '@mui/material'
+import { createFilterOptions, Grid as Grid2, TextareaAutosize } from '@mui/material'
 
 import Typography from '@mui/material/Typography'
 import Checkbox from '@mui/material/Checkbox'
@@ -26,7 +26,6 @@ import { ClientService } from '@/service/client/client.service'
 import CustomAutocomplete from '@core/components/mui/Autocomplete'
 import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
 import AddEditClient from '@views/soosmart/client/add-edit-client'
-
 
 type SelectType = {
   id: string
@@ -56,7 +55,6 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
     }
   })
 
-
   const querykey = useMemo(() => [`${ClientService.CLIENT_KEY}+all`], [])
 
   const { data } = useQuery({
@@ -68,11 +66,9 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
-
-
   const AddMutation = useMutation({
     mutationFn: async (data: SaveProjet) => {
-      return (await ProjetService.saveProjet(data))
+      return await ProjetService.saveProjet(data)
     },
     onSuccess: data => {
       toast.success(`Le Projet ${data.projet_type} a été ajouter`)
@@ -83,14 +79,13 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
         offre: false
       })
 
-
       // Appeler le callback de succès si fourni
       if (onSuccess) {
         onSuccess(data)
       }
     },
     onError: () => {
-      toast.error('Erreur lors de l\'ajout du projet')
+      toast.error("Erreur lors de l'ajout du projet")
     }
   })
 
@@ -104,7 +99,7 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
 
       return await ProjetService.updateProjet(data, projet?.id)
     },
-    onSuccess: (data) => {
+    onSuccess: data => {
       toast.success(`Mise à jour du projet ${data?.projet_type}`)
       reset({
         projet_type: '',
@@ -112,7 +107,6 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
         client_id: '',
         offre: false
       })
-
 
       // Appeler le callback de succès si fourni
       if (onSuccess) {
@@ -160,12 +154,11 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
     stringify: (option: SelectType) => option.value
   })
 
-  const client = useMemo(() => data?.map(item => ({ id: item.id, value: item.nom + ' - ' + item.sigle })) || [], [data]);
+  const client = useMemo(() => data?.map(item => ({ id: item.id, value: item.nom + ' - ' + item.sigle })) || [], [data])
 
   const handleSelectClient = (event: SyntheticEvent, newValue: SelectType | null) => {
     setClientSelected(newValue)
     setValue('client_id', newValue?.id || '')
-
   }
 
   useEffect(() => {
@@ -218,58 +211,54 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
               />
             </Grid2>
           </Grid2>
-          {!projet && (<Grid2 container direction={'row'} spacing={3}>
-            <Grid2 size={10}>
-              <Controller
-                render={() => (
-                  <CustomAutocomplete
-                    options={client || []}
-                    hidden={!!projet}
-                    value={clientSelected}
-                    filterOptions={filterOptionsClient}
-                    fullWidth
-                    onChange={handleSelectClient}
-                    getOptionLabel={option => {
-                      return option.value || ''
-                    }}
-                    error={!!errors.client_id}
-                    {...(errors.client_id && {
-                      error: true,
-                      helperText: errors?.client_id?.message
-                    })}
-                    renderInput={params => {
-                      return (
-                        <CustomTextField
-                          {...params}
-                          label={'Client'}
-                          fullWidth
-                        />
-                      )
-                    }}
-                  />
-                )}
-                name={'client_id'}
-                control={control}
-              />
-            </Grid2>
-            <Grid2
-              container
-              sx={{
-                justifyContent: 'center',
-                alignItems: 'flex-end'
-              }}
-              size={2}
-            >
-              <Button
-                onClick={() => setIsModalOpen(true)}
-                color={'inherit'}
-                variant={'contained'}
-                startIcon={<i className={'tabler-plus'}></i>}
+          {!projet && (
+            <Grid2 container direction={'row'} spacing={3}>
+              <Grid2 size={10}>
+                <Controller
+                  render={() => (
+                    <CustomAutocomplete
+                      options={client || []}
+                      hidden={!!projet}
+                      value={clientSelected}
+                      filterOptions={filterOptionsClient}
+                      fullWidth
+                      onChange={handleSelectClient}
+                      getOptionLabel={option => {
+                        return option.value || ''
+                      }}
+                      error={!!errors.client_id}
+                      {...(errors.client_id && {
+                        error: true,
+                        helperText: errors?.client_id?.message
+                      })}
+                      renderInput={params => {
+                        return <CustomTextField {...params} label={'Client'} fullWidth />
+                      }}
+                    />
+                  )}
+                  name={'client_id'}
+                  control={control}
+                />
+              </Grid2>
+              <Grid2
+                container
+                sx={{
+                  justifyContent: 'center',
+                  alignItems: 'flex-end'
+                }}
+                size={2}
               >
-                Client
-              </Button>
+                <Button
+                  onClick={() => setIsModalOpen(true)}
+                  color={'inherit'}
+                  variant={'contained'}
+                  startIcon={<i className={'tabler-plus'}></i>}
+                >
+                  Client
+                </Button>
+              </Grid2>
             </Grid2>
-          </Grid2>)}
+          )}
           <Grid2
             size={12}
             container
@@ -302,18 +291,22 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
           </Grid2>
         </Grid2>
         <Grid2>
-          <div className="flex justify-center gap-4 mt-6">
+          <div className='flex justify-center gap-4 mt-6'>
             <Button
-              variant="contained"
-              color="primary"
-              type="submit"
+              variant='contained'
+              color='primary'
+              type='submit'
               disabled={AddMutation.isPending || UpdateMutation.isPending}
             >
-              {AddMutation.isPending || UpdateMutation.isPending ? 'Traitement...' : projet ? 'Mettre à jour' : 'Ajouter'}
+              {AddMutation.isPending || UpdateMutation.isPending
+                ? 'Traitement...'
+                : projet
+                  ? 'Mettre à jour'
+                  : 'Ajouter'}
             </Button>
             <Button
-              variant="outlined"
-              color="error"
+              variant='outlined'
+              color='error'
               onClick={handleCancel}
               disabled={AddMutation.isPending || UpdateMutation.isPending}
             >
@@ -330,19 +323,18 @@ const AddEditProjet = ({ data: projet, onSuccess, onCancel }: AddEditFormType<Pr
         }}
         title={'Ajouter un Client'}
       >
-        <AddEditClient onSuccess={(data) => {
-
-
-          if ((data && (!Array.isArray(data)))) {
-            handleAddClient(data.id)
-          }
-
-        }} onCancel={() => {
-          setIsModalOpen(false)
-        }} />
+        <AddEditClient
+          onSuccess={data => {
+            if (data && !Array.isArray(data)) {
+              handleAddClient(data.id)
+            }
+          }}
+          onCancel={() => {
+            setIsModalOpen(false)
+          }}
+        />
       </DefaultDialog>
     </>
-
   )
 }
 

@@ -2,13 +2,13 @@
 
 import { useMemo, useState } from 'react'
 
-import { Grid2, TablePagination } from '@mui/material'
+import { Grid as Grid2, TablePagination } from '@mui/material'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { toast } from 'react-toastify'
 
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 
 import { BorderauService } from '@/service/dossier/borderau.service'
 import { PurchaseOrderService } from '@/service/dossier/purchaseOrder.service'
@@ -19,14 +19,12 @@ import TableManualPaginationComponent from '@components/table/TableManualPaginat
 import CardView from '@views/soosmart/dossier/bc/component/cardview'
 import UtiliMetod from '@/utils/utilsmethod'
 
-
 const PurchaseOrderList = () => {
   const queryClient = useQueryClient()
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize] = useState(12)
 
   const [filter, setFilter] = useState('')
-
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [PurchaseOrderService.PURCHASE_ORDER_KEY, pageIndex],
@@ -64,47 +62,71 @@ const PurchaseOrderList = () => {
     }
   })
 
-
   return (
     <>
-      <Grid container spacing={2} size={{ xs:12, sm:3 }} direction={'row'} sx={{
-        justifyContent: 'flex-end',
-        alignItems: 'center'
-      }}>
-        <DebouncedInput  className={'md:w-1/3 w-full'} value={filter} onChange={(data) => setFilter(String(data))} label={'Rechercher par proforma'}
-                        placeholder={'Rechercher'} />
+      <Grid
+        container
+        spacing={2}
+        size={{ xs: 12, sm: 3 }}
+        direction={'row'}
+        sx={{
+          justifyContent: 'flex-end',
+          alignItems: 'center'
+        }}
+      >
+        <DebouncedInput
+          className={'md:w-1/3 w-full'}
+          value={filter}
+          onChange={data => setFilter(String(data))}
+          label={'Rechercher par proforma'}
+          placeholder={'Rechercher'}
+        />
       </Grid>
-      <Grid container spacing={2} size={12} direction={'row'} sx={{
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        marginTop: '1rem'
-      }}>
-
-        {
-          isLoading
-            ? (
-              <div className={'w-full place-content-center place-items-center'}>
-                <LoadingWithoutModal />
-              </div>
-
-            ) : isError
-              ? (<div className={'w-full place-content-center place-items-center'}><ErrorView />
-              </div>) : bclistfilter.map((item, index) => (
-                <Grid2 size={{ xs: 12, sm: 6, md: 3 }} key={index}>
-                  <CardView bc={item}
-                            onRemove={() => UtiliMetod.SuppressionConfirmDialog({
-                              data: item.file.filename,
-                              confirmAction: () => DeleteMutation.mutate(item.id)
-                            })} />
-                </Grid2>))
-
-        }
-
+      <Grid
+        container
+        spacing={2}
+        size={12}
+        direction={'row'}
+        sx={{
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          marginTop: '1rem'
+        }}
+      >
+        {isLoading ? (
+          <div className={'w-full place-content-center place-items-center'}>
+            <LoadingWithoutModal />
+          </div>
+        ) : isError ? (
+          <div className={'w-full place-content-center place-items-center'}>
+            <ErrorView />
+          </div>
+        ) : (
+          bclistfilter.map((item, index) => (
+            <Grid2 size={{ xs: 12, sm: 6, md: 3 }} key={index}>
+              <CardView
+                bc={item}
+                onRemove={() =>
+                  UtiliMetod.SuppressionConfirmDialog({
+                    data: item.file.filename,
+                    confirmAction: () => DeleteMutation.mutate(item.id)
+                  })
+                }
+              />
+            </Grid2>
+          ))
+        )}
       </Grid>
-      <Grid container spacing={2} size={12} direction={'row'} sx={{
-        justifyContent: 'flex-end',
-        alignItems: 'center'
-      }}>
+      <Grid
+        container
+        spacing={2}
+        size={12}
+        direction={'row'}
+        sx={{
+          justifyContent: 'flex-end',
+          alignItems: 'center'
+        }}
+      >
         <TablePagination
           component={() => (
             <TableManualPaginationComponent
@@ -125,6 +147,5 @@ const PurchaseOrderList = () => {
     </>
   )
 }
-
 
 export default PurchaseOrderList

@@ -234,7 +234,7 @@ const ShareProject = ({ open, setOpen }: ShareProjectProps) => {
           </div>
         </div>
         <div className='flex items-center justify-between flex-wrap gap-4'>
-          <div className='flex items-center flex-grow gap-2'>
+          <div className='flex items-center grow gap-2'>
             <i className='tabler-users text-xl' />
             <Typography
               color='text.primary'

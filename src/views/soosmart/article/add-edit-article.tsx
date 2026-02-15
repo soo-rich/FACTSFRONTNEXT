@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form'
 
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { Grid2 } from '@mui/material'
+import { Grid as Grid2 } from '@mui/material'
 
 import Button from '@mui/material/Button'
 
@@ -27,9 +27,12 @@ import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 import CustomTextField from '@/@core/components/mui/TextField'
 import EditorBasic from '@components/editor/EditorBasic'
 
-
-const AddEditArticle = ({ data: article, onSuccess, onCancel, defaultlist=false }: AddEditFormType<ArticleType>&{defaultlist?:boolean}) => {
-
+const AddEditArticle = ({
+  data: article,
+  onSuccess,
+  onCancel,
+  defaultlist = false
+}: AddEditFormType<ArticleType> & { defaultlist?: boolean }) => {
   const [list, setList] = useState<boolean>(defaultlist)
   const [articlelist, setArticlelist] = useState<SaveArticleType[]>([])
 
@@ -149,7 +152,6 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel, defaultlist=false 
         {list && (
           <Grid2 container size={12} direction={'row'} alignItems={'center'} justifyContent={'justify-start'}>
             {articlelist.map((i, j) => {
-
               return (
                 <Grid2 container size={4} key={i.libelle + j} justifyContent={'center'} alignItems={'center'}>
                   <Tooltip placement={'top'} title={'' + i.libelle + ' - ' + i.prix_unitaire + ' FCFA'}>

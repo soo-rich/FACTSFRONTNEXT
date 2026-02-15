@@ -1,3 +1,4 @@
+import type { JSX} from 'react';
 import React, { useEffect, useMemo } from 'react'
 
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
@@ -53,9 +54,9 @@ const AddProformaModal = ({ onCancel, onSuccess, data: proforma }: AddEditFormTy
     resolver: valibotResolver(schemaProformaV2),
     mode: 'onChange',
     defaultValues: {
-      articleQuantiteslist: proforma?.articleQuantiteslist.map(item => ({
-        libelle: item.article,
-        description: item.description,
+      articleQuantiteslist: proforma?.articleQuantites.map(item => ({
+        libelle: item.article.libelle,
+        description: item.article.description,
         prix_unitaire: item.prix_article,
         quantite: item.quantite
       })) ?? [],
@@ -238,9 +239,9 @@ const AddProformaModal = ({ onCancel, onSuccess, data: proforma }: AddEditFormTy
 
       setValue('reference', proforma.reference)
 
-      setValue('articleQuantiteslist', proforma.articleQuantiteslist.map(item => ({
-        libelle: item.article,
-        description: item.description,
+      setValue('articleQuantiteslist', proforma.articleQuantites.map(item => ({
+        libelle: item.article.libelle,
+        description: item.article.description,
         prix_unitaire: item.prix_article,
         quantite: item.quantite
       })))

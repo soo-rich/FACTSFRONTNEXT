@@ -1,6 +1,5 @@
 'use client'
 
-
 import type { SyntheticEvent } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -14,10 +13,9 @@ import { valibotResolver } from '@hookform/resolvers/valibot'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { Checkbox, createFilterOptions, FormControlLabel, Grid2 } from '@mui/material'
+import { Checkbox, createFilterOptions, FormControlLabel, Grid as Grid2 } from '@mui/material'
 
 import Button from '@mui/material/Button'
-
 
 import { toast } from 'react-toastify'
 
@@ -43,7 +41,6 @@ import AddEditClient from '@views/soosmart/client/add-edit-client'
 
 import AddArticle from '@views/soosmart/dossier/proforma/component/add-article'
 
-
 type Props = {
   open: boolean
   handleClose: () => void
@@ -59,7 +56,6 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
   const [clientSelect, setClientSelect] = useState<ClientType | null>(null)
   const [choixclient, setchoixclient] = useState<boolean>(false)
   const queryClient = useQueryClient()
-
 
   const querykeyclient = useMemo(() => [ClientService.CLIENT_KEY + '+all'], [])
   const querykeyprojet = useMemo(() => [ProjetService.PROJT_KEY + '+all'], [])
@@ -92,7 +88,6 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
     name: 'articleQuantiteslist'
   })
 
-
   const { data: client } = useQuery({
     queryKey: querykeyclient,
     queryFn: async () => {
@@ -111,7 +106,6 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
-
   const AddMutation = useMutation({
     mutationFn: async (data: ProformaSaveV2) => {
       return await ProformaService.PostDataWithArticle(data)
@@ -122,16 +116,14 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
       handleReset()
     },
     onError: error => {
-      toast.error('Erreur d\'ajout de la proforma')
+      toast.error("Erreur d'ajout de la proforma")
       console.error('Error adding proforma:', error)
     }
   })
 
   const EditMutation = useMutation({
     mutationFn: async (data: ProformaSaveV2) => {
-      if (p)
-
-        return await ProformaService.Updatedata(p?.id, data)
+      if (p) return await ProformaService.Updatedata(p?.id, data)
     },
     onSuccess: () => {
       toast.success('Proforma cree')
@@ -145,8 +137,6 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
   })
 
   const SubmitData = (data: ProformaSaveV2) => {
-
-
     data.articleQuantiteslist = [...data.articleQuantiteslist, ...articlenew]
 
     if (p) {
@@ -154,7 +144,6 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
     } else {
       AddMutation.mutate(data)
     }
-
   }
 
   const handleAddClient = async (data: ClientType) => {
@@ -170,7 +159,6 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
     setProjetSelect(newValue)
   }
 
-
   const handleAddProjet = async (data: ProjetType) => {
     await queryClient.invalidateQueries({
       queryKey: querykeyprojet
@@ -178,22 +166,20 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
     setProjetSelect(data)
     setIsModalOpenProjet(false)
     setValues('projet_id', data.id)
-
   }
 
   const handleSelectClient = (event: SyntheticEvent, newValue: ClientType | null) => {
     setClientSelect(newValue)
   }
 
-
   const handleReset = () => {
-    handleClose();
+    handleClose()
     reset({
       reference: '',
       projet_id: '',
       client_id: '',
       articleQuantiteslist: []
-    });
+    })
   }
 
   useEffect(
@@ -220,26 +206,25 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
     stringify: (option: ProjetType) => option.projet_type
   })
 
-
   return (
     <>
       <Drawer
         open={open}
-        anchor="right"
+        anchor='right'
         variant={'temporary'}
         onClose={handleReset}
         ModalProps={{ keepMounted: true }}
         sx={{ '& .MuiDrawer-paper': { width: { xs: 350, sm: 550 } } }}
       >
-        <div className="flex items-center justify-between plb-5 pli-6">
-          <Typography variant="h5">Construire un Proforma {p&&`à partir de ${p.numero}`}</Typography>
-          <IconButton size="small" onClick={handleReset}>
-            <i className="tabler-x text-2xl text-textPrimary" />
+        <div className='flex items-center justify-between plb-5 pli-6'>
+          <Typography variant='h5'>Construire un Proforma {p && `à partir de ${p.numero}`}</Typography>
+          <IconButton size='small' onClick={handleReset}>
+            <i className='tabler-x text-2xl text-textPrimary' />
           </IconButton>
         </div>
         <Divider />
-        <div className="p-6">
-          <form noValidate onSubmit={handleSubmit(SubmitData)} className="flex flex-col items-start gap-6">
+        <div className='p-6'>
+          <form noValidate onSubmit={handleSubmit(SubmitData)} className='flex flex-col items-start gap-6'>
             <Typography variant={'h5'}>Information de la Proforma</Typography>
             <Controller
               render={({ field }) => (
@@ -257,172 +242,181 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
               name={'reference'}
               control={control}
             />
-            {!p && (<><Grid2
-              container
-              size={12}
-              direction={'row'}
-              spacing={3}
-              sx={{
-                justifyContent: 'flex-end',
-                alignItems: 'center'
-              }}
-            >
-
-              <FormControlLabel
-                label="(Oui: client / Nom : projet )"
-                control={<Checkbox checked={choixclient}
-                                   onChange={(e) => setchoixclient(e.target.checked)}
-                                   name="controlled" />}
-              />
-            </Grid2>
-              <div
-                className="w-full flex flex-row justify-between align-middle items-end place-content-center gap-4">
-                {choixclient ? (
+            {!p && (
+              <>
+                <Grid2
+                  container
+                  size={12}
+                  direction={'row'}
+                  spacing={3}
+                  sx={{
+                    justifyContent: 'flex-end',
+                    alignItems: 'center'
+                  }}
+                >
+                  <FormControlLabel
+                    label='(Oui: client / Nom : projet )'
+                    control={
+                      <Checkbox
+                        checked={choixclient}
+                        onChange={e => setchoixclient(e.target.checked)}
+                        name='controlled'
+                      />
+                    }
+                  />
+                </Grid2>
+                <div className='w-full flex flex-row justify-between align-middle items-end place-content-center gap-4'>
+                  {choixclient ? (
                     <CustomAutocomplete
-
                       options={client || []}
                       fullWidth
-
                       filterOptions={filterOptionsClient}
                       onChange={handleSelectClient}
                       getOptionLabel={option => option.nom || ''}
-
-                      renderInput={params => <CustomTextField {...params} label="Choix du Client" />}
+                      renderInput={params => <CustomTextField {...params} label='Choix du Client' />}
                     />
-                  ) :
-                  (
+                  ) : (
                     <CustomAutocomplete
                       options={projet || []}
                       fullWidth
                       filterOptions={filterOptionsProjet}
                       onChange={handleSelectProjet}
                       getOptionLabel={option => option.projet_type || ''}
-
-                      renderInput={params => <CustomTextField {...params} label="Choix du Projet " />}
+                      renderInput={params => <CustomTextField {...params} label='Choix du Projet ' />}
                     />
                   )}
-                <Button variant={'contained'} color={'inherit'} endIcon={<i className="tabler-plus" />}
-                        onClick={() => {
-                          if (choixclient) {
-                            setIsModalOpenClient(true)
-                          } else {
-                            setIsModalOpenProjet(true)
-                          }
-                        }}>
-                  {choixclient ? 'Client' : 'Projet'}
-                </Button>
-              </div>
-            </>)
-            }
+                  <Button
+                    variant={'contained'}
+                    color={'inherit'}
+                    endIcon={<i className='tabler-plus' />}
+                    onClick={() => {
+                      if (choixclient) {
+                        setIsModalOpenClient(true)
+                      } else {
+                        setIsModalOpenProjet(true)
+                      }
+                    }}
+                  >
+                    {choixclient ? 'Client' : 'Projet'}
+                  </Button>
+                </div>
+              </>
+            )}
 
-            <Divider className="w-full" />
+            <Divider className='w-full' />
             <Typography variant={'h5'}>Article-Quantite</Typography>
 
             <div className={'flex flex-row justify-between item-end align-baseline w-full'}>
-
               <Button
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 startIcon={<i className={'tabler-plus text-2xl'} />}
-                onClick={() =>
-                  setIsModalOpenArticle(true)
-                }
+                onClick={() => setIsModalOpenArticle(true)}
               >
                 Ajouter des Articles
               </Button>
             </div>
             <div className={'flex flex-col justify-center align-baseline w-full gap-6'}>
-              {
-                fields.map((item, index) => (
+              {fields.map((item, index) => (
+                <Card key={index}>
+                  <CardContent className={'relative flex flex-col justify-center align-baseline w-full gap-6'}>
+                    <IconButton
+                      className={'absolute -top-px -right-px'}
+                      color='error'
+                      onClick={() => {
+                        remove(index)
+                      }}
+                      disabled={AddMutation.isPending}
+                    >
+                      <i className='tabler-trash text-2xl' />
+                    </IconButton>
 
-                  <Card key={index}>
-                    <CardContent className={'relative flex flex-col justify-center align-baseline w-full gap-6'}>
-
-                      <IconButton
-                        className={'absolute -top-px -right-px'}
-                        color="error"
-                        onClick={() => {
-                          remove(index)
-                        }}
-                        disabled={AddMutation.isPending}
-                      >
-                        <i className="tabler-trash text-2xl" />
-                      </IconButton>
-
-                      <Grid2 container spacing={2} sx={{
+                    <Grid2
+                      container
+                      spacing={2}
+                      sx={{
                         justifyContent: 'center',
                         alignItems: 'flex-end'
-                      }}>
-                        <Grid2 size={12}>
-                          <Controller
-                            render={({ field }) => (
-                              <CustomTextField {...field} label={'Article'}
-                                               fullWidth error={!!errors.articleQuantiteslist?.[index]?.libelle}
-                                               {...(errors.articleQuantiteslist?.[index]?.libelle && {
-                                                 error: true,
-                                                 helperText: errors?.articleQuantiteslist?.[index]?.libelle?.message
-                                               })} />)}
-                            name={`articleQuantiteslist.${index}.libelle`}
-                            control={control}
-                          />
-                        </Grid2>
-                        <Grid2 size={6}>
-                          <Controller
-                            render={({ field }) => (
-                              <CustomTextField {...field}
-                                               label={'Prix'}
-                                               fullWidth
-                                               onChange={(e) => {
-                                                 const value = Number(e.target.value)
-
-                                                 field.onChange(isNaN(value) ? null : value)
-                                               }}
-                                               error={!!errors.articleQuantiteslist?.[index]?.prix_unitaire}
-                                               {...(errors.articleQuantiteslist?.[index]?.prix_unitaire && {
-                                                 error: true,
-                                                 helperText: errors?.articleQuantiteslist?.[index]?.prix_unitaire?.message
-                                               })} />)}
-                            name={`articleQuantiteslist.${index}.prix_unitaire`}
-                            control={control}
-                          />
-                        </Grid2>
-                        <Grid2 size={6}>
-                          <Controller
-                            render={({ field }) => (
-                              <CustomTextField {...field} type={'number'} label={'Quantité'}
-                                               fullWidth
-                                               onChange={(e) => {
-                                                 const value = Number(e.target.value)
-
-                                                 field.onChange(isNaN(value) ? null : value)
-                                               }}
-                                               error={!!errors.articleQuantiteslist?.[index]?.quantite}
-                                               {...(errors.articleQuantiteslist?.[index]?.quantite && {
-                                                 error: true,
-                                                 helperText: errors?.articleQuantiteslist?.[index]?.quantite?.message
-                                               })}
-                              />)}
-                            name={`articleQuantiteslist.${index}.quantite`}
-                            control={control}
-                          />
-                        </Grid2>
+                      }}
+                    >
+                      <Grid2 size={12}>
+                        <Controller
+                          render={({ field }) => (
+                            <CustomTextField
+                              {...field}
+                              label={'Article'}
+                              fullWidth
+                              error={!!errors.articleQuantiteslist?.[index]?.libelle}
+                              {...(errors.articleQuantiteslist?.[index]?.libelle && {
+                                error: true,
+                                helperText: errors?.articleQuantiteslist?.[index]?.libelle?.message
+                              })}
+                            />
+                          )}
+                          name={`articleQuantiteslist.${index}.libelle`}
+                          control={control}
+                        />
                       </Grid2>
-                    </CardContent>
-                  </Card>
+                      <Grid2 size={6}>
+                        <Controller
+                          render={({ field }) => (
+                            <CustomTextField
+                              {...field}
+                              label={'Prix'}
+                              fullWidth
+                              onChange={e => {
+                                const value = Number(e.target.value)
 
-                ))
-              }
+                                field.onChange(isNaN(value) ? null : value)
+                              }}
+                              error={!!errors.articleQuantiteslist?.[index]?.prix_unitaire}
+                              {...(errors.articleQuantiteslist?.[index]?.prix_unitaire && {
+                                error: true,
+                                helperText: errors?.articleQuantiteslist?.[index]?.prix_unitaire?.message
+                              })}
+                            />
+                          )}
+                          name={`articleQuantiteslist.${index}.prix_unitaire`}
+                          control={control}
+                        />
+                      </Grid2>
+                      <Grid2 size={6}>
+                        <Controller
+                          render={({ field }) => (
+                            <CustomTextField
+                              {...field}
+                              type={'number'}
+                              label={'Quantité'}
+                              fullWidth
+                              onChange={e => {
+                                const value = Number(e.target.value)
+
+                                field.onChange(isNaN(value) ? null : value)
+                              }}
+                              error={!!errors.articleQuantiteslist?.[index]?.quantite}
+                              {...(errors.articleQuantiteslist?.[index]?.quantite && {
+                                error: true,
+                                helperText: errors?.articleQuantiteslist?.[index]?.quantite?.message
+                              })}
+                            />
+                          )}
+                          name={`articleQuantiteslist.${index}.quantite`}
+                          control={control}
+                        />
+                      </Grid2>
+                    </Grid2>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
 
-            <Divider className="w-full" />
+            <Divider className='w-full' />
 
-
-            <div className="w-full flex items-center gap-4">
-              <Button variant="contained" color="primary" type="submit" disabled={AddMutation.isPending}>
+            <div className='w-full flex items-center gap-4'>
+              <Button variant='contained' color='primary' type='submit' disabled={AddMutation.isPending}>
                 {AddMutation.isPending ? 'Traitement...' : 'Ajouter'}
               </Button>
-              <Button variant="outlined" color="error" onClick={handleReset}
-                      disabled={AddMutation.isPending}>
+              <Button variant='outlined' color='error' onClick={handleReset} disabled={AddMutation.isPending}>
                 Annuler
               </Button>
             </div>
@@ -435,15 +429,16 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
         onClose={() => setIsModalOpenProjet(false)}
         title={'Ajouter un Projet'}
       >
-        <AddEditProjet onSuccess={(data) => {
-          setIsModalOpenProjet(false)
-          const array = Array.isArray(data)
+        <AddEditProjet
+          onSuccess={data => {
+            setIsModalOpenProjet(false)
+            const array = Array.isArray(data)
 
-          if (!array && data) {
-            handleAddProjet(data)
-          }
-        }} />
-
+            if (!array && data) {
+              handleAddProjet(data)
+            }
+          }}
+        />
       </DefaultDialog>
 
       <DefaultDialog
@@ -452,19 +447,20 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
         onClose={() => setIsModalOpenClient(false)}
         title={'Ajouter un Client'}
       >
-        <AddEditClient onSuccess={(data) => {
-          setIsModalOpenProjet(false)
-          const array = Array.isArray(data)
+        <AddEditClient
+          onSuccess={data => {
+            setIsModalOpenProjet(false)
+            const array = Array.isArray(data)
 
-          if (!array && data) {
-            handleAddClient(data)
-          }
-        }} />
-
+            if (!array && data) {
+              handleAddClient(data)
+            }
+          }}
+        />
       </DefaultDialog>
       <DefaultDialog open={isModalOpenArticle} setOpen={setIsModalOpenArticle} dialogMaxWidth={'md'}>
         <AddArticle
-          onSuccess={(data) => {
+          onSuccess={data => {
             append(data)
 
             // setArticleNew(prevState => [...prevState, ...data])
@@ -472,9 +468,7 @@ const AddProforma = ({ open, handleClose, onSucces, data: p }: Props) => {
           }}
         />
       </DefaultDialog>
-
     </>
-
   )
 }
 

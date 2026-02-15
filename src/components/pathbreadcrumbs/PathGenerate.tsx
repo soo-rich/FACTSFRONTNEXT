@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 
 import { useLocation } from 'react-use'
-import { Grid2 } from '@mui/material'
+import { Grid as Grid2 } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
@@ -54,7 +54,6 @@ const PathGenerate = ({ dictionary }: ComponentDictonaryParamsType) => {
           if (item === '') return null // Skip empty segments
           if (item === 'dashboard') return null
 
-
           const folder = item.replace(/-/g, ' ').replace(/_/g, ' ')
           const folderName = folder.charAt(0).toUpperCase() + folder.slice(1)
 
@@ -81,11 +80,10 @@ const PathGenerate = ({ dictionary }: ComponentDictonaryParamsType) => {
               return <Typography key={index}>{dictionary['navigation'][String(item)]}</Typography>
             }
 
-
             return <Typography key={index}>{folderName}</Typography>
           }
 
-          if (item=== 'docs'){
+          if (item === 'docs') {
             return <Typography key={index}>{'documents'}</Typography>
           }
 

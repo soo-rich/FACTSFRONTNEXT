@@ -1,7 +1,7 @@
 'use client'
 
 
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 
 
 import { DocumentStatCard }  from '@views/soosmart/dashboard/component/DocumentStatCard'
