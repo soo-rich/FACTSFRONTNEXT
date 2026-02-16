@@ -27,10 +27,9 @@ export const ColorStatusProforma: Record<StatusProforma, ThemeColor> = {
   [StatusProforma.REJECTED]: 'error'
 }
 
-
 export type ProformaQuery = {
-  end?: Date|null
-  start?: Date|null
+  end?: Date | null
+  start?: Date | null
   adopted?: boolean
 }
 

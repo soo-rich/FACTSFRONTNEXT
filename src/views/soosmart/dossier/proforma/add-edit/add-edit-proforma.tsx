@@ -11,8 +11,12 @@ import { valibotResolver } from '@hookform/resolvers/valibot'
 import { useMutation, useQueries } from '@tanstack/react-query'
 
 import Typography from '@mui/material/Typography'
-
 import FormControlLabel from '@mui/material/FormControlLabel'
+import Grid from '@mui/material/Grid'
+import Divider from '@mui/material/Divider'
+import Chip from '@mui/material/Chip'
+import Tooltip from '@mui/material/Tooltip'
+import InputAdornment from '@mui/material/InputAdornment'
 
 import {
   createFilterOptions,
@@ -39,7 +43,6 @@ import CardHeader from '@mui/material/CardHeader'
 import type { ProformaSaveV2 } from '@/types/soosmart/dossier/proforma.type'
 import { schemaProformaV2 } from '@/types/soosmart/dossier/proforma.type'
 
-
 import { ProformaService } from '@/service/dossier/proforma.service'
 import Form from '@components/Form'
 import { ClientService } from '@/service/client/client.service'
@@ -65,28 +68,43 @@ const filterOptionsProjet = createFilterOptions({
   stringify: (option: ProjetType) => option.projet_type
 })
 
+// Type pour le formulaire d'article local
+type ArticleFormValues = {
+  libelle: string
+  description: string
+  quantite: number | ''
+  prix_unitaire: number | ''
+}
+
+const defaultArticleValues: ArticleFormValues = {
+  libelle: '',
+  description: '',
+  quantite: '',
+  prix_unitaire: ''
+}
 
 const AddEditProforma = () => {
-  // hook state
   const { create, lang: locale } = useParams()
   const router = useRouter()
 
   // select state
   const [isClient, setIsClient] = useState<'client' | 'projet'>('client')
-  const [articleindex, setArticleIndex] = React.useState<number | null>(null)
 
+  // Article form state (séparé du formulaire principal)
+  const [articleForm, setArticleForm] = useState<ArticleFormValues>(defaultArticleValues)
+  const [editingIndex, setEditingIndex] = useState<number | null>(null)
+  const [articleErrors, setArticleErrors] = useState<Partial<Record<keyof ArticleFormValues, string>>>({})
 
-  //filter state
+  // filter state
   const [clientFilter, setClientFilter] = useState('')
   const [projetFilter, setProjetFilter] = useState('')
 
   const isEdit = create !== 'create'
 
-  //querykey state
+  // querykey state
   const queryKeyProforma = useMemo(() => [ProformaService.PROFORMA_KEY, create], [create])
   const querykeyclient = useMemo(() => [ClientService.CLIENT_KEY + clientFilter], [clientFilter])
   const querykeyprojet = useMemo(() => [ProjetService.PROJT_KEY + projetFilter], [projetFilter])
-
 
   const response = useQueries({
     queries: [
@@ -98,35 +116,38 @@ const AddEditProforma = () => {
         },
         refetchOnWindowFocus: true,
         refetchOnMount: true,
-        staleTime: 1000 * 60 * 5 // 5 minutes
-      }, {
-
+        staleTime: 1000 * 60 * 5
+      },
+      {
         queryKey: querykeyclient,
         queryFn: async () => {
-          return (await ClientService.getClients({
-            search: clientFilter,
-            page: 0,
-            pagesize: 50
-          })).content
+          return (
+            await ClientService.getClients({
+              search: clientFilter,
+              page: 0,
+              pagesize: 50
+            })
+          ).content
         },
         refetchOnWindowFocus: true,
         refetchOnMount: true,
-        staleTime: 1000 * 60 * 5 // 5 minutes
-      }, {
-
+        staleTime: 1000 * 60 * 5
+      },
+      {
         queryKey: querykeyprojet,
         queryFn: async () => {
-          return (await ProjetService.getAllProjet({
-            search: projetFilter,
-            page: 0,
-            pagesize: 50
-          })).content
+          return (
+            await ProjetService.getAllProjet({
+              search: projetFilter,
+              page: 0,
+              pagesize: 50
+            })
+          ).content
         },
         refetchOnWindowFocus: true,
         refetchOnMount: true,
-        staleTime: 1000 * 60 * 5 // 5 minutes
+        staleTime: 1000 * 60 * 5
       }
-
     ]
   })
 
@@ -137,35 +158,120 @@ const AddEditProforma = () => {
     control,
     reset,
     formState: { errors },
-    setValue,
-    watch
+    setValue
   } = useForm<ProformaSaveV2>({
     resolver: valibotResolver(schemaProformaV2),
     defaultValues: {
       reference: '',
-
       articleQuantiteslist: []
     }
   })
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'articleQuantiteslist'
   })
 
-  const articlenew = watch('articleQuantiteslist')
+  // --- Validation locale de l'article ---
+  const validateArticleForm = (): boolean => {
+    const errs: Partial<Record<keyof ArticleFormValues, string>> = {}
 
+    if (!articleForm.libelle || articleForm.libelle.trim().length < 1) {
+      errs.libelle = 'Le libellé est requis'
+    }
 
+    if (articleForm.quantite === '' || Number(articleForm.quantite) <= 0) {
+      errs.quantite = 'La quantité doit être supérieure à 0'
+    }
+
+    if (articleForm.prix_unitaire === '' || Number(articleForm.prix_unitaire) < 0) {
+      errs.prix_unitaire = 'Le prix unitaire est requis'
+    }
+
+    setArticleErrors(errs)
+
+    return Object.keys(errs).length === 0
+  }
+
+  // --- Ajouter ou mettre à jour un article ---
+  const handleAddOrUpdateArticle = () => {
+    if (!validateArticleForm()) return
+
+    const articleData = {
+      libelle: articleForm.libelle,
+      description: articleForm.description,
+      quantite: Number(articleForm.quantite),
+      prix_unitaire: Number(articleForm.prix_unitaire)
+    }
+
+    if (editingIndex !== null) {
+      // Mode mise à jour
+      update(editingIndex, articleData)
+
+      // toast.success(`Article "${articleData.libelle}" mis à jour`)
+      setEditingIndex(null)
+    } else {
+      // Mode ajout
+      append(articleData)
+
+      // toast.success(`Article "${articleData.libelle}" ajouté`)
+    }
+
+    // Reset le formulaire article
+    setArticleForm(defaultArticleValues)
+    setArticleErrors({})
+  }
+
+  // --- Cliquer sur un item pour le modifier ---
+  const handleSelectArticle = (index: number) => {
+    const item = fields[index]
+
+    setEditingIndex(index)
+    setArticleForm({
+      libelle: item.libelle,
+      description: item.description,
+      quantite: item.quantite,
+      prix_unitaire: item.prix_unitaire
+    })
+    setArticleErrors({})
+  }
+
+  // --- Annuler l'édition d'un article ---
+  const handleCancelArticleEdit = () => {
+    setEditingIndex(null)
+    setArticleForm(defaultArticleValues)
+    setArticleErrors({})
+  }
+
+  // --- Supprimer un article ---
+  const handleRemoveArticle = (index: number) => {
+    remove(index)
+
+    // Si on supprime l'article en cours d'édition, on reset
+    if (editingIndex === index) {
+      handleCancelArticleEdit()
+    } else if (editingIndex !== null && index < editingIndex) {
+      // Ajuster l'index si on supprime avant l'élément en cours d'édition
+      setEditingIndex(editingIndex - 1)
+    }
+  }
+
+  // --- Calculs ---
+  const totalHT = useMemo(() => {
+    return fields.reduce((acc, item) => acc + item.prix_unitaire * item.quantite, 0)
+  }, [fields])
+
+  // --- Mutations ---
   const AddMutation = useMutation({
     mutationFn: async (data: ProformaSaveV2) => {
       return await ProformaService.PostDataWithArticle(data)
     },
     onSuccess: () => {
-      toast.success('Proforma cree')
-
+      toast.success('Proforma créée avec succès')
+      router.push(getLocalizedUrl('/proforma', locale as Locale))
     },
     onError: error => {
-      toast.error('Erreur d\'ajout de la proforma')
+      toast.error("Erreur lors de l'ajout de la proforma")
       console.error('Error adding proforma:', error)
     }
   })
@@ -177,18 +283,17 @@ const AddEditProforma = () => {
       return await ProformaService.Updatedata(proforma?.id, data)
     },
     onSuccess: data => {
-      toast.success(`Proforma ${data?.numero} mise à joure avec succès `)
+      toast.success(`Proforma ${data?.numero} mise à jour avec succès`)
       router.push(getLocalizedUrl('/proforma', locale as Locale))
     },
     onError: error => {
-      toast.error(`Erreur de la mise a jour de la proforma ${proforma?.numero}`)
-      console.error('Error adding proforma:', error)
+      toast.error(`Erreur lors de la mise à jour de la proforma ${proforma?.numero}`)
+      console.error('Error updating proforma:', error)
     }
   })
 
-
   const handleSubmitForm = (data: ProformaSaveV2) => {
-    isEdit && proforma? EditMutation.mutate(data): AddMutation.mutate(data)
+    isEdit && proforma ? EditMutation.mutate(data) : AddMutation.mutate(data)
   }
 
   const handeReset = () => {
@@ -198,6 +303,7 @@ const AddEditProforma = () => {
       projet_id: null,
       articleQuantiteslist: []
     })
+    handleCancelArticleEdit()
     router.push(getLocalizedUrl('/proforma', locale as Locale))
   }
 
@@ -207,7 +313,6 @@ const AddEditProforma = () => {
 
       if (proforma.client) {
         setValue('client_id', proforma.client.id, { shouldDirty: true })
-
         setIsClient('client')
       }
 
@@ -216,246 +321,440 @@ const AddEditProforma = () => {
         setIsClient('projet')
       }
 
-      setValue('articleQuantiteslist', proforma.articleQuantites.map(aq => ({
-        libelle: aq.article.libelle,
-        description: aq.article.description,
-        quantite: aq.quantite,
-        prix_unitaire: aq.prix_article
-      })), { shouldDirty: true })
+      setValue(
+        'articleQuantiteslist',
+        proforma.articleQuantites.map(aq => ({
+          libelle: aq.article.libelle,
+          description: aq.article.description,
+          quantite: aq.quantite,
+          prix_unitaire: aq.prix_article
+        })),
+        { shouldDirty: true }
+      )
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEdit])
+  }, [isEdit, proforma])
 
-  const handleListItemClick = (index: number) => {
-    setArticleIndex(index)
-  }
+  useEffect(() => {
+    console.log('Validation errors:', errors)
+  }, [errors])
+
+  const isPending = AddMutation.isPending || EditMutation.isPending
 
   return (
-    <Form onSubmit={handleSubmit(handleSubmitForm)} className="w-full">
-      <Typography variant={'h5'}>Information de la Proforma</Typography>
-      <div className={'grid grid-cols-1 gap-4'}>
-        <Controller
-          render={({ field }) => (
-            <CustomTextField
-              {...field}
-              label={'Reference'}
-              fullWidth
-              error={!!errors.reference}
-              {...(errors.reference && {
-                error: true,
-                helperText: errors?.reference?.message
-              })}
-            />
-          )}
-          name={'reference'}
-          control={control}
-        />
+    <Form onSubmit={handleSubmit(handleSubmitForm)} className='w-full'>
+      <div className='flex flex-col gap-6'>
+        {/* ====== EN-TÊTE ====== */}
+        <Card>
+          <CardHeader
+            title={
+              <div className='flex items-center gap-2'>
+                <i className='tabler-file-invoice text-primary text-2xl' />
+                <Typography variant='h5'>{isEdit ? 'Modifier la Proforma' : 'Nouvelle Proforma'}</Typography>
+              </div>
+            }
+            subheader='Remplissez les informations de la proforma puis ajoutez les articles'
+          />
+          <Divider />
+          <CardContent>
+            <Grid container spacing={4}>
+              {/* Référence */}
+              <Grid size={{ xs: 12, md: isEdit ? 12 : 6 }}>
+                <Controller
+                  render={({ field }) => (
+                    <CustomTextField
+                      {...field}
+                      label='Référence'
+                      placeholder='Ex: PRO-2026-001'
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position='start'>
+                            <i className='tabler-hash text-lg' />
+                          </InputAdornment>
+                        )
+                      }}
+                      error={!!errors.reference}
+                      {...(errors.reference && {
+                        error: true,
+                        helperText: errors?.reference?.message
+                      })}
+                    />
+                  )}
+                  name='reference'
+                  control={control}
+                />
+              </Grid>
 
-        {!isEdit && (
-          <RadioGroup
-            row
-            name="isClient"
-            value={isClient}
-            onChange={event => {
-              setIsClient((event.target as HTMLInputElement).value as 'client' | 'projet')
-            }}
-            className={'grid grid-cols-2 gap-4'}
-          >
-            <div className={'flex flex-col gap-4'}>
-              <FormControlLabel value="client" control={<Radio />} label="Client" />
+              {/* Client / Projet */}
+              {!isEdit && (
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <RadioGroup
+                    row
+                    name='isClient'
+                    value={isClient}
+                    onChange={event => {
+                      const value = (event.target as HTMLInputElement).value as 'client' | 'projet'
 
-              <Controller
-                render={({ field }) => (
-                  <CustomAutocomplete
-                    disabled={isClient === 'projet'}
-                    options={clients || []}
-                    fullWidth
-                    filterOptions={filterOptionsClient}
-                    onChange={(event, newvalue) => {
-                      field.onChange(newvalue?.id)
+                      setIsClient(value)
+
+                      if (value === 'client') {
+                        setValue('projet_id', null)
+                      } else {
+                        setValue('client_id', null)
+                      }
                     }}
-                    getOptionLabel={option => option.nom || ''}
-                    renderInput={params => (
-                      <DebouncedInput
-                        {...params}
-                        disabled={isClient === 'projet'}
-                        onChange={e => {
-                          setClientFilter(e || '')
-                        }}
-                      />
-                    )}
-                  />
-                )}
-                name={'client_id'}
-                control={control}
-              />
-            </div>
-            <div className={'flex flex-col gap-4'}>
-              <FormControlLabel value="projet" control={<Radio />} label="Projet" />
-
-              <Controller
-                render={({ field }) => (
-                  <CustomAutocomplete
-                    disabled={isClient === 'client'}
-                    options={projets || []}
-                    fullWidth
-                    filterOptions={filterOptionsProjet}
-                    onChange={(event, newvalue) => {
-                      field.onChange(newvalue?.id)
-                    }}
-                    getOptionLabel={option => option.projet_type || ''}
-                    renderInput={params => (
-                      <DebouncedInput
-                        {...params}
-                        disabled={isClient === 'client'}
-                        onChange={e => {
-                          setProjetFilter(e || '')
-                        }}
-                      />
-                    )}
-                  />
-                )}
-                name={'projet_id'}
-                control={control}
-              />
-            </div>
-          </RadioGroup>
-        )}
-
-        <div className={'grid grid-cols-3 gap-4'}>
-          <div className={'col-span-2'}>
-            <Typography variant={'h5'}>Article-Quantite</Typography>
-            <Card>
-              <CardHeader>Article</CardHeader>
-              <CardContent>
-                <div className={'grid grid-cols-1 gap-4'}>
-                  <Controller
-                    render={({ field }) => (
-                      <CustomTextField
-                        {...field}
-                        label={'Libelle'}
-                        fullWidth
-                        error={!!errors.articleQuantiteslist?.[articleindex ?? 0]?.libelle}
-                        {...(errors.articleQuantiteslist?.[articleindex ?? 0]?.libelle && {
-                          error: true,
-                          helperText: errors.articleQuantiteslist?.[articleindex ?? 0]?.libelle?.message
-                        })}
-                      />
-                    )}
-                    name={`articleQuantiteslist.${articlenew.length}.libelle`}
-                    control={control}
-                  />
-
-                  <Controller
-                    render={({ field }) => <CustomTextField {...field} label={'Description'} fullWidth />}
-                    name={`articleQuantiteslist.${articlenew.length}.description`}
-                    control={control}
-                  />
-
-                  <Controller
-                    render={({ field }) => (
-                      <CustomTextField
-                        {...field}
-                        label={'Quantite'}
-                        fullWidth
-                        error={!!errors.articleQuantiteslist?.[articleindex ?? 0]?.quantite}
-                        {...(errors.articleQuantiteslist?.[articleindex ?? 0]?.quantite && {
-                          error: true,
-                          helperText: errors.articleQuantiteslist?.[articleindex ?? 0]?.quantite?.message
-                        })}
-                      />
-                    )}
-                    name={`articleQuantiteslist.${articlenew.length}.quantite`}
-                    control={control}
-                  />
-
-                  <Controller
-                    render={({ field }) => (
-                      <CustomTextField
-                        {...field}
-                        label={'Prix Unitaire'}
-                        fullWidth
-                        error={!!errors.articleQuantiteslist?.[articleindex ?? 0]?.prix_unitaire}
-                        {...(errors.articleQuantiteslist?.[articleindex ?? 0]?.prix_unitaire && {
-                          error: true,
-                          helperText: errors.articleQuantiteslist?.[articleindex ?? 0]?.prix_unitaire?.message
-                        })}
-                      />
-                    )}
-                    name={`articleQuantiteslist.${articlenew.length}.prix_unitaire`}
-                    control={control}
-                  />
-
-                  <Button
-
-                    // disabled={articleindex === null}
-                    onClick={() => {
-                      if (articleindex === null) return
-
-                      append({
-                        libelle: articlenew[articlenew.length].libelle,
-                        description: articlenew[articlenew.length].description,
-                        quantite: articlenew[articlenew.length].quantite,
-                        prix_unitaire: articlenew[articlenew.length].prix_unitaire
-                      })
-                      setArticleIndex(null)
-                    }}
+                    className='mb-3'
                   >
-                    Ajouter Article
-                  </Button>
+                    <FormControlLabel
+                      value='client'
+                      control={<Radio />}
+                      label={
+                        <span className='flex items-center gap-1'>
+                          <i className='tabler-user text-base' /> Client
+                        </span>
+                      }
+                    />
+                    <FormControlLabel
+                      value='projet'
+                      control={<Radio />}
+                      label={
+                        <span className='flex items-center gap-1'>
+                          <i className='tabler-briefcase text-base' /> Projet
+                        </span>
+                      }
+                    />
+                  </RadioGroup>
+
+                  {isClient === 'client' ? (
+                    <Controller
+                      render={({ field }) => (
+                        <CustomAutocomplete
+                          options={clients || []}
+                          fullWidth
+                          filterOptions={filterOptionsClient}
+                          onChange={(_event, newvalue) => {
+                            field.onChange(newvalue?.id)
+                          }}
+                          getOptionLabel={option => option.nom || ''}
+                          renderInput={params => (
+                            <DebouncedInput
+                              {...params}
+                              label='Sélectionner un client'
+                              onChange={e => {
+                                setClientFilter(e || '')
+                              }}
+                            />
+                          )}
+                        />
+                      )}
+                      name='client_id'
+                      control={control}
+                    />
+                  ) : (
+                    <Controller
+                      render={({ field }) => (
+                        <CustomAutocomplete
+                          options={projets || []}
+                          fullWidth
+                          filterOptions={filterOptionsProjet}
+                          onChange={(_event, newvalue) => {
+                            field.onChange(newvalue?.id)
+                          }}
+                          getOptionLabel={option => option.projet_type || ''}
+                          renderInput={params => (
+                            <DebouncedInput
+                              {...params}
+                              label='Sélectionner un projet'
+                              onChange={e => {
+                                setProjetFilter(e || '')
+                              }}
+                            />
+                          )}
+                        />
+                      )}
+                      name='projet_id'
+                      control={control}
+                    />
+                  )}
+                </Grid>
+              )}
+            </Grid>
+          </CardContent>
+        </Card>
+
+        {/* ====== SECTION ARTICLES ====== */}
+        <Grid container spacing={4}>
+          {/* --- Formulaire Article --- */}
+          <Grid size={{ xs: 12, md: 7 }}>
+            <Card>
+              <CardHeader
+                title={
+                  <div className='flex items-center gap-2'>
+                    <i className='tabler-package text-primary text-xl' />
+                    <Typography variant='h6'>
+                      {editingIndex !== null ? `Modifier l'article #${editingIndex + 1}` : 'Ajouter un article'}
+                    </Typography>
+                    {editingIndex !== null && (
+                      <Chip label='Mode édition' color='warning' size='small' variant='tonal' />
+                    )}
+                  </div>
+                }
+              />
+              <Divider />
+              <CardContent>
+                <div className='flex flex-col gap-4'>
+                  <CustomTextField
+                    label='Libellé *'
+                    placeholder="Ex: Développement d'une application"
+                    fullWidth
+                    value={articleForm.libelle}
+                    onChange={e => setArticleForm(prev => ({ ...prev, libelle: e.target.value }))}
+                    error={!!articleErrors.libelle}
+                    helperText={articleErrors.libelle}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position='start'>
+                          <i className='tabler-tag text-lg' />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+
+                  <CustomTextField
+                    label='Description'
+                    placeholder="Description détaillée de l'article"
+                    fullWidth
+                    multiline
+                    rows={2}
+                    value={articleForm.description}
+                    onChange={e => setArticleForm(prev => ({ ...prev, description: e.target.value }))}
+                  />
+
+                  <Grid container spacing={3}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                      <CustomTextField
+                        label='Quantité *'
+                        placeholder='0'
+                        fullWidth
+                        type='number'
+                        value={articleForm.quantite}
+                        onChange={e =>
+                          setArticleForm(prev => ({
+                            ...prev,
+                            quantite: e.target.value === '' ? '' : Number(e.target.value)
+                          }))
+                        }
+                        error={!!articleErrors.quantite}
+                        helperText={articleErrors.quantite}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position='start'>
+                              <i className='tabler-stack-2 text-lg' />
+                            </InputAdornment>
+                          )
+                        }}
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                      <CustomTextField
+                        label='Prix Unitaire *'
+                        placeholder='0'
+                        fullWidth
+                        type='number'
+                        value={articleForm.prix_unitaire}
+                        onChange={e =>
+                          setArticleForm(prev => ({
+                            ...prev,
+                            prix_unitaire: e.target.value === '' ? '' : Number(e.target.value)
+                          }))
+                        }
+                        error={!!articleErrors.prix_unitaire}
+                        helperText={articleErrors.prix_unitaire}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position='start'>
+                              <i className='tabler-currency-franc text-lg' />
+                            </InputAdornment>
+                          )
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  {/* Sous-total aperçu */}
+                  {articleForm.quantite !== '' && articleForm.prix_unitaire !== '' && (
+                    <div className='flex items-center justify-end gap-2 px-2'>
+                      <Typography variant='body2' color='text.secondary'>
+                        Sous-total :
+                      </Typography>
+                      <Typography variant='subtitle1' fontWeight={600} color='primary'>
+                        {(Number(articleForm.quantite) * Number(articleForm.prix_unitaire)).toLocaleString('fr-FR')}{' '}
+                        Fcfa
+                      </Typography>
+                    </div>
+                  )}
+
+                  <div className='flex gap-3 mt-1'>
+                    <Button
+                      variant='contained'
+                      color={editingIndex !== null ? 'warning' : 'primary'}
+                      startIcon={<i className={editingIndex !== null ? 'tabler-check' : 'tabler-plus'} />}
+                      onClick={handleAddOrUpdateArticle}
+                    >
+                      {editingIndex !== null ? "Mettre à jour l'article" : 'Ajouter'}
+                    </Button>
+                    {editingIndex !== null && (
+                      <Button variant='tonal' color='secondary' onClick={handleCancelArticleEdit}>
+                        Annuler
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
-          <div className={'grid grid-cols-1 gap-2  overflow-hidden overflow-y-auto max-h-[50dvh]'}>
-            <List className="space-y-2">
-              {fields.map((item, index) => (
-                <ListItem
-                  className="border border-primary rounded-md"
-                  key={item.id}
-                  disablePadding
-                  secondaryAction={
-                    <IconButton edge="end" size="small" onClick={() => remove(index)}>
-                      <i className="tabler-trash text-red-500" />
-                    </IconButton>
-                  }
-                >
-                  <ListItemButton selected={articleindex === index} onClick={() => handleListItemClick(index)}>
-                    <ListItemAvatar>
-                      <CustomAvatar alt="Caroline Black">{getInitials(item.libelle)}</CustomAvatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={item.libelle}
-                      secondary={`Prix: ${item.prix_unitaire} Fcfa x ${item.quantite}`}
+          </Grid>
+
+          {/* --- Liste des articles --- */}
+          <Grid size={{ xs: 12, md: 5 }}>
+            <Card className='h-full'>
+              <CardHeader
+                title={
+                  <div className='flex items-center justify-between'>
+                    <div className='flex items-center gap-2'>
+                      <i className='tabler-list-details text-primary text-xl' />
+                      <Typography variant='h6'>Articles</Typography>
+                    </div>
+                    <Chip
+                      label={`${fields.length} article${fields.length > 1 ? 's' : ''}`}
+                      size='small'
+                      color='primary'
+                      variant='tonal'
                     />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </div>
-        </div>
-      </div>
-      <div className={'flex flex-row gap-4 justify-end mt-4'}>
-        <LoadingButton loading={AddMutation.isPending || EditMutation.isPending} type={'submit'}>
-          Ajouter
-        </LoadingButton>
-        <Button
-          disabled={AddMutation.isPending || EditMutation.isPending}
-          type={'reset'}
-          variant={'outlined'}
-          color={'secondary'}
-          onClick={handeReset}
-        >
-          Annuler
-        </Button>
+                  </div>
+                }
+              />
+              <Divider />
+              <CardContent className='!pt-2'>
+                {fields.length === 0 ? (
+                  <div className='flex flex-col items-center justify-center py-10 text-center'>
+                    <i className='tabler-package-off text-5xl text-gray-300 mb-3' />
+                    <Typography variant='body1' color='text.secondary'>
+                      Aucun article ajouté
+                    </Typography>
+                    <Typography variant='caption' color='text.disabled'>
+                      Utilisez le formulaire ci-contre pour ajouter des articles
+                    </Typography>
+                  </div>
+                ) : (
+                  <>
+                    <List className='space-y-2 overflow-y-auto max-h-[45dvh]'>
+                      {fields.map((item, index) => (
+                        <ListItem
+                          key={item.id}
+                          disablePadding
+                          className={`border rounded-lg transition-all ${
+                            editingIndex === index
+                              ? 'border-warning bg-warning/5 shadow-sm'
+                              : 'border-gray-200 hover:border-primary/40'
+                          }`}
+                          secondaryAction={
+                            <Tooltip title='Supprimer'>
+                              <IconButton edge='end' size='small' onClick={() => handleRemoveArticle(index)}>
+                                <i className='tabler-trash text-red-500 text-lg' />
+                              </IconButton>
+                            </Tooltip>
+                          }
+                        >
+                          <ListItemButton
+                            selected={editingIndex === index}
+                            onClick={() => handleSelectArticle(index)}
+                            sx={{ borderRadius: '8px' }}
+                          >
+                            <ListItemAvatar>
+                              <CustomAvatar color={editingIndex === index ? 'warning' : 'primary'} variant='rounded'>
+                                {getInitials(item.libelle)}
+                              </CustomAvatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                              primary={
+                                <Typography variant='subtitle2' fontWeight={600}>
+                                  {item.libelle}
+                                </Typography>
+                              }
+                              secondary={
+                                <span className='flex flex-col'>
+                                  {item.description && (
+                                    <Typography variant='caption' color='text.disabled' noWrap>
+                                      {item.description}
+                                    </Typography>
+                                  )}
+                                  <Typography variant='caption' color='text.secondary'>
+                                    {item.prix_unitaire.toLocaleString('fr-FR')} Fcfa x {item.quantite} ={' '}
+                                    <strong>{(item.prix_unitaire * item.quantite).toLocaleString('fr-FR')} Fcfa</strong>
+                                  </Typography>
+                                </span>
+                              }
+                            />
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
+                    </List>
+
+                    {/* Total */}
+                    <Divider className='!my-3' />
+                    <div className='flex items-center justify-between px-3 py-2 bg-primary/5 rounded-lg'>
+                      <Typography variant='subtitle1' fontWeight={600}>
+                        Total HT
+                      </Typography>
+                      <Typography variant='h6' color='primary' fontWeight={700}>
+                        {totalHT.toLocaleString('fr-FR')} Fcfa
+                      </Typography>
+                    </div>
+                  </>
+                )}
+
+                {/* Erreur de validation si pas d'article */}
+                {errors.articleQuantiteslist && (
+                  <Typography variant='caption' color='error' className='mt-2 block'>
+                    <i className='tabler-alert-circle text-sm mr-1' />
+                    Ajoutez au moins un article à la proforma
+                  </Typography>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+
+        {/* ====== BOUTONS D'ACTION ====== */}
+        <Card>
+          <CardContent>
+            <div className='flex flex-row gap-3 justify-end'>
+              <LoadingButton
+                loading={isPending}
+                type='submit'
+                variant='contained'
+                startIcon={<i className={isEdit ? 'tabler-device-floppy' : 'tabler-send'} />}
+              >
+                {isEdit ? 'Enregistrer les modifications' : 'Créer la Proforma'}
+              </LoadingButton>
+              <Button
+                disabled={isPending}
+                type='reset'
+                variant='tonal'
+                color='secondary'
+                startIcon={<i className='tabler-x' />}
+                onClick={handeReset}
+              >
+                Annuler
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </Form>
   )
-
 }
 
 export default AddEditProforma
-
-
-
