@@ -19,19 +19,6 @@ export class ProjetService {
       })
     ).data
   }
-  static async getAll() {
-    return (await instance.get<ProjetType[]>(url + `/all`)).data
-  }
-
-  static async searchProjet(search?: string) {
-    return (
-      await instance.get<ProjetType[]>(url + '/search', {
-        params: {
-          search: search
-        }
-      })
-    ).data
-  }
 
   static async updateProjet(data: UpdateProjet, id: string) {
     return (await instance.put<ProjetType>(url + `/${id}`, data)).data

@@ -31,7 +31,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Checkbox from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography'
 
-import { ArrowDown, ArrowUp, SearchX } from 'lucide-react'
+import { ArrowDown, ArrowUp, PlusIcon, SearchX } from 'lucide-react'
 
 import LoadingWithoutModal from '../LoadingWithoutModal'
 import ErrorView from '../ErrorView'
@@ -60,11 +60,7 @@ type TableProps<T> = {
   renderHeaderCell?: (header: Header<T, unknown>) => React.ReactNode
   displayTableHeaderSession?: boolean
   cardProps?: CardProps
-  buttonadd?: {
-    elementProps?: any
-    text?: string
-    action?: () => void
-  }
+  buttonadd?: ButtonProps
 }
 
 const Menu = styled(MuiMenu)<MenuProps>({
@@ -86,31 +82,37 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
-const TableGeneric = <T,>({
-  tabledata: table_data,
-  columns,
-  title,
-  page,
-  totalElements,
-  pageSize,
-  SetPage,
-  SetPageSize,
-  globalFilter,
-  setGlobalFilter,
-  ComponentOther: FilterComponent,
-  isError,
-  isLoading,
-  pagination = true,
-  renderHeaderCell,
-  displayTableHeaderSession = true,
-  cardProps,
-  visibleColumns,
-  buttonadd
-}: TableProps<T>) => {
-  const buttonProps: ButtonProps = {
-    startIcon: <i className="tabler-plus" />,
+const TableGeneric = <T, >(props: TableProps<T> ) => {
+
+  const {
+    tabledata: table_data,
+    columns,
+    title,
+    page,
+    totalElements,
+    pageSize,
+    SetPage,
+    SetPageSize,
+    globalFilter,
+    setGlobalFilter,
+    ComponentOther: FilterComponent,
+    isError,
+    isLoading,
+    pagination = true,
+    renderHeaderCell,
+    displayTableHeaderSession = true,
+    cardProps,
+    visibleColumns,
+    buttonadd
+  } = props
+
+
+  const defaultButton: ButtonProps = {
+size:'small',
     variant: 'contained',
-    children: 'Nouveau'
+    children: 'Nouveau',
+    startIcon: <PlusIcon />,
+    ...buttonadd
   }
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -168,19 +170,20 @@ const TableGeneric = <T,>({
 
         {displayTableHeaderSession && (
           <div className="flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4">
-            {!pagination || pageSize && (
-              <CustomTextField
-                select
-                value={pagination ? (pageSize ?? 10) : table.getState().pagination.pageSize}
-                onChange={e => handlePageSizeChange(e)}
-                className="max-sm:is-full sm:is-[70px]"
-              >
-                <MenuItem value="5">5</MenuItem>
-                <MenuItem value="10">10</MenuItem>
-                <MenuItem value="25">25</MenuItem>
-                <MenuItem value="50">50</MenuItem>
-              </CustomTextField>
-            )}
+            {!pagination ||
+              (pageSize && (
+                <CustomTextField
+                  select
+                  value={pagination ? (pageSize ?? 10) : table.getState().pagination.pageSize}
+                  onChange={e => handlePageSizeChange(e)}
+                  className="max-sm:is-full sm:is-[70px]"
+                >
+                  <MenuItem value="5">5</MenuItem>
+                  <MenuItem value="10">10</MenuItem>
+                  <MenuItem value="25">25</MenuItem>
+                  <MenuItem value="50">50</MenuItem>
+                </CustomTextField>
+              ))}
             <div className="flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4">
               {FilterComponent}
               {visibleColumns && (
@@ -244,79 +247,84 @@ const TableGeneric = <T,>({
                 />
               )}
 
-              {buttonadd ? (
-                buttonadd.elementProps ? (
-                  <Button {...buttonadd.elementProps} onClick={buttonadd.action}>
-                    {buttonadd.text ?? buttonProps.children}
-                  </Button>
-                ) : (
-                  <Button {...buttonProps} onClick={buttonadd.action}>
-                    {buttonProps.children}
-                  </Button>
-                )
-              ) : null}
+              {buttonadd ? <Button {...defaultButton} /> : null}
             </div>
           </div>
         )}
         <div className="overflow-x-auto">
           <table className={tableStyles.table}>
             <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : renderHeaderCell ? (
-                        renderHeaderCell(header)
-                      ) : (
-                        <div
-                          className={classnames({
-                            'flex justify-between items-center': header.column.getIsSorted(),
-                            'cursor-pointer select-none': header.column.getCanSort()
-                          })}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: <ArrowUp />,
-                            desc: <ArrowDown />
-                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                        </div>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : renderHeaderCell ? (
+                      renderHeaderCell(header)
+                    ) : (
+                      <div
+                        className={classnames({
+                          'flex justify-between items-center': header.column.getIsSorted(),
+                          'cursor-pointer select-none': header.column.getCanSort()
+                        })}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: <ArrowUp />,
+                          desc: <ArrowDown />
+                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                      </div>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
             </thead>
             {isLoading ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
-                    <LoadingWithoutModal padding="p-4" />
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                  <LoadingWithoutModal padding="p-4" />
+                </td>
+              </tr>
               </tbody>
             ) : isError ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
-                    <ErrorView />
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                  <ErrorView />
+                </td>
+              </tr>
               </tbody>
             ) : table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
-                    <div>
-                      <SearchX className="mx-auto mb-2 text-gray-400" size={48} />
-                      <Typography>Aucune donnée disponible</Typography>
-                    </div>
-                  </td>
-                </tr>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                  <div>
+                    <SearchX className="mx-auto mb-2 text-gray-400" size={48} />
+                    <Typography>Aucune donnée disponible</Typography>
+                  </div>
+                </td>
+              </tr>
               </tbody>
             ) : pagination ? (
               <tbody>
-                {table.getRowModel().rows.map(row => {
+              {table.getRowModel().rows.map(row => {
+                return (
+                  <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                    ))}
+                  </tr>
+                )
+              })}
+              </tbody>
+            ) : (
+              <tbody>
+              {table
+                .getRowModel()
+                .rows.slice(0, table.getState().pagination.pageSize)
+                .map(row => {
                   return (
                     <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
                       {row.getVisibleCells().map(cell => (
@@ -325,21 +333,6 @@ const TableGeneric = <T,>({
                     </tr>
                   )
                 })}
-              </tbody>
-            ) : (
-              <tbody>
-                {table
-                  .getRowModel()
-                  .rows.slice(0, table.getState().pagination.pageSize)
-                  .map(row => {
-                    return (
-                      <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                        {row.getVisibleCells().map(cell => (
-                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                        ))}
-                      </tr>
-                    )
-                  })}
               </tbody>
             )}
           </table>

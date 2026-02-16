@@ -24,6 +24,14 @@ export class ProformaService {
     ).data
   }
 
+  static  async getById(id: string) {
+    return (await instance.get<ProformaType>(url + `/${id}`)).data
+  }
+
+  static async AdoptProforma(id: string) {
+    return (await instance.patch(url + `/adopted/${id}`)).data
+  }
+
   static async Updatedata(id: string, article_quantite: ProformaSaveV2) {
     return (await instance.put<ProformaType>(url + `/${id}`, article_quantite)).data
   }

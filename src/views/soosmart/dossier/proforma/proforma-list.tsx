@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 import { Typography } from '@mui/material'
 
@@ -14,8 +14,6 @@ import { toast } from 'react-toastify'
 
 // MUI Imports
 import Tooltip from '@mui/material/Tooltip'
-
-import Button from '@mui/material/Button'
 
 import Chip from '@mui/material/Chip'
 
@@ -30,6 +28,7 @@ import CustomIconButton from '@core/components/mui/IconButton'
 import TableGeneric from '@/components/table/TableGeneric'
 import { ProformaService } from '@/service/dossier/proforma.service'
 import type { ProformaType } from '@/types/soosmart/dossier/proforma.type'
+import { ColorStatusProforma, LabelStatusProforma, StatusProforma } from '@/types/soosmart/dossier/proforma.type'
 import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
 
 import { getLocalizedUrl } from '@/utils/i18n'
@@ -40,6 +39,8 @@ import AddProformaModal from '@views/soosmart/dossier/proforma/form/add-proforma
 import { DocumentService } from '@/service/document/document.service'
 import CustomTextField from '@core/components/mui/TextField'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
+import OptionMenu from '@/@core/components/option-menu'
+import Link from '@components/Link'
 
 const columnHelper = createColumnHelper<ProformaType>()
 
@@ -85,7 +86,12 @@ const ProformaList = () => {
 
   // hooks
   const { lang: locale } = useParams()
-  const queryKey = useMemo(() => [ProformaService.PROFORMA_KEY, pageIndex, pageSize, notadopted, filter, startDate, endDate], [filter, pageIndex, pageSize, notadopted, startDate, endDate])
+  const router = useRouter()
+
+  const queryKey = useMemo(
+    () => [ProformaService.PROFORMA_KEY, pageIndex, pageSize, notadopted, filter, startDate, endDate],
+    [filter, pageIndex, pageSize, notadopted, startDate, endDate]
+  )
 
   const { data, isLoading, isError } = useQuery({
     queryKey,
@@ -122,12 +128,26 @@ const ProformaList = () => {
     }
   })
 
-  const handleClickToAdopt = (data: ProformaType) => {
-    setProformaSelect(data)
+  const AdoptMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await ProformaService.AdoptProforma(id)
+    },
+    onSuccess: () => {
+      queryClient
+        .invalidateQueries({
+          queryKey
+        })
+        .then(r => r)
+      toast.success('Proforma adoptée avec succès')
+    },
+    onError: () => {
+      toast.error('Erreur lors de l\'adoption de la proforma')
+      console.error('Erreur lors de l\'adoption de la proforma')
+    }
+  })
 
-    setTimeout(() => {
-      setIsModalOpenAdopt(true)
-    }, 500)
+  const handleClickToAdopt = (id: string) => {
+    AdoptMutation.mutate(id)
   }
 
   const columns = useMemo(
@@ -167,22 +187,13 @@ const ProformaList = () => {
       // }),
       columnHelper.accessor('adopted', {
         header: 'Status',
-        cell: ({ row }) =>
-          row.original.oldVersion ? (
-            <Chip label={'Rejétée'} variant="tonal" color={'error'} />
-          ) : row.original.adopted ? (
-            <Chip label={'Adoptée'} variant="tonal" color={'success'} />
-          ) : (
-            <Button
-              disabled={row.original.oldVersion}
-              color={'primary'}
-              variant={'outlined'}
-              className={'hover:bg-primary hover:text-white'}
-              onClick={() => handleClickToAdopt(row.original)}
-            >
-              Adopter
-            </Button>
-          )
+        cell: ({ row }) => (
+          <Chip
+            label={LabelStatusProforma[row.original.status]}
+            variant="tonal"
+            color={ColorStatusProforma[row.original.status]}
+          />
+        )
       }),
       columnHelper.display({
         id: 'actions', // Important : donner un ID à la colonne display
@@ -206,7 +217,7 @@ const ProformaList = () => {
               </CustomIconButton>
             </Tooltip>
 
-            {!row.original.oldVersion && !row.original.adopted && (
+            {row.original.status === StatusProforma.PENDING && !row.original.adopted && (
               <Tooltip title={'mettre a jour'}>
                 <CustomIconButton
                   onClick={() => {
@@ -233,6 +244,58 @@ const ProformaList = () => {
                 <i className="tabler-trash" />
               </CustomIconButton>
             </Tooltip>
+            <OptionMenu
+              iconButtonProps={{ size: 'medium' }}
+              iconClassName="text-textSecondary"
+              options={[
+                ...(row.original.status === StatusProforma.PENDING && !row.original.adopted
+                  ? [
+                    {
+                      text: 'Adopter',
+                      icon: 'tabler-check',
+
+                      menuItemProps: {
+                        className: 'flex items-center gap-2 text-textSecondary',
+                        onClick: () => handleClickToAdopt(row.original.id)
+                      }
+                    }
+                  ]
+                  : []),
+                {
+                  text: 'Download',
+                  icon: 'tabler-download',
+
+                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
+                },
+                {
+                  text: 'Edit',
+                  icon: 'tabler-edit text-yellow-600',
+
+                  // href: getLocalizedUrl(`/proforma/${row.original.id}`, locale as Locale),
+                  menuItemProps: {
+                    className: 'flex items-center gap-2 text-textSecondary', onClick: () => {
+                      router.push(getLocalizedUrl(`/proforma/${row.original.id}`, locale as Locale))
+                    }
+                  }
+
+                  /* linkProps: {
+                     className: 'flex items-center gap-2 text-textSecondary flex-1 w-full place-items-center'
+                   }*/
+                },
+                {
+                  text: 'Delete',
+                  icon: 'tabler-trash text-red-600',
+                  menuItemProps: {
+                    className: 'flex items-center gap-2 text-textSecondary',
+                    onClick: () =>
+                      UtiliMetod.SuppressionConfirmDialog({
+                        data: row.original.reference,
+                        confirmAction: () => DeleteMutation.mutate(row.original.id)
+                      })
+                  }
+                }
+              ]}
+            />
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
@@ -252,20 +315,20 @@ const ProformaList = () => {
             isClearable={true}
             showMonthDropdown
             selected={startDate}
-            id='picker-open-date'
+            id="picker-open-date"
             openToDate={new Date()}
             onChange={(date: Date | null) => setStartDate(date)}
-            customInput={<CustomTextField label='Date de Debut' fullWidth />}
+            customInput={<CustomTextField label="Date de Debut" fullWidth />}
           />
           <AppReactDatepicker
             showYearDropdown
             showMonthDropdown
             selected={endDate}
             isClearable={true}
-            id='picker-open-date'
+            id="picker-open-date"
             openToDate={new Date()}
             onChange={(date: Date | null) => setEndDate(date)}
-            customInput={<CustomTextField label='Date de Fin' fullWidth />}
+            customInput={<CustomTextField label="Date de Fin" fullWidth />}
           />
         </CardContent>
       </Card>
@@ -285,20 +348,10 @@ const ProformaList = () => {
         setGlobalFilter={setFilter}
         totalElements={data?.totalElements}
         buttonadd={{
-          action: () => setIsModalOpen(true)
+          component: Link,
+          href: getLocalizedUrl('/proforma/create', locale as Locale)
         }}
       />
-      {/* <AddProforma data={proformaselect} open={isModalOpen} handleClose={() => {
-        setIsModalOpen(false)
-        setProformaSelect(undefined)
-      }} onSucces={() => {
-        setIsModalOpen(false)
-        queryClient
-          .invalidateQueries({
-            queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize]
-          })
-          .then(r => r)
-      }} />*/}
 
       <DefaultDialog
         open={isModalOpenAdopt}

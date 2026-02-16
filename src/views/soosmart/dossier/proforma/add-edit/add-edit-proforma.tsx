@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { useParams, useRouter } from 'next/navigation'
 
@@ -14,11 +14,27 @@ import Typography from '@mui/material/Typography'
 
 import FormControlLabel from '@mui/material/FormControlLabel'
 
-import { createFilterOptions, Radio, RadioGroup } from '@mui/material'
+import {
+  createFilterOptions,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  Radio,
+  RadioGroup
+} from '@mui/material'
 
 import { toast } from 'react-toastify'
 
 import Button from '@mui/material/Button'
+
+import Card from '@mui/material/Card'
+
+import CardContent from '@mui/material/CardContent'
+
+import CardHeader from '@mui/material/CardHeader'
 
 import type { ProformaSaveV2 } from '@/types/soosmart/dossier/proforma.type'
 import { schemaProformaV2 } from '@/types/soosmart/dossier/proforma.type'
@@ -36,6 +52,8 @@ import DebouncedInput from '@components/CustomInput/DebounceInput'
 import LoadingButton from '@components/button/LoadingButton'
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
+import CustomAvatar from '@core/components/mui/Avatar'
+import { getInitials } from '@/utils/getInitials'
 
 const filterOptionsClient = createFilterOptions({
   matchFrom: 'any',
@@ -55,6 +73,7 @@ const AddEditProforma = () => {
 
   // select state
   const [isClient, setIsClient] = useState<'client' | 'projet'>('client')
+  const [articleindex, setArticleIndex] = React.useState<number | null>(null)
 
 
   //filter state
@@ -111,7 +130,7 @@ const AddEditProforma = () => {
     ]
   })
 
-  const [{ data: proformas }, { data: clients }, { data: projets }] = response
+  const [{ data: proforma }, { data: clients }, { data: projets }] = response
 
   const {
     handleSubmit,
@@ -151,8 +170,25 @@ const AddEditProforma = () => {
     }
   })
 
+  const EditMutation = useMutation({
+    mutationFn: async (data: ProformaSaveV2) => {
+      if (proforma == null) return
+
+      return await ProformaService.Updatedata(proforma?.id, data)
+    },
+    onSuccess: data => {
+      toast.success(`Proforma ${data?.numero} mise à joure avec succès `)
+      router.push(getLocalizedUrl('/proforma', locale as Locale))
+    },
+    onError: error => {
+      toast.error(`Erreur de la mise a jour de la proforma ${proforma?.numero}`)
+      console.error('Error adding proforma:', error)
+    }
+  })
+
+
   const handleSubmitForm = (data: ProformaSaveV2) => {
-    AddMutation.mutate(data)
+    isEdit && proforma? EditMutation.mutate(data): AddMutation.mutate(data)
   }
 
   const handeReset = () => {
@@ -166,34 +202,37 @@ const AddEditProforma = () => {
   }
 
   useEffect(() => {
-    if (isEdit && proformas) {
-      setValue('reference', proformas.reference)
+    if (isEdit && proforma) {
+      setValue('reference', proforma.reference, { shouldDirty: true })
 
-      if (proformas.client) {
-        setValue('client_id', proformas.client.id)
+      if (proforma.client) {
+        setValue('client_id', proforma.client.id, { shouldDirty: true })
 
         setIsClient('client')
       }
 
-      if (proformas.projet) {
-        setValue('projet_id', proformas.projet.id)
+      if (proforma.projet) {
+        setValue('projet_id', proforma.projet.id, { shouldDirty: true })
         setIsClient('projet')
       }
 
-      setValue('articleQuantiteslist', proformas.articleQuantites.map(aq => ({
+      setValue('articleQuantiteslist', proforma.articleQuantites.map(aq => ({
         libelle: aq.article.libelle,
         description: aq.article.description,
         quantite: aq.quantite,
         prix_unitaire: aq.prix_article
-      })))
+      })), { shouldDirty: true })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit])
 
+  const handleListItemClick = (index: number) => {
+    setArticleIndex(index)
+  }
 
   return (
-    <Form onSubmit={handleSubmit(handleSubmitForm)} className='w-full'>
+    <Form onSubmit={handleSubmit(handleSubmitForm)} className="w-full">
       <Typography variant={'h5'}>Information de la Proforma</Typography>
       <div className={'grid grid-cols-1 gap-4'}>
         <Controller
@@ -216,7 +255,7 @@ const AddEditProforma = () => {
         {!isEdit && (
           <RadioGroup
             row
-            name='isClient'
+            name="isClient"
             value={isClient}
             onChange={event => {
               setIsClient((event.target as HTMLInputElement).value as 'client' | 'projet')
@@ -224,7 +263,7 @@ const AddEditProforma = () => {
             className={'grid grid-cols-2 gap-4'}
           >
             <div className={'flex flex-col gap-4'}>
-              <FormControlLabel value='client' control={<Radio />} label='Client' />
+              <FormControlLabel value="client" control={<Radio />} label="Client" />
 
               <Controller
                 render={({ field }) => (
@@ -253,7 +292,7 @@ const AddEditProforma = () => {
               />
             </div>
             <div className={'flex flex-col gap-4'}>
-              <FormControlLabel value='projet' control={<Radio />} label='Projet' />
+              <FormControlLabel value="projet" control={<Radio />} label="Projet" />
 
               <Controller
                 render={({ field }) => (
@@ -287,16 +326,122 @@ const AddEditProforma = () => {
         <div className={'grid grid-cols-3 gap-4'}>
           <div className={'col-span-2'}>
             <Typography variant={'h5'}>Article-Quantite</Typography>
+            <Card>
+              <CardHeader>Article</CardHeader>
+              <CardContent>
+                <div className={'grid grid-cols-1 gap-4'}>
+                  <Controller
+                    render={({ field }) => (
+                      <CustomTextField
+                        {...field}
+                        label={'Libelle'}
+                        fullWidth
+                        error={!!errors.articleQuantiteslist?.[articleindex ?? 0]?.libelle}
+                        {...(errors.articleQuantiteslist?.[articleindex ?? 0]?.libelle && {
+                          error: true,
+                          helperText: errors.articleQuantiteslist?.[articleindex ?? 0]?.libelle?.message
+                        })}
+                      />
+                    )}
+                    name={`articleQuantiteslist.${articlenew.length}.libelle`}
+                    control={control}
+                  />
+
+                  <Controller
+                    render={({ field }) => <CustomTextField {...field} label={'Description'} fullWidth />}
+                    name={`articleQuantiteslist.${articlenew.length}.description`}
+                    control={control}
+                  />
+
+                  <Controller
+                    render={({ field }) => (
+                      <CustomTextField
+                        {...field}
+                        label={'Quantite'}
+                        fullWidth
+                        error={!!errors.articleQuantiteslist?.[articleindex ?? 0]?.quantite}
+                        {...(errors.articleQuantiteslist?.[articleindex ?? 0]?.quantite && {
+                          error: true,
+                          helperText: errors.articleQuantiteslist?.[articleindex ?? 0]?.quantite?.message
+                        })}
+                      />
+                    )}
+                    name={`articleQuantiteslist.${articlenew.length}.quantite`}
+                    control={control}
+                  />
+
+                  <Controller
+                    render={({ field }) => (
+                      <CustomTextField
+                        {...field}
+                        label={'Prix Unitaire'}
+                        fullWidth
+                        error={!!errors.articleQuantiteslist?.[articleindex ?? 0]?.prix_unitaire}
+                        {...(errors.articleQuantiteslist?.[articleindex ?? 0]?.prix_unitaire && {
+                          error: true,
+                          helperText: errors.articleQuantiteslist?.[articleindex ?? 0]?.prix_unitaire?.message
+                        })}
+                      />
+                    )}
+                    name={`articleQuantiteslist.${articlenew.length}.prix_unitaire`}
+                    control={control}
+                  />
+
+                  <Button
+
+                    // disabled={articleindex === null}
+                    onClick={() => {
+                      if (articleindex === null) return
+
+                      append({
+                        libelle: articlenew[articlenew.length].libelle,
+                        description: articlenew[articlenew.length].description,
+                        quantite: articlenew[articlenew.length].quantite,
+                        prix_unitaire: articlenew[articlenew.length].prix_unitaire
+                      })
+                      setArticleIndex(null)
+                    }}
+                  >
+                    Ajouter Article
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-          <div className={'grid grid-cols-1 gap-2 max-h-44 overflow-hidden'}></div>
+          <div className={'grid grid-cols-1 gap-2  overflow-hidden overflow-y-auto max-h-[50dvh]'}>
+            <List className="space-y-2">
+              {fields.map((item, index) => (
+                <ListItem
+                  className="border border-primary rounded-md"
+                  key={item.id}
+                  disablePadding
+                  secondaryAction={
+                    <IconButton edge="end" size="small" onClick={() => remove(index)}>
+                      <i className="tabler-trash text-red-500" />
+                    </IconButton>
+                  }
+                >
+                  <ListItemButton selected={articleindex === index} onClick={() => handleListItemClick(index)}>
+                    <ListItemAvatar>
+                      <CustomAvatar alt="Caroline Black">{getInitials(item.libelle)}</CustomAvatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={item.libelle}
+                      secondary={`Prix: ${item.prix_unitaire} Fcfa x ${item.quantite}`}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </div>
         </div>
       </div>
       <div className={'flex flex-row gap-4 justify-end mt-4'}>
-        <LoadingButton loading={AddMutation.isPending} type={'submit'}>
+        <LoadingButton loading={AddMutation.isPending || EditMutation.isPending} type={'submit'}>
           Ajouter
         </LoadingButton>
         <Button
-          disabled={AddMutation.isPending}
+          disabled={AddMutation.isPending || EditMutation.isPending}
           type={'reset'}
           variant={'outlined'}
           color={'secondary'}

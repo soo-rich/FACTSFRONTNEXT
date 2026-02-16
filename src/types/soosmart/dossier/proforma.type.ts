@@ -5,6 +5,27 @@ import { schemaArticleQuantiteListV2, schemaArticleQuantiteslist } from './Artic
 import type { ClientType } from '@/types/soosmart/client.type'
 import type { ProjetType } from '@/types/soosmart/projet.type'
 import type { BaseType } from '@/types/soosmart/api-default,type'
+import type { ThemeColor } from '@core/types'
+
+export enum StatusProforma {
+  PENDING = 'pending',
+  ACCEPTED = 'accepted',
+  REJECTED = 'rejected'
+}
+
+export const listStatusProforma = Object.values(StatusProforma)
+
+export const LabelStatusProforma: Record<StatusProforma, string> = {
+  [StatusProforma.PENDING]: 'En attente',
+  [StatusProforma.ACCEPTED]: 'Accepté',
+  [StatusProforma.REJECTED]: 'Rejeté'
+}
+
+export const ColorStatusProforma: Record<StatusProforma, ThemeColor> = {
+  [StatusProforma.PENDING]: 'warning',
+  [StatusProforma.ACCEPTED]: 'success',
+  [StatusProforma.REJECTED]: 'error'
+}
 
 
 export type ProformaQuery = {
@@ -25,10 +46,10 @@ export type ProformaType = {
   role: string
   signedBy: string
   articleQuantites: Article_Quantite[]
-  oldVersion: boolean
-  client: ClientType|null
-  projet:ProjetType|null
-}&BaseType
+  status: StatusProforma
+  client: ClientType | null
+  projet: ProjetType | null
+} & BaseType
 
 export const schemaProforma = v.object({
   projet_id: v.nullable(v.string()),
