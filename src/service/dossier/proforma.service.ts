@@ -33,7 +33,7 @@ export class ProformaService {
   }
 
   static async Updatedata(id: string, article_quantite: ProformaSaveV2) {
-    return (await instance.put<ProformaType>(url + `/${id}`, article_quantite)).data
+    return (await instance.patch<ProformaType>(url + `/${id}`, article_quantite)).data
   }
 
   static async DeleteDAta(numero: string) {

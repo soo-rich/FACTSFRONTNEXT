@@ -4,12 +4,10 @@ import { minLength, number, object, pipe, string } from 'valibot'
 import type { BaseType } from '@/types/soosmart/api-default,type'
 
 export type ArticleType = {
-
   libelle: string
   description: string
   prix_unitaire: number
   isdeleted: boolean
-
 } & BaseType
 
 export const articleSchema = object({
@@ -17,4 +15,4 @@ export const articleSchema = object({
   description: string(),
   prix_unitaire: number()
 })
-export type SaveArticleType = InferInput<typeof articleSchema>;
+export type SaveArticleType = InferInput<typeof articleSchema>

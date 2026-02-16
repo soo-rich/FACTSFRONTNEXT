@@ -50,16 +50,30 @@ export type ProformaType = {
   projet: ProjetType | null
 } & BaseType
 
-export const schemaProforma = v.object({
-  projet_id: v.nullable(v.string()),
-  client_id: v.nullable(v.string()),
-  reference: v.pipe(v.string(), v.minLength(3, 'entre au moin 3 carateres')),
-  articleQuantiteslist: v.pipe(v.array(schemaArticleQuantiteslist), v.minLength(1))
-})
+export const schemaProforma = v.pipe(
+  v.object({
+    projet_id: v.optional(v.nullable(v.string())),
+    client_id: v.optional(v.nullable(v.string())),
+    reference: v.pipe(v.string(), v.minLength(3, 'entre au moin 3 carateres')),
+    articleQuantiteslist: v.pipe(v.array(schemaArticleQuantiteslist), v.minLength(1))
+  }),
+  v.check(input => !!input.client_id || !!input.projet_id, 'Veuillez sélectionner un client ou un projet')
+)
 
-export const schemaProformaV2 = v.object({
-  projet_id: v.nullable(v.string()),
-  client_id: v.nullable(v.string()),
+export const schemaProformaV2 = v.pipe(
+  v.object({
+    projet_id: v.optional(v.nullable(v.string())),
+    client_id: v.optional(v.nullable(v.string())),
+    reference: v.pipe(v.string(), v.minLength(3, 'entre au moin 3 carateres')),
+    articleQuantiteslist: v.pipe(v.array(schemaArticleQuantiteListV2), v.minLength(1))
+  }),
+  v.check(input => !!input.client_id || !!input.projet_id, 'Veuillez sélectionner un client ou un projet')
+)
+
+/** Schema pour le mode édition — client/projet non requis */
+export const schemaProformaV2Edit = v.object({
+  projet_id: v.optional(v.nullable(v.string())),
+  client_id: v.optional(v.nullable(v.string())),
   reference: v.pipe(v.string(), v.minLength(3, 'entre au moin 3 carateres')),
   articleQuantiteslist: v.pipe(v.array(schemaArticleQuantiteListV2), v.minLength(1))
 })

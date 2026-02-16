@@ -36,8 +36,13 @@ export class AuthService {
   }
 
   static async refreshToken(refreshToken: string) {
+    const instance_axios = axios.create({
+      baseURL: process.env.NEXT_PUBLIC_API_URL,
+      timeout: 10000
+    })
+
     return (
-      await instance.post<LoginResponse>('auth/refresh-token', {
+      await instance_axios.post<LoginResponse>('auth/refresh-token', {
         refresh_token: refreshToken
       })
     ).data

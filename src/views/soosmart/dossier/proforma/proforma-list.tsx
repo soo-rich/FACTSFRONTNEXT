@@ -33,9 +33,6 @@ import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
 
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
-import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
-import AdoptForm from '@views/soosmart/dossier/proforma/component/adopt-form'
-import AddProformaModal from '@views/soosmart/dossier/proforma/form/add-proforma-modal'
 import { DocumentService } from '@/service/document/document.service'
 import CustomTextField from '@core/components/mui/TextField'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
@@ -78,11 +75,6 @@ const ProformaList = () => {
 
   const [startDate, setStartDate] = useState<Date | null>(null)
   const [endDate, setEndDate] = useState<Date | null>(null)
-
-  // États pour le modal
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isModalOpenAdopt, setIsModalOpenAdopt] = useState(false)
-  const [proformaselect, setProformaSelect] = useState<ProformaType | undefined>(undefined)
 
   // hooks
   const { lang: locale } = useParams()
@@ -217,33 +209,7 @@ const ProformaList = () => {
               </CustomIconButton>
             </Tooltip>
 
-            {row.original.status === StatusProforma.PENDING && !row.original.adopted && (
-              <Tooltip title={'mettre a jour'}>
-                <CustomIconButton
-                  onClick={() => {
-                    setProformaSelect(row.original)
-                    setIsModalOpen(true)
-                  }}
-                  className="cursor-pointer text-yellow-600 hover:text-yellow-800"
-                >
-                  <i className="tabler-edit" />
-                </CustomIconButton>
-              </Tooltip>
-            )}
-            <Tooltip title={'Supprimer'}>
-              <CustomIconButton
-                color={'error'}
-                onClick={() =>
-                  UtiliMetod.SuppressionConfirmDialog({
-                    data: row.original.reference,
-                    confirmAction: () => DeleteMutation.mutate(row.original.numero)
-                  })
-                }
-                className="cursor-pointer "
-              >
-                <i className="tabler-trash" />
-              </CustomIconButton>
-            </Tooltip>
+
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
               iconClassName="text-textSecondary"
@@ -271,16 +237,13 @@ const ProformaList = () => {
                   text: 'Edit',
                   icon: 'tabler-edit text-yellow-600',
 
-                  // href: getLocalizedUrl(`/proforma/${row.original.id}`, locale as Locale),
                   menuItemProps: {
                     className: 'flex items-center gap-2 text-textSecondary', onClick: () => {
                       router.push(getLocalizedUrl(`/proforma/${row.original.id}`, locale as Locale))
                     }
                   }
 
-                  /* linkProps: {
-                     className: 'flex items-center gap-2 text-textSecondary flex-1 w-full place-items-center'
-                   }*/
+
                 },
                 {
                   text: 'Delete',
@@ -352,56 +315,6 @@ const ProformaList = () => {
           href: getLocalizedUrl('/proforma/create', locale as Locale)
         }}
       />
-
-      <DefaultDialog
-        open={isModalOpenAdopt}
-        setOpen={setIsModalOpenAdopt}
-        onClose={() => {
-          setIsModalOpen(false)
-          setProformaSelect(undefined)
-        }}
-        title={'Adopter la proforma'}
-      >
-        <AdoptForm
-          data={proformaselect}
-          onCancel={() => {
-            setProformaSelect(undefined)
-            setIsModalOpenAdopt(false)
-          }}
-          onSuccess={() => {
-            queryClient
-              .invalidateQueries({
-                queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize]
-              })
-              .then(r => r)
-          }}
-        />
-      </DefaultDialog>
-      <DefaultDialog
-        dialogMaxWidth={'md'}
-        open={isModalOpen}
-        setOpen={setIsModalOpen}
-        onClose={() => {
-          setIsModalOpen(false)
-          setProformaSelect(undefined)
-        }}
-        title={`Construire un Proforma ${proformaselect ? `à partir de ${proformaselect.numero}` : ''}`}
-      >
-        <AddProformaModal
-          data={proformaselect}
-          onCancel={() => {
-            setIsModalOpenAdopt(false)
-          }}
-          onSuccess={() => {
-            setIsModalOpen(false)
-            queryClient
-              .invalidateQueries({
-                queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize]
-              })
-              .then(r => r)
-          }}
-        />
-      </DefaultDialog>
     </>
   )
 }
