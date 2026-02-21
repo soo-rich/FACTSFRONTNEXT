@@ -31,7 +31,7 @@ export class ArticleService {
   }
 
   static updateArticle = async (id: string, article: SaveArticleType) => {
-    return (await instance.put<ArticleType>(`${url}/${id}`, article)).data
+    return (await instance.patch<ArticleType>(`${url}/${id}`, article)).data
   }
 
   static addArticle = async (article: SaveArticleType | SaveArticleType[]) => {

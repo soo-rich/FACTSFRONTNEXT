@@ -161,6 +161,7 @@ size:'small',
 
   const handlePageSizeChange = (event: any) => {
     pagination ? SetPageSize?.(parseInt(event.target.value, 10)) : table.setPageSize(parseInt(event.target.value, 10))
+    SetPage?.(0)
   }
 
   return (

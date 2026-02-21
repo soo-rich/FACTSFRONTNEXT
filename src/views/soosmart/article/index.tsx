@@ -113,17 +113,15 @@ const ArticleIndex = () => {
         globalFilter={filter}
         setGlobalFilter={setFilter}
         totalElements={data?.totalElements}
-        buttonadd={{
-          action: () => setIsModalOpen(true)
-        }}
       />
 
       <DefaultDialog
         open={isModalOpen} setOpen={setIsModalOpen}
         onClose={() => {
+          setIsModalOpen(false)
           setSelectedArticle(undefined)
         }}
-        title={selectedArticle ? `Mettre a jour ${selectedArticle.libelle}` : 'Ajouter un article'}
+        title={selectedArticle ? `Mettre a jour ${selectedArticle.libelle}` : ''}
         children={
           <AddEditArticle
             data={selectedArticle}
