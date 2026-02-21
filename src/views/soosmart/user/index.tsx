@@ -13,7 +13,6 @@ import { toast } from 'react-toastify'
 import Tooltip from '@mui/material/Tooltip'
 
 
-
 import { styled } from '@mui/material/styles'
 
 import classNames from 'classnames'
@@ -46,9 +45,6 @@ type UserRoleType = {
 const columnHelper = createColumnHelper<UtilisateurDto>()
 
 
-
-
-
 const UserIndex = () => {
   const queryClient = useQueryClient()
   const [pageIndex, setPageIndex] = useState(0)
@@ -60,8 +56,9 @@ const UserIndex = () => {
   const [userselect, setUserSelect] = useState<UtilisateurDto | undefined>(undefined)
 
   const userRoleObj: UserRoleType = {
+    system_admin: { icon: 'tabler-shield-check', color: 'error' },
     admin: { icon: 'tabler-crown', color: 'success' },
-    user: { icon: 'tabler-user', color: 'info' },
+    user: { icon: 'tabler-user', color: 'info' }
   }
 
 
@@ -69,11 +66,9 @@ const UserIndex = () => {
     queryKey: [UserService.USER_KEY, pageIndex, pageSize],
     queryFn: async () => {
       // Remplacez par votre service pour récupérer les utilisateurs
-      return await UserService.getAllorOnebyEmail({
-        params: {
-          page: pageIndex, pagesize:
-            pageSize
-        }
+      return await UserService.getAll({
+        page: pageIndex,
+        pagesize: pageSize
       })
     },
     refetchOnWindowFocus: false,
@@ -103,7 +98,7 @@ const UserIndex = () => {
       queryClient.invalidateQueries({
         queryKey: [UserService.USER_KEY, pageIndex, pageSize]
       }).then(r => r)
-      toast.success(`${data ? 'Activation OK' : 'Désactivation OK '}`)
+      toast.success(`${data.isActive ? 'Activation OK' : 'Désactivation OK '}`)
     },
     onError: () => {
       toast.error('Erreur lors de l\'activation/désactivation de l\'utilisateur')
@@ -127,37 +122,45 @@ const UserIndex = () => {
     'text-2xl text-green-600',
     'cursor-pointer',
     'hover:text-green-800'
-  );
+  )
 
   const iconStyleInactive = classNames(
     'tabler-square-rounded-x',
     'text-2xl',
     'cursor-pointer',
-    'hover:text-red-800',
-  );
+    'hover:text-red-800'
+  )
 
 
+  const getAvatar = (params: Pick<UtilisateurDto, 'image' | 'nom' | 'prenom'>) => {
+    const { image, nom, prenom } = params
+
+    if (image) {
+      return <CustomAvatar src={UtiliMetod.getFileFormApi(image)} size={34} />
+    } else {
+      return <CustomAvatar size={34}>{getInitials((nom + ' ' + prenom).toUpperCase() as string)}</CustomAvatar>
+    }
+  }
 
 
   const columns = useMemo(
     () => [
-
       columnHelper.accessor('nom', {
         header: 'User',
         cell: ({ row }) => (
-          <div className="flex items-center gap-4">
-            <CustomAvatar size={34}>{getInitials(row.original.username.toUpperCase())}</CustomAvatar>
-            <div className="flex flex-col">
-              <Typography color="text.primary" className="font-medium">
-                {row.original.nom}{' '}{row.original.prenom}
+          <div className='flex items-center gap-4'>
+            {getAvatar(row.original)}
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {row.original.nom} {row.original.prenom}
               </Typography>
-              <Typography variant="body2">{row.original.email}</Typography>
+              <Typography variant='body2'>{row.original.email}</Typography>
             </div>
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
       }),
-      columnHelper.accessor('telephone', {
+      columnHelper.accessor('numero', {
         header: 'Telphone',
         cell: info => <span>{info.getValue()}</span>,
         enableHiding: true // Permet de cacher cette colonne
@@ -171,19 +174,18 @@ const UserIndex = () => {
               sx={{ color: `var(--mui-palette-${userRoleObj[row.original?.role?.toLowerCase()]?.color}-main)` }}
             />
             <Typography className='capitalize' color='text.primary'>
-              {row.original.role.toLocaleLowerCase()}
+              {row.original.role.toLowerCase()}
             </Typography>
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
       }),
-      columnHelper.accessor('dateCreation', {
+      columnHelper.accessor('createdat', {
         header: 'Creer le .',
         cell: ({ row }) => (
-          <Typography variant="body2"
-            color={'info'}
-            className="capitalize"
-          >{UtiliMetod.formatDate(row.original.dateCreation)}</Typography>
+          <Typography variant='body2' color={'info'} className='capitalize'>
+            {UtiliMetod.formatDate(row.original.createdat)}
+          </Typography>
         ),
         enableHiding: true // Permet de cacher cette colonne
       }),
@@ -192,28 +194,27 @@ const UserIndex = () => {
         id: 'actions', // Important: donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             <CustomIconButton
               onClick={() => {
                 setUserSelect(row.original)
                 setIsModalOpen(true)
               }}
-              className="cursor-pointer text-yellow-600 hover:text-yellow-800"
+              className='cursor-pointer text-yellow-600 hover:text-yellow-800'
             >
-              <i className="tabler-edit" />
+              <i className='tabler-edit' />
             </CustomIconButton>
-            <Tooltip placement={'top'} title={row.original.actif ? 'Désactiver utilisateur' : 'Activer utilisateur'}>
+            <Tooltip placement={'top'} title={row.original.isActive ? 'Désactiver utilisateur' : 'Activer utilisateur'}>
               <CustomIconButton
                 onClick={() => {
                   UtiliMetod.confirmDialog({
                     title: row.original.nom,
-                    subtitle: `Voulez-vous ${row.original.actif ? 'désactiver' : 'activer'} cet utilisateur ?`,
-                    confirmAction: () =>
-                      ActivateMutation.mutate(row.original.id)
+                    subtitle: `Voulez-vous ${row.original.isActive ? 'désactiver' : 'activer'} cet utilisateur ?`,
+                    confirmAction: () => ActivateMutation.mutate(row.original.id)
                   })
                 }}
               >
-                <i className={classNames(!row.original.actif ? iconStyleActive : iconStyleInactive)} />
+                <i className={classNames(!row.original.isActive ? iconStyleActive : iconStyleInactive)} />
               </CustomIconButton>
             </Tooltip>
             <Tooltip placement={'top'} title={'reinitialiser le mot de passe'}>
@@ -222,30 +223,29 @@ const UserIndex = () => {
                   UtiliMetod.confirmDialog({
                     title: row.original.nom,
                     subtitle: `Voulez-vous réinitialiser le mot de passe de ${row.original.nom} ?`,
-                    confirmAction: () =>
-                      ResetPasswordMutation.mutate(row.original.email)
+                    confirmAction: () => ResetPasswordMutation.mutate(row.original.email)
                   })
                 }}
               >
-                <KeyRound className="text-2xl cursor-pointer hover:text-blue-800" />
+                <KeyRound className='text-2xl cursor-pointer hover:text-blue-800' />
               </CustomIconButton>
             </Tooltip>
             <CustomIconButton
-              onClick={() => UtiliMetod.confirmDialog({
-                title: row.original.nom,
-                subtitle: 'Voulez-vous supprimer cet utilisateur ?',
-                confirmAction: () => DeleteMutation.mutate(row.original.id)
-              })}
-              className="cursor-pointer text-red-600 hover:text-red-800"
+              onClick={() =>
+                UtiliMetod.confirmDialog({
+                  title: row.original.nom,
+                  subtitle: 'Voulez-vous supprimer cet utilisateur ?',
+                  confirmAction: () => DeleteMutation.mutate(row.original.id)
+                })
+              }
+              className='cursor-pointer text-red-600 hover:text-red-800'
             >
-              <i className="tabler-trash" />
+              <i className='tabler-trash' />
             </CustomIconButton>
-
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
       })
-
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -265,7 +265,7 @@ const UserIndex = () => {
     setGlobalFilter={setFilter}
     totalElements={data?.totalElements}
     buttonadd={{
-      action: () => {
+      onClick: async () => {
         setIsModalOpen(true)
         setUserSelect(undefined)
       }

@@ -3,7 +3,6 @@ import Swal from 'sweetalert2'
 import { fr } from 'date-fns/locale'
 
 // import axios from 'axios'
-
 import { toast } from 'react-toastify'
 
 import type { SweetconfirmProps } from '@/types/soosmart/sweetAlertProps'
@@ -19,6 +18,7 @@ class UtiliMetod {
 
     return parseFloat((size / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
+
   static formatDevise = (value: number, format?: string) => {
     return new Intl.NumberFormat(format ?? 'fr-FR').format(value)
   }
@@ -46,10 +46,10 @@ class UtiliMetod {
     })
   }
   static SuppressionConfirmDialog = async ({
-    data,
-    confirmAction,
-    cancelAction
-  }: SweetconfirmProps & {
+                                             data,
+                                             confirmAction,
+                                             cancelAction
+                                           }: SweetconfirmProps & {
     data: string
   }) => {
     await Swal.fire({
@@ -98,10 +98,14 @@ class UtiliMetod {
     return colors[Math.floor(Math.random() * colors.length)]
   }
 
-  static getFileFormApi = async (url: string, provider?: 'minio' | 'local') => {
-    return provider === 'minio'
-      ? (await instance.get('file/presigned', { params: { url } })).data
-      : { presigned: process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') + url }
+  /*  static getFileFormApi = async (url: string, provider?: 'minio' | 'local') => {
+      return provider === 'minio'
+        ? (await instance.get('file/presigned', { params: { url } })).data
+        : { presigned: process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') + url }
+    }*/
+
+  static getFileFormApi = (url: string) => {
+    return instance.defaults.baseURL + url
   }
 
   static getImagefromLocal = async (url: string) => {

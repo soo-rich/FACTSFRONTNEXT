@@ -3,15 +3,17 @@ import { picklist, custom, email, maxLength, minLength, object, pipe, regex, str
 
 export type UtilisateurDto = {
   id: string
+  createdat: Date
+  updatedat: Date
+  isdeleted: boolean
+  email: string
   nom: string
   prenom: string
-  telephone: string
-  email: string
+  numero: string
   username: string
   role: string
-  dateCreation: Date
-  actif: boolean
-  image?: string
+  image: string
+  isActive: boolean
 }
 
 export const userCreateSchema = object({
@@ -26,18 +28,31 @@ export const userCreateSchema = object({
     maxLength(9, "Le nom d'utilisateur doit contenir au maximum 9 caractères")
   ),
   role: pipe(string(), picklist(['ADMIN', 'USER'], "Ce role n'existe pas"))
-
-  // password: pipe(string(), minLength(1, 'Le mot de passe est requis'))
 })
 
 export const userUpdateSchema = object({
-  id: pipe(string(), minLength(1, "L'id est requis")),
   image: optional(file()),
   nom: pipe(string(), minLength(1, 'Le nom est requis')),
   prenom: pipe(string(), minLength(1, 'Le prénom est requis')),
-  email: pipe(string(), minLength(1, "L'email est requis")),
-  numero: pipe(string(), minLength(1, 'Le numéro est requis'))
+  email: pipe(string(), minLength(1, "L'email est requis"), email('Email invalide')),
+  numero: pipe(string(), minLength(1, 'Le numéro est requis')),
+  username: optional(pipe(
+    string(),
+    minLength(4, "Le nom d'utilisateur doit contenir au moins 4 caractères"),
+    maxLength(9, "Le nom d'utilisateur doit contenir au maximum 9 caractères")
+  )),
+  role: pipe(string(), picklist(['ADMIN', 'USER'], "Ce role n'existe pas"))
 })
+
+//
+// export const userUpdateSchema = object({
+//   id: pipe(string(), minLength(1, "L'id est requis")),
+//   image: optional(file()),
+//   nom: pipe(string(), minLength(1, 'Le nom est requis')),
+//   prenom: pipe(string(), minLength(1, 'Le prénom est requis')),
+//   email: pipe(string(), minLength(1, "L'email est requis")),
+//   numero: pipe(string(), minLength(1, 'Le numéro est requis'))
+// })
 
 export const changePasswordSchema = pipe(
   object({
@@ -57,8 +72,8 @@ export const changePasswordSchema = pipe(
   }, 'Les mots de passe ne correspondent pas')
 )
 
-export type UtilisateurUpdate = InferInput<typeof userUpdateSchema>
+export type UtilsateurRegister = InferInput<typeof userUpdateSchema>
 
-export type UtilsateurRegister = InferInput<typeof userCreateSchema>
+// export type UtilsateurRegister = InferInput<typeof userCreateSchema>
 
 export type ChangePassword = InferInput<typeof changePasswordSchema>
