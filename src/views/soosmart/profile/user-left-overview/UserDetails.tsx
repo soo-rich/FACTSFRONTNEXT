@@ -1,7 +1,9 @@
 'use client'
 
 // MUI Imports
-import { useMemo, useState } from 'react'
+
+
+import { useState } from 'react'
 
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -10,7 +12,7 @@ import Chip from '@mui/material/Chip'
 import Divider from '@mui/material/Divider'
 
 
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { Button, Dialog, DialogContent, DialogTitle } from '@mui/material'
 
@@ -26,35 +28,30 @@ const UserDetails = ({ user: userData }: { user: UtilisateurDto }) => {
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
 
-  const queryKey = useMemo(() => [userData.image + '-file'], [userData.image])
-
-  const { data } = useQuery({
-    queryKey: queryKey,
-    queryFn: async () => {
-      return (await Utilsmethod.getFileFormApi(userData.image ?? '', 'minio'))
-    },
-    enabled: !!userData.image
-  })
 
   const handleSucces = () => {
-    queryClient.invalidateQueries({ queryKey: queryKey })
-    queryClient.invalidateQueries({ queryKey: [UserService.USER_KEY + 'info'] })
+    queryClient.invalidateQueries({ queryKey: [UserService.USER_KEY + 'info'] }).then(() => {
+    })
     setOpen(false)
   }
 
 
   return (
-
     <>
       <Card>
         <CardContent className="flex flex-col pbs-12 gap-6">
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-center flex-col gap-4">
               <div className="flex flex-col items-center gap-4">
-                <CustomAvatar alt="user-profile" src={data?.presigned || "https://picsum.photos/200"} variant="rounded" size={120} />
-                <Typography variant="h5">{`${userData.nom} ${userData.prenom}`}</Typography>
+                <CustomAvatar
+                  alt="user-profile"
+                  src={userData?.image ? Utilsmethod.getFileFormApi(userData?.image) : 'https://picsum.photos/200'}
+                  variant="rounded"
+                  size={120}
+                />
+                <Typography variant="h5">{`${userData?.nom} ${userData?.prenom}`}</Typography>
               </div>
-              <Chip label={userData.role} color="info" size="small" variant="tonal" />
+              <Chip label={userData?.role} color="info" size="small" variant="tonal" />
             </div>
           </div>
           <div>
@@ -65,65 +62,81 @@ const UserDetails = ({ user: userData }: { user: UtilisateurDto }) => {
                 <Typography className="font-medium" color="text.primary">
                   Nom:
                 </Typography>
-                <Typography>{userData.nom}</Typography>
+                <Typography>{userData?.nom}</Typography>
               </div>
               <div className="flex items-center flex-wrap gap-x-1.5">
                 <Typography className="font-medium" color="text.primary">
                   Prenom:
                 </Typography>
-                <Typography>{userData.prenom}</Typography>
+                <Typography>{userData?.prenom}</Typography>
               </div>
               <div className="flex items-center flex-wrap gap-x-1.5">
                 <Typography className="font-medium" color="text.primary">
                   Username:
                 </Typography>
-                <Typography>{userData.username}</Typography>
+                <Typography>{userData?.username}</Typography>
               </div>
               <div className="flex items-center flex-wrap gap-x-1.5">
                 <Typography className="font-medium" color="text.primary">
                   Email:
                 </Typography>
-                <Typography>{userData.email}</Typography>
+                <Typography>{userData?.email}</Typography>
               </div>
               <div className="flex items-center flex-wrap gap-x-1.5">
                 <Typography className="font-medium" color="text.primary">
                   Status
                 </Typography>
-                <Chip label={userData.actif ? 'Activer' : 'Desactiver'} color={userData.actif ? 'success' : 'error'}
-                  size="small" variant="tonal" />
+                <Chip
+                  label={userData?.isActive ? 'Activer' : 'Desactiver'}
+                  color={userData?.isActive ? 'success' : 'error'}
+                  size="small"
+                  variant="tonal"
+                />
               </div>
               <div className="flex items-center flex-wrap gap-x-1.5">
                 <Typography className="font-medium" color="text.primary">
                   Contact:
                 </Typography>
-                <Typography color="text.primary">{userData.telephone}</Typography>
+                <Typography color="text.primary">{userData?.numero}</Typography>
               </div>
               <div className="flex items-center flex-wrap gap-x-1.5">
                 <Typography className="font-medium" color="text.primary">
                   Inscription:
                 </Typography>
-                <Typography color="text.primary">{Utilsmethod.formatDate(userData.dateCreation)}</Typography>
+                <Typography color="text.primary">{Utilsmethod.formatDate(userData?.createdat)}</Typography>
               </div>
             </div>
           </div>
           <Divider className="mlb-4" />
-          <div className='flex justify-center'>
-            <Button variant='contained' color='primary' onClick={() => { setOpen(true) }}>
+          <div className="flex justify-center">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                setOpen(true)
+              }}
+            >
               Mettre à jour le profil
             </Button>
           </div>
         </CardContent>
       </Card>
 
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md" fullWidth scroll='body'
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="md"
+        fullWidth
+        scroll="body"
         closeAfterTransition={false}
-        sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}>
+        sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}
+      >
         <DialogCloseButton onClick={() => setOpen(false)} disableRipple>
-          <i className='tabler-x' />
+          <i className="tabler-x" />
         </DialogCloseButton>
-        <DialogTitle variant='h4' className='flex gap-2 flex-col text-center sm:pbs-8 sm:pbe-6 sm:pli-16'>
+        <DialogTitle variant="h4" className="flex gap-2 flex-col text-center sm:pbs-8 sm:pbe-6 sm:pli-16">
           {'Mettre à jour le profil'}
-          <Typography component='span' className='flex flex-col text-center'>
+          <Typography component="span" className="flex flex-col text-center">
             {'Mettre à jour les informations du profil utilisateur'}
           </Typography>
         </DialogTitle>

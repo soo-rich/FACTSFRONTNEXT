@@ -53,6 +53,6 @@ export class AuthService {
   }
 
   static async forgotUserPassword(email: string) {
-    return (await instance.get<boolean>(`auth/forget-password`, { params: { email } })).data
+    return (await instance.post(`auth/forget-password`, { email: email })).data
   }
 }

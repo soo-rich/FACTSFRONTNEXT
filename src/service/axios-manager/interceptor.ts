@@ -7,7 +7,7 @@ export const InterceptorAxios = (instance: AxiosInstance) => {
     async config => {
       const session = await getSession()
 
-      const excludeUrls = ['auth/login', 'auth/refresh-token']
+      const excludeUrls = ['auth/login', 'auth/refresh-token', 'auth/forget-password']
 
       if (session) {
         // ne pas ajouter le token sur les route t'authentication

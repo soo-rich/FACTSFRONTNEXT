@@ -44,16 +44,6 @@ export const userUpdateSchema = object({
   role: pipe(string(), picklist(['ADMIN', 'USER'], "Ce role n'existe pas"))
 })
 
-//
-// export const userUpdateSchema = object({
-//   id: pipe(string(), minLength(1, "L'id est requis")),
-//   image: optional(file()),
-//   nom: pipe(string(), minLength(1, 'Le nom est requis')),
-//   prenom: pipe(string(), minLength(1, 'Le prénom est requis')),
-//   email: pipe(string(), minLength(1, "L'email est requis")),
-//   numero: pipe(string(), minLength(1, 'Le numéro est requis'))
-// })
-
 export const changePasswordSchema = pipe(
   object({
     password: pipe(string(), minLength(5, 'Le mot de passe actuel est requis')),
@@ -74,6 +64,5 @@ export const changePasswordSchema = pipe(
 
 export type UtilsateurRegister = InferInput<typeof userUpdateSchema>
 
-// export type UtilsateurRegister = InferInput<typeof userCreateSchema>
 
 export type ChangePassword = InferInput<typeof changePasswordSchema>
