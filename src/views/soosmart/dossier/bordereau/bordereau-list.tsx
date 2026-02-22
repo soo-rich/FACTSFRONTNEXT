@@ -16,7 +16,6 @@ import { toast } from 'react-toastify'
 import Tooltip from '@mui/material/Tooltip'
 
 // import Button from '@mui/material/Button'
-
 import UtiliMetod from '@/utils/utilsmethod'
 
 import TableGeneric from '@/components/table/TableGeneric'
@@ -28,8 +27,9 @@ import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
 import CustomIconButton from '@core/components/mui/IconButton'
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
-import Link from "@components/Link";
+import Link from '@components/Link'
 import { DocumentService } from '@/service/document/document.service'
+import OptionMenu from '@core/components/option-menu'
 
 
 const columnHelper = createColumnHelper<BorderauType>()
@@ -50,10 +50,10 @@ const BordereauList = () => {
     queryKey: querykey,
     queryFn: async () => {
       return await BorderauService.getAll({
-          page: pageIndex,
-          pagesize: pageSize,
-          adopted: notadopted
-        })
+        page: pageIndex,
+        pagesize: pageSize,
+        adopted: notadopted
+      })
     },
     refetchOnWindowFocus: true,
     refetchOnMount: true,
@@ -136,7 +136,7 @@ const BordereauList = () => {
         )
       }),
 
-    /*  columnHelper.accessor('adopte', {
+      /*  columnHelper.accessor('adopte', {
         header: 'Status',
         cell: ({ row }) =>
           row.original.adopte ? (
@@ -165,27 +165,39 @@ const BordereauList = () => {
                 <i className='tabler-file-type-pdf' />
               </CustomIconButton>
             </Tooltip>
-            <Tooltip title={'Télécharger le PDF'}>
-              <CustomIconButton
-                onClick={() => DocumentService.generatePdf(row.original.numero)}
-                className='cursor-pointer  hover:text-green-800'
-              >
-                <i className='tabler-download' />
-              </CustomIconButton>
-            </Tooltip>
-            <Tooltip title={`Supprimer ${row.original.numero}`} placement={'top'}>
-              <CustomIconButton
-                onClick={() =>
-                  UtiliMetod.SuppressionConfirmDialog({
-                    data: row.original.proforma.reference,
-                    confirmAction: () => DeleteMutation.mutate(row.original.id)
-                  })
+
+            <OptionMenu
+              iconButtonProps={{ size: 'medium' }}
+              iconClassName='text-textSecondary'
+              options={[
+                {
+                  text: 'Télécharger le PDF',
+                  icon: 'tabler-download hover:text-green-600 text-green-900',
+                  menuItemProps: {
+                    onClick: () => DocumentService.generatePdf(row.original.numero)
+                  }
+                },
+                {
+                  text: row.original.__invoice__ ? 'Facture déjà creer' : 'Creer la facture',
+                  icon: 'tabler-check hover:text-green-600 text-green-900',
+                  menuItemProps: {
+                    disabled: !!row.original.__invoice__,
+                    onClick: () => AdoptMutation.mutate(row.original.id)
+                  }
+                },
+                {
+                  text: `Supprimer ${row.original.numero}`,
+                  icon: 'tabler-trash hover:text-red-900 text-red-600',
+                  menuItemProps: {
+                    onClick: () =>
+                      UtiliMetod.SuppressionConfirmDialog({
+                        data: row.original.proforma.reference,
+                        confirmAction: () => DeleteMutation.mutate(row.original.id)
+                      })
+                  }
                 }
-                className='cursor-pointer flex items-center gap-2 text-textSecondary'
-              >
-                <i className='tabler-trash text-red-600' />
-              </CustomIconButton>
-            </Tooltip>
+              ]}
+            />
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
