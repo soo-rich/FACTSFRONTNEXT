@@ -112,7 +112,7 @@ const AddEditProforma = () => {
         enabled: isEdit,
         queryKey: queryKeyProforma,
         queryFn: async () => {
-          return await ProformaService.getById(create! as string)
+          return await ProformaService.getById({id: create! as string })
         },
         refetchOnWindowFocus: true,
         refetchOnMount: true,

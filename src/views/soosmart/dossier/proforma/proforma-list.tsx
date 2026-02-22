@@ -39,6 +39,7 @@ import CustomTextField from '@core/components/mui/TextField'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import OptionMenu from '@/@core/components/option-menu'
 import Link from '@components/Link'
+import { BorderauService } from '@/service/dossier/borderau.service'
 
 const columnHelper = createColumnHelper<ProformaType>()
 
@@ -142,6 +143,24 @@ const ProformaList = ({ props }: { props: Partial<ProformaQuery> }) => {
     }
   })
 
+  const CreateBLMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await BorderauService.PostData(id)
+    },
+    onSuccess: () => {
+      queryClient
+        .invalidateQueries({
+          queryKey
+        })
+        .then(r => r)
+      toast.success('Borderau de livraison créé avec succès')
+    },
+    onError: () => {
+      toast.error('Erreur lors de la création du borderau de livraison')
+      console.error('Erreur lors de la création du borderau de livraison')
+    }
+  })
+
   const handleClickToAdopt = (id: string) => {
     AdoptMutation.mutate(id)
   }
@@ -226,6 +245,17 @@ const ProformaList = ({ props }: { props: Partial<ProformaQuery> }) => {
                       menuItemProps: {
                         className: 'flex items-center gap-2 text-textSecondary',
                         onClick: () => handleClickToAdopt(row.original.id)
+                      }
+                    },
+                    {
+                      text: 'Creer BL',
+                      icon: 'tabler-truck-delivery',
+
+                      menuItemProps: {
+                        className: 'flex items-center gap-2 text-textSecondary',
+                        onClick: () => {
+                          CreateBLMutation.mutate(row.original.id)
+                        }
                       }
                     }
                   ]

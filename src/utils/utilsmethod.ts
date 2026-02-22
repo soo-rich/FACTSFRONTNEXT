@@ -7,7 +7,8 @@ import { toast } from 'react-toastify'
 
 import type { SweetconfirmProps } from '@/types/soosmart/sweetAlertProps'
 import instance from '@/service/axios-manager/instance'
-import type { FileObject } from '@/types/soosmart/dossier/purchaseOrder.type'
+import type { FileObject } from '@/types/soosmart/file.object.type'
+
 
 class UtiliMetod {
   static formatBytes(size: number): string {

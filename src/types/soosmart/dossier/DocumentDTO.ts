@@ -13,3 +13,9 @@ export enum DocumentTypes {
   BORDERAU = 'BORDERAU',
   FACTURE = 'FACTURE'
 }
+
+
+export type OneQueryDocs = {
+  id?: string
+  numero?: string
+}
