@@ -27,13 +27,14 @@ import UtiliMetod from '@/utils/utilsmethod'
 import CustomIconButton from '@core/components/mui/IconButton'
 import TableGeneric from '@/components/table/TableGeneric'
 import { ProformaService } from '@/service/dossier/proforma.service'
-import type { ProformaType } from '@/types/soosmart/dossier/proforma.type'
+import type { ProformaQuery, ProformaType } from '@/types/soosmart/dossier/proforma.type'
 import { ColorStatusProforma, LabelStatusProforma, StatusProforma } from '@/types/soosmart/dossier/proforma.type'
 import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
 
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
-import { DocumentService } from '@/service/document/document.service'
+
+// import { DocumentService } from '@/service/document/document.service'
 import CustomTextField from '@core/components/mui/TextField'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import OptionMenu from '@/@core/components/option-menu'
@@ -66,11 +67,12 @@ const RenderClientOrProject = ({ for_who }: { for_who: Pick<ProformaType, 'clien
   )
 }
 
-const ProformaList = () => {
+const ProformaList = ({ props }: { props: Partial<ProformaQuery> }) => {
+
   const queryClient = useQueryClient()
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize, setPageSize] = useState(10)
-  const [notadopted, setNotadopte] = useState<boolean>(false)
+  const [notadopted, setNotadopte] = useState<boolean>(props?.adopted ?? false)
   const [filter, setFilter] = useState('')
 
   const [startDate, setStartDate] = useState<Date | null>(null)
@@ -81,8 +83,8 @@ const ProformaList = () => {
   const router = useRouter()
 
   const queryKey = useMemo(
-    () => [ProformaService.PROFORMA_KEY, pageIndex, pageSize, notadopted, filter, startDate, endDate],
-    [filter, pageIndex, pageSize, notadopted, startDate, endDate]
+    () => [ProformaService.PROFORMA_KEY, pageIndex, pageSize, notadopted, filter, startDate, endDate, props?.client_id, props?.projet_id],
+    [filter, pageIndex, pageSize, notadopted, startDate, endDate, props?.client_id, props?.projet_id]
   )
 
   const { data, isLoading, isError } = useQuery({
@@ -94,7 +96,9 @@ const ProformaList = () => {
         adopted: notadopted,
         search: filter,
         end: endDate,
-        start: startDate
+        start: startDate,
+        client_id: props?.client_id,
+        projet_id: props?.projet_id
       })
     },
     refetchOnWindowFocus: true,
@@ -200,15 +204,14 @@ const ProformaList = () => {
                 <i className="tabler-file-type-pdf" />
               </CustomIconButton>
             </Tooltip>
-            <Tooltip title={'Télécharger le PDF'}>
+            {/*<Tooltip title={'Télécharger le PDF'}>
               <CustomIconButton
                 onClick={() => DocumentService.generatePdf(row.original.numero)}
                 className="cursor-pointer  hover:text-green-800"
               >
                 <i className="tabler-download" />
               </CustomIconButton>
-            </Tooltip>
-
+            </Tooltip>*/}
 
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
@@ -238,12 +241,11 @@ const ProformaList = () => {
                   icon: 'tabler-edit text-yellow-600',
 
                   menuItemProps: {
-                    className: 'flex items-center gap-2 text-textSecondary', onClick: () => {
+                    className: 'flex items-center gap-2 text-textSecondary',
+                    onClick: () => {
                       router.push(getLocalizedUrl(`/proforma/${row.original.id}`, locale as Locale))
                     }
                   }
-
-
                 },
                 {
                   text: 'Delete',

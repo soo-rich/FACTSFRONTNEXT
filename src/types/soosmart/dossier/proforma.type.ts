@@ -31,6 +31,8 @@ export type ProformaQuery = {
   end?: Date | null
   start?: Date | null
   adopted?: boolean
+  client_id?: string
+  projet_id?: string
 }
 
 export type ProformaType = {
