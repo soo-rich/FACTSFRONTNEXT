@@ -57,8 +57,4 @@ export class UserService {
   static async changepassword(value: { oldPassword: string; newPassword: string }) {
     return (await instance.post<boolean>(url + `/change-password`, value)).data
   }
-
-  static async forgotUserPassword(email: string) {
-    return (await instance.get<boolean>(url + `/forget-password`, { params: { email } })).data
-  }
 }

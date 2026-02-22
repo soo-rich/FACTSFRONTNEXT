@@ -10,14 +10,13 @@ import Typography from '@mui/material/Typography'
 
 import { toast } from 'react-toastify'
 
-import Tooltip from '@mui/material/Tooltip'
-
 
 import { styled } from '@mui/material/styles'
 
 import classNames from 'classnames'
 
-import { KeyRound } from 'lucide-react'
+
+import Chip from '@mui/material/Chip'
 
 import TableGeneric from '@components/table/TableGeneric'
 
@@ -34,8 +33,9 @@ import CustomAvatar from '@/@core/components/mui/Avatar'
 import UtiliMetod from '@/utils/utilsmethod'
 
 
-import CustomIconButton from '@/@core/components/mui/IconButton'
 import AddEditUser from '@views/soosmart/user/add-edit-user'
+import { AuthService } from '@/service/auth/auth-service'
+import OptionMenu from '@core/components/option-menu'
 
 const Icon = styled('i')({})
 
@@ -63,12 +63,13 @@ const UserIndex = () => {
 
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: [UserService.USER_KEY, pageIndex, pageSize],
+    queryKey: [UserService.USER_KEY, pageIndex, pageSize, filter],
     queryFn: async () => {
       // Remplacez par votre service pour récupérer les utilisateurs
       return await UserService.getAll({
         page: pageIndex,
-        pagesize: pageSize
+        pagesize: pageSize,
+        search: filter
       })
     },
     refetchOnWindowFocus: false,
@@ -107,7 +108,7 @@ const UserIndex = () => {
 
   const ResetPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
-      return await UserService.forgotUserPassword(email)
+      return await AuthService.forgotUserPassword(email)
     },
     onSuccess: () => {
       toast.success('Réinitialisation du mot de passe effectuée. le Mail sera envoyé.')
@@ -116,21 +117,6 @@ const UserIndex = () => {
       toast.error('Erreur lors de la réinitialisation du mot de passe')
     }
   })
-
-  const iconStyleActive = classNames(
-    'tabler-square-rounded-check-filled',
-    'text-2xl text-green-600',
-    'cursor-pointer',
-    'hover:text-green-800'
-  )
-
-  const iconStyleInactive = classNames(
-    'tabler-square-rounded-x',
-    'text-2xl',
-    'cursor-pointer',
-    'hover:text-red-800'
-  )
-
 
   const getAvatar = (params: Pick<UtilisateurDto, 'image' | 'nom' | 'prenom'>) => {
     const { image, nom, prenom } = params
@@ -148,13 +134,13 @@ const UserIndex = () => {
       columnHelper.accessor('nom', {
         header: 'User',
         cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
+          <div className="flex items-center gap-4">
             {getAvatar(row.original)}
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
+            <div className="flex flex-col">
+              <Typography color="text.primary" className="font-medium">
                 {row.original.nom} {row.original.prenom}
               </Typography>
-              <Typography variant='body2'>{row.original.email}</Typography>
+              <Typography variant="body2">{row.original.email}</Typography>
             </div>
           </div>
         ),
@@ -168,22 +154,32 @@ const UserIndex = () => {
       columnHelper.accessor('role', {
         header: 'Role',
         cell: ({ row }) => (
-          <div className='flex items-center gap-2'>
+          <div className="flex items-center gap-2">
             <Icon
               className={userRoleObj[row.original.role?.toString().toLowerCase()]?.icon}
               sx={{ color: `var(--mui-palette-${userRoleObj[row.original?.role?.toLowerCase()]?.color}-main)` }}
             />
-            <Typography className='capitalize' color='text.primary'>
+            <Typography className="capitalize" color="text.primary">
               {row.original.role.toLowerCase()}
             </Typography>
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
       }),
+      columnHelper.accessor('isActive', {
+        header: 'Status',
+        cell: ({ row }) => {
+          const isActive = row.original.isActive
+
+
+          return <Chip color={isActive ? 'success' : 'default'} label={isActive ? 'Actif' : 'Inactif'} />
+        },
+        enableHiding: true // Permet de cacher cette colonne
+      }),
       columnHelper.accessor('createdat', {
         header: 'Creer le .',
         cell: ({ row }) => (
-          <Typography variant='body2' color={'info'} className='capitalize'>
+          <Typography variant="body2" color={'info'} className="capitalize">
             {UtiliMetod.formatDate(row.original.createdat)}
           </Typography>
         ),
@@ -191,57 +187,70 @@ const UserIndex = () => {
       }),
 
       columnHelper.display({
-        id: 'actions', // Important: donner un ID à la colonne display
+        id: 'actions', // Important : donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
-          <div className='flex gap-2'>
-            <CustomIconButton
-              onClick={() => {
-                setUserSelect(row.original)
-                setIsModalOpen(true)
-              }}
-              className='cursor-pointer text-yellow-600 hover:text-yellow-800'
-            >
-              <i className='tabler-edit' />
-            </CustomIconButton>
-            <Tooltip placement={'top'} title={row.original.isActive ? 'Désactiver utilisateur' : 'Activer utilisateur'}>
-              <CustomIconButton
-                onClick={() => {
-                  UtiliMetod.confirmDialog({
-                    title: row.original.nom,
-                    subtitle: `Voulez-vous ${row.original.isActive ? 'désactiver' : 'activer'} cet utilisateur ?`,
-                    confirmAction: () => ActivateMutation.mutate(row.original.id)
-                  })
-                }}
-              >
-                <i className={classNames(!row.original.isActive ? iconStyleActive : iconStyleInactive)} />
-              </CustomIconButton>
-            </Tooltip>
-            <Tooltip placement={'top'} title={'reinitialiser le mot de passe'}>
-              <CustomIconButton
-                onClick={() => {
-                  UtiliMetod.confirmDialog({
-                    title: row.original.nom,
-                    subtitle: `Voulez-vous réinitialiser le mot de passe de ${row.original.nom} ?`,
-                    confirmAction: () => ResetPasswordMutation.mutate(row.original.email)
-                  })
-                }}
-              >
-                <KeyRound className='text-2xl cursor-pointer hover:text-blue-800' />
-              </CustomIconButton>
-            </Tooltip>
-            <CustomIconButton
-              onClick={() =>
-                UtiliMetod.confirmDialog({
-                  title: row.original.nom,
-                  subtitle: 'Voulez-vous supprimer cet utilisateur ?',
-                  confirmAction: () => DeleteMutation.mutate(row.original.id)
-                })
-              }
-              className='cursor-pointer text-red-600 hover:text-red-800'
-            >
-              <i className='tabler-trash' />
-            </CustomIconButton>
+          <div className="flex gap-2">
+            <OptionMenu
+              iconButtonProps={{ size: 'medium' }}
+              iconClassName="text-textSecondary"
+              options={[
+                {
+                  text: 'Modifier',
+                  icon: 'tabler-edit cursor-pointer text-yellow-600 hover:text-yellow-800',
+                  menuItemProps: {
+                    onClick: () => {
+                      setUserSelect(row.original)
+                      setIsModalOpen(true)
+                    }
+                  }
+                },
+                {
+                  text: row.original.isActive ? 'Désactiver' : 'Activer',
+                  icon: classNames(
+                    !row.original.isActive ? 'tabler-square-rounded-check-filled text-green-600 hover:text-green-800' : 'tabler-square-rounded-x text-red-600 hover:text-red-800',
+                    'cursor-pointer'
+                  ),
+                  menuItemProps: {
+                    onClick: () => {
+                      UtiliMetod.confirmDialog({
+                        title: row.original.nom,
+                        subtitle: `Voulez-vous ${row.original.isActive ? 'désactiver' : 'activer'} cet utilisateur ?`,
+                        confirmAction: () => ActivateMutation.mutate(row.original.id)
+                      }).then(() => {
+                      })
+                    }
+                  }
+                },
+                {
+                  text: 'Réinitialiser',
+                  icon: 'tabler-key cursor-pointer text-blue-600 hover:text-blue-800',
+                  menuItemProps: {
+                    onClick: () => {
+                      UtiliMetod.confirmDialog({
+                        title: row.original.nom,
+                        subtitle: `Voulez-vous réinitialiser le mot de passe de ${row.original.nom} ?`,
+                        confirmAction: () => ResetPasswordMutation.mutate(row.original.email)
+                      }).then(() => {
+                      })
+                    }
+                  }
+                },
+                {
+                  text: 'Supprimer',
+                  icon: 'tabler-trash cursor-pointer text-red-600 hover:text-red-800',
+                  menuItemProps: {
+                    onClick: () =>
+                      UtiliMetod.confirmDialog({
+                        title: row.original.nom,
+                        subtitle: 'Voulez-vous supprimer cet utilisateur ?',
+                        confirmAction: () => DeleteMutation.mutate(row.original.id)
+                      }).then(() => {
+                      })
+                  }
+                }
+              ]}
+            />
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
