@@ -89,57 +89,73 @@ const ProjetIndex = () => {
   })
 
 
-  const columns = useMemo(() => [
-    columnHelper.accessor('offre', {
-      header: 'Offre',
-      cell: ({row}) => <Tooltip placement={'top'} title={row.original.offre ? 'Oui' : 'Non'}>{
-        row.original.offre ? <i className={' bg-success text-2xl tabler-square-rounded-check-filled cursor-pointer'} onClick={() => ActivateMutation.mutate(row.original.id)}></i> :
-            <i className={'bg-error text-2xl tabler-square-rounded-x cursor-pointer'} onClick={() => ActivateMutation.mutate(row.original.id)}></i>}</Tooltip>
-    }),
-    columnHelper.accessor('projet_type', {
-      header: 'Type de projet',
-      cell: info => info.getValue()
-    }),
-    columnHelper.accessor('description', {
-      header: 'Description',
-      cell: info => info.getValue()
-    }),
-    columnHelper.accessor('client', {
-      header: 'Client',
-      cell: info => info.getValue()
-    }),
-    columnHelper.accessor('createdat', {
-      header: 'Créé le',
-      cell: ({ row }) => (<Typography>{UtiliMetod.formatDate(row.original.createdat)}</Typography>)
-    }),
-    columnHelper.accessor('update_at', {
-      header: 'Mis à jour le',
-      cell: ({ row }) => (<Typography>{UtiliMetod.formatDate(row.original.update_at)}</Typography>)
-    }),
-    columnHelper.display({
-      id: 'actions', // Important : donner un ID à la colonne display
-      header: 'Actions',
-      cell: ({ row }) => (
-        <div className="flex gap-2">
-          <CustomIconButton
-            onClick={() => {
-              setProjetSelect(row.original)
-              setIsModalOpen(true)
-            }}
-            className="cursor-pointer text-yellow-600 hover:text-yellow-800"
-          >
-            <i className="tabler-edit" />
-          </CustomIconButton>
-          <CustomIconButton
-            onClick={() => UtiliMetod.SuppressionConfirmDialog({
-              data: row.original.projet_type,
-              confirmAction: () => DeleteMutation.mutate(row.original.id)
-            })}
-            className="cursor-pointer text-red-600 hover:text-red-800"
-          >
-            <i className="tabler-trash" />
-          </CustomIconButton>
-         {/* <OptionMenu
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor('offre', {
+        header: 'Offre',
+        cell: ({ row }) => (
+          <Tooltip placement={'top'} title={row.original.offre ? 'Oui' : 'Non'}>
+            {row.original.offre ? (
+              <i
+                className={' bg-success text-2xl tabler-square-rounded-check-filled cursor-pointer'}
+                onClick={() => ActivateMutation.mutate(row.original.id)}
+              ></i>
+            ) : (
+              <i
+                className={'bg-error text-2xl tabler-square-rounded-x cursor-pointer'}
+                onClick={() => ActivateMutation.mutate(row.original.id)}
+              ></i>
+            )}
+          </Tooltip>
+        )
+      }),
+      columnHelper.accessor('projet_type', {
+        header: 'Type de projet',
+        cell: info => info.getValue()
+      }),
+      columnHelper.accessor('description', {
+        header: 'Description',
+        cell: info => info.getValue()
+      }),
+
+      columnHelper.accessor('client', {
+        header: 'Client',
+        cell: ({ row }) => <Typography>{row.original.client?.nom}</Typography>
+      }),
+      columnHelper.accessor('createdat', {
+        header: 'Créé le',
+        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.createdat)}</Typography>
+      }),
+      columnHelper.accessor('updatedat', {
+        header: 'Mis à jour le',
+        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.updatedat)}</Typography>
+      }),
+      columnHelper.display({
+        id: 'actions', // Important : donner un ID à la colonne display
+        header: 'Actions',
+        cell: ({ row }) => (
+          <div className='flex gap-2'>
+            <CustomIconButton
+              onClick={() => {
+                setProjetSelect(row.original)
+                setIsModalOpen(true)
+              }}
+              className='cursor-pointer text-yellow-600 hover:text-yellow-800'
+            >
+              <i className='tabler-edit' />
+            </CustomIconButton>
+            <CustomIconButton
+              onClick={() =>
+                UtiliMetod.SuppressionConfirmDialog({
+                  data: row.original.projet_type,
+                  confirmAction: () => DeleteMutation.mutate(row.original.id)
+                })
+              }
+              className='cursor-pointer text-red-600 hover:text-red-800'
+            >
+              <i className='tabler-trash' />
+            </CustomIconButton>
+            {/* <OptionMenu
             iconButtonProps={{ size: 'medium' }}
             iconClassName="text-textSecondary"
             options={[
@@ -158,11 +174,13 @@ const ProjetIndex = () => {
               }
             ]}
           />*/}
-        </div>
-      ),
-      enableHiding: true // Permet de cacher cette colonne
-    })
-  ], [ActivateMutation, DeleteMutation, columnHelper])
+          </div>
+        ),
+        enableHiding: true // Permet de cacher cette colonne
+      })
+    ],
+    [ActivateMutation, DeleteMutation, columnHelper]
+  )
 
 
 
@@ -181,13 +199,14 @@ const ProjetIndex = () => {
         setGlobalFilter={setFilter}
         totalElements={data?.totalElements}
         buttonadd={{
-          action: () => setIsModalOpen(true)
+          onClick: () => setIsModalOpen(true)
         }}
       />
       <DefaultDialog
         open={isModalOpen}
         setOpen={setIsModalOpen}
         onClose={()=>{
+          setIsModalOpen(false)
           setProjetSelect(undefined)
         }}
         title={projetSelect ? ` Mettre a jour ${projetSelect?.projet_type}` : 'Ajouter un Projet'}

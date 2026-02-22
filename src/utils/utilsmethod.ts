@@ -23,8 +23,8 @@ class UtiliMetod {
     return new Intl.NumberFormat(format ?? 'fr-FR').format(value)
   }
 
-  static formatDate = (date: Date, format?: string) => {
-    return formatter(date, format ?? 'yyyy-MM-dd', { locale: fr })
+  static formatDate = (date: Date | string, format?: string) => {
+    return formatter(new Date(date), format ?? 'yyyy-MM-dd', { locale: fr })
   }
 
   static confirmDialog = async ({ icon, title, subtitle, confirmAction, cancelAction }: SweetconfirmProps) => {

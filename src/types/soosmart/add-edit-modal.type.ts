@@ -16,6 +16,6 @@ export type AddEditModalType = ChildrenType & {
 
 export type AddEditFormType<T> = {
   data?: T
-  onSuccess?: (data?: T | T[]) => void // Callback appelé après succès
+  onSuccess?: (data?: T ) => void // Callback appelé après succès
   onCancel?: () => void // Callback pour annuler
 }

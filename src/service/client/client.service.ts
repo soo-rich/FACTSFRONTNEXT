@@ -20,6 +20,10 @@ export class ClientService {
     return (await instance.post<ClientType>(api, client)).data
   }
 
+  static async getClientById(id: string) {
+    return (await instance.get<ClientType>(api + '/' + id)).data
+  }
+
   static async updateClient(id: string, client: ClientSave) {
     return (await instance.put<ClientType>(api + '/' + id, client)).data
   }

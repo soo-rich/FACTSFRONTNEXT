@@ -21,7 +21,7 @@ export class ProjetService {
   }
 
   static async updateProjet(data: UpdateProjet, id: string) {
-    return (await instance.put<ProjetType>(url + `/${id}`, data)).data
+    return (await instance.patch<ProjetType>(url + `/${id}`, data)).data
   }
 
   static async deleteProjet(id: string) {
