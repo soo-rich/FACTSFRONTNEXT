@@ -39,7 +39,7 @@ const DocumentViews = () => {
 
   useEffect(() => {
     if (data) {
-      setSigned(data.signby || '')
+      setSigned(data.signedBy || '')
     }
   }, [data])
 
@@ -58,8 +58,8 @@ const DocumentViews = () => {
         }
       </Grid>
       <Grid size={{ xs: 12, md: 3, lg: 4 }} className={'no-print'}>
-        <DocumentsActions id_facture={data?.id} UpdateSignature={setSigned} UpdateRole={setRole} paied={data?.paied}
-          printFonction={() => DocumentService.generatePdf(data?.numero || '')} signby={data?.signby} role={data?.role} />
+        <DocumentsActions id_facture={data?.numero} UpdateSignature={setSigned} UpdateRole={setRole} paied={data?.paied}
+          printFonction={() => DocumentService.generatePdf(data?.numero || '')} signby={data?.signedBy} role={data?.role} />
       </Grid>
     </Grid>
   )

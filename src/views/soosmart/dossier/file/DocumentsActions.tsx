@@ -1,11 +1,12 @@
 'use client'
-
-// React Imports
 import { useMemo, useState } from 'react'
 
-// Next Imports
 import { useParams } from 'next/navigation'
 
+import * as v from 'valibot'
+
+// React Imports
+// Next Imports
 // MUI Imports
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -19,10 +20,21 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { toast } from 'react-toastify'
 
+import { Controller, useForm } from 'react-hook-form'
+
+import { valibotResolver } from '@hookform/resolvers/valibot'
+
+import MenuItem from '@mui/material/MenuItem'
+
 import DebounceInput from '@components/CustomInput/DebounceInput'
 import { DocumentTypes } from '@/types/soosmart/dossier/DocumentDTO'
 import { DocumentService } from '@/service/document/document.service'
 import { FactureService } from '@/service/dossier/facture.service'
+import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
+import { InvoiceState } from '@/types/soosmart/dossier/facture.type'
+
+
+import CustomTextField from '@core/components/mui/TextField'
 
 
 type DocumentsActionsType = {
@@ -35,15 +47,36 @@ type DocumentsActionsType = {
   printFonction?: () => void
 }
 
-const DocumentsActions = ({ id_facture, UpdateSignature, UpdateRole, paied, printFonction, signby, role }: DocumentsActionsType) => {
+const DocumentsActions = ({
+                            id_facture,
+                            UpdateSignature,
+                            UpdateRole,
+                            printFonction,
+                            signby,
+                            role
+                          }: DocumentsActionsType) => {
   // States
   const [signature, setSignature] = useState<string>(signby || '')
   const [signaturerole, setSignatureRole] = useState<string>(role || '')
   const [isSigning, setIsSigning] = useState<boolean>(false)
+  const [openModalPaid, setOpenModalPaid] = useState<boolean>(false)
 
   // Hooks
   const { numero } = useParams()
   const queryClient = useQueryClient()
+
+  const {
+    control,
+    formState: { errors },
+    handleSubmit
+  } = useForm({
+    resolver: valibotResolver(v.object({
+      status: v.picklist(Object.values(InvoiceState), 'Status de la facture invalide')
+    })),
+    defaultValues: {
+      status: InvoiceState.PENDING
+    }
+  })
 
   const documenttype = useMemo(() => {
     const nu = (numero as string).substring(0, 2).toUpperCase()
@@ -92,10 +125,10 @@ const DocumentsActions = ({ id_facture, UpdateSignature, UpdateRole, paied, prin
   })
 
   const PayMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (status: InvoiceState) => {
       if (!id_facture) throw new Error('ID Facture is required')
 
-      return await FactureService.paid(id_facture)
+      return await FactureService.paid(id_facture, status)
     },
     onSuccess: (data) => {
       if (!data) {
@@ -129,75 +162,104 @@ const DocumentsActions = ({ id_facture, UpdateSignature, UpdateRole, paied, prin
   })
 
 
-  return (
-    <Grid container spacing={6}>
-      <Grid size={{ xs: 12 }}>
-        <Card>
-          <CardContent className="flex flex-col gap-4">
-            {
-              documenttype === DocumentTypes.FACTURE && id_facture ? (<Button
+  const handlePay = (data: { status: InvoiceState }) => {
+    PayMutation.mutate(data.status)
+  }
+
+  return (<>
+      <Grid container spacing={6}>
+        <Grid size={{ xs: 12 }}>
+          <Card>
+            <CardContent className="flex flex-col gap-4">
+             {/* {
+                documenttype === DocumentTypes.FACTURE && id_facture ? (<Button
+                  fullWidth
+                  disabled={paied}
+                  variant="contained"
+                  className="capitalize"
+                  startIcon={<i className="tabler-send" />}
+                  onClick={() => setOpenModalPaid(true)}
+                >
+                  {documenttype ? `Payée ${documenttype}  ${numero}` : 'Document non Reconnu '}
+                </Button>) : null
+              }*/}
+
+              <Button
                 fullWidth
-                disabled={paied}
-                variant="contained"
+                color="secondary"
+                variant="tonal"
                 className="capitalize"
-                startIcon={<i className="tabler-send" />}
-                onClick={() => PayMutation.mutate()}
+                onClick={() => {
+                  if (printFonction) {
+                    printFonction()
+                  }
+                }}
               >
-                {documenttype ? `Payée ${documenttype}  ${numero}` : 'Document non Reconnu '}
-              </Button>) : null
-            }
+                Telecharger le {documenttype ? `${documenttype}  ${numero}` : 'Document non Reconnu '}
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
 
-            <Button
-              fullWidth
-              color="secondary"
-              variant="tonal"
-              className="capitalize"
-              onClick={() => {
-                if (printFonction) {
-                  printFonction()
-                }
-              }}
-            >
-              Telecharger le {documenttype ? `${documenttype}  ${numero}` : 'Document non Reconnu '}
-            </Button>
-          </CardContent>
-        </Card>
+        <Grid size={{ xs: 12 }}>
+          {
+            documenttype !== DocumentTypes.BORDERAU ? (<Grid container spacing={6}>
+                <DebounceInput onBlur={() => setIsSigning(!isSigning)} fullWidth label={`Signer par ${signature} `}
+                               value={signature} onChange={(value) => {
+                  if (value && value?.length > 0) {
+                    setSignature(value as string)
+
+                    if (UpdateSignature) {
+                      UpdateSignature(value)
+                    }
+                  }
+                }} debounce={2000} />
+                <DebounceInput onBlur={() => setIsSigning(!isSigning)} fullWidth label={`Role`} value={signaturerole}
+                               onChange={(value) => {
+                                 if (value && value?.length > 0) {
+                                   setSignatureRole(value as string)
+
+                                   if (UpdateRole) {
+                                     UpdateRole(value)
+                                   }
+
+                                 }
+                               }} />
+                <Button fullWidth variant="outlined"
+                        disabled={isSigning || signature.length === 0 || signaturerole.length === 0} onClick={() => {
+                  UpdateSignature && UpdateSignature(signature)
+                  UpdateRole && UpdateRole(signaturerole)
+                  SignatureMutation.mutate({ signature, signaturerole })
+                }}>
+                  Signer le {documenttype ? `${documenttype}  ${numero}` : 'Document non Reconnu '}
+                </Button>
+              </Grid>
+            ) : null
+          }
+        </Grid>
       </Grid>
 
-      <Grid size={{ xs: 12 }}>
-        {
-          documenttype !== DocumentTypes.BORDERAU ? (<Grid container spacing={6}>
-            <DebounceInput onBlur={() => setIsSigning(!isSigning)} fullWidth label={`Signer par ${signature} `} value={signature} onChange={(value) => {
-              if (value && typeof value !== 'number' && value?.length > 0) {
-                setSignature(value as string)
+      <DefaultDialog open={openModalPaid} setOpen={setOpenModalPaid} title={'Payer la facture'}>
 
-                if (UpdateSignature) {
-                  UpdateSignature(value)
-                }
+        <form noValidate onSubmit={handleSubmit(handlePay)} className="flex flex-col gap-4 p-4">
+          <Controller render={({ field }) => (
+            <CustomTextField select {...field} label="Status de la facture" error={!!errors.status} helperText={errors.status?.message}>
+              {
+                Object.values(InvoiceState).map((status) => (
+                  <MenuItem key={status} value={status}>
+                    {status}
+                  </MenuItem>
+                ))
               }
-            }} debounce={2000} />
-            <DebounceInput onBlur={() => setIsSigning(!isSigning)} fullWidth label={`Role`} value={signaturerole} onChange={(value) => {
-              if (value && typeof value !== 'number' && value?.length > 0) {
-                setSignatureRole(value as string)
+            </CustomTextField>
+          )} name={'status'} control={control} />
+          <Button type="submit" fullWidth variant="contained" color="primary">
+            Confirmer le statut de la facture
+          </Button>
+        </form>
 
-                if (UpdateRole) {
-                  UpdateRole(value)
-                }
-
-              }
-            }} />
-            <Button fullWidth variant="outlined" disabled={isSigning || signature.length === 0 || signaturerole.length === 0} onClick={() => {
-              UpdateSignature && UpdateSignature(signature)
-              UpdateRole && UpdateRole(signaturerole)
-              SignatureMutation.mutate({ signature, signaturerole })
-            }}>
-              Signer le {documenttype ? `${documenttype}  ${numero}` : 'Document non Reconnu '}
-            </Button>
-          </Grid>
-          ) : null
-        }
-      </Grid>
-    </Grid>
+      </DefaultDialog>
+    </>
   )
 }
 

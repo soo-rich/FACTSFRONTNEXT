@@ -1,5 +1,5 @@
 import type { CustomresponseType } from '@/types/soosmart/customresponse.type'
-import type { FactureListType } from '@/types/soosmart/dossier/facture.type'
+import type { FactureListType, InvoiceState } from '@/types/soosmart/dossier/facture.type'
 import type { ParamRequests } from '@/types/soosmart/pagination/paramrequestion.type'
 import instance from '../axios-manager/instance'
 import type { TreeNodeType } from '@/types/soosmart/dossier/TreeNode.type'
@@ -21,8 +21,11 @@ export class FactureService {
     ).data
   }
 
-  static async paid(id: string) {
-    return (await instance.get<boolean>(url + `/paid/${id}`)).data
+  static async paid(id: string, status: InvoiceState) {
+    return (await instance.patch<boolean>(url + `/change-state`, {
+      numero:id,
+      state: status
+    })).data
   }
 
   static async getThree(numero: string) {
