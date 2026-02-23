@@ -24,7 +24,8 @@ import CustomIconButton from '@core/components/mui/IconButton'
 import DefaultDialog from '@/components/dialogs/unique-modal/DefaultDialog'
 import FileTree from '../tree/FileTree'
 import { DocumentService } from '@/service/document/document.service'
-
+import OptionMenu from '@core/components/option-menu'
+import RenderClientOrProject from '@views/soosmart/dossier/components/RenderClientOrProject'
 
 
 const columnHelper = createColumnHelper<FactureListType>()
@@ -76,7 +77,7 @@ const FactureList = () => {
     setNumero(numero)
     setTimeout(() => {
       setOpen(true)
-    }, 500);
+    }, 500)
 
   }
 
@@ -93,7 +94,10 @@ const FactureList = () => {
       }),
       columnHelper.accessor('bordereau.proforma.client.nom', {
         header: 'Client',
-        cell: info => info.getValue()
+        cell: ({ row }) => <RenderClientOrProject for_who={{
+          client: row.original?.bordereau?.proforma?.client,
+          projet: row.original?.bordereau?.proforma?.projet
+        }} />
       }),
       columnHelper.accessor('createdat', {
         header: 'Créé le',
@@ -117,46 +121,46 @@ const FactureList = () => {
         id: 'actions', // Important: donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
-          <div className='flex gap-2'>
+          <div className="flex gap-2">
             <Tooltip title={'Voir le PDF'}>
               <CustomIconButton
                 href={getLocalizedUrl(`/docs/${row.original.numero}`, locale as Locale)}
-                className='cursor-pointer text-green-600 hover:text-green-800'
+                className="cursor-pointer text-green-600 hover:text-green-800"
               >
-                <i className='tabler-file-type-pdf' />
+                <i className="tabler-file-type-pdf" />
               </CustomIconButton>
             </Tooltip>
-            <Tooltip title={'Hieriachie'}>
-              <CustomIconButton
-                onClick={() => showTree(row.original.id)}
-
-                // href={getLocalizedUrl(`/tree/${row.original.numero}`, locale as Locale)}
-                className='cursor-pointer text-info hover:text-green-800'
-              >
-                <i className='tabler-hierarchy-3' />
-              </CustomIconButton>
-            </Tooltip>
-            <Tooltip title={'Télécharger le PDF'}>
-              <CustomIconButton
-                onClick={() => DocumentService.generatePdf(row.original.numero)}
-                className='cursor-pointer  hover:text-green-800'
-              >
-                <i className='tabler-download' />
-              </CustomIconButton>
-            </Tooltip>
-            <Tooltip title={'Supprimer'}>
-              <CustomIconButton
-                onClick={() =>
-                  UtiliMetod.SuppressionConfirmDialog({
-                    data: row.original.bordereau.proforma.reference,
-                    confirmAction: () => DeleteMutation.mutate(row.original.id)
-                  })
+            <OptionMenu
+              iconButtonProps={{ size: 'medium' }}
+              iconClassName="text-textSecondary"
+              options={[
+                {
+                  text: 'Hieriachie',
+                  icon: 'tabler-hierarchy-3',
+                  menuItemProps: {
+                    onClick: () => showTree(row.original.id)
+                  }
+                },
+                {
+                  text: 'Télécharger le PDF',
+                  icon: 'tabler-download',
+                  menuItemProps: {
+                    onClick: () => DocumentService.generatePdf(row.original.numero)
+                  }
+                },
+                {
+                  text: 'Supprimer',
+                  icon: 'tabler-trash text-red-600 hover:text-red-800',
+                  menuItemProps: {
+                    onClick: () =>
+                      UtiliMetod.SuppressionConfirmDialog({
+                        data: row.original.bordereau.proforma.reference,
+                        confirmAction: () => DeleteMutation.mutate(row.original.id)
+                      })
+                  }
                 }
-                className='cursor-pointer '
-              >
-                <i className='tabler-trash text-red-600 hover:text-red-800' />
-              </CustomIconButton>
-            </Tooltip>
+              ]}
+            />
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
@@ -184,7 +188,7 @@ const FactureList = () => {
       />
 
       <DefaultDialog dialogMaxWidth="lg" open={open} setOpen={setOpen} title="Hiérarchie du document">
-        <FileTree numero={numero} ></FileTree>
+        <FileTree numero={numero}></FileTree>
       </DefaultDialog>
     </>
   )
