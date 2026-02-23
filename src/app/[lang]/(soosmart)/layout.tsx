@@ -20,13 +20,14 @@ import Header from '@components/layout/horizontal/Header'
 import Navbar from '@components/layout/vertical/Navbar'
 import VerticalFooter from '@components/layout/vertical/Footer'
 import HorizontalFooter from '@components/layout/horizontal/Footer'
+import Customizer from '@core/components/customizer'
 import ScrollToTop from '@core/components/scroll-to-top'
 import AuthGuard from '@/hocs/AuthGuard'
 
 // Util Imports
 import { getDictionary } from '@/utils/getDictionary'
 import { getMode, getSystemMode } from '@core/utils/serverHelpers'
-import ProviderTokenCheker from '@/components/token/TokenChecker'
+import ProviderTokenCheker from '@components/token/TokenChecker'
 import PathGenerate from '@components/pathbreadcrumbs/PathGenerate'
 
 const Layout = async (props: ChildrenType & { params: Promise<{ lang: Locale }> }) => {
@@ -34,13 +35,9 @@ const Layout = async (props: ChildrenType & { params: Promise<{ lang: Locale }> 
 
   const { children } = props
 
-  // Type guard to ensure lang is a valid Locale
-  const lang: Locale = i18n.locales.includes(params.lang as Locale) ? (params.lang as Locale) : i18n.defaultLocale
-
-
   // Vars
-  const direction = i18n.langDirection[lang]
-  const dictionary = await getDictionary(lang)
+  const direction = i18n.langDirection[params.lang]
+  const dictionary = await getDictionary(params.lang)
   const mode = await getMode()
   const systemMode = await getSystemMode()
 
@@ -74,7 +71,7 @@ const Layout = async (props: ChildrenType & { params: Promise<{ lang: Locale }> 
               <i className="tabler-arrow-up" />
             </Button>
           </ScrollToTop>
-
+          <Customizer dir={direction} />
         </ProviderTokenCheker>
       </AuthGuard>
     </Providers>
