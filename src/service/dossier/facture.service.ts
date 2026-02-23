@@ -4,13 +4,13 @@ import type { ParamRequests } from '@/types/soosmart/pagination/paramrequestion.
 import instance from '../axios-manager/instance'
 import type { TreeNodeType } from '@/types/soosmart/dossier/TreeNode.type'
 
-const url = `facture`
+const url = `invoice`
 
 export class FactureService {
   static FACTURE_KEY = 'facture'
 
   static async PostData(id_borderau: any) {
-    return (await instance.post(`${url}/${id_borderau}`, {})).data
+    return (await instance.post(`${url}`, { bordereau_id:id_borderau })).data
   }
 
   static async getAll(params?: ParamRequests) {

@@ -7,7 +7,7 @@ export type BorderauType = {
   numero: string
   uniqueIdDossier: string
   proforma: Omit<ProformaType, 'articleQuantites'>
-  __invoice__: FactureListType
+  invoice: FactureListType
 } & BaseType
 
 export type BorderauOneType =

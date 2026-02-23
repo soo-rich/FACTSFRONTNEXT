@@ -6,6 +6,7 @@ import type { ClientType } from '@/types/soosmart/client.type'
 import type { ProjetType } from '@/types/soosmart/projet.type'
 import type { BaseType } from '@/types/soosmart/api-default,type'
 import type { ThemeColor } from '@core/types'
+import type { BorderauOneType } from '@/types/soosmart/dossier/borderau.type'
 
 export enum StatusProforma {
   PENDING = 'pending',
@@ -33,6 +34,7 @@ export type ProformaQuery = {
   adopted?: boolean
   client_id?: string
   projet_id?: string
+  status?: StatusProforma
 }
 
 export type ProformaType = {
@@ -50,6 +52,7 @@ export type ProformaType = {
   status: StatusProforma
   client: ClientType | null
   projet: ProjetType | null
+  bordereau: Omit<BorderauOneType, 'proforma'>
 } & BaseType
 
 export const schemaProforma = v.pipe(

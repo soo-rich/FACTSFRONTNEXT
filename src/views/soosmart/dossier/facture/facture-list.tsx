@@ -17,7 +17,7 @@ import UtiliMetod from '@/utils/utilsmethod'
 
 import TableGeneric from '@/components/table/TableGeneric'
 import { FactureService } from '@/service/dossier/facture.service'
-import type { FactureType } from '@/types/soosmart/dossier/facture.type'
+import type { FactureListType } from '@/types/soosmart/dossier/facture.type'
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
 import CustomIconButton from '@core/components/mui/IconButton'
@@ -27,7 +27,7 @@ import { DocumentService } from '@/service/document/document.service'
 
 
 
-const columnHelper = createColumnHelper<FactureType>()
+const columnHelper = createColumnHelper<FactureListType>()
 
 const FactureList = () => {
 
@@ -83,8 +83,7 @@ const FactureList = () => {
 
   const columns = useMemo(
     () => [
-
-      columnHelper.accessor('reference', {
+      columnHelper.accessor('bordereau.proforma.reference', {
         header: 'Reference',
         cell: info => info.getValue()
       }),
@@ -92,23 +91,22 @@ const FactureList = () => {
         header: 'Numéro',
         cell: info => info.getValue()
       }),
-      columnHelper.accessor('client', {
+      columnHelper.accessor('bordereau.proforma.client.nom', {
         header: 'Client',
         cell: info => info.getValue()
       }),
-      columnHelper.accessor('date', {
+      columnHelper.accessor('createdat', {
         header: 'Créé le',
-        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
+        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.createdat)}</Typography>
       }),
 
       // columnHelper.accessor('total_ht', {
       //   header: 'Total HT',
       //   cell: info => info.getValue()
       // }),
-      columnHelper.accessor('total_ttc', {
+      columnHelper.accessor('bordereau.proforma.total_ttc', {
         header: 'Total TTC (Fcfa)',
-        cell: info => info.getValue(),
-
+        cell: info => info.getValue()
       }),
 
       // columnHelper.accessor('total_tva', {
@@ -119,46 +117,46 @@ const FactureList = () => {
         id: 'actions', // Important: donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             <Tooltip title={'Voir le PDF'}>
               <CustomIconButton
                 href={getLocalizedUrl(`/docs/${row.original.numero}`, locale as Locale)}
-                className="cursor-pointer text-green-600 hover:text-green-800"
+                className='cursor-pointer text-green-600 hover:text-green-800'
               >
-                <i className="tabler-file-type-pdf" />
+                <i className='tabler-file-type-pdf' />
               </CustomIconButton>
             </Tooltip>
             <Tooltip title={'Hieriachie'}>
               <CustomIconButton
-                onClick={() => showTree(row.original.numero)}
+                onClick={() => showTree(row.original.id)}
 
                 // href={getLocalizedUrl(`/tree/${row.original.numero}`, locale as Locale)}
-                className="cursor-pointer text-info hover:text-green-800"
+                className='cursor-pointer text-info hover:text-green-800'
               >
-                <i className="tabler-hierarchy-3" />
+                <i className='tabler-hierarchy-3' />
               </CustomIconButton>
             </Tooltip>
             <Tooltip title={'Télécharger le PDF'}>
               <CustomIconButton
                 onClick={() => DocumentService.generatePdf(row.original.numero)}
-                className="cursor-pointer  hover:text-green-800"
+                className='cursor-pointer  hover:text-green-800'
               >
-                <i className="tabler-download" />
+                <i className='tabler-download' />
               </CustomIconButton>
             </Tooltip>
             <Tooltip title={'Supprimer'}>
               <CustomIconButton
                 onClick={() =>
                   UtiliMetod.SuppressionConfirmDialog({
-                    data: row.original.reference,
+                    data: row.original.bordereau.proforma.reference,
                     confirmAction: () => DeleteMutation.mutate(row.original.id)
-                  })}
-                className="cursor-pointer "
+                  })
+                }
+                className='cursor-pointer '
               >
-                <i className="tabler-trash text-red-600 hover:text-red-800" />
+                <i className='tabler-trash text-red-600 hover:text-red-800' />
               </CustomIconButton>
             </Tooltip>
-
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne

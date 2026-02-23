@@ -57,7 +57,6 @@ const BordereauList = () => {
     },
     refetchOnWindowFocus: true,
     refetchOnMount: true,
-    staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
   const DeleteMutation = useMutation({
@@ -178,10 +177,10 @@ const BordereauList = () => {
                   }
                 },
                 {
-                  text: row.original.__invoice__ ? 'Facture déjà creer' : 'Creer la facture',
+                  text: row.original.invoice ? 'Facture déjà creer' : 'Creer la facture',
                   icon: 'tabler-check hover:text-green-600 text-green-900',
                   menuItemProps: {
-                    disabled: !!row.original.__invoice__,
+                    disabled: !!row.original.invoice,
                     onClick: () => AdoptMutation.mutate(row.original.id)
                   }
                 },
@@ -189,6 +188,7 @@ const BordereauList = () => {
                   text: `Supprimer ${row.original.numero}`,
                   icon: 'tabler-trash hover:text-red-900 text-red-600',
                   menuItemProps: {
+                    disabled: !!row.original.invoice,
                     onClick: () =>
                       UtiliMetod.SuppressionConfirmDialog({
                         data: row.original.proforma.reference,

@@ -21,7 +21,8 @@ class UtiliMetod {
   }
 
   static formatDevise = (value: number, format?: string) => {
-    return new Intl.NumberFormat(format ?? 'fr-FR').format(value)
+    // Remplace les espaces par des points pour les milliers
+    return new Intl.NumberFormat(format ?? 'fr-FR').format(value);
   }
 
   static formatDate = (date: Date | string, format?: string) => {

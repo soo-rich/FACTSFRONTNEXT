@@ -9,8 +9,8 @@ import { Box, Square } from 'lucide-react'
 import { FactureService } from '@/service/dossier/facture.service'
 import LoadingWithoutModal from '@/components/LoadingWithoutModal'
 import ErrorView from '@/components/ErrorView'
-import TreeScene from './components/Tree3D/TreeScene'
-import { Tree2DView } from './components/Tree2D'
+
+// import { Tree2DView } from './components/Tree2D'
 
 
 const FileTree = ({ numero }: { numero: string }) => {
@@ -55,7 +55,7 @@ const FileTree = ({ numero }: { numero: string }) => {
           </ToggleButtonGroup>
         </div>
         <div className="h-[60dvh] border border-gray-300 rounded-md">
-          {type === '2d' ? <Tree2DView tree={data} /> : <TreeScene tree={data} />}
+        {/*  chart origanizational */}
         </div>
       </div>
     )

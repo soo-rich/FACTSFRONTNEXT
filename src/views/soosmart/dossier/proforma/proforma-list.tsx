@@ -27,8 +27,14 @@ import UtiliMetod from '@/utils/utilsmethod'
 import CustomIconButton from '@core/components/mui/IconButton'
 import TableGeneric from '@/components/table/TableGeneric'
 import { ProformaService } from '@/service/dossier/proforma.service'
-import type { ProformaQuery, ProformaType } from '@/types/soosmart/dossier/proforma.type'
-import { ColorStatusProforma, LabelStatusProforma, StatusProforma } from '@/types/soosmart/dossier/proforma.type'
+import type {
+  ProformaQuery,
+  ProformaType} from '@/types/soosmart/dossier/proforma.type';
+import {
+  ColorStatusProforma,
+  LabelStatusProforma,
+  StatusProforma
+} from '@/types/soosmart/dossier/proforma.type'
 import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
 
 import { getLocalizedUrl } from '@/utils/i18n'
@@ -84,7 +90,16 @@ const ProformaList = ({ props }: { props: Partial<ProformaQuery> }) => {
   const router = useRouter()
 
   const queryKey = useMemo(
-    () => [ProformaService.PROFORMA_KEY, pageIndex, pageSize, notadopted, filter, startDate, endDate, props?.client_id, props?.projet_id],
+    () => [ProformaService.queryKey.all({
+        page: pageIndex,
+        pagesize: pageSize,
+        adopted: notadopted,
+        search: filter,
+        end: endDate,
+        start: startDate,
+        client_id: props?.client_id,
+        projet_id: props?.projet_id
+    }),],
     [filter, pageIndex, pageSize, notadopted, startDate, endDate, props?.client_id, props?.projet_id]
   )
 
@@ -104,7 +119,6 @@ const ProformaList = ({ props }: { props: Partial<ProformaQuery> }) => {
     },
     refetchOnWindowFocus: true,
     refetchOnMount: true,
-    staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
   const DeleteMutation = useMutation({
@@ -193,7 +207,7 @@ const ProformaList = ({ props }: { props: Partial<ProformaQuery> }) => {
       // }),
       columnHelper.accessor('total_ttc', {
         header: 'Total TTC (Fcfa)',
-        cell: info => info.getValue()
+        cell: info => UtiliMetod.formatDevise(info.getValue())
       }),
 
       // columnHelper.accessor('total_tva', {
@@ -205,7 +219,7 @@ const ProformaList = ({ props }: { props: Partial<ProformaQuery> }) => {
         cell: ({ row }) => (
           <Chip
             label={LabelStatusProforma[row.original.status]}
-            variant="tonal"
+            variant='tonal'
             color={ColorStatusProforma[row.original.status]}
           />
         )
@@ -214,13 +228,13 @@ const ProformaList = ({ props }: { props: Partial<ProformaQuery> }) => {
         id: 'actions', // Important : donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             <Tooltip title={'Voir le PDF'}>
               <CustomIconButton
                 href={getLocalizedUrl(`/docs/${row.original.numero}`, locale as Locale)}
-                className="cursor-pointer text-green-600 hover:text-green-800"
+                className='cursor-pointer text-green-600 hover:text-green-800'
               >
-                <i className="tabler-file-type-pdf" />
+                <i className='tabler-file-type-pdf' />
               </CustomIconButton>
             </Tooltip>
             {/*<Tooltip title={'Télécharger le PDF'}>
@@ -234,61 +248,72 @@ const ProformaList = ({ props }: { props: Partial<ProformaQuery> }) => {
 
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
-              iconClassName="text-textSecondary"
+              iconClassName='text-textSecondary'
               options={[
                 ...(row.original.status === StatusProforma.PENDING && !row.original.adopted
                   ? [
-                    {
-                      text: 'Adopter',
-                      icon: 'tabler-check',
+                      {
+                        text: 'Adopter',
+                        icon: 'tabler-check',
 
-                      menuItemProps: {
-                        className: 'flex items-center gap-2 text-textSecondary',
-                        onClick: () => handleClickToAdopt(row.original.id)
-                      }
-                    },
-                    {
-                      text: 'Creer BL',
-                      icon: 'tabler-truck-delivery',
-
-                      menuItemProps: {
-                        className: 'flex items-center gap-2 text-textSecondary',
-                        onClick: () => {
-                          CreateBLMutation.mutate(row.original.id)
+                        menuItemProps: {
+                          className: 'flex items-center gap-2 text-textSecondary',
+                          onClick: () => handleClickToAdopt(row.original.id)
                         }
                       }
-                    }
-                  ]
+                    ]
+                  : []),
+                ...(row.original.bordereau === null && row.original.status !== StatusProforma.REJECTED
+                  ? [
+                      {
+                        text: 'Creer le borderau',
+                        icon: 'tabler-truck-delivery',
+
+                        menuItemProps: {
+                          className: 'flex items-center gap-2 text-textSecondary',
+                          onClick: () => {
+                            CreateBLMutation.mutate(row.original.id)
+                          }
+                        }
+                      }
+                    ]
                   : []),
                 {
                   text: 'Download',
                   icon: 'tabler-download',
-
                   menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
                 },
-                {
-                  text: 'Edit',
-                  icon: 'tabler-edit text-yellow-600',
+                ...(!row.original.adopted && row.original.status !== StatusProforma.REJECTED
+                  ? [
+                      {
+                        text: 'Mettre à jour',
+                        icon: 'tabler-edit text-yellow-600',
 
-                  menuItemProps: {
-                    className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => {
-                      router.push(getLocalizedUrl(`/proforma/${row.original.id}`, locale as Locale))
-                    }
-                  }
-                },
-                {
-                  text: 'Delete',
-                  icon: 'tabler-trash text-red-600',
-                  menuItemProps: {
-                    className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () =>
-                      UtiliMetod.SuppressionConfirmDialog({
-                        data: row.original.reference,
-                        confirmAction: () => DeleteMutation.mutate(row.original.id)
-                      })
-                  }
-                }
+                        menuItemProps: {
+                          className: 'flex items-center gap-2 text-textSecondary',
+                          onClick: () => {
+                            router.push(getLocalizedUrl(`/proforma/${row.original.id}`, locale as Locale))
+                          }
+                        }
+                      }
+                    ]
+                  : []),
+                ...(!row.original.adopted && row.original.status !== StatusProforma.REJECTED
+                  ? [
+                      {
+                        text: 'Delete',
+                        icon: 'tabler-trash text-red-600',
+                        menuItemProps: {
+                          className: 'flex items-center gap-2 text-textSecondary',
+                          onClick: () =>
+                            UtiliMetod.SuppressionConfirmDialog({
+                              data: row.original.reference,
+                              confirmAction: () => DeleteMutation.mutate(row.original.id)
+                            })
+                        }
+                      }
+                    ]
+                  : [])
               ]}
             />
           </div>

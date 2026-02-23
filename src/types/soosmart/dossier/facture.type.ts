@@ -1,5 +1,6 @@
 import type { BaseType } from '@/types/soosmart/api-default,type'
 import type { ThemeColor } from '@core/types'
+import type { BorderauOneType } from '@/types/soosmart/dossier/borderau.type'
 
 export enum InvoiceState {
   PENDING = 'pending',
@@ -24,11 +25,9 @@ export const ColorInvoiceState: Record<InvoiceState, ThemeColor> = {
 }
 
 export type FactureListType = {
-  id: string
-  createdat: string
-  updatedat: string
   isdeleted: boolean
   numero: string
   uniqueIdDossier: string
+  bordereau: BorderauOneType
   status: InvoiceState
 } & BaseType

@@ -9,6 +9,11 @@ const url = `proforma`
 export class ProformaService {
   static PROFORMA_KEY = 'proforma'
 
+  static queryKey = {
+    all: (query?: ParamRequests & ProformaQuery) => [ProformaService.PROFORMA_KEY, 'all', query],
+    one: (query: OneQueryDocs) => [ProformaService.PROFORMA_KEY, 'one', query]
+  }
+
   static async PostData(data: ProformaSave) {
     return (await instance.post<ProformaType>(url, data)).data
   }
@@ -25,8 +30,8 @@ export class ProformaService {
     ).data
   }
 
-  static  async getById(query: OneQueryDocs) {
-    return (await instance.get<ProformaType>(url + `/one`, {params:{query}})).data
+  static async getById(query: OneQueryDocs) {
+    return (await instance.get<ProformaType>(url + `/one`, { params: { query } })).data
   }
 
   static async AdoptProforma(id: string) {
