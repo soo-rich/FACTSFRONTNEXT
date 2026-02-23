@@ -27,17 +27,15 @@ import { DocumentService } from '@/service/document/document.service'
 import OptionMenu from '@core/components/option-menu'
 import RenderClientOrProject from '@views/soosmart/dossier/components/RenderClientOrProject'
 
-
 const columnHelper = createColumnHelper<FactureListType>()
 
 const FactureList = () => {
-
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize, setPageSize] = useState(10)
   const [filter, setFilter] = useState('')
-  const [numero, setNumero] = useState('')
+  const [id, setID] = useState('')
 
   // hooks
   const { lang: locale } = useParams()
@@ -73,14 +71,12 @@ const FactureList = () => {
     }
   })
 
-  const showTree = (numero: string) => {
-    setNumero(numero)
+  const showTree = (id: string) => {
+    setID(id)
     setTimeout(() => {
       setOpen(true)
     }, 500)
-
   }
-
 
   const columns = useMemo(
     () => [
@@ -94,10 +90,14 @@ const FactureList = () => {
       }),
       columnHelper.accessor('bordereau.proforma.client.nom', {
         header: 'Client',
-        cell: ({ row }) => <RenderClientOrProject for_who={{
-          client: row.original?.bordereau?.proforma?.client,
-          projet: row.original?.bordereau?.proforma?.projet
-        }} />
+        cell: ({ row }) => (
+          <RenderClientOrProject
+            for_who={{
+              client: row.original?.bordereau?.proforma?.client,
+              projet: row.original?.bordereau?.proforma?.projet
+            }}
+          />
+        )
       }),
       columnHelper.accessor('createdat', {
         header: 'Créé le',
@@ -121,21 +121,21 @@ const FactureList = () => {
         id: 'actions', // Important: donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             <Tooltip title={'Voir le PDF'}>
               <CustomIconButton
                 href={getLocalizedUrl(`/docs/${row.original.numero}`, locale as Locale)}
-                className="cursor-pointer text-green-600 hover:text-green-800"
+                className='cursor-pointer text-green-600 hover:text-green-800'
               >
-                <i className="tabler-file-type-pdf" />
+                <i className='tabler-file-type-pdf' />
               </CustomIconButton>
             </Tooltip>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
-              iconClassName="text-textSecondary"
+              iconClassName='text-textSecondary'
               options={[
                 {
-                  text: 'Hieriachie',
+                  text: 'Hiérarchie du document',
                   icon: 'tabler-hierarchy-3',
                   menuItemProps: {
                     onClick: () => showTree(row.original.id)
@@ -184,15 +184,13 @@ const FactureList = () => {
         globalFilter={filter}
         setGlobalFilter={setFilter}
         totalElements={data?.totalElements}
-
       />
 
-      <DefaultDialog dialogMaxWidth="lg" open={open} setOpen={setOpen} title="Hiérarchie du document">
-        <FileTree numero={numero}></FileTree>
+      <DefaultDialog dialogMaxWidth='lg' open={open} setOpen={setOpen} title='Hiérarchie du document'>
+        <FileTree numero={id}></FileTree>
       </DefaultDialog>
     </>
   )
 }
-
 
 export default FactureList
