@@ -184,7 +184,9 @@ const DefaultDesignFact = ({
               <tbody>
                 <tr className='text-center font-medium'>
                   <td className='border  px-2 py-1'>{docs.numero}</td>
-                  <td className='border  px-2 py-1'>{UtiliMetod.formatDate(docs.createdat, 'dd/MM/yyyy')}</td>
+                  <td className='border  px-2 py-1'>
+                    {docs.createdat?UtiliMetod.formatDate(docs.createdat, 'dd/MM/yyyy'):''}
+                  </td>
                   <td className='border  text-red-600  px-2 py-1'>{docs.reference}</td>
                 </tr>
               </tbody>
@@ -229,7 +231,6 @@ const DefaultDesignFact = ({
                     <td className='border  text-center px-2 py-1'>{item.quantite}</td>
                     <td className='border  px-2 py-1'>
                       {documenttype === DocumentTypes.BORDERAU ? '' : Number(item.prix_article) * Number(item.quantite)}
-
                     </td>
                   </tr>
                 ))}

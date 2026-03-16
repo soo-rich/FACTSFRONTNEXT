@@ -1,4 +1,3 @@
-import type { ProformaType } from '@/types/soosmart/dossier/proforma.type'
 import type { ClientType } from '@/types/soosmart/client.type'
 
 export type DocumentDTO = {
@@ -31,12 +30,6 @@ export interface Client {
   lieu: string
   telephone: string
 }
-
-// }&{
-//   client: ClientType,
-//   total_letters: string,
-//   paied?: boolean,
-// } & Omit<ProformaType, 'client' | 'adopted'>
 
 
 export enum DocumentTypes {

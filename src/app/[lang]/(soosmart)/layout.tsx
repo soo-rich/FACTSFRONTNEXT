@@ -27,7 +27,6 @@ import { i18n } from '@configs/i18n'
 // Util Imports
 import { getDictionary } from '@/utils/getDictionary'
 import { getMode, getSystemMode } from '@core/utils/serverHelpers'
-import PathGenerate from '@components/pathbreadcrumbs/PathGenerate'
 
 const Layout = async (props: ChildrenType & { params: Promise<{ lang: string }> }) => {
   const params = await props.params
@@ -54,7 +53,6 @@ const Layout = async (props: ChildrenType & { params: Promise<{ lang: string }> 
               navbar={<Navbar />}
               footer={<VerticalFooter />}
             >
-              <PathGenerate dictionary={dictionary} />
               {children}
             </VerticalLayout>
           }
