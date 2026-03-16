@@ -12,7 +12,6 @@ import { createColumnHelper } from '@tanstack/react-table'
 
 import { toast } from 'react-toastify'
 
-
 import Tooltip from '@mui/material/Tooltip'
 
 // import Button from '@mui/material/Button'
@@ -28,9 +27,8 @@ import CustomIconButton from '@core/components/mui/IconButton'
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
 import Link from '@components/Link'
-import { DocumentService } from '@/service/document/document.service'
 import OptionMenu from '@core/components/option-menu'
-
+import { PDFService } from '@/service/pdf/pdf.service'
 
 const columnHelper = createColumnHelper<BorderauType>()
 
@@ -44,7 +42,10 @@ const BordereauList = () => {
   // hooks
   const { lang: locale } = useParams()
 
-  const querykey = useMemo(() => [BorderauService.BORDERAU_KEY, pageIndex, pageSize, notadopted], [pageIndex, pageSize, notadopted])
+  const querykey = useMemo(
+    () => [BorderauService.BORDERAU_KEY, pageIndex, pageSize, notadopted],
+    [pageIndex, pageSize, notadopted]
+  )
 
   const { data, isLoading, isError } = useQuery({
     queryKey: querykey,
@@ -56,7 +57,7 @@ const BordereauList = () => {
       })
     },
     refetchOnWindowFocus: true,
-    refetchOnMount: true,
+    refetchOnMount: true
   })
 
   const DeleteMutation = useMutation({
@@ -89,8 +90,8 @@ const BordereauList = () => {
         .then(r => r)
       toast.success('Bordereau adoptée avec succès')
     },
-    onError: (error) => {
-      toast.error((error as any).response.data.message || 'Erreur lors de l\'adoption de la Bordereau')
+    onError: error => {
+      toast.error((error as any).response.data.message || "Erreur lors de l'adoption de la Bordereau")
     }
   })
 
@@ -173,7 +174,10 @@ const BordereauList = () => {
                   text: 'Télécharger le PDF',
                   icon: 'tabler-download hover:text-green-600 text-green-900',
                   menuItemProps: {
-                    onClick: () => DocumentService.generatePdf(row.original.numero)
+                    className: 'flex items-center gap-2 text-textSecondary',
+                    onClick: () => {
+                      PDFService.downloadPdfByNumero(row.original.numero)
+                    }
                   }
                 },
                 {
@@ -223,11 +227,9 @@ const BordereauList = () => {
         globalFilter={filter}
         setGlobalFilter={setFilter}
         totalElements={data?.totalElements}
-
       />
     </>
   )
 }
-
 
 export default BordereauList

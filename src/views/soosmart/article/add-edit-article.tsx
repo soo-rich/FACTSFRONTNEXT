@@ -42,13 +42,13 @@ const AddEditArticle = ({
     mutationFn: async (data: SaveArticleType) => {
       return await ArticleService.addArticle(data)
     },
-    onSuccess: data => {
+    onSuccess: () => {
       toast.success('Ajout OK')
       reset()
 
       // Appeler le callback de succès si fourni
       if (onSuccess) {
-        onSuccess(data)
+        onSuccess()
       }
     },
     onError: () => {

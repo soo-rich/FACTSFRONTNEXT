@@ -14,6 +14,7 @@ import { DocumentService } from '@/service/document/document.service'
 import LoadingWithoutModal from '@components/LoadingWithoutModal'
 import ErrorView from '@components/ErrorView'
 import DefaultDesignFact from '@views/soosmart/dossier/file/DefaultDesignFact'
+import { PDFService } from '@/service/pdf/pdf.service'
 
 
 const DocumentViews = () => {
@@ -46,20 +47,24 @@ const DocumentViews = () => {
   return (
     <Grid container spacing={6}>
       <Grid size={{ xs: 12, md: 9, lg: 8 }}>
-        {
-          isLoading ? (
-            <LoadingWithoutModal />
-          ) : isError ? (
-            <ErrorView />
-          ) : data &&
-          (
-            <DefaultDesignFact docs={data} signe={signed} role={role} />
-          )
-        }
+        {isLoading ? (
+          <LoadingWithoutModal />
+        ) : isError ? (
+          <ErrorView />
+        ) : (
+          data && <DefaultDesignFact docs={data} signe={signed} role={role} />
+        )}
       </Grid>
       <Grid size={{ xs: 12, md: 3, lg: 4 }} className={'no-print'}>
-        <DocumentsActions id_facture={data?.numero} UpdateSignature={setSigned} UpdateRole={setRole} paied={data?.paied}
-          printFonction={() => DocumentService.generatePdf(data?.numero || '')} signby={data?.signedBy} role={data?.role} />
+        <DocumentsActions
+          id_facture={data?.numero}
+          UpdateSignature={setSigned}
+          UpdateRole={setRole}
+          paied={data?.paied}
+          printFonction={() => PDFService.downloadPdfByNumero(data?.numero || '')}
+          signby={data?.signedBy}
+          role={data?.role}
+        />
       </Grid>
     </Grid>
   )

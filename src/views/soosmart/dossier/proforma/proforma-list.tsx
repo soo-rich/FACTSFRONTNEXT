@@ -47,11 +47,12 @@ import OptionMenu from '@/@core/components/option-menu'
 import Link from '@components/Link'
 import { BorderauService } from '@/service/dossier/borderau.service'
 import RenderClientOrProject from '@views/soosmart/dossier/components/RenderClientOrProject'
+import { PDFService } from '@/service/pdf/pdf.service'
 
 const columnHelper = createColumnHelper<ProformaType>()
 
 
-const ProformaList = ({ props }: { props: Partial<ProformaQuery> }) => {
+const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
 
   const queryClient = useQueryClient()
   const [pageIndex, setPageIndex] = useState(0)
@@ -258,7 +259,12 @@ const ProformaList = ({ props }: { props: Partial<ProformaQuery> }) => {
                 {
                   text: 'Download',
                   icon: 'tabler-download',
-                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
+                  menuItemProps: {
+                    className: 'flex items-center gap-2 text-textSecondary',
+                    onClick: () => {
+                      PDFService.downloadPdfByNumero(row.original.numero)
+                    }
+                  }
                 },
                 ...(!row.original.adopted && row.original.status !== StatusProforma.REJECTED
                   ? [

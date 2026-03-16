@@ -112,7 +112,7 @@ const AddEditProforma = () => {
         enabled: isEdit,
         queryKey: queryKeyProforma,
         queryFn: async () => {
-          return await ProformaService.getById({id: create! as string })
+          return await ProformaService.getById({ id: create! as string })
         },
         refetchOnWindowFocus: true,
         refetchOnMount: true,
@@ -271,7 +271,7 @@ const AddEditProforma = () => {
       router.push(getLocalizedUrl('/proforma', locale as Locale))
     },
     onError: error => {
-      toast.error('Erreur lors de l\'ajout de la proforma')
+      toast.error("Erreur lors de l'ajout de la proforma")
       console.error('Error adding proforma:', error)
     }
   })
@@ -293,7 +293,6 @@ const AddEditProforma = () => {
   })
 
   const handleSubmitForm = (data: ProformaSaveV2) => {
-
     isEdit && proforma ? EditMutation.mutate(data) : AddMutation.mutate(data)
   }
 
@@ -337,25 +336,21 @@ const AddEditProforma = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, proforma])
 
-  useEffect(() => {
-    console.log('Validation errors:', errors)
-  }, [errors])
-
   const isPending = AddMutation.isPending || EditMutation.isPending
 
   return (
-    <Form onSubmit={handleSubmit(handleSubmitForm)} className="w-full">
-      <div className="flex flex-col gap-6">
+    <Form onSubmit={handleSubmit(handleSubmitForm)} className='w-full'>
+      <div className='flex flex-col gap-6'>
         {/* ====== EN-TÊTE ====== */}
         <Card>
           <CardHeader
             title={
-              <div className="flex items-center gap-2">
-                <i className="tabler-file-invoice text-primary text-2xl" />
-                <Typography variant="h5">{isEdit ? 'Modifier la Proforma' : 'Nouvelle Proforma'}</Typography>
+              <div className='flex items-center gap-2'>
+                <i className='tabler-file-invoice text-primary text-2xl' />
+                <Typography variant='h5'>{isEdit ? 'Modifier la Proforma' : 'Nouvelle Proforma'}</Typography>
               </div>
             }
-            subheader="Remplissez les informations de la proforma puis ajoutez les articles"
+            subheader='Remplissez les informations de la proforma puis ajoutez les articles'
           />
           <Divider />
           <CardContent>
@@ -366,14 +361,14 @@ const AddEditProforma = () => {
                   render={({ field }) => (
                     <CustomTextField
                       {...field}
-                      label="Référence"
-                      placeholder="Ex: PRO-2026-001"
+                      label='Référence'
+                      placeholder='Ex: PRO-2026-001'
                       fullWidth
                       slotProps={{
                         input: {
                           startAdornment: (
-                            <InputAdornment position="start">
-                              <i className="tabler-hash text-lg" />
+                            <InputAdornment position='start'>
+                              <i className='tabler-hash text-lg' />
                             </InputAdornment>
                           )
                         }
@@ -385,7 +380,7 @@ const AddEditProforma = () => {
                       })}
                     />
                   )}
-                  name="reference"
+                  name='reference'
                   control={control}
                 />
               </Grid>
@@ -395,7 +390,7 @@ const AddEditProforma = () => {
                 <Grid size={{ xs: 12, md: 12 }}>
                   <RadioGroup
                     row
-                    name="isClient"
+                    name='isClient'
                     value={isClient}
                     onChange={event => {
                       const value = (event.target as HTMLInputElement).value as 'client' | 'projet'
@@ -408,23 +403,23 @@ const AddEditProforma = () => {
                         setValue('client_id', null)
                       }
                     }}
-                    className="mb-3"
+                    className='mb-3'
                   >
                     <FormControlLabel
-                      value="client"
+                      value='client'
                       control={<Radio />}
                       label={
-                        <span className="flex items-center gap-1">
-                          <i className="tabler-user text-base" /> Client
+                        <span className='flex items-center gap-1'>
+                          <i className='tabler-user text-base' /> Client
                         </span>
                       }
                     />
                     <FormControlLabel
-                      value="projet"
+                      value='projet'
                       control={<Radio />}
                       label={
-                        <span className="flex items-center gap-1">
-                          <i className="tabler-briefcase text-base" /> Projet
+                        <span className='flex items-center gap-1'>
+                          <i className='tabler-briefcase text-base' /> Projet
                         </span>
                       }
                     />
@@ -444,7 +439,7 @@ const AddEditProforma = () => {
                           renderInput={params => (
                             <DebouncedInput
                               {...params}
-                              label="Sélectionner un client"
+                              label='Sélectionner un client'
                               onChange={e => {
                                 setClientFilter(e || '')
                               }}
@@ -452,7 +447,7 @@ const AddEditProforma = () => {
                           )}
                         />
                       )}
-                      name="client_id"
+                      name='client_id'
                       control={control}
                     />
                   ) : (
@@ -469,7 +464,7 @@ const AddEditProforma = () => {
                           renderInput={params => (
                             <DebouncedInput
                               {...params}
-                              label="Sélectionner un projet"
+                              label='Sélectionner un projet'
                               onChange={e => {
                                 setProjetFilter(e || '')
                               }}
@@ -477,7 +472,7 @@ const AddEditProforma = () => {
                           )}
                         />
                       )}
-                      name="projet_id"
+                      name='projet_id'
                       control={control}
                     />
                   )}
@@ -494,22 +489,22 @@ const AddEditProforma = () => {
             <Card>
               <CardHeader
                 title={
-                  <div className="flex items-center gap-2">
-                    <i className="tabler-package text-primary text-xl" />
-                    <Typography variant="h6">
+                  <div className='flex items-center gap-2'>
+                    <i className='tabler-package text-primary text-xl' />
+                    <Typography variant='h6'>
                       {editingIndex !== null ? `Modifier l'article #${editingIndex + 1}` : 'Ajouter un article'}
                     </Typography>
                     {editingIndex !== null && (
-                      <Chip label="Mode édition" color="warning" size="small" variant="tonal" />
+                      <Chip label='Mode édition' color='warning' size='small' variant='tonal' />
                     )}
                   </div>
                 }
               />
               <Divider />
               <CardContent>
-                <div className="flex flex-col gap-4">
+                <div className='flex flex-col gap-4'>
                   <CustomTextField
-                    label="Libellé *"
+                    label='Libellé *'
                     placeholder="Ex: Développement d'une application"
                     fullWidth
                     value={articleForm.libelle}
@@ -519,8 +514,8 @@ const AddEditProforma = () => {
                     slotProps={{
                       input: {
                         startAdornment: (
-                          <InputAdornment position="start">
-                            <i className="tabler-tag text-lg" />
+                          <InputAdornment position='start'>
+                            <i className='tabler-tag text-lg' />
                           </InputAdornment>
                         )
                       }
@@ -528,7 +523,7 @@ const AddEditProforma = () => {
                   />
 
                   <CustomTextField
-                    label="Description"
+                    label='Description'
                     placeholder="Description détaillée de l'article"
                     fullWidth
                     multiline
@@ -540,10 +535,10 @@ const AddEditProforma = () => {
                   <Grid container spacing={3}>
                     <Grid size={{ xs: 12, sm: 6 }}>
                       <CustomTextField
-                        label="Quantité *"
-                        placeholder="0"
+                        label='Quantité *'
+                        placeholder='0'
                         fullWidth
-                        type="number"
+                        type='number'
                         value={articleForm.quantite}
                         onChange={e =>
                           setArticleForm(prev => ({
@@ -556,8 +551,8 @@ const AddEditProforma = () => {
                         slotProps={{
                           input: {
                             startAdornment: (
-                              <InputAdornment position="start">
-                                <i className="tabler-stack-2 text-lg" />
+                              <InputAdornment position='start'>
+                                <i className='tabler-stack-2 text-lg' />
                               </InputAdornment>
                             )
                           }
@@ -566,10 +561,10 @@ const AddEditProforma = () => {
                     </Grid>
                     <Grid size={{ xs: 12, sm: 6 }}>
                       <CustomTextField
-                        label="Prix Unitaire *"
-                        placeholder="0"
+                        label='Prix Unitaire *'
+                        placeholder='0'
                         fullWidth
-                        type="number"
+                        type='number'
                         value={articleForm.prix_unitaire}
                         onChange={e =>
                           setArticleForm(prev => ({
@@ -582,8 +577,8 @@ const AddEditProforma = () => {
                         slotProps={{
                           input: {
                             startAdornment: (
-                              <InputAdornment position="start">
-                                <i className="tabler-currency-franc text-lg" />
+                              <InputAdornment position='start'>
+                                <i className='tabler-currency-franc text-lg' />
                               </InputAdornment>
                             )
                           }
@@ -594,28 +589,28 @@ const AddEditProforma = () => {
 
                   {/* Sous-total aperçu */}
                   {articleForm.quantite !== '' && articleForm.prix_unitaire !== '' && (
-                    <div className="flex items-center justify-end gap-2 px-2">
-                      <Typography variant="body2" color="text.secondary">
+                    <div className='flex items-center justify-end gap-2 px-2'>
+                      <Typography variant='body2' color='text.secondary'>
                         Sous-total :
                       </Typography>
-                      <Typography variant="subtitle1" fontWeight={600} color="primary">
+                      <Typography variant='subtitle1' fontWeight={600} color='primary'>
                         {(Number(articleForm.quantite) * Number(articleForm.prix_unitaire)).toLocaleString('fr-FR')}{' '}
                         Fcfa
                       </Typography>
                     </div>
                   )}
 
-                  <div className="flex gap-3 mt-1">
+                  <div className='flex gap-3 mt-1'>
                     <Button
-                      variant="contained"
+                      variant='contained'
                       color={editingIndex !== null ? 'warning' : 'primary'}
                       startIcon={<i className={editingIndex !== null ? 'tabler-check' : 'tabler-plus'} />}
                       onClick={handleAddOrUpdateArticle}
                     >
-                      {editingIndex !== null ? 'Mettre à jour l\'article' : 'Ajouter'}
+                      {editingIndex !== null ? "Mettre à jour l'article" : 'Ajouter'}
                     </Button>
                     {editingIndex !== null && (
-                      <Button variant="tonal" color="secondary" onClick={handleCancelArticleEdit}>
+                      <Button variant='tonal' color='secondary' onClick={handleCancelArticleEdit}>
                         Annuler
                       </Button>
                     )}
@@ -627,38 +622,38 @@ const AddEditProforma = () => {
 
           {/* --- Liste des articles --- */}
           <Grid size={{ xs: 12, md: 5 }}>
-            <Card className="h-full">
+            <Card className='h-full'>
               <CardHeader
                 title={
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <i className="tabler-list-details text-primary text-xl" />
-                      <Typography variant="h6">Articles</Typography>
+                  <div className='flex items-center justify-between'>
+                    <div className='flex items-center gap-2'>
+                      <i className='tabler-list-details text-primary text-xl' />
+                      <Typography variant='h6'>Articles</Typography>
                     </div>
                     <Chip
                       label={`${fields.length} article${fields.length > 1 ? 's' : ''}`}
-                      size="small"
-                      color="primary"
-                      variant="tonal"
+                      size='small'
+                      color='primary'
+                      variant='tonal'
                     />
                   </div>
                 }
               />
               <Divider />
-              <CardContent className="pt-2!">
+              <CardContent className='pt-2!'>
                 {fields.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-10 text-center">
-                    <i className="tabler-package-off text-5xl text-gray-300 mb-3" />
-                    <Typography variant="body1" color="text.secondary">
+                  <div className='flex flex-col items-center justify-center py-10 text-center'>
+                    <i className='tabler-package-off text-5xl text-gray-300 mb-3' />
+                    <Typography variant='body1' color='text.secondary'>
                       Aucun article ajouté
                     </Typography>
-                    <Typography variant="caption" color="text.disabled">
+                    <Typography variant='caption' color='text.disabled'>
                       Utilisez le formulaire ci-contre pour ajouter des articles
                     </Typography>
                   </div>
                 ) : (
                   <>
-                    <List className="space-y-2 overflow-y-auto max-h-44">
+                    <List className='space-y-2 overflow-y-auto max-h-44'>
                       {fields.map((item, index) => (
                         <ListItem
                           key={item.id}
@@ -669,9 +664,9 @@ const AddEditProforma = () => {
                               : 'border-gray-200 hover:border-primary/40'
                           }`}
                           secondaryAction={
-                            <Tooltip title="Supprimer">
-                              <IconButton edge="end" size="small" onClick={() => handleRemoveArticle(index)}>
-                                <i className="tabler-trash text-red-500 text-lg" />
+                            <Tooltip title='Supprimer'>
+                              <IconButton edge='end' size='small' onClick={() => handleRemoveArticle(index)}>
+                                <i className='tabler-trash text-red-500 text-lg' />
                               </IconButton>
                             </Tooltip>
                           }
@@ -682,24 +677,24 @@ const AddEditProforma = () => {
                             sx={{ borderRadius: '8px' }}
                           >
                             <ListItemAvatar>
-                              <CustomAvatar color={editingIndex === index ? 'warning' : 'primary'} variant="rounded">
+                              <CustomAvatar color={editingIndex === index ? 'warning' : 'primary'} variant='rounded'>
                                 {getInitials(item.libelle)}
                               </CustomAvatar>
                             </ListItemAvatar>
                             <ListItemText
                               primary={
-                                <Typography variant="subtitle2" fontWeight={600}>
+                                <Typography variant='subtitle2' fontWeight={600}>
                                   {item.libelle}
                                 </Typography>
                               }
                               secondary={
-                                <span className="flex flex-col">
+                                <span className='flex flex-col'>
                                   {item.description && (
-                                    <Typography variant="caption" color="text.disabled" noWrap>
+                                    <Typography variant='caption' color='text.disabled' noWrap>
                                       {item.description}
                                     </Typography>
                                   )}
-                                  <Typography variant="caption" color="text.secondary">
+                                  <Typography variant='caption' color='text.secondary'>
                                     {item.prix_unitaire.toLocaleString('fr-FR')} Fcfa x {item.quantite} ={' '}
                                     <strong>{(item.prix_unitaire * item.quantite).toLocaleString('fr-FR')} Fcfa</strong>
                                   </Typography>
@@ -712,12 +707,12 @@ const AddEditProforma = () => {
                     </List>
 
                     {/* Total */}
-                    <Divider className="my-3!" />
-                    <div className="flex items-center justify-between px-3 py-2 bg-primary/5 rounded-lg">
-                      <Typography variant="subtitle1" fontWeight={600}>
+                    <Divider className='my-3!' />
+                    <div className='flex items-center justify-between px-3 py-2 bg-primary/5 rounded-lg'>
+                      <Typography variant='subtitle1' fontWeight={600}>
                         Total HT
                       </Typography>
-                      <Typography variant="h6" color="primary" fontWeight={700}>
+                      <Typography variant='h6' color='primary' fontWeight={700}>
                         {totalHT.toLocaleString('fr-FR')} Fcfa
                       </Typography>
                     </div>
@@ -727,11 +722,11 @@ const AddEditProforma = () => {
                 {/* Erreur de validation si pas d'article */}
                 {errors.articleQuantiteslist && (
                   <Typography
-                    variant="subtitle2"
-                    color="error"
-                    className="mt-2 block text-error text-center align-middle"
+                    variant='subtitle2'
+                    color='error'
+                    className='mt-2 block text-error text-center align-middle'
                   >
-                    <i className="tabler-alert-circle text-sm mr-1 my-auto" />
+                    <i className='tabler-alert-circle text-sm mr-1 my-auto' />
                     Ajoutez au moins un article à la proforma
                   </Typography>
                 )}
@@ -743,21 +738,21 @@ const AddEditProforma = () => {
         {/* ====== BOUTONS D'ACTION ====== */}
         <Card>
           <CardContent>
-            <div className="flex flex-row gap-3 justify-end">
+            <div className='flex flex-row gap-3 justify-end'>
               <LoadingButton
                 loading={isPending}
-                type="submit"
-                variant="contained"
+                type='submit'
+                variant='contained'
                 startIcon={<i className={isEdit ? 'tabler-device-floppy' : 'tabler-send'} />}
               >
                 {isEdit ? 'Enregistrer les modifications' : 'Créer la Proforma'}
               </LoadingButton>
               <Button
                 disabled={isPending}
-                type="reset"
-                variant="tonal"
-                color="secondary"
-                startIcon={<i className="tabler-x" />}
+                type='reset'
+                variant='tonal'
+                color='secondary'
+                startIcon={<i className='tabler-x' />}
                 onClick={handeReset}
               >
                 Annuler

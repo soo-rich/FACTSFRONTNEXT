@@ -23,9 +23,9 @@ import type { Locale } from '@configs/i18n'
 import CustomIconButton from '@core/components/mui/IconButton'
 import DefaultDialog from '@/components/dialogs/unique-modal/DefaultDialog'
 import FileTree from '../tree/FileTree'
-import { DocumentService } from '@/service/document/document.service'
 import OptionMenu from '@core/components/option-menu'
 import RenderClientOrProject from '@views/soosmart/dossier/components/RenderClientOrProject'
+import { PDFService } from '@/service/pdf/pdf.service'
 
 const columnHelper = createColumnHelper<FactureListType>()
 
@@ -145,7 +145,10 @@ const FactureList = () => {
                   text: 'Télécharger le PDF',
                   icon: 'tabler-download',
                   menuItemProps: {
-                    onClick: () => DocumentService.generatePdf(row.original.numero)
+                    className: 'flex items-center gap-2 text-textSecondary',
+                    onClick: () => {
+                      PDFService.downloadPdfByNumero(row.original.numero)
+                    }
                   }
                 },
                 {

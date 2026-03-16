@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/FACTSFRONTNEXT.iml" filepath="$PROJECT_DIR$/.idea/FACTSFRONTNEXT.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/facts_front_new.iml" filepath="$PROJECT_DIR$/.idea/facts_front_new.iml" />
     </modules>
   </component>
 </project>

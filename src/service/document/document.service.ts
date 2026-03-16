@@ -27,7 +27,7 @@ export class DocumentService {
     return (await instance.get<DocumentDTO>(`${url}/data/${numero}`)).data
   }
 
-  static async generatePdf(numero: string) {
+/*  static async generatePdf(numero: string) {
     const response = instance.get(`${url}/generate/${numero}`, { responseType: 'arraybuffer' })
 
     //telecharger le document PDF
@@ -62,5 +62,5 @@ export class DocumentService {
       success: 'PDF généré avec succès !',
       error: 'Erreur lors de la génération du PDF.'
     })
-  }
+  }*/
 }

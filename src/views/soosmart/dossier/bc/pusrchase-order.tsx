@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import {  useState } from 'react'
 
 import { Grid as Grid2, TablePagination } from '@mui/material'
 
@@ -27,22 +27,17 @@ const PurchaseOrderList = () => {
   const [filter, setFilter] = useState('')
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: [PurchaseOrderService.PURCHASE_ORDER_KEY, pageIndex],
+    queryKey: [PurchaseOrderService.PURCHASE_ORDER_KEY, pageIndex, filter],
     queryFn: async () => {
       return await PurchaseOrderService.getAll({
         page: pageIndex,
-        pagesize: pageSize
+        pagesize: pageSize,
+        search: filter
       })
     },
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
-
-  const bclistfilter = useMemo(() => {
-    if (!data?.content) return []
-
-    return filter ? data?.content?.filter(item => item.numeroProforma === filter) : data?.content
-  }, [data, filter])
 
   const DeleteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -78,7 +73,6 @@ const PurchaseOrderList = () => {
           className={'md:w-1/3 w-full'}
           value={filter}
           onChange={data => setFilter(String(data))}
-          label={'Rechercher par proforma'}
           placeholder={'Rechercher'}
         />
       </Grid>
@@ -102,7 +96,7 @@ const PurchaseOrderList = () => {
             <ErrorView />
           </div>
         ) : (
-          bclistfilter.map((item, index) => (
+          data?.content?.map((item, index) => (
             <Grid2 size={{ xs: 12, sm: 6, md: 3 }} key={index}>
               <CardView
                 bc={item}

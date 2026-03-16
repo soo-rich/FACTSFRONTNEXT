@@ -1,4 +1,6 @@
 // Type Imports
+import { NuqsAdapter } from 'nuqs/adapters/next'
+
 import type { ChildrenType, Direction } from '@core/types'
 
 // Context Imports
@@ -28,20 +30,20 @@ const Providers = async (props: Props) => {
   const systemMode = await getSystemMode()
 
   return (
-    <NextAuthProvider basePath={process.env.NEXTAUTH_BASEPATH}>
-      <VerticalNavProvider>
-        <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
-          <ThemeProvider direction={direction} systemMode={systemMode}>
-            {/*<ReduxProvider>*/}
-            <QueryProvider>
-              {children}
-            </QueryProvider>
-            {/*</ReduxProvider>*/}
-            <AppReactToastify direction={direction} hideProgressBar={false} position='top-right' />
-          </ThemeProvider>
-        </SettingsProvider>
-      </VerticalNavProvider>
-    </NextAuthProvider>
+    <NuqsAdapter>
+      <NextAuthProvider basePath={process.env.NEXTAUTH_BASEPATH}>
+        <VerticalNavProvider>
+          <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
+            <ThemeProvider direction={direction} systemMode={systemMode}>
+              {/*<ReduxProvider>*/}
+              <QueryProvider>{children}</QueryProvider>
+              {/*</ReduxProvider>*/}
+              <AppReactToastify direction={direction} hideProgressBar={false} position='top-right' />
+            </ThemeProvider>
+          </SettingsProvider>
+        </VerticalNavProvider>
+      </NextAuthProvider>
+    </NuqsAdapter>
   )
 }
 
