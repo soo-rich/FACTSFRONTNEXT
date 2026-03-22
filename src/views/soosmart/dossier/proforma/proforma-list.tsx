@@ -27,14 +27,8 @@ import UtiliMetod from '@/utils/utilsmethod'
 import CustomIconButton from '@core/components/mui/IconButton'
 import TableGeneric from '@/components/table/TableGeneric'
 import { ProformaService } from '@/service/dossier/proforma.service'
-import type {
-  ProformaQuery,
-  ProformaType} from '@/types/soosmart/dossier/proforma.type';
-import {
-  ColorStatusProforma,
-  LabelStatusProforma,
-  StatusProforma
-} from '@/types/soosmart/dossier/proforma.type'
+import type { ProformaQuery, ProformaType } from '@/types/soosmart/dossier/proforma.type'
+import { ColorStatusProforma, LabelStatusProforma, StatusProforma } from '@/types/soosmart/dossier/proforma.type'
 import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
 
 import { getLocalizedUrl } from '@/utils/i18n'
@@ -51,9 +45,7 @@ import { PDFService } from '@/service/pdf/pdf.service'
 
 const columnHelper = createColumnHelper<ProformaType>()
 
-
 const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
-
   const queryClient = useQueryClient()
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize, setPageSize] = useState(10)
@@ -68,7 +60,8 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
   const router = useRouter()
 
   const queryKey = useMemo(
-    () => [ProformaService.queryKey.all({
+    () => [
+      ProformaService.queryKey.all({
         page: pageIndex,
         pagesize: pageSize,
         adopted: notadopted,
@@ -77,7 +70,8 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
         start: startDate,
         client_id: props?.client_id,
         projet_id: props?.projet_id
-    }),],
+      })
+    ],
     [filter, pageIndex, pageSize, notadopted, startDate, endDate, props?.client_id, props?.projet_id]
   )
 
@@ -96,7 +90,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
       })
     },
     refetchOnWindowFocus: true,
-    refetchOnMount: true,
+    refetchOnMount: true
   })
 
   const DeleteMutation = useMutation({
@@ -130,8 +124,8 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
       toast.success('Proforma adoptée avec succès')
     },
     onError: () => {
-      toast.error('Erreur lors de l\'adoption de la proforma')
-      console.error('Erreur lors de l\'adoption de la proforma')
+      toast.error("Erreur lors de l'adoption de la proforma")
+      console.error("Erreur lors de l'adoption de la proforma")
     }
   })
 
@@ -188,10 +182,6 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
         cell: info => UtiliMetod.formatDevise(info.getValue())
       }),
 
-      // columnHelper.accessor('total_tva', {
-      //   header: 'Total TVA',
-      //   cell: info => info.getValue()
-      // }),
       columnHelper.accessor('adopted', {
         header: 'Status',
         cell: ({ row }) => (
@@ -202,6 +192,15 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
           />
         )
       }),
+      ...(notadopted
+        ? [
+            columnHelper.accessor('bordereau.numero', {
+              header: 'Bordereau',
+              cell: ({ row }) => row.original.bordereau?.numero || 'N/A',
+              enableSorting: false
+            })
+          ]
+        : []),
       columnHelper.display({
         id: 'actions', // Important : donner un ID à la colonne display
         header: 'Actions',
@@ -305,7 +304,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
       })
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [notadopted]
   )
 
   return (
@@ -318,20 +317,20 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
             isClearable={true}
             showMonthDropdown
             selected={startDate}
-            id="picker-open-date"
+            id='picker-open-date'
             openToDate={new Date()}
             onChange={(date: Date | null) => setStartDate(date)}
-            customInput={<CustomTextField label="Date de Debut" fullWidth />}
+            customInput={<CustomTextField label='Date de Debut' fullWidth />}
           />
           <AppReactDatepicker
             showYearDropdown
             showMonthDropdown
             selected={endDate}
             isClearable={true}
-            id="picker-open-date"
+            id='picker-open-date'
             openToDate={new Date()}
             onChange={(date: Date | null) => setEndDate(date)}
-            customInput={<CustomTextField label="Date de Fin" fullWidth />}
+            customInput={<CustomTextField label='Date de Fin' fullWidth />}
           />
         </CardContent>
       </Card>

@@ -20,9 +20,14 @@ class UtiliMetod {
     return parseFloat((size / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
 
-  static formatDevise = (value: number, format?: string) => {
+  static formatDevise = (value: number, format?: string, currency='XOF') => {
     // Remplace les espaces par des points pour les milliers
-    return new Intl.NumberFormat(format ?? 'fr-FR').format(value);
+    return value.toLocaleString(format ?? 'fr-FR', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    })
   }
 
   static formatDate = (date: Date | string, format?: string) => {

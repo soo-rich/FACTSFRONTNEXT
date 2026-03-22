@@ -31,7 +31,7 @@ export class ProformaService {
   }
 
   static async getById(query: OneQueryDocs) {
-    return (await instance.get<ProformaType>(url + `/one`, { params: { query } })).data
+    return (await instance.get<ProformaType>(url + `/one`, { params: { ...query } })).data
   }
 
   static async AdoptProforma(id: string) {

@@ -22,7 +22,7 @@ export class BorderauService {
   }
 
   static async getOne(query: OneQueryDocs) {
-    return (await instance.get<BorderauOneType>(`${url}/one`, { params: { query } })).data
+    return (await instance.get<BorderauOneType>(`${url}/one`, { params: { ...query } })).data
   }
 
   static async DeleteDAta(id: string) {

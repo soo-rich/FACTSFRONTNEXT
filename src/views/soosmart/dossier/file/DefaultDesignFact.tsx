@@ -244,19 +244,19 @@ const DefaultDesignFact = ({
                     <td colSpan={2}></td>
                     <td className='border px-2 w-28'>Total HT</td>
                     <td className='border px-2 w-28 text-center'>-</td>
-                    <td className='border px-2 w-40 text-end'>{UtiliMetod.formatDevise(docs.total_ht)} FCFA</td>
+                    <td className='border px-2 w-40 text-end'>{UtiliMetod.formatDevise(docs.total_ht)}</td>
                   </tr>
                   <tr className='text-center font-semibold'>
                     <td colSpan={2}></td>
                     <td className='border px-2 w-28'>TVA</td>
-                    <td className='border px-2 w-28 text-center'></td>
-                    <td className='border px-2 w-40 text-end'>{UtiliMetod.formatDevise(docs.total_tva)} FCFA</td>
+                    <td className='border px-2 w-28 text-center'>18 %</td>
+                    <td className='border px-2 w-40 text-end'>{UtiliMetod.formatDevise(docs.total_tva)}</td>
                   </tr>
                   <tr className='text-center font-semibold'>
                     <td colSpan={2}></td>
                     <td className='border px-2 w-28'>Total TTC</td>
                     <td className='border px-2 w-28 text-center'>-</td>
-                    <td className='border px-2 w-40 text-end '>{UtiliMetod.formatDevise(docs.total_ttc)} FCFA</td>
+                    <td className='border px-2 w-40 text-end '>{UtiliMetod.formatDevise(docs.total_ttc)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -282,7 +282,6 @@ const DefaultDesignFact = ({
           <>
             <Grid container spacing={0} gap={0} size={12} className={'mt-3'}>
               <Typography className={'text-[1.2rem]'}>
-                {' '}
                 Arrêté la présente facture à la somme de <span className={'font-bold'}>{docs.total_letters}</span>{' '}
                 francs CFA
               </Typography>
