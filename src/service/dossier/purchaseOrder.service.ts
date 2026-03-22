@@ -28,7 +28,7 @@ export class PurchaseOrderService {
     formData.append('bc', bc.file)
     bc.proforma_id ? formData.append('proforma_id', bc.proforma_id) : null
     bc.bordereau_id ? formData.append('bordereau_id', bc.bordereau_id) : null
-    formData.append('filename', bc.filename)
+    formData.append('label', bc.filename)
 
     return (await instance.post<PurchaseOrderType>(`${url}`, formData)).data
   }
