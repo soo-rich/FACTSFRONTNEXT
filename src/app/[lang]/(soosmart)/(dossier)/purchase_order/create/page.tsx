@@ -1,4 +1,4 @@
-import  AddModalBc  from '@views/soosmart/dossier/bc/component/add-modal'
+import  AddModalBc  from '@views/soosmart/dossier/bc/component/add-bc'
 
 const PurchaseOrderCreatePage = () => {
   return (

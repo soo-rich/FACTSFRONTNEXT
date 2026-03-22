@@ -73,22 +73,28 @@ const PurchaseOrderList = () => {
       <Grid
         container
         spacing={2}
-        size={{ xs: 12, sm: 3 }}
+        size={{ xs: 12, sm: 12 }}
         direction={'row'}
         sx={{
           justifyContent: 'flex-end',
           alignItems: 'center'
         }}
       >
+
+        <Button
+          component={Link}
+          href={getLocalizedUrl('purchase_order/create', locale as Locale)}
+          size={'small'}
+          variant={'contained'}
+        >
+          Ajouter un bon de commande
+        </Button>
         <DebouncedInput
-          className={'md:w-1/3 w-full'}
+
           value={filter}
           onChange={data => setFilter(String(data))}
           placeholder={'Rechercher'}
         />
-        <Button component={Link} href={getLocalizedUrl('purchase_order/create', locale as Locale)} size={'small'} variant={'contained'}>
-          Ajouter un bon de commande
-        </Button>
       </Grid>
       <Grid
         container
