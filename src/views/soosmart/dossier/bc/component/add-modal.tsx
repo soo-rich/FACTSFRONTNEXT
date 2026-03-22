@@ -2,17 +2,23 @@
 
 import { useMemo, useState } from 'react'
 
+import { useParams, useRouter } from 'next/navigation'
+
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query'
 
 import { toast } from 'react-toastify'
 
 import { useForm } from 'react-hook-form'
 
+import { valibotResolver } from '@hookform/resolvers/valibot'
+
 import { PurchaseOrderService } from '@/service/dossier/purchaseOrder.service'
 import { ProformaService } from '@/service/dossier/proforma.service'
 import { BorderauService } from '@/service/dossier/borderau.service'
-import { PurchaseOrderSave, schemaPurchaseOrder } from '@/types/soosmart/dossier/purchaseOrder.type'
-import { valibotResolver } from '@hookform/resolvers/valibot'
+import type { PurchaseOrderSave } from '@/types/soosmart/dossier/purchaseOrder.type'
+import { schemaPurchaseOrder } from '@/types/soosmart/dossier/purchaseOrder.type'
+import { getLocalizedUrl } from '@/utils/i18n'
+import { Locale } from '@configs/i18n'
 
 const AddModalBc = () => {
   const queryClient = useQueryClient()
@@ -21,6 +27,10 @@ const AddModalBc = () => {
   const [filterP, setFilterP] = useState('')
   const [filterB, setFilterB] = useState('')
   const [pageSize] = useState(12)
+
+  //hooks
+  const { lang: locale } = useParams()
+  const router = useRouter()
 
   const queryKeyProforma = useMemo(
     () => [
@@ -57,18 +67,25 @@ const AddModalBc = () => {
   })
 
   const AddMutatation = useMutation({
-    mutationFn: async () => {},
-    onSuccess: data => {
+    mutationFn: async (data: PurchaseOrderSave) => {
+      return await PurchaseOrderService.PostData(data)
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: PurchaseOrderService.queryKey.all()
       })
+      toast.success('Purchase order added successfully')
+      reset()
+      router.push(getLocalizedUrl('purchase_order', locale as Locale))
     },
     onError: error => {
       toast.error(error.message)
     }
   })
 
-  const Submit = async () => {}
+  const Submit = async (data: PurchaseOrderSave) => {
+    AddMutatation.mutate(data)
+  }
 
   const resultQuery = useQueries({
     queries: [
@@ -106,7 +123,7 @@ const AddModalBc = () => {
   return (
     <div>
       {/* Your modal content goes here */}
-      <h2>Ajouter un nouveau BC</h2>
+      <form noValidate onSubmit={handleSubmit(Submit)}></form>
     </div>
   )
 }
