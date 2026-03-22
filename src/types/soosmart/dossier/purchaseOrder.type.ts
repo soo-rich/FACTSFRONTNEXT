@@ -12,14 +12,14 @@ export type PurchaseOrderType = {
   uploadBy: string
   file: FileObject
   proforma?: ProformaType
-  bordereau?:BorderauType
+  bordereau?: BorderauType
 } & BaseType
-
 
 export const schemaPurchaseOrder = v.object({
   file: v.instance(File),
   filename: v.string(),
-  numeroProforma: v.string(),
+  bordereau_id: v.optional(v.pipe(v.string(), v.uuid())),
+  proforma_id: v.optional(v.pipe(v.string(), v.uuid()))
 })
 
 export type PurchaseOrderSave = v.InferInput<typeof schemaPurchaseOrder>

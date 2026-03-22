@@ -43,8 +43,8 @@ const BordereauList = () => {
   const { lang: locale } = useParams()
 
   const querykey = useMemo(
-    () => [BorderauService.BORDERAU_KEY, pageIndex, pageSize, notadopted],
-    [pageIndex, pageSize, notadopted]
+    () => [BorderauService.queryKey.all({ page: pageIndex, pagesize: pageSize, adopted: notadopted, search: filter })],
+    [pageIndex, pageSize, notadopted, filter]
   )
 
   const { data, isLoading, isError } = useQuery({

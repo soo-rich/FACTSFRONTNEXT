@@ -1,6 +1,8 @@
 'use client'
 
-import {  useState } from 'react'
+import { useState } from 'react'
+
+import { useParams } from 'next/navigation'
 
 import { Grid as Grid2, TablePagination } from '@mui/material'
 
@@ -10,6 +12,8 @@ import { toast } from 'react-toastify'
 
 import Grid from '@mui/material/Grid'
 
+import Button from '@mui/material/Button'
+
 import { BorderauService } from '@/service/dossier/borderau.service'
 import { PurchaseOrderService } from '@/service/dossier/purchaseOrder.service'
 import LoadingWithoutModal from '@components/LoadingWithoutModal'
@@ -18,6 +22,10 @@ import DebouncedInput from '@components/CustomInput/DebounceInput'
 import TableManualPaginationComponent from '@components/table/TableManualPaginationComponent'
 import CardView from '@views/soosmart/dossier/bc/component/cardview'
 import UtiliMetod from '@/utils/utilsmethod'
+import Link from '@/components/Link'
+
+import { getLocalizedUrl } from '@/utils/i18n'
+import type { Locale } from '@configs/i18n'
 
 const PurchaseOrderList = () => {
   const queryClient = useQueryClient()
@@ -25,6 +33,9 @@ const PurchaseOrderList = () => {
   const [pageSize] = useState(12)
 
   const [filter, setFilter] = useState('')
+
+  // hooks
+  const { lang: locale } = useParams()
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [PurchaseOrderService.PURCHASE_ORDER_KEY, pageIndex, filter],
@@ -75,6 +86,9 @@ const PurchaseOrderList = () => {
           onChange={data => setFilter(String(data))}
           placeholder={'Rechercher'}
         />
+        <Button component={Link} href={getLocalizedUrl('purchase_order/create', locale as Locale)} size={'small'} variant={'contained'}>
+          Ajouter un bon de commande
+        </Button>
       </Grid>
       <Grid
         container

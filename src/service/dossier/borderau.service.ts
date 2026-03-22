@@ -9,6 +9,11 @@ const url = `bordereau`
 export class BorderauService {
   static BORDERAU_KEY = 'bordereau'
 
+  static queryKey = {
+    all: (query?: ParamRequests & { adopted?: boolean }) => [BorderauService.BORDERAU_KEY, 'all', query],
+    one: (query: OneQueryDocs) => [BorderauService.BORDERAU_KEY, 'one', query]
+  }
+
   static async PostData(id_proforma: string) {
     return (await instance.post<BorderauType>(`${url}`, { proforma_id: id_proforma })).data
   }
