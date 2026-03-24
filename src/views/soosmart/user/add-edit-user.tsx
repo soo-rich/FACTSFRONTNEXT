@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
@@ -40,7 +40,7 @@ const VisuallyHiddenInput = styled('input')({
 
 const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<UtilisateurDto>) => {
   const queryClient = useQueryClient()
-
+  const [imageUrl, setImageUrl] = useState<string>('https://picsum.photos/200')
 
   const {
     control,
@@ -63,13 +63,14 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
 
   const image = watch('image')
 
-  const imageUrl = useMemo(() => {
+  useEffect(() => {
     if (image) {
-      return URL.createObjectURL(image)
+      setImageUrl(URL.createObjectURL(image))
+    } else if (user?.image) {
+      Utilsmethod.getFileFormApi(user?.image).then(value => {
+        setImageUrl(value)
+      })
     }
-
-
-    return user?.image ? Utilsmethod.getFileFormApi(user?.image) : 'https://picsum.photos/200'
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [image])
 
@@ -99,7 +100,7 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
       }
     },
     onError: () => {
-      toast.error('Erreur lors de l\'ajout de l\'utilisateur')
+      toast.error("Erreur lors de l'ajout de l'utilisateur")
     }
   })
 
@@ -130,7 +131,7 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
       }
     },
     onError: () => {
-      toast.error('Erreur lors de la mise à jour de l\'utilisateur')
+      toast.error("Erreur lors de la mise à jour de l'utilisateur")
     }
   })
 
@@ -161,25 +162,25 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
   }, [errors])
 
   return (
-    <form onSubmit={handleSubmit(submitForm)} className="space-y-4">
+    <form onSubmit={handleSubmit(submitForm)} className='space-y-4'>
       <Grid2 spacing={2} direction={'column'} container>
-        <CustomAvatar alt="user-profile" src={imageUrl} variant="rounded" size={220} />
+        <CustomAvatar alt='user-profile' src={imageUrl} variant='rounded' size={220} />
 
-        <div className="w-1/3">
+        <div className='w-1/3'>
           <Controller
             render={({ field }) => (
-              <Button component="label" role={undefined} variant="contained" tabIndex={-1} startIcon={<Upload />}>
+              <Button component='label' role={undefined} variant='contained' tabIndex={-1} startIcon={<Upload />}>
                 Télécharger une image
                 <VisuallyHiddenInput
-                  type="file"
-                  accept="image/*"
+                  type='file'
+                  accept='image/*'
                   onChange={(event: any) => field.onChange(event.target.files[0])}
                   multiple
                 />
               </Button>
             )}
             control={control}
-            name="image"
+            name='image'
           />
         </div>
       </Grid2>
@@ -304,18 +305,18 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
       </Grid2>
 
       <Grid2>
-        <div className="flex justify-center gap-4 mt-6">
+        <div className='flex justify-center gap-4 mt-6'>
           <Button
-            variant="contained"
-            color="primary"
-            type="submit"
+            variant='contained'
+            color='primary'
+            type='submit'
             disabled={AddMutation.isPending || UpdateMutation.isPending}
           >
             {AddMutation.isPending || UpdateMutation.isPending ? 'Traitement...' : user ? 'Mettre à jour' : 'Ajouter'}
           </Button>
           <Button
-            variant="outlined"
-            color="error"
+            variant='outlined'
+            color='error'
             onClick={handleCancel}
             disabled={AddMutation.isPending || UpdateMutation.isPending}
           >

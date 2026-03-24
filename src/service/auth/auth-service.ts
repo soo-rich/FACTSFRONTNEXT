@@ -25,12 +25,14 @@ export const schemaLogin = object({
   password: pipe(string(), minLength(6, 'entre 6 caracteres au minimum'))
 })
 
+const instance_axios = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  timeout: 10000
+})
+
 export class AuthService {
-  static async login(data: { username: string; password: string }, hostname?: string) {
-    const instance_axios = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL || `http://${hostname}:4000/api/v1`,
-      timeout: 10000
-    })
+  static async login(data: { username: string; password: string }) {
+
 
     return (await instance_axios.post<LoginResponse>('auth/login', data)).data
   }
@@ -49,7 +51,7 @@ export class AuthService {
   }
 
   static async logout() {
-    return (await instance.post('auth/logout', {})).data
+    return (await instance_axios.post('auth/logout', {})).data
   }
 
   static async forgotUserPassword(email: string) {

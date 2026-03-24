@@ -118,11 +118,12 @@ const UserIndex = () => {
     }
   })
 
-  const getAvatar = (params: Pick<UtilisateurDto, 'image' | 'nom' | 'prenom'>) => {
+  const getAvatar = async (params: Pick<UtilisateurDto, 'image' | 'nom' | 'prenom'>) => {
     const { image, nom, prenom } = params
+    const uri = await UtiliMetod.getFileFormApi(image)
 
     if (image) {
-      return <CustomAvatar src={UtiliMetod.getFileFormApi(image)} size={34} />
+      return <CustomAvatar src={uri} size={34} />
     } else {
       return <CustomAvatar size={34}>{getInitials((nom + ' ' + prenom).toUpperCase() as string)}</CustomAvatar>
     }

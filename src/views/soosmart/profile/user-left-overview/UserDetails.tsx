@@ -3,7 +3,7 @@
 // MUI Imports
 
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -22,18 +22,24 @@ import type { UtilisateurDto } from '@/types/soosmart/utilisateur.type'
 import AddEditUser from '../../user/add-edit-user'
 import DialogCloseButton from '@/components/dialogs/DialogCloseButton'
 import { UserService } from '@/service/user/user.service'
+import UtiliMetod from '@/utils/utilsmethod'
 
 //
 const UserDetails = ({ user: userData }: { user: UtilisateurDto }) => {
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
-
+  const [presignedurl, setPresignedurl] = useState('')
 
   const handleSucces = () => {
-    queryClient.invalidateQueries({ queryKey: [UserService.USER_KEY + 'info'] }).then(() => {
-    })
+    queryClient.invalidateQueries({ queryKey: [UserService.USER_KEY + 'info'] }).then(() => {})
     setOpen(false)
   }
+
+  useEffect(() => {
+    UtiliMetod.getFileFormApi(userData?.image).then(value => {
+      setPresignedurl(value)
+    })
+  }, [userData?.image])
 
 
   return (
@@ -45,7 +51,7 @@ const UserDetails = ({ user: userData }: { user: UtilisateurDto }) => {
               <div className="flex flex-col items-center gap-4">
                 <CustomAvatar
                   alt="user-profile"
-                  src={userData?.image ? Utilsmethod.getFileFormApi(userData?.image) : 'https://picsum.photos/200'}
+                  src={presignedurl?presignedurl  : 'https://picsum.photos/200'}
                   variant="rounded"
                   size={120}
                 />

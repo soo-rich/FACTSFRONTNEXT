@@ -66,7 +66,6 @@ export const authOptions: NextAuthOptions = {
               username: credentials.username,
               password: credentials.password
             },
-            credentials.hostname
           )
 
           if (res.access_token && res.refresh_token) {
