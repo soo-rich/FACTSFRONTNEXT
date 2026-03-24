@@ -1,61 +1,63 @@
 'use client'
 
-import {  useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 
 import { useParams } from 'next/navigation'
 
-
-import { ArrowBigLeftDash, ArrowBigRightDash, CircleX, Download, EyeIcon } from 'lucide-react'
+import { CircleX, Download, EyeIcon, FileIcon } from 'lucide-react'
 
 import Button from '@mui/material/Button'
 
 import Typography from '@mui/material/Typography'
-
-
-
 import Card from '@mui/material/Card'
-
 import CardContent from '@mui/material/CardContent'
-
-
-
 
 import type { PurchaseOrderType } from '@/types/soosmart/dossier/purchaseOrder.type'
 import UtiliMetod from '@/utils/utilsmethod'
-
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
 import CustomIconButton from '@core/components/mui/IconButton'
 import DefaultDialog from '@/components/dialogs/unique-modal/DefaultDialog'
 
-const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType, onRemove?: () => void }) => {
+const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => void }) => {
   const pdfisvg = '/images/svg/pdf.svg'
   const imagesvg = '/images/svg/photo-svgrepo-com.svg'
   const ms_wordsvg = '/images/svg/ms-word-svgrepo-com.svg'
 
   const [open, setOpen] = useState(false)
+  const [presignedurl, setPresignedurl] = useState('')
 
   // Hooks
   const { lang: locale } = useParams()
 
   const getimageformMineType = () => {
     if (bc.file.mimetype === 'application/pdf') {
-      return <img src={pdfisvg} alt={bc.file.filename} className={'is-[150px]'} />
-
-    } else if (bc.file.mimetype === 'image/jpeg' || bc.file.mimetype === 'image/png' || bc.file.mimetype === 'image/gif') {
+      return <iframe src={pdfisvg} className={'is-[150px]'} />
+    } else if (
+      bc.file.mimetype === 'image/jpeg' ||
+      bc.file.mimetype === 'image/png' ||
+      bc.file.mimetype === 'image/gif'
+    ) {
       return <img src={imagesvg} alt={bc.file.filename} className={'is-[150px]'} />
     } else if (
       bc.file.mimetype === 'application/msword' ||
       bc.file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ) {
       return <img src={ms_wordsvg} alt={bc.file.filename} className={'is-[150px]'} />
-    } /*else if (bc.file.contentType==='application/vnd.ms-excel' || bc.file.contentType==='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {}*/
+    }
   }
 
+  function getFileFormApi() {
+    return UtiliMetod.getFileFormApi(bc.file.filename).then(value => {
+      setPresignedurl(value)
+    })
+  }
 
-
+  useEffect(() => {
+    getFileFormApi()
+  }, [])
 
   return (
     <>
@@ -91,7 +93,11 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType, onRemove?: () => vo
               className={'rounded-2xl'}
               startIcon={<Download />}
               onClick={() => {
-                 UtiliMetod.download(UtiliMetod.getFileFormApi(bc.file.path), bc.file).then(()=>{})
+                UtiliMetod.getFileFormApi(bc.file.filename)
+                  .then(value => {
+                    UtiliMetod.download(value, bc.file)
+                  })
+                  .then(() => {})
               }}
             >
               Télécharger
@@ -100,25 +106,16 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType, onRemove?: () => vo
         </CardContent>
       </Card>
 
-      <DefaultDialog open={open} setOpen={setOpen} onClose={() => setOpen(false)} title={bc.file.filename}>
+      <DefaultDialog open={open} setOpen={setOpen} onClose={() => setOpen(false)} title={bc?.label}>
         {bc.file.mimetype === 'application/pdf' ? (
-          <iframe src={UtiliMetod.getFileFormApi(bc.file.path)} width='100%' height='600px' title={bc.file.filename} />
+          <iframe src={presignedurl} width='100%' height='600px' title={bc.file.filename} />
         ) : bc.file.mimetype.startsWith('image/') ? (
           <>
-            <img
-              src={UtiliMetod.getFileFormApi(bc.file.path)}
-              alt={bc.file.filename}
-              style={{ maxWidth: '100%', maxHeight: '600px' }}
-            />
+            <img src={presignedurl} alt={bc.file.filename} style={{ maxWidth: '100%', maxHeight: '600px' }} />
           </>
         ) : (
           <div className='flex flex-col justify-center items-center p-4'>
-            <a
-              href={UtiliMetod.getFileFormApi(bc.file.path)}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-blue-600 underline'
-            >
+            <a href={presignedurl} target='_blank' rel='noopener noreferrer' className='text-blue-600 underline'>
               Ouvrir le fichier
             </a>
             <p className='mt-2 text-gray-600'>Aperçu non disponible pour ce type de fichier.</p>
@@ -132,7 +129,7 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType, onRemove?: () => vo
             <div>
               <Typography variant='body1'>
                 <span className='font-bold'>Nom du fichier :</span>{' '}
-                <span className='text-primary'>{bc.file.filename}</span>
+                <span className='text-primary'>{bc.file.originalName}</span>
               </Typography>
               <Typography variant='body1'>
                 <span className='font-bold'>Type de contenu :</span> {bc.file.mimetype}
@@ -152,31 +149,35 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType, onRemove?: () => vo
               </Typography>
             </div>
             <div className='col-span-2 mt-4 grid grid-cols-2 gap-2'>
-              <Button
-                variant='outlined'
-                component={Link}
-                href={getLocalizedUrl(`/docs/${bc?.proforma?.numero}`, locale as Locale)}
-                startIcon={<ArrowBigLeftDash />}
-              >
-                Proforma
-              </Button>
-              <Button
-                variant='outlined'
-                component={Link}
-                href={getLocalizedUrl(`/docs/${bc?.bordereau?.numero}`, locale as Locale)}
-                startIcon={<ArrowBigRightDash />}
-              >
-                Bordereau
-              </Button>
+              {bc?.proforma?.numero && (
+                <Button
+                  variant='outlined'
+                  component={Link}
+                  href={getLocalizedUrl(`/docs/${bc?.proforma?.numero}`, locale as Locale)}
+                  startIcon={<FileIcon />}
+                >
+                  Proforma
+                </Button>
+              )}
+              {bc?.bordereau?.numero && (
+                <Button
+                  variant='outlined'
+                  color={'warning'}
+                  component={Link}
+                  href={getLocalizedUrl(`/docs/${bc?.bordereau?.numero}`, locale as Locale)}
+                  startIcon={<FileIcon />}
+                >
+                  Bordereau
+                </Button>
+              )}
 
               <Button
-                variant={'contained'}
-                fullWidth
+                variant={'outlined'}
+                color={'success'}
                 size={'small'}
-                className={'rounded-2xl col-span-2'}
                 startIcon={<Download />}
                 onClick={() => {
-                 UtiliMetod.download(UtiliMetod.getFileFormApi(bc.file.path), bc.file).then(()=>{})
+                  UtiliMetod.download(presignedurl, bc.file).then(() => {})
                 }}
               >
                 Télécharger

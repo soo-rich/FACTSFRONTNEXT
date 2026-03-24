@@ -9,7 +9,6 @@ import type { SweetconfirmProps } from '@/types/soosmart/sweetAlertProps'
 import instance from '@/service/axios-manager/instance'
 import type { FileObject } from '@/types/soosmart/file.object.type'
 
-
 class UtiliMetod {
   static formatBytes(size: number): string {
     if (size === 0) return '0 Bytes'
@@ -20,7 +19,7 @@ class UtiliMetod {
     return parseFloat((size / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
 
-  static formatDevise = (value: number, format?: string, currency='XOF') => {
+  static formatDevise = (value: number, format?: string, currency = 'XOF') => {
     // Remplace les espaces par des points pour les milliers
     return value.toLocaleString(format ?? 'fr-FR', {
       style: 'currency',
@@ -53,10 +52,10 @@ class UtiliMetod {
     })
   }
   static SuppressionConfirmDialog = async ({
-                                             data,
-                                             confirmAction,
-                                             cancelAction
-                                           }: SweetconfirmProps & {
+    data,
+    confirmAction,
+    cancelAction
+  }: SweetconfirmProps & {
     data: string
   }) => {
     await Swal.fire({
@@ -105,15 +104,16 @@ class UtiliMetod {
     return colors[Math.floor(Math.random() * colors.length)]
   }
 
-  /*  static getFileFormApi = async (url: string, provider?: 'minio' | 'local') => {
-      return provider === 'minio'
-        ? (await instance.get('file/presigned', { params: { url } })).data
-        : { presigned: process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') + url }
-    }*/
+  static getFileFormApi = async (url: string) => {
+    const uri = (await instance.get<{ presignedUrl: string }>('uploads/presigned-url', { params: { filename:url } }))
+      .data
 
-  static getFileFormApi = (url: string) => {
-    return instance.defaults.baseURL + url
+    return uri.presignedUrl
   }
+
+  // static getFileFormApi = (url: string) => {
+  //   return instance.defaults.baseURL + url
+  // }
 
   static getImagefromLocal = async (url: string) => {
     return process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') + url
