@@ -105,6 +105,10 @@ class UtiliMetod {
   }
 
   static getFileFormApi = async (url: string) => {
+    if (url == undefined || url.length>1) {
+      return ''
+    }
+
     const uri = (await instance.get<{ presignedUrl: string }>('uploads/presigned-url', { params: { filename:url } }))
       .data
 
