@@ -40,18 +40,20 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
       bc.file.mimetype === 'image/png' ||
       bc.file.mimetype === 'image/gif'
     ) {
-      return <img src={imagesvg} alt={bc.file.filename} className={'is-[150px]'} />
+      return <img src={imagesvg} alt={bc.file.originalName} className={'is-[150px]'} />
     } else if (
       bc.file.mimetype === 'application/msword' ||
       bc.file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ) {
-      return <img src={ms_wordsvg} alt={bc.file.filename} className={'is-[150px]'} />
+      return <img src={ms_wordsvg} alt={bc.file.originalName} className={'is-[150px]'} />
     }
   }
 
   function getFileFormApi() {
-    return UtiliMetod.getFileFormApi(bc.file.filename).then(value => {
-      setPresignedurl(value)
+    return UtiliMetod.getFileFormApi(bc.file.storageKey, bc.file.provider).then(value => {
+      if (value) {
+        setPresignedurl(value)
+      }
     })
   }
 
@@ -93,9 +95,11 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
               className={'rounded-2xl'}
               startIcon={<Download />}
               onClick={() => {
-                UtiliMetod.getFileFormApi(bc.file.filename)
+                UtiliMetod.getFileFormApi(bc.file.storageKey, bc.file.provider)
                   .then(value => {
-                    UtiliMetod.download(value, bc.file)
+                    if (value) {
+                      UtiliMetod.download(value, bc.file)
+                    }
                   })
                   .then(() => {})
               }}
@@ -108,10 +112,10 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
 
       <DefaultDialog open={open} setOpen={setOpen} onClose={() => setOpen(false)} title={bc?.label}>
         {bc.file.mimetype === 'application/pdf' ? (
-          <iframe src={presignedurl} width='100%' height='600px' title={bc.file.filename} />
+          <iframe src={presignedurl} width='100%' height='600px' title={bc.file.originalName} />
         ) : bc.file.mimetype.startsWith('image/') ? (
           <>
-            <img src={presignedurl} alt={bc.file.filename} style={{ maxWidth: '100%', maxHeight: '600px' }} />
+            <img src={presignedurl} alt={bc.file.originalName} style={{ maxWidth: '100%', maxHeight: '600px' }} />
           </>
         ) : (
           <div className='flex flex-col justify-center items-center p-4'>

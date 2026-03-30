@@ -67,8 +67,10 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
     if (image) {
       setImageUrl(URL.createObjectURL(image))
     } else if (user?.image) {
-      Utilsmethod.getFileFormApi(user?.image).then(value => {
-        setImageUrl(value)
+      Utilsmethod.getFileFormApi(user?.image.storageKey).then(value => {
+        if (value) {
+          setImageUrl(value)
+        }
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

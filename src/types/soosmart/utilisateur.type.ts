@@ -1,6 +1,8 @@
 import type { InferInput } from 'valibot'
 import { picklist, custom, email, maxLength, minLength, object, pipe, regex, string, file, optional } from 'valibot'
 
+import type { FileObject } from './file.object.type'
+
 export type UtilisateurDto = {
   id: string
   createdat: Date
@@ -12,7 +14,7 @@ export type UtilisateurDto = {
   numero: string
   username: string
   role: string
-  image: string
+  image: FileObject | null
   isActive: boolean
 }
 
@@ -36,11 +38,13 @@ export const userUpdateSchema = object({
   prenom: pipe(string(), minLength(1, 'Le prénom est requis')),
   email: pipe(string(), minLength(1, "L'email est requis"), email('Email invalide')),
   numero: pipe(string(), minLength(1, 'Le numéro est requis')),
-  username: optional(pipe(
-    string(),
-    minLength(4, "Le nom d'utilisateur doit contenir au moins 4 caractères"),
-    maxLength(9, "Le nom d'utilisateur doit contenir au maximum 9 caractères")
-  )),
+  username: optional(
+    pipe(
+      string(),
+      minLength(4, "Le nom d'utilisateur doit contenir au moins 4 caractères"),
+      maxLength(9, "Le nom d'utilisateur doit contenir au maximum 9 caractères")
+    )
+  ),
   role: pipe(string(), picklist(['ADMIN', 'USER'], "Ce role n'existe pas"))
 })
 
@@ -63,6 +67,5 @@ export const changePasswordSchema = pipe(
 )
 
 export type UtilsateurRegister = InferInput<typeof userUpdateSchema>
-
 
 export type ChangePassword = InferInput<typeof changePasswordSchema>

@@ -82,8 +82,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
-const TableGeneric = <T, >(props: TableProps<T> ) => {
-
+const TableGeneric = <T,>(props: TableProps<T>) => {
   const {
     tabledata: table_data,
     columns,
@@ -106,9 +105,8 @@ const TableGeneric = <T, >(props: TableProps<T> ) => {
     buttonadd
   } = props
 
-
   const defaultButton: ButtonProps = {
-size:'small',
+    size: 'small',
     variant: 'contained',
     children: 'Nouveau',
     startIcon: <PlusIcon />,
@@ -167,36 +165,36 @@ size:'small',
   return (
     <>
       <Card {...cardProps}>
-        {title && <CardHeader title={title ?? 'Table'} className="pbe-4" />}
+        {title && <CardHeader title={title ?? 'Table'} className='pbe-4' />}
 
         {displayTableHeaderSession && (
-          <div className="flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4">
+          <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
             {!pagination ||
               (pageSize && (
                 <CustomTextField
                   select
                   value={pagination ? (pageSize ?? 10) : table.getState().pagination.pageSize}
                   onChange={e => handlePageSizeChange(e)}
-                  className="max-sm:is-full sm:is-[70px]"
+                  className='max-sm:is-full sm:is-[70px]'
                 >
-                  <MenuItem value="5">5</MenuItem>
-                  <MenuItem value="10">10</MenuItem>
-                  <MenuItem value="25">25</MenuItem>
-                  <MenuItem value="50">50</MenuItem>
+                  <MenuItem value='5'>5</MenuItem>
+                  <MenuItem value='10'>10</MenuItem>
+                  <MenuItem value='25'>25</MenuItem>
+                  <MenuItem value='50'>50</MenuItem>
                 </CustomTextField>
               ))}
-            <div className="flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4">
+            <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
               {FilterComponent}
               {visibleColumns && (
                 <>
-                  <Button variant="outlined" aria-haspopup="true" onClick={handleClick} aria-controls="customized-menu">
+                  <Button variant='outlined' aria-haspopup='true' onClick={handleClick} aria-controls='customized-menu'>
                     Colonnes
                   </Button>
                   <Menu
                     keepMounted
                     elevation={0}
                     anchorEl={anchorEl}
-                    id="customized-menu"
+                    id='customized-menu'
                     onClose={handleClose}
                     open={Boolean(anchorEl)}
                     anchorOrigin={{
@@ -223,7 +221,7 @@ size:'small',
                               e.preventDefault()
                               column.toggleVisibility()
                             }}
-                            className="flex items-center gap-2"
+                            className='flex items-center gap-2'
                           >
                             <Checkbox
                               checked={column.getIsVisible()}
@@ -243,8 +241,8 @@ size:'small',
                 <DebouncedInput
                   value={globalFilter ?? ''}
                   onChange={value => setGlobalFilter && setGlobalFilter(String(value))}
-                  placeholder="Recherche"
-                  className="max-sm:is-full"
+                  placeholder='Recherche'
+                  className='max-sm:is-full'
                 />
               )}
 
@@ -252,80 +250,65 @@ size:'small',
             </div>
           </div>
         )}
-        <div className="overflow-x-auto">
+        <div className='overflow-x-auto'>
           <table className={tableStyles.table}>
             <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id}>
-                    {header.isPlaceholder ? null : renderHeaderCell ? (
-                      renderHeaderCell(header)
-                    ) : (
-                      <div
-                        className={classnames({
-                          'flex justify-between items-center': header.column.getIsSorted(),
-                          'cursor-pointer select-none': header.column.getCanSort()
-                        })}
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                        {{
-                          asc: <ArrowUp />,
-                          desc: <ArrowDown />
-                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                      </div>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map(header => (
+                    <th key={header.id}>
+                      {header.isPlaceholder ? null : renderHeaderCell ? (
+                        renderHeaderCell(header)
+                      ) : (
+                        <div
+                          className={classnames({
+                            'flex justify-between items-center': header.column.getIsSorted(),
+                            'cursor-pointer select-none': header.column.getCanSort()
+                          })}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {{
+                            asc: <ArrowUp />,
+                            desc: <ArrowDown />
+                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                        </div>
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
             </thead>
             {isLoading ? (
               <tbody>
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
-                  <LoadingWithoutModal padding="p-4" />
-                </td>
-              </tr>
+                <tr>
+                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                    <LoadingWithoutModal padding='p-4' />
+                  </td>
+                </tr>
               </tbody>
             ) : isError ? (
               <tbody>
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
-                  <ErrorView />
-                </td>
-              </tr>
+                <tr>
+                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                    <ErrorView />
+                  </td>
+                </tr>
               </tbody>
             ) : table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
-                  <div>
-                    <SearchX className="mx-auto mb-2 text-gray-400" size={48} />
-                    <Typography>Aucune donnée disponible</Typography>
-                  </div>
-                </td>
-              </tr>
+                <tr>
+                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                    <div>
+                      <SearchX className='mx-auto mb-2 text-gray-400' size={48} />
+                      <Typography>Aucune donnée disponible</Typography>
+                    </div>
+                  </td>
+                </tr>
               </tbody>
             ) : pagination ? (
               <tbody>
-              {table.getRowModel().rows.map(row => {
-                return (
-                  <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                    {row.getVisibleCells().map(cell => (
-                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                    ))}
-                  </tr>
-                )
-              })}
-              </tbody>
-            ) : (
-              <tbody>
-              {table
-                .getRowModel()
-                .rows.slice(0, table.getState().pagination.pageSize)
-                .map(row => {
+                {table.getRowModel().rows.map(row => {
                   return (
                     <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
                       {row.getVisibleCells().map(cell => (
@@ -334,6 +317,21 @@ size:'small',
                     </tr>
                   )
                 })}
+              </tbody>
+            ) : (
+              <tbody>
+                {table
+                  .getRowModel()
+                  .rows.slice(0, table.getState().pagination.pageSize)
+                  .map(row => {
+                    return (
+                      <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
+                        {row.getVisibleCells().map(cell => (
+                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                        ))}
+                      </tr>
+                    )
+                  })}
               </tbody>
             )}
           </table>

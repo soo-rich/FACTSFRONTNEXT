@@ -42,3 +42,6 @@ src/assets/iconify-icons/generated-icons.css
 
 
 .idea
+
+
+*.log

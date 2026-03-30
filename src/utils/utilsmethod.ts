@@ -104,20 +104,22 @@ class UtiliMetod {
     return colors[Math.floor(Math.random() * colors.length)]
   }
 
-  static getFileFormApi = async (url: string) => {
-    if (url == undefined || url.length>1) {
-      return ''
+  static getFileFormApi = async (url: string, provider: 'local' | 'minio' = 'local') => {
+    if (url == undefined || url.length > 1) {
+      return null
     }
 
-    const uri = (await instance.get<{ presignedUrl: string }>('uploads/presigned-url', { params: { filename:url } }))
-      .data
+    if (provider === 'local') {
+      return process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') + url
+    }
 
-    return uri.presignedUrl
+    if (provider === 'minio') {
+      const uri = (await instance.get<{ presignedUrl: string }>('uploads/presigned-url', { params: { filename: url } }))
+        .data
+
+      return uri.presignedUrl
+    }
   }
-
-  // static getFileFormApi = (url: string) => {
-  //   return instance.defaults.baseURL + url
-  // }
 
   static getImagefromLocal = async (url: string) => {
     return process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') + url
@@ -137,7 +139,7 @@ class UtiliMetod {
         const link = document.createElement('a')
 
         link.href = url
-        link.download = file ? file.filename : 'file'
+        link.download = file ? file.originalName : 'file'
         document.body.appendChild(link)
         link.click()
 
