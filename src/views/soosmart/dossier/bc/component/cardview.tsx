@@ -29,7 +29,7 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
   const ms_wordsvg = '/images/svg/ms-word-svgrepo-com.svg'
 
   const [open, setOpen] = useState(false)
-  const [presignedurl, setPresignedurl] = useState('')
+  const [presignedurl, setPresignedurl] = useState<string | null>(null)
 
   // Hooks
   const { lang: locale } = useParams()
@@ -52,9 +52,7 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
 
   useEffect(() => {
     UtilsMetod.getFileFormApi(bc.file.storageKey, bc.file.provider).then(value => {
-      if (value?.length && value?.length > 10) {
-        setPresignedurl(value)
-      }
+      if (value) setPresignedurl(value)
     })
   }, [bc.file.storageKey, bc.file.provider])
 
@@ -113,12 +111,12 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
       </Card>
 
       <DefaultDialog open={open} setOpen={setOpen} onClose={() => setOpen(false)} title={bc?.label}>
-        {bc.file.mimetype === 'application/pdf' ? (
+        {!presignedurl ? (
+          <div className='flex justify-center items-center h-40 text-gray-400'>Chargement...</div>
+        ) : bc.file.mimetype === 'application/pdf' ? (
           <iframe src={presignedurl} width='100%' height='600px' title={bc.file.originalName} />
         ) : bc.file.mimetype.startsWith('image/') ? (
-          <>
-            <img src={presignedurl} alt={bc.file.originalName} style={{ maxWidth: '100%', maxHeight: '600px' }} />
-          </>
+          <img src={presignedurl} alt={bc.file.originalName} style={{ maxWidth: '100%', maxHeight: '600px' }} />
         ) : (
           <div className='flex flex-col justify-center items-center p-4'>
             <a href={presignedurl} target='_blank' rel='noopener noreferrer' className='text-blue-600 underline'>
@@ -183,7 +181,7 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
                 size={'small'}
                 startIcon={<Download />}
                 onClick={() => {
-                  UtilsMetod.download(presignedurl, bc.file).then(() => {})
+                  if (presignedurl) UtilsMetod.download(presignedurl, bc.file)
                 }}
               >
                 Télécharger

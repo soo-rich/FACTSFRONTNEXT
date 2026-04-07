@@ -105,7 +105,7 @@ class UtilsMetod {
   }
 
   static getFileFormApi = async (url: string, provider: 'local' | 'minio' = 'local') => {
-    if (url == undefined || url.length > 1) {
+    if (!url) {
       return null
     }
 
