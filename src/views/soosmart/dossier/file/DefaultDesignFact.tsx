@@ -67,20 +67,6 @@ const DefaultDesignFact = ({
         <SoosmartLogo width='100%' height='100%' />
       </div>
 
-      {/*<div
-        style={{
-          position: 'absolute',
-          bottom: '20%',
-          left: '15%',
-          transform: 'rotate(35deg) scale(1.2)',
-          opacity: 0.03,
-          zIndex: 1,
-          pointerEvents: 'none',
-          userSelect: 'none',
-        }}
-      >
-        <SoosmartLogo width="6rem" height="6rem" />
-      </div>*/}
       <CardContent className='sm:p-12!'>
         <Grid container spacing={0} direction={'column'} gap={0} className={'no-print'}>
           <Grid
