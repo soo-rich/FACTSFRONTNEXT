@@ -114,10 +114,9 @@ class UtilsMetod {
     }
 
     if (provider === 'minio') {
-      const uri = (await instance.get<{ presignedUrl: string }>('uploads/presigned-url', { params: { filename: url } }))
-        .data
+      const uri = (await instance.get('uploads/presigned-url', { params: { filename: url } })).data
 
-      return uri.presignedUrl
+      return uri.url
     }
   }
 

@@ -306,7 +306,8 @@ const AddModalBc = () => {
                         button={false}
                         showPreview={true}
                         accept={{
-                          'application/': ['.pdf', '.doc', '.docx', '.xls', '.xlsx']
+                          'application/': ['.pdf', '.doc', '.docx', '.xls', '.xlsx'],
+                          'image/': ['.jpg', '.jpeg', '.png', '.gif']
                         }}
                       />
                     )}

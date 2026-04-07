@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import Link from 'next/link'
 
@@ -16,6 +16,8 @@ import CardContent from '@mui/material/CardContent'
 
 import { toast } from 'react-toastify'
 
+import { useQuery } from '@tanstack/react-query'
+
 import type { PurchaseOrderType } from '@/types/soosmart/dossier/purchaseOrder.type'
 import UtilsMetod from '@/utils/utilsmethod'
 import { getLocalizedUrl } from '@/utils/i18n'
@@ -29,7 +31,18 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
   const ms_wordsvg = '/images/svg/ms-word-svgrepo-com.svg'
 
   const [open, setOpen] = useState(false)
-  const [presignedurl, setPresignedurl] = useState<string | null>(null)
+
+  // const [presignedurl, setPresignedurl] = useState<string | null>(null)
+
+  const { data: presignedurl, isLoading } = useQuery({
+    queryKey: ['purchaseOrder', 'presignedUrl', bc.file.storageKey, bc.file.provider],
+    queryFn: async () => {
+      return (await UtilsMetod.getFileFormApi(bc.file.storageKey, bc.file.provider)) as string
+    },
+    enabled: open && !!bc.file.storageKey && !!bc.file.provider,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5 // 5 minutes
+  })
 
   // Hooks
   const { lang: locale } = useParams()
@@ -48,13 +61,21 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
     }
   }
 
+  // useEffect(() => {
+  //   if (!open) {
+  //     setPresignedurl(null)
 
+  //     return
+  //   }
 
-  useEffect(() => {
-    UtilsMetod.getFileFormApi(bc.file.storageKey, bc.file.provider).then(value => {
-      if (value) setPresignedurl(value)
-    })
-  }, [bc.file.storageKey, bc.file.provider])
+  //   UtilsMetod.getFileFormApi(bc.file.storageKey, bc.file.provider)
+  //     .then(value => {
+  //       if (value) setPresignedurl(value)
+  //     })
+  //     .catch(() => {
+  //       toast.error('Erreur lors de la récupération du fichier')
+  //     })
+  // }, [open, bc.file.storageKey, bc.file.provider])
 
   return (
     <>
@@ -111,19 +132,22 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
       </Card>
 
       <DefaultDialog open={open} setOpen={setOpen} onClose={() => setOpen(false)} title={bc?.label}>
-        {!presignedurl ? (
+        {isLoading ? (
           <div className='flex justify-center items-center h-40 text-gray-400'>Chargement...</div>
-        ) : bc.file.mimetype === 'application/pdf' ? (
-          <iframe src={presignedurl} width='100%' height='600px' title={bc.file.originalName} />
-        ) : bc.file.mimetype.startsWith('image/') ? (
-          <img src={presignedurl} alt={bc.file.originalName} style={{ maxWidth: '100%', maxHeight: '600px' }} />
         ) : (
-          <div className='flex flex-col justify-center items-center p-4'>
-            <a href={presignedurl} target='_blank' rel='noopener noreferrer' className='text-blue-600 underline'>
-              Ouvrir le fichier
-            </a>
-            <p className='mt-2 text-gray-600'>Aperçu non disponible pour ce type de fichier.</p>
-          </div>
+          presignedurl &&
+          (bc.file.mimetype === 'application/pdf' ? (
+            <iframe src={presignedurl} width='100%' height='600px' title={bc.file.originalName} />
+          ) : bc.file.mimetype.startsWith('image/') ? (
+            <img src={presignedurl} alt={bc.file.originalName} style={{ maxWidth: '100%', maxHeight: '600px' }} />
+          ) : (
+            <div className='flex flex-col justify-center items-center p-4'>
+              <a href={presignedurl} target='_blank' rel='noopener noreferrer' className='text-blue-600 underline'>
+                Ouvrir le fichier
+              </a>
+              <p className='mt-2 text-gray-600'>Aperçu non disponible pour ce type de fichier.</p>
+            </div>
+          ))
         )}
         <div className='grid grid-cols-1 justify-start mt-4'>
           <Typography variant='h6' className='text-xl font-bold underline'>
