@@ -100,7 +100,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey: [ProformaService.PROFORMA_KEY, pageIndex, pageSize]
+          queryKey
         })
         .then(r => r)
       toast.success('Proforma supprimée avec succès')
