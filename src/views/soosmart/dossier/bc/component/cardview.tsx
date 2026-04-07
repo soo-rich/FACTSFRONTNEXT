@@ -9,10 +9,12 @@ import { useParams } from 'next/navigation'
 import { CircleX, Download, EyeIcon, FileIcon } from 'lucide-react'
 
 import Button from '@mui/material/Button'
-
 import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import Chip from '@mui/material/Chip'
+import Divider from '@mui/material/Divider'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { toast } from 'react-toastify'
 
@@ -32,8 +34,6 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
 
   const [open, setOpen] = useState(false)
 
-  // const [presignedurl, setPresignedurl] = useState<string | null>(null)
-
   const { data: presignedurl, isLoading } = useQuery({
     queryKey: ['purchaseOrder', 'presignedUrl', bc.file.storageKey, bc.file.provider],
     queryFn: async () => {
@@ -44,85 +44,91 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
-  // Hooks
   const { lang: locale } = useParams()
 
-  const getimageformMineType = () => {
+  const getMimeLabel = (mime: string) => {
+    if (mime === 'application/pdf') return 'PDF'
+    if (mime.startsWith('image/')) return 'Image'
+    if (mime.includes('word')) return 'Word'
+
+    return 'Fichier'
+  }
+
+  const getFileTypeIcon = () => {
     if (bc.file.mimetype === 'application/pdf') {
-      return <iframe src={pdfisvg} className={'is-[150px]'} />
-    } else if (['image/jpeg', 'image/png', 'image/gif'].includes(bc.file.mimetype)) {
-      return <img src={imagesvg} alt={bc.file.originalName} className={'is-[150px]'} />
-    } else if (
+      return <img src={pdfisvg} alt='PDF' className='size-[80px]' />
+    }
+
+    if (['image/jpeg', 'image/png', 'image/gif'].includes(bc.file.mimetype)) {
+      return <img src={imagesvg} alt='Image' className='size-[80px]' />
+    }
+
+    if (
       ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(
         bc.file.mimetype
       )
     ) {
-      return <img src={ms_wordsvg} alt={bc.file.originalName} className={'is-[150px]'} />
+      return <img src={ms_wordsvg} alt='Word' className='size-[80px]' />
     }
+
+    return <FileIcon size={80} className='text-gray-400' />
   }
 
-  // useEffect(() => {
-  //   if (!open) {
-  //     setPresignedurl(null)
-
-  //     return
-  //   }
-
-  //   UtilsMetod.getFileFormApi(bc.file.storageKey, bc.file.provider)
-  //     .then(value => {
-  //       if (value) setPresignedurl(value)
-  //     })
-  //     .catch(() => {
-  //       toast.error('Erreur lors de la récupération du fichier')
-  //     })
-  // }, [open, bc.file.storageKey, bc.file.provider])
+  const MetaRow = ({ label, value, uppercase }: { label: string; value: string; uppercase?: boolean }) => (
+    <div>
+      <Typography variant='caption' className='text-gray-500 font-medium block'>
+        {label}
+      </Typography>
+      <Typography variant='body2' className={uppercase ? 'uppercase text-primary' : 'text-primary'}>
+        {value}
+      </Typography>
+    </div>
+  )
 
   return (
     <>
-      <Card className='border rounded bs-full'>
-        <CardContent className='flex flex-col gap-4 shadow shadow-slate-200/50 p-1'>
-          <div className={'flex flex-col justify-between  gap-1 bg-gray-200/50 rounded-t-md'}>
-            <div className={'flex  justify-end items-end gap-2'}>
-              <CustomIconButton onClick={() => onRemove && onRemove()}>
-                <CircleX size={20} className='cursor-pointer hover:text-red-700' />
-              </CustomIconButton>
-            </div>
-            <div className={'flex flex-col gap-3 justify-center items-center'}>
-              {getimageformMineType()}
+      <Card className='border rounded-xl overflow-hidden relative'>
+        {/* Remove overlay */}
+        <div className='absolute top-2 right-2 z-10'>
+          <CustomIconButton size='small' onClick={() => onRemove?.()}>
+            <CircleX size={16} className='text-gray-400 hover:text-red-600' />
+          </CustomIconButton>
+        </div>
 
-              <Typography className={' text-center text-blue-900 font-bold text-wrap'}> {bc.label}</Typography>
-            </div>
-          </div>
-          <div className={'flex flex-row justify-between items-center gap-1 p-2'}>
+        {/* Preview zone — fixed height */}
+        <div className='flex flex-col items-center justify-center gap-2 bg-gray-100 h-40 px-4'>
+          {getFileTypeIcon()}
+          <Chip label={getMimeLabel(bc.file.mimetype)} size='small' variant='outlined' className='text-xs' />
+        </div>
+
+        <Divider />
+
+        <CardContent className='p-3 flex flex-col gap-2'>
+          <Typography className='text-center text-blue-900 font-semibold text-sm line-clamp-2'>{bc.label}</Typography>
+          <Typography variant='caption' className='text-center text-gray-400 block'>
+            {UtilsMetod.formatBytes(bc.file.size)}
+          </Typography>
+          <div className='flex gap-2 mt-1'>
             <Button
-              variant={'tonal'}
-              size={'small'}
-              className={'rounded-2xl'}
-              startIcon={<EyeIcon />}
-              onClick={() => {
-                setOpen(true)
-              }}
+              variant='tonal'
+              size='small'
+              fullWidth
+              startIcon={<EyeIcon size={14} />}
+              onClick={() => setOpen(true)}
             >
               Voir
             </Button>
             <Button
-              variant={'contained'}
-              size={'small'}
-              className={'rounded-2xl'}
-              startIcon={<Download />}
+              variant='contained'
+              size='small'
+              fullWidth
+              startIcon={<Download size={14} />}
               onClick={() => {
                 UtilsMetod.getFileFormApi(bc.file.storageKey, bc.file.provider)
                   .then(value => {
-                    if (value) {
-                      UtilsMetod.download(value, bc.file)
-                    }
+                    if (value) UtilsMetod.download(value, bc.file)
                   })
-                  .catch(() => {
-                    toast.error('Erreur lors de la récupération du fichier')
-                  })
-                  .finally(() => {
-                    setOpen(false)
-                  })
+                  .catch(() => toast.error('Erreur lors de la récupération du fichier'))
               }}
             >
               Télécharger
@@ -132,86 +138,85 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
       </Card>
 
       <DefaultDialog open={open} setOpen={setOpen} onClose={() => setOpen(false)} title={bc?.label}>
+        {/* Preview */}
         {isLoading ? (
-          <div className='flex justify-center items-center h-40 text-gray-400'>Chargement...</div>
-        ) : (
-          presignedurl &&
-          (bc.file.mimetype === 'application/pdf' ? (
-            <iframe src={presignedurl} width='100%' height='600px' title={bc.file.originalName} />
+          <div className='flex justify-center items-center h-40'>
+            <CircularProgress size={32} />
+          </div>
+        ) : presignedurl ? (
+          bc.file.mimetype === 'application/pdf' ? (
+            <iframe src={presignedurl} width='100%' height='500px' title={bc.file.originalName} />
           ) : bc.file.mimetype.startsWith('image/') ? (
-            <img src={presignedurl} alt={bc.file.originalName} style={{ maxWidth: '100%', maxHeight: '600px' }} />
+            <img src={presignedurl} alt={bc.file.originalName} className='max-w-full max-h-[500px] mx-auto block' />
           ) : (
-            <div className='flex flex-col justify-center items-center p-4'>
+            <div className='flex flex-col items-center gap-2 p-4'>
               <a href={presignedurl} target='_blank' rel='noopener noreferrer' className='text-blue-600 underline'>
                 Ouvrir le fichier
               </a>
-              <p className='mt-2 text-gray-600'>Aperçu non disponible pour ce type de fichier.</p>
-            </div>
-          ))
-        )}
-        <div className='grid grid-cols-1 justify-start mt-4'>
-          <Typography variant='h6' className='text-xl font-bold underline'>
-            Information
-          </Typography>
-          <div className='grid grid-cols-2 justify-start mt-4'>
-            <div>
-              <Typography variant='body1'>
-                <span className='font-bold'>Nom du fichier :</span>{' '}
-                <span className='text-primary'>{bc.file.originalName}</span>
-              </Typography>
-              <Typography variant='body1'>
-                <span className='font-bold'>Type de contenu :</span> {bc.file.mimetype}
-              </Typography>
-              <Typography variant='body1'>
-                <span className='font-bold'>Taille du fichier :</span> {UtilsMetod.formatBytes(bc.file.size)}
+              <Typography variant='caption' className='text-gray-500'>
+                Aperçu non disponible pour ce type de fichier.
               </Typography>
             </div>
-            <div>
-              {' '}
-              <Typography variant='body1'>
-                <span className='font-bold'>Téléchargé par :</span>{' '}
-                <span className='uppercase text-primary'>{bc?.file?.uploadBy}</span>
-              </Typography>
-              <Typography variant='body1'>
-                <span className='font-bold'>Mis à jour le :</span> {new Date(bc.file.updatedat).toLocaleDateString()}
-              </Typography>
-            </div>
-            <div className='col-span-2 mt-4 grid grid-cols-2 gap-2'>
-              {bc?.proforma?.numero && (
-                <Button
-                  variant='outlined'
-                  component={Link}
-                  href={getLocalizedUrl(`/docs/${bc?.proforma?.numero}`, locale as Locale)}
-                  startIcon={<FileIcon />}
-                >
-                  Proforma
-                </Button>
-              )}
-              {bc?.bordereau?.numero && (
-                <Button
-                  variant='outlined'
-                  color={'warning'}
-                  component={Link}
-                  href={getLocalizedUrl(`/docs/${bc?.bordereau?.numero}`, locale as Locale)}
-                  startIcon={<FileIcon />}
-                >
-                  Bordereau
-                </Button>
-              )}
-
-              <Button
-                variant={'outlined'}
-                color={'success'}
-                size={'small'}
-                startIcon={<Download />}
-                onClick={() => {
-                  if (presignedurl) UtilsMetod.download(presignedurl, bc.file)
-                }}
-              >
-                Télécharger
-              </Button>
-            </div>
+          )
+        ) : (
+          <div className='flex justify-center items-center h-40'>
+            <Typography variant='body2' className='text-gray-400'>
+              Impossible de charger l&apos;aperçu.
+            </Typography>
           </div>
+        )}
+
+        <Divider className='my-3' />
+
+        {/* Metadata */}
+        <Typography variant='subtitle2' className='font-bold mb-2'>
+          Informations
+        </Typography>
+        <div className='grid grid-cols-2 gap-x-4 gap-y-3'>
+          <MetaRow label='Nom du fichier' value={bc.file.originalName} />
+          <MetaRow label='Type' value={getMimeLabel(bc.file.mimetype)} />
+          <MetaRow label='Taille' value={UtilsMetod.formatBytes(bc.file.size)} />
+          <MetaRow label='Téléchargé par' value={bc.file.uploadBy ?? ''} uppercase />
+          <MetaRow label='Mis à jour le' value={new Date(bc.file.updatedat).toLocaleDateString()} />
+        </div>
+
+        {/* Actions */}
+        <div className='grid grid-cols-2 gap-2 mt-4'>
+          {bc?.proforma?.numero && (
+            <Button
+              variant='outlined'
+              component={Link}
+              href={getLocalizedUrl(`/docs/${bc.proforma.numero}`, locale as Locale)}
+              startIcon={<FileIcon size={14} />}
+              size='small'
+            >
+              Proforma
+            </Button>
+          )}
+          {bc?.bordereau?.numero && (
+            <Button
+              variant='outlined'
+              color='warning'
+              component={Link}
+              href={getLocalizedUrl(`/docs/${bc.bordereau.numero}`, locale as Locale)}
+              startIcon={<FileIcon size={14} />}
+              size='small'
+            >
+              Bordereau
+            </Button>
+          )}
+          <Button
+            variant='outlined'
+            color='success'
+            size='small'
+            startIcon={<Download size={14} />}
+            disabled={isLoading || !presignedurl}
+            onClick={() => {
+              if (presignedurl) UtilsMetod.download(presignedurl, bc.file)
+            }}
+          >
+            Télécharger
+          </Button>
         </div>
       </DefaultDialog>
     </>
