@@ -52,7 +52,7 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
 
   useEffect(() => {
     UtilsMetod.getFileFormApi(bc.file.storageKey, bc.file.provider).then(value => {
-      if (value) {
+      if (value?.length && value?.length > 10) {
         setPresignedurl(value)
       }
     })
