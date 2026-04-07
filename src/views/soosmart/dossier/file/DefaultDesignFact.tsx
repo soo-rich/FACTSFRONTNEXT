@@ -13,7 +13,7 @@ import { DocumentTypes } from '@/types/soosmart/dossier/DocumentDTO'
 
 
 import SoosmartLogo from '@components/layout/shared/SoosmartLogo'
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 import themeConfig from '@configs/themeConfig'
 import HtmlRenderer from '@components/HtmlRenderer'
 
@@ -171,7 +171,7 @@ const DefaultDesignFact = ({
                 <tr className='text-center font-medium'>
                   <td className='border  px-2 py-1'>{docs.numero}</td>
                   <td className='border  px-2 py-1'>
-                    {docs.createdat?UtiliMetod.formatDate(docs.createdat, 'dd/MM/yyyy'):''}
+                    {docs.createdat ? UtilsMetod.formatDate(docs.createdat, 'dd/MM/yyyy') : ''}
                   </td>
                   <td className='border  text-red-600  px-2 py-1'>{docs.reference}</td>
                 </tr>
@@ -212,7 +212,7 @@ const DefaultDesignFact = ({
                     <td className='border  text-center px-2 py-1'>
                       {documenttype === DocumentTypes.BORDERAU
                         ? item.prix_article
-                        : UtiliMetod.formatDevise(item.prix_article)}
+                        : UtilsMetod.formatDevise(item.prix_article)}
                     </td>
                     <td className='border  text-center px-2 py-1'>{item.quantite}</td>
                     <td className='border  px-2 py-1'>
@@ -230,19 +230,19 @@ const DefaultDesignFact = ({
                     <td colSpan={2}></td>
                     <td className='border px-2 w-28'>Total HT</td>
                     <td className='border px-2 w-28 text-center'>-</td>
-                    <td className='border px-2 w-40 text-end'>{UtiliMetod.formatDevise(docs.total_ht)}</td>
+                    <td className='border px-2 w-40 text-end'>{UtilsMetod.formatDevise(docs.total_ht)}</td>
                   </tr>
                   <tr className='text-center font-semibold'>
                     <td colSpan={2}></td>
                     <td className='border px-2 w-28'>TVA</td>
                     <td className='border px-2 w-28 text-center'>18 %</td>
-                    <td className='border px-2 w-40 text-end'>{UtiliMetod.formatDevise(docs.total_tva)}</td>
+                    <td className='border px-2 w-40 text-end'>{UtilsMetod.formatDevise(docs.total_tva)}</td>
                   </tr>
                   <tr className='text-center font-semibold'>
                     <td colSpan={2}></td>
                     <td className='border px-2 w-28'>Total TTC</td>
                     <td className='border px-2 w-28 text-center'>-</td>
-                    <td className='border px-2 w-40 text-end '>{UtiliMetod.formatDevise(docs.total_ttc)}</td>
+                    <td className='border px-2 w-40 text-end '>{UtilsMetod.formatDevise(docs.total_ttc)}</td>
                   </tr>
                 </tbody>
               </table>

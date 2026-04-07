@@ -21,7 +21,7 @@ import { ProjetService } from '@/service/projet/projet.service'
 import type { ProjetType } from '@/types/soosmart/projet.type'
 
 
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 
 
 import CustomIconButton from '@core/components/mui/IconButton'
@@ -124,11 +124,11 @@ const ProjetIndex = () => {
       }),
       columnHelper.accessor('createdat', {
         header: 'Créé le',
-        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.createdat)}</Typography>
+        cell: ({ row }) => <Typography>{UtilsMetod.formatDate(row.original.createdat)}</Typography>
       }),
       columnHelper.accessor('updatedat', {
         header: 'Mis à jour le',
-        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.updatedat)}</Typography>
+        cell: ({ row }) => <Typography>{UtilsMetod.formatDate(row.original.updatedat)}</Typography>
       }),
       columnHelper.display({
         id: 'actions', // Important : donner un ID à la colonne display
@@ -146,7 +146,7 @@ const ProjetIndex = () => {
             </CustomIconButton>
             <CustomIconButton
               onClick={() =>
-                UtiliMetod.SuppressionConfirmDialog({
+                UtilsMetod.SuppressionConfirmDialog({
                   data: row.original.projet_type,
                   confirmAction: () => DeleteMutation.mutate(row.original.id)
                 })

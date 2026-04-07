@@ -24,7 +24,7 @@ import DefaultDialog from '@components/dialogs/unique-modal/DefaultDialog'
 import { getInitials } from '@/utils/getInitials'
 import CustomAvatar from '@/@core/components/mui/Avatar'
 
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 
 import AddEditUser from '@views/soosmart/user/add-edit-user'
 import { AuthService } from '@/service/auth/auth-service'
@@ -41,7 +41,9 @@ const UserAvatar = ({ image, nom, prenom }: Pick<UtilisateurDto, 'image' | 'nom'
   const [uri, setUri] = useState<string | null>(null)
 
   useEffect(() => {
-    UtiliMetod.getFileFormApi(image?.storageKey || '', image?.provider || 'local').then(result => setUri(result ?? null))
+    UtilsMetod.getFileFormApi(image?.storageKey || '', image?.provider || 'local').then(result =>
+      setUri(result ?? null)
+    )
   }, [image?.storageKey, image?.provider])
 
   if (image && uri) {
@@ -177,7 +179,7 @@ const UserIndex = () => {
         header: 'Creer le .',
         cell: ({ row }) => (
           <Typography variant='body2' color={'info'} className='capitalize'>
-            {UtiliMetod.formatDate(row.original.createdat)}
+            {UtilsMetod.formatDate(row.original.createdat)}
           </Typography>
         ),
         enableHiding: true // Permet de cacher cette colonne
@@ -212,7 +214,7 @@ const UserIndex = () => {
                   ),
                   menuItemProps: {
                     onClick: () => {
-                      UtiliMetod.confirmDialog({
+                      UtilsMetod.confirmDialog({
                         title: row.original.nom,
                         subtitle: `Voulez-vous ${row.original.isActive ? 'désactiver' : 'activer'} cet utilisateur ?`,
                         confirmAction: () => ActivateMutation.mutate(row.original.id)
@@ -225,7 +227,7 @@ const UserIndex = () => {
                   icon: 'tabler-key cursor-pointer text-blue-600 hover:text-blue-800',
                   menuItemProps: {
                     onClick: () => {
-                      UtiliMetod.confirmDialog({
+                      UtilsMetod.confirmDialog({
                         title: row.original.nom,
                         subtitle: `Voulez-vous réinitialiser le mot de passe de ${row.original.nom} ?`,
                         confirmAction: () => ResetPasswordMutation.mutate(row.original.email)
@@ -238,7 +240,7 @@ const UserIndex = () => {
                   icon: 'tabler-trash cursor-pointer text-red-600 hover:text-red-800',
                   menuItemProps: {
                     onClick: () =>
-                      UtiliMetod.confirmDialog({
+                      UtilsMetod.confirmDialog({
                         title: row.original.nom,
                         subtitle: 'Voulez-vous supprimer cet utilisateur ?',
                         confirmAction: () => DeleteMutation.mutate(row.original.id)

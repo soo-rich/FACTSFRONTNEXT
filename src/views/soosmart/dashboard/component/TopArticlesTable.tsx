@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography'
 import { useQuery } from '@tanstack/react-query'
 
 import { StatAPIService } from '@/service/statistique/stat-api.service'
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 import LoadingWithoutModal from '@components/LoadingWithoutModal'
 import ErrorView from '@components/ErrorView'
 
@@ -55,13 +55,13 @@ const TopArticlesTable = () => {
                     </div>
                   </TableCell>
                   <TableCell align='right'>
-                    <Typography variant='body2'>{UtiliMetod.formatDevise(article.totalQuantite)}</Typography>
+                    <Typography variant='body2'>{UtilsMetod.formatDevise(article.totalQuantite)}</Typography>
                   </TableCell>
                   <TableCell align='right'>
-                    <Typography variant='body2'>{UtiliMetod.formatDevise(article.totalRevenue)} FCFA</Typography>
+                    <Typography variant='body2'>{UtilsMetod.formatDevise(article.totalRevenue)} FCFA</Typography>
                   </TableCell>
                   <TableCell align='right'>
-                    <Typography variant='body2'>{UtiliMetod.formatDevise(article.averagePrice)} FCFA</Typography>
+                    <Typography variant='body2'>{UtilsMetod.formatDevise(article.averagePrice)} FCFA</Typography>
                   </TableCell>
                 </TableRow>
               ))}

@@ -14,14 +14,13 @@ import Grid from '@mui/material/Grid'
 
 import Button from '@mui/material/Button'
 
-import { BorderauService } from '@/service/dossier/borderau.service'
 import { PurchaseOrderService } from '@/service/dossier/purchaseOrder.service'
 import LoadingWithoutModal from '@components/LoadingWithoutModal'
 import ErrorView from '@components/ErrorView'
 import DebouncedInput from '@components/CustomInput/DebounceInput'
 import TableManualPaginationComponent from '@components/table/TableManualPaginationComponent'
 import CardView from '@views/soosmart/dossier/bc/component/cardview'
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 import Link from '@/components/Link'
 
 import { getLocalizedUrl } from '@/utils/i18n'
@@ -37,8 +36,10 @@ const PurchaseOrderList = () => {
   // hooks
   const { lang: locale } = useParams()
 
+  const queryKey = [PurchaseOrderService.queryKey.all({ page: pageIndex, pagesize: pageSize, search: filter })]
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: [PurchaseOrderService.PURCHASE_ORDER_KEY, pageIndex, filter],
+    queryKey,
     queryFn: async () => {
       return await PurchaseOrderService.getAll({
         page: pageIndex,
@@ -57,7 +58,7 @@ const PurchaseOrderList = () => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey: [BorderauService.BORDERAU_KEY, pageIndex, pageSize]
+          queryKey
         })
         .then(r => r)
       toast.success('Bon de commande supprimée avec succès')
@@ -80,7 +81,6 @@ const PurchaseOrderList = () => {
           alignItems: 'center'
         }}
       >
-
         <Button
           component={Link}
           href={getLocalizedUrl('purchase_order/create', locale as Locale)}
@@ -89,12 +89,7 @@ const PurchaseOrderList = () => {
         >
           Ajouter un bon de commande
         </Button>
-        <DebouncedInput
-
-          value={filter}
-          onChange={data => setFilter(String(data))}
-          placeholder={'Rechercher'}
-        />
+        <DebouncedInput value={filter} onChange={data => setFilter(String(data))} placeholder={'Rechercher'} />
       </Grid>
       <Grid
         container
@@ -121,8 +116,8 @@ const PurchaseOrderList = () => {
               <CardView
                 bc={item}
                 onRemove={() =>
-                  UtiliMetod.SuppressionConfirmDialog({
-                    data: item.file.filename,
+                  UtilsMetod.SuppressionConfirmDialog({
+                    data: item.file.storageKey,
                     confirmAction: () => DeleteMutation.mutate(item.id)
                   })
                 }

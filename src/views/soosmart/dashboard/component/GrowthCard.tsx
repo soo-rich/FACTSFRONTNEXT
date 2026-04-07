@@ -10,7 +10,7 @@ import classnames from 'classnames'
 
 import CustomAvatar from '@core/components/mui/Avatar'
 import { StatAPIService } from '@/service/statistique/stat-api.service'
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 import LoadingWithoutModal from '@components/LoadingWithoutModal'
 import ErrorView from '@components/ErrorView'
 
@@ -38,7 +38,7 @@ const GrowthCard = () => {
           </CustomAvatar>
           <div className='flex flex-col'>
             <div className='flex items-center gap-2'>
-              <Typography variant='h4'>{UtiliMetod.formatDevise(data.currentPeriodRevenue)} FCFA</Typography>
+              <Typography variant='h4'>{UtilsMetod.formatDevise(data.currentPeriodRevenue)} FCFA</Typography>
               <Chip
                 label={`${isPositive ? '+' : ''}${data.growthRate.toFixed(1)}%`}
                 color={growthColor}
@@ -56,7 +56,7 @@ const GrowthCard = () => {
             <i className={classnames('tabler-calendar-minus', 'text-[28px]')} />
           </CustomAvatar>
           <div className='flex flex-col'>
-            <Typography variant='h5'>{UtiliMetod.formatDevise(data.previousPeriodRevenue)} FCFA</Typography>
+            <Typography variant='h5'>{UtilsMetod.formatDevise(data.previousPeriodRevenue)} FCFA</Typography>
             <Typography variant='body2' color='text.secondary'>
               Mois précédent ({data.previousPeriodCount} proforma{data.previousPeriodCount > 1 ? 's' : ''})
             </Typography>

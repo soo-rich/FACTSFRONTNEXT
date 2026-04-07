@@ -16,7 +16,7 @@ import classnames from 'classnames'
 
 import CustomAvatar from '@core/components/mui/Avatar'
 import { StatAPIService } from '@/service/statistique/stat-api.service'
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 import LoadingWithoutModal from '@components/LoadingWithoutModal'
 import ErrorView from '@components/ErrorView'
 
@@ -77,7 +77,7 @@ const ClientRankingTable = () => {
                   </TableCell>
                   <TableCell align='right'>
                     <Typography variant='body2' className='font-medium'>
-                      {UtiliMetod.formatDevise(client.totalHT)} FCFA
+                      {UtilsMetod.formatDevise(client.totalHT)} FCFA
                     </Typography>
                   </TableCell>
                 </TableRow>

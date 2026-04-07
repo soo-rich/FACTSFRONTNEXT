@@ -15,7 +15,7 @@ import Tooltip from '@mui/material/Tooltip'
 import TableGeneric from '@components/table/TableGeneric'
 import type { ClientType } from '@/types/soosmart/client.type'
 import { ClientService } from '@/service/client/client.service'
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 
 import DefaultDialog from '@/components/dialogs/unique-modal/DefaultDialog'
 import AddEditClient from '@views/soosmart/client/add-edit-client'
@@ -81,14 +81,9 @@ const ClientIndex = () => {
         cell: ({ row }) => (
           <Tooltip placement={'top'} title={row.original.potentiel ? 'Oui' : 'Non'}>
             {row.original.potentiel ? (
-              <i
-                className={' bg-success text-2xl tabler-square-rounded-check-filled '}
-              ></i>
+              <i className={' bg-success text-2xl tabler-square-rounded-check-filled '}></i>
             ) : (
-              <i
-                className={'bg-error text-2xl tabler-square-rounded-x '}
-
-              ></i>
+              <i className={'bg-error text-2xl tabler-square-rounded-x '}></i>
             )}
           </Tooltip>
         )
@@ -114,17 +109,17 @@ const ClientIndex = () => {
         id: 'actions',
         header: 'Actions',
         cell: ({ row }) => (
-          <Grid2 container direction={'row'} spacing={2} justifyContent="center">
-
+          <Grid2 container direction={'row'} spacing={2} justifyContent='center'>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
-              iconClassName="text-textSecondary"
+              iconClassName='text-textSecondary'
               options={[
                 {
                   text: 'Details',
                   icon: 'tabler-eye',
                   menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
-                }, {
+                },
+                {
                   text: 'Modifier',
                   icon: 'tabler-edit cursor-pointer text-yellow-600 hover:text-yellow-800',
                   menuItemProps: {
@@ -139,10 +134,11 @@ const ClientIndex = () => {
                   icon: row.original.potentiel ? 'tabler-x' : 'tabler-check',
                   menuItemProps: {
                     className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => UtiliMetod.confirmDialog({
-                      title: `Êtes-vous sûr de vouloir ${row.original.potentiel ? 'retirer ce client de la liste des potentiels' : 'marquer ce client comme potentiel'} ?`,
-                      confirmAction: () => ChangePotentielMutation.mutate(row.original.id)
-                    })
+                    onClick: () =>
+                      UtilsMetod.confirmDialog({
+                        title: `Êtes-vous sûr de vouloir ${row.original.potentiel ? 'retirer ce client de la liste des potentiels' : 'marquer ce client comme potentiel'} ?`,
+                        confirmAction: () => ChangePotentielMutation.mutate(row.original.id)
+                      })
                   }
                 },
                 {
@@ -150,14 +146,13 @@ const ClientIndex = () => {
                   icon: 'tabler-trash cursor-pointer text-red-600 hover:text-red-800',
                   menuItemProps: {
                     onClick: () =>
-                      UtiliMetod.SuppressionConfirmDialog({
+                      UtilsMetod.SuppressionConfirmDialog({
                         data: `${row.original.nom}`,
                         confirmAction: () => DeleteMutation.mutate(row.original.id)
                       })
                   }
                 }
               ]}
-
             />
           </Grid2>
         )

@@ -12,7 +12,7 @@ import classnames from 'classnames'
 import type { ThemeColor } from '@core/types'
 import CustomAvatar from '@core/components/mui/Avatar'
 import { StatAPIService } from '@/service/statistique/stat-api.service'
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 import LoadingWithoutModal from '@components/LoadingWithoutModal'
 import ErrorView from '@components/ErrorView'
 import { getLocalizedUrl } from '@/utils/i18n'
@@ -94,19 +94,19 @@ const OverviewCards = () => {
     },
     {
       title: "Chiffre d'affaires HT",
-      value: `${UtiliMetod.formatDevise(data.totalRevenueHT)} FCFA`,
+      value: `${UtilsMetod.formatDevise(data.totalRevenueHT)} FCFA`,
       icon: 'tabler-currency-dollar',
       color: 'warning'
     },
     {
       title: 'Factures payées',
-      value: `${UtiliMetod.formatDevise(data.paidInvoicesAmount)} FCFA`,
+      value: `${UtilsMetod.formatDevise(data.paidInvoicesAmount)} FCFA`,
       icon: 'tabler-check',
       color: 'success'
     },
     {
       title: 'Factures impayées',
-      value: `${UtiliMetod.formatDevise(data.unpaidInvoicesAmount)} FCFA`,
+      value: `${UtilsMetod.formatDevise(data.unpaidInvoicesAmount)} FCFA`,
       icon: 'tabler-alert-circle',
       color: 'error'
     },

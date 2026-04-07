@@ -7,7 +7,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 
 import { ArticleService } from '@/service/article/article.service'
 import type { ArticleType } from '@/types/soosmart/article.type'
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 import TableGeneric from '@components/table/TableGeneric'
 import CustomIconButton from '@core/components/mui/IconButton'
 import AddEditArticle from '@views/soosmart/article/add-edit-article'
@@ -61,34 +61,35 @@ const ArticleIndex = () => {
       }),
       columnHelper.accessor('prix_unitaire', {
         header: 'Prix Unitaire',
-        cell: info => <span>{UtiliMetod.formatDevise(info.getValue())} FCFA</span>,
+        cell: info => <span>{UtilsMetod.formatDevise(info.getValue())} FCFA</span>,
         enableHiding: true // Permet de cacher cette colonne
       }),
       columnHelper.display({
         id: 'actions', // Important: donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
-          <div className="flex gap-2">
-
+          <div className='flex gap-2'>
             <CustomIconButton
               onClick={() => {
                 setSelectedArticle(row.original)
                 setIsModalOpen(true)
               }}
-              className="text-yellow-600 hover:text-yellow-800"
+              className='text-yellow-600 hover:text-yellow-800'
             >
-              <i className="tabler-edit" />
+              <i className='tabler-edit' />
             </CustomIconButton>
 
             <CustomIconButton
-              onClick={() => UtiliMetod.SuppressionConfirmDialog({
-                data: row.original.libelle,
-                confirmAction: () => DeleteMutation.mutate(row.original.id),
-                cancelAction: () => toast.info('Suppression annulée')
-              })}
-              className="text-red-600 hover:text-red-800"
+              onClick={() =>
+                UtilsMetod.SuppressionConfirmDialog({
+                  data: row.original.libelle,
+                  confirmAction: () => DeleteMutation.mutate(row.original.id),
+                  cancelAction: () => toast.info('Suppression annulée')
+                })
+              }
+              className='text-red-600 hover:text-red-800'
             >
-              <i className="tabler-trash" />
+              <i className='tabler-trash' />
             </CustomIconButton>
           </div>
         ),

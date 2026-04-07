@@ -13,7 +13,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { toast } from 'react-toastify'
 
 // MUI Imports
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 
 import TableGeneric from '@/components/table/TableGeneric'
 import { FactureService } from '@/service/dossier/facture.service'
@@ -101,7 +101,7 @@ const FactureList = () => {
       }),
       columnHelper.accessor('createdat', {
         header: 'Créé le',
-        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.createdat)}</Typography>
+        cell: ({ row }) => <Typography>{UtilsMetod.formatDate(row.original.createdat)}</Typography>
       }),
 
       // columnHelper.accessor('total_ht', {
@@ -156,7 +156,7 @@ const FactureList = () => {
                   icon: 'tabler-trash text-red-600 hover:text-red-800',
                   menuItemProps: {
                     onClick: () =>
-                      UtiliMetod.SuppressionConfirmDialog({
+                      UtilsMetod.SuppressionConfirmDialog({
                         data: row.original.bordereau.proforma.reference,
                         confirmAction: () => DeleteMutation.mutate(row.original.id)
                       })

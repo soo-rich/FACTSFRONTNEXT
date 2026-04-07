@@ -14,8 +14,10 @@ import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 
+import { toast } from 'react-toastify'
+
 import type { PurchaseOrderType } from '@/types/soosmart/dossier/purchaseOrder.type'
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
 import CustomIconButton from '@core/components/mui/IconButton'
@@ -35,31 +37,26 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
   const getimageformMineType = () => {
     if (bc.file.mimetype === 'application/pdf') {
       return <iframe src={pdfisvg} className={'is-[150px]'} />
-    } else if (
-      bc.file.mimetype === 'image/jpeg' ||
-      bc.file.mimetype === 'image/png' ||
-      bc.file.mimetype === 'image/gif'
-    ) {
+    } else if (['image/jpeg', 'image/png', 'image/gif'].includes(bc.file.mimetype)) {
       return <img src={imagesvg} alt={bc.file.originalName} className={'is-[150px]'} />
     } else if (
-      bc.file.mimetype === 'application/msword' ||
-      bc.file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(
+        bc.file.mimetype
+      )
     ) {
       return <img src={ms_wordsvg} alt={bc.file.originalName} className={'is-[150px]'} />
     }
   }
 
-  function getFileFormApi() {
-    return UtiliMetod.getFileFormApi(bc.file.storageKey, bc.file.provider).then(value => {
+
+
+  useEffect(() => {
+    UtilsMetod.getFileFormApi(bc.file.storageKey, bc.file.provider).then(value => {
       if (value) {
         setPresignedurl(value)
       }
     })
-  }
-
-  useEffect(() => {
-    getFileFormApi()
-  }, [])
+  }, [bc.file.storageKey, bc.file.provider])
 
   return (
     <>
@@ -95,13 +92,18 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
               className={'rounded-2xl'}
               startIcon={<Download />}
               onClick={() => {
-                UtiliMetod.getFileFormApi(bc.file.storageKey, bc.file.provider)
+                UtilsMetod.getFileFormApi(bc.file.storageKey, bc.file.provider)
                   .then(value => {
                     if (value) {
-                      UtiliMetod.download(value, bc.file)
+                      UtilsMetod.download(value, bc.file)
                     }
                   })
-                  .then(() => {})
+                  .catch(() => {
+                    toast.error('Erreur lors de la récupération du fichier')
+                  })
+                  .finally(() => {
+                    setOpen(false)
+                  })
               }}
             >
               Télécharger
@@ -139,7 +141,7 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
                 <span className='font-bold'>Type de contenu :</span> {bc.file.mimetype}
               </Typography>
               <Typography variant='body1'>
-                <span className='font-bold'>Taille du fichier :</span> {UtiliMetod.formatBytes(bc.file.size)}
+                <span className='font-bold'>Taille du fichier :</span> {UtilsMetod.formatBytes(bc.file.size)}
               </Typography>
             </div>
             <div>
@@ -181,7 +183,7 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
                 size={'small'}
                 startIcon={<Download />}
                 onClick={() => {
-                  UtiliMetod.download(presignedurl, bc.file).then(() => {})
+                  UtilsMetod.download(presignedurl, bc.file).then(() => {})
                 }}
               >
                 Télécharger

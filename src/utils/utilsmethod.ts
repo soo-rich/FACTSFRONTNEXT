@@ -9,7 +9,7 @@ import type { SweetconfirmProps } from '@/types/soosmart/sweetAlertProps'
 import instance from '@/service/axios-manager/instance'
 import type { FileObject } from '@/types/soosmart/file.object.type'
 
-class UtiliMetod {
+class UtilsMetod {
   static formatBytes(size: number): string {
     if (size === 0) return '0 Bytes'
     const k = 1024
@@ -110,7 +110,7 @@ class UtiliMetod {
     }
 
     if (provider === 'local') {
-      return process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') + url
+      return process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, '') + url
     }
 
     if (provider === 'minio') {
@@ -161,4 +161,4 @@ class UtiliMetod {
   }
 }
 
-export default UtiliMetod
+export default UtilsMetod

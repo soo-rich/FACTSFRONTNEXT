@@ -23,7 +23,7 @@ import CardContent from '@mui/material/CardContent'
 
 import CardHeader from '@mui/material/CardHeader'
 
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 import CustomIconButton from '@core/components/mui/IconButton'
 import TableGeneric from '@/components/table/TableGeneric'
 import { ProformaService } from '@/service/dossier/proforma.service'
@@ -170,7 +170,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
       }),
       columnHelper.accessor('createdat', {
         header: 'Date de création',
-        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.createdat)}</Typography>
+        cell: ({ row }) => <Typography>{UtilsMetod.formatDate(row.original.createdat)}</Typography>
       }),
 
       // columnHelper.accessor('total_ht', {
@@ -179,7 +179,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
       // }),
       columnHelper.accessor('total_ttc', {
         header: 'Total TTC (Fcfa)',
-        cell: info => UtiliMetod.formatDevise(info.getValue())
+        cell: info => UtilsMetod.formatDevise(info.getValue())
       }),
 
       columnHelper.accessor('adopted', {
@@ -288,7 +288,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
                         menuItemProps: {
                           className: 'flex items-center gap-2 text-textSecondary',
                           onClick: () =>
-                            UtiliMetod.SuppressionConfirmDialog({
+                            UtilsMetod.SuppressionConfirmDialog({
                               data: row.original.reference,
                               confirmAction: () => DeleteMutation.mutate(row.original.id)
                             })

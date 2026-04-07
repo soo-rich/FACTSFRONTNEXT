@@ -15,7 +15,7 @@ import { toast } from 'react-toastify'
 import Tooltip from '@mui/material/Tooltip'
 
 // import Button from '@mui/material/Button'
-import UtiliMetod from '@/utils/utilsmethod'
+import UtilsMetod from '@/utils/utilsmethod'
 
 import TableGeneric from '@/components/table/TableGeneric'
 import { BorderauService } from '@/service/dossier/borderau.service'
@@ -111,7 +111,7 @@ const BordereauList = () => {
       }),
       columnHelper.accessor('createdat', {
         header: 'Créé le',
-        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.createdat)}</Typography>
+        cell: ({ row }) => <Typography>{UtilsMetod.formatDate(row.original.createdat)}</Typography>
       }),
       columnHelper.accessor('proforma.total_ttc', {
         header: 'Total TTC (Fcfa)',
@@ -184,7 +184,7 @@ const BordereauList = () => {
                   menuItemProps: {
                     disabled: !!row.original.invoice,
                     onClick: () =>
-                      UtiliMetod.SuppressionConfirmDialog({
+                      UtilsMetod.SuppressionConfirmDialog({
                         data: row.original.proforma.reference,
                         confirmAction: () => DeleteMutation.mutate(row.original.id)
                       })
