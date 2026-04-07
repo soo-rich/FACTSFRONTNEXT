@@ -1,6 +1,6 @@
 import Grid2 from '@mui/material/Grid'
 
-import PurchaseOrderList from '@views/soosmart/dossier/bc/pusrchase-order'
+import PurchaseOrderList from '@/views/soosmart/dossier/bc/purchase-order'
 import type { Locale } from '@configs/i18n';
 import { i18n } from '@configs/i18n'
 import { getDictionary } from '@/utils/getDictionary'

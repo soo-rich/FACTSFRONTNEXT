@@ -100,7 +100,7 @@ const AddModalBc = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: PurchaseOrderService.queryKey.all()
+        queryKey: [[PurchaseOrderService.PURCHASE_ORDER_KEY]]
       })
       toast.success('Purchase order added successfully')
       reset()
@@ -140,7 +140,7 @@ const AddModalBc = () => {
               page: 0,
               pagesize: pageSize,
               adopted: true,
-              search: filterP
+              search: filterB
             })
           ).content
         },

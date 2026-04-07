@@ -33,7 +33,7 @@ export class PurchaseOrderService {
     return (await instance.post<PurchaseOrderType>(`${url}`, formData)).data
   }
 
-  static async DeleteDAta(id: string) {
+  static async DeleteData(id: string) {
     return (await instance.delete(`${url}/${id}`)).data
   }
 }

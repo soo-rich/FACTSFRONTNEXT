@@ -4,13 +4,11 @@ import { useState } from 'react'
 
 import { useParams } from 'next/navigation'
 
-import { Grid as Grid2, TablePagination } from '@mui/material'
+import { Grid, TablePagination } from '@mui/material'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { toast } from 'react-toastify'
-
-import Grid from '@mui/material/Grid'
 
 import Button from '@mui/material/Button'
 
@@ -47,13 +45,13 @@ const PurchaseOrderList = () => {
         search: filter
       })
     },
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5 // 5 minutes
+    refetchOnWindowFocus: true,
+    staleTime: 1000 * 30 // 30 secondes
   })
 
   const DeleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      return await PurchaseOrderService.DeleteDAta(id)
+      return await PurchaseOrderService.DeleteData(id)
     },
     onSuccess: () => {
       queryClient
@@ -65,7 +63,6 @@ const PurchaseOrderList = () => {
     },
     onError: () => {
       toast.error('Erreur lors de la suppression du Bon de commande')
-      console.error('Erreur lors de la suppression du Bon de commande')
     }
   })
 
@@ -111,8 +108,8 @@ const PurchaseOrderList = () => {
             <ErrorView />
           </div>
         ) : (
-          data?.content?.map((item, index) => (
-            <Grid2 size={{ xs: 12, sm: 6, md: 3 }} key={index}>
+          data?.content?.map(item => (
+            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={item.id}>
               <CardView
                 bc={item}
                 onRemove={() =>
@@ -122,7 +119,7 @@ const PurchaseOrderList = () => {
                   })
                 }
               />
-            </Grid2>
+            </Grid>
           ))
         )}
       </Grid>
