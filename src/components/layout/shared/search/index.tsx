@@ -21,7 +21,7 @@ import { useQuery } from '@tanstack/react-query'
 import type { Locale } from '@configs/i18n'
 
 // Component Imports
-import DefaultSuggestions from './DefaultSuggestions'
+
 import NoResult from './NoResult'
 
 // Hook Imports
@@ -33,8 +33,8 @@ import { getLocalizedUrl } from '@/utils/i18n'
 
 // Style Imports
 import './styles.css'
-
 import { DocumentService } from '@/service/document/document.service'
+import EmptyData from '@/components/EmptyData'
 
 // Data Imports
 
@@ -202,7 +202,7 @@ const NavSearch = () => {
               </CommandEmpty>
             )
           ) : (
-            <DefaultSuggestions setOpen={setOpen} />
+            <EmptyData />
           )}
         </CommandList>
         <CommandFooter />
