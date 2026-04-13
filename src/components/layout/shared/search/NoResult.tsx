@@ -19,19 +19,19 @@ type NoResultData = {
 
 const noResultData: NoResultData[] = [
   {
-    label: 'Analytics',
-    href: '/dashboards/analytics',
-    icon: 'tabler-chart-pie-2'
+    label: 'Proforma',
+    href: '/proforma',
+    icon: 'tabler-file-description'
   },
   {
-    label: 'User Profile',
-    href: '/pages/user-profile',
-    icon: 'tabler-user'
+    label: 'Bordereau',
+    href: '/bordereau',
+    icon: 'tabler-file-description'
   },
   {
-    label: 'CRM',
-    href: '/dashboards/crm',
-    icon: 'tabler-chart-donut-3'
+    label: 'Factures',
+    href: '/invoice',
+    icon: 'tabler-file-description'
   }
 ]
 

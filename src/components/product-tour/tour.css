@@ -83,25 +83,25 @@
 
 /* Footer separator */
 .driver-popover-footer {
-  margin-top: 14px !important;
-  padding-top: 10px !important;
-  border-top: 1px solid var(--mui-palette-divider) !important;
+  margin-block-start: 14px !important;
+  padding-block-start: 10px !important;
+  border-block-start: 1px solid var(--mui-palette-divider) !important;
   justify-content: space-between !important;
   align-items: center !important;
 }
 
 /* Arrow matches paper background */
 .driver-popover-arrow-side-left.driver-popover-arrow {
-  border-right-color: var(--mui-palette-background-paper) !important;
+  border-inline-end-color: var(--mui-palette-background-paper) !important;
 }
 .driver-popover-arrow-side-right.driver-popover-arrow {
-  border-left-color: var(--mui-palette-background-paper) !important;
+  border-inline-start-color: var(--mui-palette-background-paper) !important;
 }
 .driver-popover-arrow-side-top.driver-popover-arrow {
-  border-bottom-color: var(--mui-palette-background-paper) !important;
+  border-block-end-color: var(--mui-palette-background-paper) !important;
 }
 .driver-popover-arrow-side-bottom.driver-popover-arrow {
-  border-top-color: var(--mui-palette-background-paper) !important;
+  border-block-start-color: var(--mui-palette-background-paper) !important;
 }
 
 /* Overlay */

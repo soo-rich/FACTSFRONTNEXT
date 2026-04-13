@@ -110,7 +110,7 @@ const UserDropdown = () => {
         disablePortal
         placement='bottom-end'
         anchorEl={anchorRef.current}
-        className='min-is-[240px] !mbs-3 z-[1]'
+        className='min-is-60 mbs-3! z-1'
       >
         {({ TransitionProps, placement }) => (
           <Fade

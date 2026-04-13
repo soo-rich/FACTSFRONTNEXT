@@ -1,11 +1,11 @@
 'use client'
 
 // React Imports
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
 // Next Imports
-import { useParams, useRouter, usePathname } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 
 // MUI Imports
 import IconButton from '@mui/material/IconButton'
@@ -16,6 +16,8 @@ import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, C
 import { Title, Description } from '@radix-ui/react-dialog'
 
 // Type Imports
+import { useQuery } from '@tanstack/react-query'
+
 import type { Locale } from '@configs/i18n'
 
 // Component Imports
@@ -32,22 +34,12 @@ import { getLocalizedUrl } from '@/utils/i18n'
 // Style Imports
 import './styles.css'
 
+import { DocumentService } from '@/service/document/document.service'
+
 // Data Imports
-import data from '@/data/searchData'
 
-type Item = {
-  id: string
-  name: string
-  url: string
-  excludeLang?: boolean
-  icon: string
-  shortcut?: string
-}
 
-type Section = {
-  title: string
-  items: Item[]
-}
+
 
 type SearchItemProps = {
   children: ReactNode
@@ -59,26 +51,7 @@ type SearchItemProps = {
 }
 
 // Transform the data to group items by their sections
-const transformedData = data.reduce((acc: Section[], item) => {
-  const existingSection = acc.find(section => section.title === item.section)
 
-  const newItem = {
-    id: item.id,
-    name: item.name,
-    url: item.url,
-    excludeLang: item.excludeLang,
-    icon: item.icon,
-    shortcut: item.shortcut
-  }
-
-  if (existingSection) {
-    existingSection.items.push(newItem)
-  } else {
-    acc.push({ title: item.section, items: [newItem] })
-  }
-
-  return acc
-}, [])
 
 // SearchItem Component for introduce the shortcut keys
 const SearchItem = ({ children, shortcut, value, currentPath, url, onSelect = () => {} }: SearchItemProps) => {
@@ -102,15 +75,7 @@ const SearchItem = ({ children, shortcut, value, currentPath, url, onSelect = ()
   )
 }
 
-// Helper function to filter and limit results per section based on the number of sections
-const getFilteredResults = (sections: Section[]) => {
-  const limit = sections.length > 1 ? 3 : 5
 
-  return sections.map(section => ({
-    ...section,
-    items: section.items.slice(0, limit)
-  }))
-}
 
 // Footer component for the search menu
 const CommandFooter = () => {
@@ -145,48 +110,29 @@ const NavSearch = () => {
   const [searchValue, setSearchValue] = useState('')
 
   // Hooks
-  const router = useRouter()
+
   const pathName = usePathname()
   const { settings } = useSettings()
   const { lang: locale } = useParams()
   const { isBreakpointReached } = useVerticalNav()
 
   // When an item is selected from the search results
-  const onSearchItemSelect = (item: Item) => {
-    item.url.startsWith('http')
-      ? window.open(item.url, '_blank')
-      : router.push(item.excludeLang ? item.url : getLocalizedUrl(item.url, locale as Locale))
-    setOpen(false)
-  }
 
-  // Filter the data based on the search query
-  const filteredData = (sections: Section[], query: string) => {
-    const searchQuery = query.trim().toLowerCase()
+  const queryKey = useMemo(() => ['search', searchValue], [searchValue])
 
-    return sections
-      .filter(section => {
-        const sectionMatches = section.title.toLowerCase().includes(searchQuery)
-
-        const itemsMatch = section.items.some(
-          item =>
-            item.name.toLowerCase().includes(searchQuery) ||
-            (item.shortcut && item.shortcut.toLowerCase().includes(searchQuery))
-        )
-
-        return sectionMatches || itemsMatch
-      })
-      .map(section => ({
-        ...section,
-        items: section.items.filter(
-          item =>
-            section.title.toLowerCase().includes(searchQuery) ||
-            item.name.toLowerCase().includes(searchQuery) ||
-            (item.shortcut && item.shortcut.toLowerCase().includes(searchQuery))
-        )
+  const { data: limitedData } = useQuery({
+    queryKey,
+    queryFn: async () => {
+      return (await DocumentService.getDocument(searchValue)).map(document => ({
+        id: document.id,
+        name: document.numero,
+        url: `/documents/${document.numero}`,
+        icon: 'tabler-file',
+        shortcut: 'Enter'
       }))
-  }
-
-  const limitedData = getFilteredResults(filteredData(transformedData, searchValue))
+    },
+    enabled: !!searchValue
+  })
 
   // Toggle the menu when ⌘K is pressed
   useEffect(() => {
@@ -234,25 +180,20 @@ const NavSearch = () => {
           <i className='tabler-x cursor-pointer' onClick={() => setOpen(false)} />
         </div>
         <CommandList>
-          {searchValue ? (
+          {searchValue && limitedData ? (
             limitedData.length > 0 ? (
-              limitedData.map((section, index) => (
-                <CommandGroup key={index} heading={section.title.toUpperCase()} className='text-xs'>
-                  {section.items.map((item, index) => {
-                    return (
-                      <SearchItem
-                        shortcut={item.shortcut}
-                        key={index}
-                        currentPath={pathName}
-                        url={getLocalizedUrl(item.url, locale as Locale)}
-                        value={`${item.name} ${section.title} ${item.shortcut}`}
-                        onSelect={() => onSearchItemSelect(item)}
-                      >
-                        {item.icon && <i className={classnames('text-xl', item.icon)} />}
-                        {item.name}
-                      </SearchItem>
-                    )
-                  })}
+              limitedData?.map((section, index) => (
+                <CommandGroup key={index} heading={section.name.toUpperCase()} className='text-xs'>
+                  <SearchItem
+                    shortcut={section.shortcut}
+                    key={index}
+                    currentPath={pathName}
+                    url={getLocalizedUrl(section.url, locale as Locale)}
+                    value={`${section.name} ${section.shortcut}`}
+                  >
+                    {section.icon && <i className={classnames('text-xl', section.icon)} />}
+                    {section.name}
+                  </SearchItem>
                 </CommandGroup>
               ))
             ) : (
