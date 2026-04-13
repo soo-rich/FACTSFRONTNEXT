@@ -3,10 +3,11 @@ import type { DriveStep } from 'driver.js'
 export function getTourSteps(): DriveStep[] {
   return [
     {
-      element: '.ts-vertical-nav-root',
+      element: '.ts-vertical-nav-container',
       popover: {
         title: 'Navigation principale',
-        description: 'Le menu latéral vous donne accès à toutes les sections de l\'application. Vous pouvez le réduire ou l\'agrandir selon vos besoins.',
+        description:
+          "Le menu latéral vous donne accès à toutes les sections de l'application. Vous pouvez le réduire ou l'agrandir selon vos besoins.",
         side: 'right',
         align: 'start'
       }
@@ -15,16 +16,18 @@ export function getTourSteps(): DriveStep[] {
       element: 'a[href*="dashboard"]',
       popover: {
         title: 'Dashboard',
-        description: 'Consultez vos indicateurs clés — chiffre d\'affaires, graphiques et tableaux récapitulatifs en un seul endroit.',
+        description:
+          "Consultez vos indicateurs clés — chiffre d'affaires, graphiques et tableaux récapitulatifs en un seul endroit.",
         side: 'right',
         align: 'center'
       }
     },
     {
-      element: 'a[href*="proforma"]',
+      element: '#dossier',
       popover: {
         title: 'Dossiers',
-        description: 'Créez et gérez vos proformas, bons de commande, bons de livraison et factures depuis cette section.',
+        description:
+          'Créez et gérez vos proformas, bons de commande, bons de livraison et factures depuis cette section.',
         side: 'right',
         align: 'center'
       }
@@ -33,27 +36,9 @@ export function getTourSteps(): DriveStep[] {
       element: '#tour-search',
       popover: {
         title: 'Recherche globale',
-        description: 'Accédez instantanément à n\'importe quelle ressource de l\'application grâce à la recherche globale.',
+        description: "Accédez instantanément a n'import quel documents Documents.",
         side: 'bottom',
         align: 'start'
-      }
-    },
-    {
-      element: '#tour-notifications',
-      popover: {
-        title: 'Notifications',
-        description: 'Retrouvez ici toutes vos alertes et notifications en temps réel.',
-        side: 'bottom',
-        align: 'end'
-      }
-    },
-    {
-      element: '#tour-mode',
-      popover: {
-        title: 'Mode d\'affichage',
-        description: 'Basculez entre le mode clair, sombre ou système selon vos préférences.',
-        side: 'bottom',
-        align: 'end'
       }
     },
     {

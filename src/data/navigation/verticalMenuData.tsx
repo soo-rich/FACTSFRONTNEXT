@@ -7,32 +7,36 @@ const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>)
   {
     label: dictionary['navigation'].dashboard,
     href: '/dashboard',
-    icon: 'tabler-smart-home',
-
+    icon: 'tabler-smart-home'
   },
   {
     label: dictionary['navigation'].dossier,
     isSection: true,
+
     children: [
       {
         label: dictionary['navigation'].dossier,
         icon: 'tabler-file-description',
+        id: 'dossier',
         children: [
           {
             label: dictionary['navigation'].case.proforma,
-            href: '/proforma',
-          }, {
-            label: dictionary['navigation'].case.purchase_order,
-            href: '/purchase_order',
-          }, {
-            label: dictionary['navigation'].case.order_slip,
-            href: '/order_slip',
-          }, {
-            label: dictionary['navigation'].invoice,
-            href: '/invoice',
+            href: '/proforma'
           },
+          {
+            label: dictionary['navigation'].case.purchase_order,
+            href: '/purchase_order'
+          },
+          {
+            label: dictionary['navigation'].case.order_slip,
+            href: '/order_slip'
+          },
+          {
+            label: dictionary['navigation'].invoice,
+            href: '/invoice'
+          }
         ]
-      },
+      }
     ]
   },
   {
@@ -40,15 +44,15 @@ const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>)
     isSection: true,
     children: [
       {
-        label: "Projet",
-        href: "/projet",
-        icon: 'tabler-clipboard-list',
+        label: 'Projet',
+        href: '/projet',
+        icon: 'tabler-clipboard-list'
       },
       {
-        label: "Client",
-        href: "/client",
-        icon: 'tabler-users',
-      },
+        label: 'Client',
+        href: '/client',
+        icon: 'tabler-users'
+      }
     ]
   },
   {
@@ -63,17 +67,15 @@ const verticalMenuData = (dictionary: Awaited<ReturnType<typeof getDictionary>>)
       {
         label: dictionary['navigation'].user,
         icon: 'tabler-user',
-        href: '/user',
-
+        href: '/user'
       },
       {
         label: dictionary['navigation'].profile,
         icon: 'tabler-settings',
-        href: '/profile',
-
-      },
+        href: '/profile'
+      }
     ]
-  },
+  }
 ]
 
 export default verticalMenuData

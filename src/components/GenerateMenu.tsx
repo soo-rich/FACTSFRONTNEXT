@@ -54,7 +54,7 @@ export const GenerateVerticalMenu = ({ menuData }: { menuData: VerticalMenuDataT
 
       // Check if the current item is a sub menu
       if (subMenuItem.children) {
-        const { children, icon, prefix, suffix, ...rest } = subMenuItem
+        const { children, icon, id, prefix, suffix, ...rest } = subMenuItem
 
         const Icon = icon ? <i className={icon} /> : null
 
@@ -78,6 +78,7 @@ export const GenerateVerticalMenu = ({ menuData }: { menuData: VerticalMenuDataT
             key={index}
             prefix={subMenuPrefix}
             suffix={subMenuSuffix}
+            id={id}
             {...rest}
             {...(Icon && { icon: Icon })}
           >
