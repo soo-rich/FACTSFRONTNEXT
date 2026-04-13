@@ -29,6 +29,7 @@ import type { Locale } from '@configs/i18n'
 
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
+import { useTourContext } from '@components/product-tour/TourProvider'
 
 // Util Imports
 import { getLocalizedUrl } from '@/utils/i18n'
@@ -55,6 +56,8 @@ const UserDropdown = () => {
   const { data: session } = useSession()
   const { settings } = useSettings()
   const { lang: locale } = useParams()
+
+  const { openTourDialog } = useTourContext()
 
   const handleDropdownOpen = () => {
     !open ? setOpen(true) : setOpen(false)
@@ -144,6 +147,17 @@ const UserDropdown = () => {
                   <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/pages/faq')}>
                     <i className='tabler-help-circle' />
                     <Typography color='text.primary'>FAQ</Typography>
+                  </MenuItem>
+                  <Divider className='mlb-1' />
+                  <MenuItem
+                    className='mli-2 gap-3'
+                    onClick={() => {
+                      setOpen(false)
+                      openTourDialog()
+                    }}
+                  >
+                    <i className='tabler-map-route' />
+                    <Typography color='text.primary'>Démarrer le tour</Typography>
                   </MenuItem>
                   <div className='flex items-center plb-2 pli-3'>
                     <Button

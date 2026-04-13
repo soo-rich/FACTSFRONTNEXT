@@ -110,14 +110,14 @@ const NavbarContent = () => {
     <div className={classnames(verticalLayoutClasses.navbarContent, 'flex items-center justify-between gap-4 is-full')}>
       <div className='flex items-center gap-4'>
         <NavToggle />
-        <NavSearch />
+        <span id='tour-search'><NavSearch /></span>
       </div>
       <div className='flex items-center'>
         <LanguageDropdown />
-        <ModeDropdown />
+        <span id='tour-mode'><ModeDropdown /></span>
         <ShortcutsDropdown shortcuts={shortcuts} />
-        <NotificationsDropdown notifications={notifications} />
-        <UserDropdown />
+        <span id='tour-notifications'><NotificationsDropdown notifications={notifications} /></span>
+        <span id='tour-user'><UserDropdown /></span>
       </div>
     </div>
   )
