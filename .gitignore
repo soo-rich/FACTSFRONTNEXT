@@ -45,3 +45,4 @@ src/assets/iconify-icons/generated-icons.css
 
 
 *.log
+.build.conf
