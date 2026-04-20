@@ -15,18 +15,19 @@ const getDictionaryPropPattern2 =
 
 const getDictionaryPropFromType = /(dictionary\s*:\s*Awaited<ReturnType<typeof\s*getDictionary>>),?/g
 
-const getDictionaryProp = /const\s+dictionary\s+=\s+await\s+getDictionary\(params\.lang\)\s*/g
+const getDictionaryProp = /const\s+dictionary\s+=\s+await\s+getDictionary\(lang\)\s*/g
 
-const replaceDirectionPattern = /const direction\s*=\s*i18n.langDirection\[params.lang\]/g
+const replaceDirectionPattern = /const direction\s*=\s*i18n.langDirection\[lang\]/g
 
 const removeDictionaryDestructuringPattern = /dictionary(,| )/g
 
 // Pattern to match Props type definitions including `params`
-const removeParamsFromPropsPattern = /&\s*{\s*params:\s*Promise<{\slang:\s*Locale\s*}>\s*}/g
+const removeParamsFromPropsPattern = /&\s*{\s*params:\s*Promise<{\slang:\s*string\s*}>\s*}/g
 
 const removeParamsFromFunctionPattern = /(?<={ .*)params,?(?=.* }: [A-Z][A-Za-z]+)/g
 
 const excludeLangPattern = /excludeLang\??:\s.*,?/g
+const removeLangVariablePattern = /const\s*lang:\s*Locale\s*=.*/g
 
 async function replacePatternInFile(filePath: string) {
   const data = await fs.readFile(filePath, 'utf8')
@@ -44,7 +45,8 @@ async function replacePatternInFile(filePath: string) {
     removeDictionaryDestructuringPattern.test(data) ||
     removeParamsFromPropsPattern.test(data) ||
     removeParamsFromFunctionPattern.test(data) ||
-    excludeLangPattern.test(data)
+    excludeLangPattern.test(data) ||
+    removeLangVariablePattern.test(data)
   ) {
     // Perform replacements
     const newData = data
@@ -59,12 +61,13 @@ async function replacePatternInFile(filePath: string) {
       .replace(removeDictionaryDestructuringPattern, '')
       .replace(removeParamsFromPropsPattern, '')
       .replace(removeParamsFromFunctionPattern, '')
+      .replace(removeLangVariablePattern, '')
       .replace(/const\s*{\s*lang:\s*locale\s*}\s*=\s*useParams\(\)/g, '')
       .replace(/(\w+: )?locale,/g, '')
       .replace(/,\s*(\w+: )?locale/g, '')
       .replace(/\{ lang \}: \{ lang: Locale \}/g, '')
       .replace(/\${lang}\//g, '')
-      .replace(/props: \{ params: Promise<\{ lang: Locale \}> \}/gm, '')
+      .replace(/props: \{ params: Promise<\{ lang: string \}> \}/gm, '')
       .replace(/excludeLang\??:\s.*,?/g, '')
       .replace(/item\.excludeLang.*?:/, '')
 

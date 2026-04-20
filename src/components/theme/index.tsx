@@ -106,6 +106,7 @@ const CustomThemeProvider = (props: Props) => {
         theme={theme}
         defaultMode={systemMode}
         modeStorageKey={`${themeConfig.templateName.toLowerCase().split(' ').join('-')}-mui-template-mode`}
+        forceThemeRerender
       >
         <>
           <ModeChanger systemMode={systemMode} />

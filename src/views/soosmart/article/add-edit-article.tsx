@@ -1,24 +1,14 @@
 'use client'
 
-import { useState } from 'react'
-
 import { Controller, useForm } from 'react-hook-form'
 
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { Grid2 } from '@mui/material'
+import { Grid as Grid2 } from '@mui/material'
 
 import Button from '@mui/material/Button'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
-
-import Chip from '@mui/material/Chip'
-
-import FormControlLabel from '@mui/material/FormControlLabel'
-
-import Checkbox from '@mui/material/Checkbox'
-
-import Tooltip from '@mui/material/Tooltip'
 
 import { ArticleService } from '@/service/article/article.service'
 import type { ArticleType, SaveArticleType } from '@/types/soosmart/article.type'
@@ -26,17 +16,17 @@ import { articleSchema } from '@/types/soosmart/article.type'
 import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 import CustomTextField from '@/@core/components/mui/TextField'
 import EditorBasic from '@components/editor/EditorBasic'
+import LoadingButton from '@components/button/LoadingButton'
 
-
-const AddEditArticle = ({ data: article, onSuccess, onCancel, defaultlist=false }: AddEditFormType<ArticleType>&{defaultlist?:boolean}) => {
-
-  const [list, setList] = useState<boolean>(defaultlist)
-  const [articlelist, setArticlelist] = useState<SaveArticleType[]>([])
+const AddEditArticle = ({
+  data: article,
+  onSuccess,
+  onCancel,
+}: AddEditFormType<ArticleType>) => {
 
   const {
     control,
     handleSubmit,
-    getValues,
     formState: { errors },
     reset
   } = useForm<SaveArticleType>({
@@ -49,16 +39,16 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel, defaultlist=false 
   })
 
   const AddMutation = useMutation({
-    mutationFn: async (data: SaveArticleType | SaveArticleType[]) => {
+    mutationFn: async (data: SaveArticleType) => {
       return await ArticleService.addArticle(data)
     },
-    onSuccess: data => {
+    onSuccess: () => {
       toast.success('Ajout OK')
       reset()
 
       // Appeler le callback de succès si fourni
       if (onSuccess) {
-        onSuccess(data)
+        onSuccess()
       }
     },
     onError: () => {
@@ -80,10 +70,6 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel, defaultlist=false 
       toast.success('Mise à jour OK')
       reset()
 
-      if (list) {
-        setArticlelist([])
-      }
-
       // Appeler le callback de succès si fourni
       if (onSuccess) {
         onSuccess()
@@ -102,29 +88,7 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel, defaultlist=false 
     }
   }
 
-  const submitFormList = () => {
-    AddMutation.mutate(articlelist)
-  }
 
-  const handleListChange = () => {
-    setList(!list)
-  }
-
-  const addArticleToList = () => {
-    const values = getValues()
-
-    if (!values.libelle || values.prix_unitaire <= 0) {
-      toast.warning("Veuillez remplir le libellé et le prix unitaire avant d'ajouter à la liste")
-
-      return
-    }
-
-    setArticlelist([...articlelist, values])
-    reset({
-      libelle: '',
-      prix_unitaire: 0
-    })
-  }
 
   const handleCancel = () => {
     reset({
@@ -140,26 +104,8 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel, defaultlist=false 
   return (
     <form onSubmit={handleSubmit(submitForm)} className='space-y-4'>
       <Grid2 container direction={'column'} spacing={3}>
-        <Grid2 size={12} alignItems={'end'} justifyContent={'flex-end'}>
-          <FormControlLabel
-            label='Liste'
-            control={<Checkbox checked={list} onChange={handleListChange} name='controlled' disabled={defaultlist} />}
-          />
-        </Grid2>
-        {list && (
-          <Grid2 container size={12} direction={'row'} alignItems={'center'} justifyContent={'justify-start'}>
-            {articlelist.map((i, j) => {
 
-              return (
-                <Grid2 container size={4} key={i.libelle + j} justifyContent={'center'} alignItems={'center'}>
-                  <Tooltip placement={'top'} title={'' + i.libelle + ' - ' + i.prix_unitaire + ' FCFA'}>
-                    <Chip label={i.libelle} color={'info'} />
-                  </Tooltip>
-                </Grid2>
-              )
-            })}
-          </Grid2>
-        )}
+
         <Grid2>
           <Controller
             render={({ field }) => (
@@ -219,40 +165,21 @@ const AddEditArticle = ({ data: article, onSuccess, onCancel, defaultlist=false 
 
         <Grid2>
           <div className='flex justify-center gap-4 mt-6'>
-            {list && (
-              <>
-                <Button variant='contained' color='secondary' type='button' onClick={() => addArticleToList()}>
-                  Ajouter à la liste
-                </Button>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  type='button'
-                  onClick={submitFormList}
-                  disabled={AddMutation.isPending || UpdateMutation.isPending || articlelist.length < 2}
-                >
-                  {AddMutation.isPending || UpdateMutation.isPending
-                    ? 'Traitement...'
-                    : article
-                      ? 'Mettre à jour'
-                      : 'Ajouter'}
-                </Button>
-              </>
-            )}
-            {!list && (
-              <Button
+
+
+              <LoadingButton
                 variant='contained'
                 color='primary'
                 type='submit'
-                disabled={AddMutation.isPending || UpdateMutation.isPending}
+                loading={AddMutation.isPending || UpdateMutation.isPending}
               >
                 {AddMutation.isPending || UpdateMutation.isPending
                   ? 'Traitement...'
                   : article
                     ? 'Mettre à jour'
                     : 'Ajouter'}
-              </Button>
-            )}
+              </LoadingButton>
+
 
             <Button
               variant='outlined'

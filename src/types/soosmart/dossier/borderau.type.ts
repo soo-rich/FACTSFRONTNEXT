@@ -1,16 +1,19 @@
-import type { Article_Quantite } from './Article_Quantite'
+import type { BaseType } from '@/types/soosmart/api-default,type'
+import type { ProformaType } from '@/types/soosmart/dossier/proforma.type'
+import type { FactureListType } from '@/types/soosmart/dossier/facture.type'
 
 export type BorderauType = {
-  id: string;
-  reference: string;
-  uniqueIdDossier: string;
-  numero: string;
-  numeroProforma?: string;
-  articleQuantiteslist: Article_Quantite[];
-  total_ht: number;
-  total_ttc: number;
-  total_tva: number;
-  client: string;
-  adopte: boolean;
-  date: Date;
-};
+  isdeleted: boolean
+  numero: string
+  uniqueIdDossier: string
+  proforma: Omit<ProformaType, 'articleQuantites'>
+  invoice: FactureListType
+} & BaseType
+
+export type BorderauOneType =
+  {
+    isdeleted: boolean
+    numero: string
+    uniqueIdDossier: string
+    proforma: ProformaType
+  } & BaseType

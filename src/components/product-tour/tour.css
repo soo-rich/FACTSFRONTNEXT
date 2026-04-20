@@ -1,0 +1,117 @@
+/* ===================================================
+   Driver.js — Override styles to match MUI/Vuexy theme
+   =================================================== */
+
+.driver-popover {
+  background-color: var(--mui-palette-background-paper) !important;
+  color: var(--mui-palette-text-primary) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border-radius: 10px !important;
+  border: 1px solid var(--mui-palette-divider) !important;
+  min-inline-size: 280px;
+  max-inline-size: 340px;
+  font-family: inherit !important;
+}
+
+.driver-popover-title {
+  color: var(--mui-palette-text-primary) !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  margin-block-end: 6px !important;
+  line-height: 1.4 !important;
+}
+
+.driver-popover-description {
+  color: var(--mui-palette-text-secondary) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.6 !important;
+}
+
+.driver-popover-progress-text {
+  color: var(--mui-palette-text-disabled) !important;
+  font-size: 0.75rem !important;
+}
+
+/* Buttons */
+.driver-popover-prev-btn,
+.driver-popover-next-btn,
+.driver-popover-close-btn {
+  border-radius: 6px !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: background 0.2s, color 0.2s !important;
+  letter-spacing: 0.02em !important;
+}
+
+.driver-popover-prev-btn {
+  background: transparent !important;
+  color: var(--mui-palette-text-secondary) !important;
+  border: 1px solid var(--mui-palette-divider) !important;
+  padding-block: 5px !important;
+  padding-inline: 14px !important;
+}
+
+.driver-popover-prev-btn:hover:not(:disabled) {
+  background: var(--mui-palette-action-hover) !important;
+}
+
+.driver-popover-next-btn {
+  background: var(--mui-palette-primary-main) !important;
+  color: #fff !important;
+  border: none !important;
+  padding-block: 5px !important;
+  padding-inline: 16px !important;
+}
+
+.driver-popover-next-btn:hover:not(:disabled) {
+  opacity: 0.9 !important;
+}
+
+.driver-popover-close-btn {
+  background: transparent !important;
+  color: var(--mui-palette-text-disabled) !important;
+  border: none !important;
+  padding-block: 2px !important;
+  padding-inline: 6px !important;
+  font-size: 1rem !important;
+}
+
+.driver-popover-close-btn:hover {
+  color: var(--mui-palette-text-primary) !important;
+}
+
+/* Footer separator */
+.driver-popover-footer {
+  margin-block-start: 14px !important;
+  padding-block-start: 10px !important;
+  border-block-start: 1px solid var(--mui-palette-divider) !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+/* Arrow matches paper background */
+.driver-popover-arrow-side-left.driver-popover-arrow {
+  border-inline-end-color: var(--mui-palette-background-paper) !important;
+}
+.driver-popover-arrow-side-right.driver-popover-arrow {
+  border-inline-start-color: var(--mui-palette-background-paper) !important;
+}
+.driver-popover-arrow-side-top.driver-popover-arrow {
+  border-block-end-color: var(--mui-palette-background-paper) !important;
+}
+.driver-popover-arrow-side-bottom.driver-popover-arrow {
+  border-block-start-color: var(--mui-palette-background-paper) !important;
+}
+
+/* Overlay */
+.driver-overlay {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Highlighted element ring */
+.driver-active-element {
+  outline: 3px solid var(--mui-palette-primary-main) !important;
+  outline-offset: 3px !important;
+  border-radius: 6px !important;
+}

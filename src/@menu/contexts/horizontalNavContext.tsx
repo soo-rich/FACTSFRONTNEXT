@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { createContext, useMemo, useState } from 'react'
+import { createContext, useMemo, useState, useCallback } from 'react'
 
 // Type Imports
 import type { ChildrenType } from '../types'
@@ -17,10 +17,10 @@ export const HorizontalNavProvider = ({ children }: ChildrenType) => {
   // States
   const [isBreakpointReached, setIsBreakpointReached] = useState(false)
 
-  // update isBreakpointReached value
-  const updateIsBreakpointReached = (isBreakpointReached: boolean) => {
-    setIsBreakpointReached(isBreakpointReached)
-  }
+  // Stable callback using useCallback
+  const updateIsBreakpointReached = useCallback((value: boolean) => {
+    setIsBreakpointReached(value)
+  }, [])
 
   // Hooks
   const HorizontalNavProviderValue = useMemo(
@@ -28,7 +28,7 @@ export const HorizontalNavProvider = ({ children }: ChildrenType) => {
       isBreakpointReached,
       updateIsBreakpointReached
     }),
-    [isBreakpointReached]
+    [isBreakpointReached, updateIsBreakpointReached]
   )
 
   return <HorizontalNavContext.Provider value={HorizontalNavProviderValue}>{children}</HorizontalNavContext.Provider>

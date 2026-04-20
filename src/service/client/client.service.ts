@@ -16,26 +16,16 @@ export class ClientService {
     ).data
   }
 
-  static async getClientsByNom(search?: string) {
-    return (
-      await instance.get<ClientType[]>(`${api}/search`, {
-        params: {
-          search: search ?? ''
-        }
-      })
-    ).data
-  }
-
-  static async getClientsAll() {
-    return (await instance.get<ClientType[]>(`${api}/all`)).data
-  }
-
   static async saveClient(client: ClientSave) {
     return (await instance.post<ClientType>(api, client)).data
   }
 
+  static async getClientById(id: string) {
+    return (await instance.get<ClientType>(api + '/' + id)).data
+  }
+
   static async updateClient(id: string, client: ClientSave) {
-    return (await instance.put<ClientType>(api + '/' + id, client)).data
+    return (await instance.patch<ClientType>(api + '/' + id, client)).data
   }
 
   static async deleteClient(id: string) {

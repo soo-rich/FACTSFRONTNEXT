@@ -72,7 +72,7 @@ export type SubMenuProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'prefix
     suffix?: ReactNode
     defaultOpen?: boolean
     disabled?: boolean
-    component?: string | ReactElement
+    component?: string | ReactElement<{ className?: string; href?: string; [key: string]: unknown }>
     contentClassName?: string
     onOpenChange?: (open: boolean) => void
 
@@ -329,10 +329,12 @@ const SubMenu: ForwardRefRenderFunction<HTMLLIElement, SubMenuProps> = (props, r
       isCollapsed={isCollapsed}
       isHovered={isHovered}
       className={classnames(menuClasses.subMenuContent, contentClassName)}
-      rootStyles={{
-        ...(isCollapsed && level === 0 && isPopoutWhenCollapsed && floatingStyles),
-        ...getSubMenuItemStyles('subMenuContent')
-      }}
+      rootStyles={
+        {
+          ...(isCollapsed && level === 0 && isPopoutWhenCollapsed && floatingStyles),
+          ...getSubMenuItemStyles('subMenuContent')
+        } as CSSObject
+      }
     >
       {childNodes.map(node =>
         cloneElement(node, {

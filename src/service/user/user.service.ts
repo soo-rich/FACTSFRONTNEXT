@@ -1,5 +1,5 @@
 import instance from '@/service/axios-manager/instance'
-import type { UtilisateurDto, UtilisateurUpdate, UtilsateurRegister } from '@/types/soosmart/utilisateur.type'
+import type { UtilisateurDto, UtilsateurRegister } from '@/types/soosmart/utilisateur.type'
 import type { ParamRequests } from '@/types/soosmart/pagination/paramrequestion.type'
 import type { CustomresponseType } from '@/types/soosmart/customresponse.type'
 
@@ -8,23 +8,22 @@ const url = `user`
 export class UserService {
   static USER_KEY = 'user'
 
-  static async getAllorOnebyEmail({ email, params }: { email?: string; params?: ParamRequests }) {
+  static async getAll(params?: ParamRequests ) {
     return (
-      await instance.get<CustomresponseType<UtilisateurDto>>(url + (email ? `/${email}` : ''), { params: params })
+      await instance.get<CustomresponseType<UtilisateurDto>>(url, { params: params })
     ).data
   }
 
   static async create(user: UtilsateurRegister) {
     const formdata = new FormData()
 
-    if (user.image) {
-      formdata.append('image', user.image)
-    }
-
-    const userData = { ...user }
-
-    delete userData.image
-    formdata.append('user', new Blob([JSON.stringify(userData)], { type: 'application/json' }))
+    Object.entries(user).forEach(([key, value]) => {
+      if (key === 'image' && value) {
+        formdata.append('image', value)
+      } else if (value !== undefined) {
+        formdata.append(key, value)
+      }
+    })
 
     return (await instance.post<UtilisateurDto>(url, formdata)).data
   }
@@ -33,17 +32,16 @@ export class UserService {
     return (await instance.get<UtilisateurDto>(url + '/me')).data
   }
 
-  static async update({ id, user }: { id: string; user: UtilisateurUpdate }) {
+  static async update({ id, user }: { id: string; user: UtilsateurRegister }) {
     const formdata = new FormData()
 
-    if (user.image) {
-      formdata.append('image', user.image)
-    }
-
-    const userData = { ...user }
-
-    delete userData.image
-    formdata.append('user', new Blob([JSON.stringify(userData)], { type: 'application/json' }))
+    Object.entries(user).forEach(([key, value]) => {
+      if (key === 'image' && value) {
+        formdata.append('image', value)
+      } else if (value !== undefined) {
+        formdata.append(key, value)
+      }
+    })
 
     return (await instance.put<UtilisateurDto>(url + `/${id}`, formdata)).data
   }
@@ -53,14 +51,10 @@ export class UserService {
   }
 
   static async activateorDesactivate(id: string) {
-    return (await instance.get<boolean>(url + `/${id}/activate`)).data
+    return (await instance.get<UtilisateurDto>(url + `/${id}/activate`)).data
   }
 
   static async changepassword(value: { oldPassword: string; newPassword: string }) {
     return (await instance.post<boolean>(url + `/change-password`, value)).data
-  }
-
-  static async forgotUserPassword(email: string) {
-    return (await instance.get<boolean>(url + `/forget-password`, { params: { email } })).data
   }
 }

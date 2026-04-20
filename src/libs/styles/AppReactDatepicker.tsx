@@ -47,7 +47,7 @@ const StyledReactDatePicker = styled(Box)<BoxProps>(({ theme }) => {
           textAlign: 'left'
         },
         '&:not(.react-datepicker-year-header)': {
-          '& + .react-datepicker__month, & + .react-datepicker__year': {
+          '& + div > .react-datepicker__month, & + div > .react-datepicker__year': {
             margin: theme.spacing(2),
             marginTop: theme.spacing(4.5)
           }
@@ -150,16 +150,31 @@ const StyledReactDatePicker = styled(Box)<BoxProps>(({ theme }) => {
         lineHeight: '2.25rem',
         color: 'var(--mui-palette-text-primary)',
         fontSize: theme.typography.body1.fontSize,
+        '&:hover:not(.react-datepicker__day--in-range):not(.react-datepicker__day--in-selecting-range)': {
+          borderRadius: '50% !important'
+        },
         '&.react-datepicker__day--selected.react-datepicker__day--in-selecting-range.react-datepicker__day--selecting-range-start, &.react-datepicker__day--selected.react-datepicker__day--range-start.react-datepicker__day--in-range, &.react-datepicker__day--range-start':
           {
             borderRadius: '18px 0px 0px 18px;',
             color: 'var(--mui-palette-common-white) !important',
-            backgroundColor: 'var(--mui-palette-primary-main) !important'
+            backgroundColor: 'var(--mui-palette-primary-main) !important',
+            '&:hover': {
+              borderTopLeftRadius: '50% !important',
+              borderBottomLeftRadius: '50% !important',
+              borderTopRightRadius: '0 !important',
+              borderBottomRightRadius: '0 !important'
+            }
           },
         '&.react-datepicker__day--range-end.react-datepicker__day--in-range': {
           borderRadius: '0px 18px 18px 0px',
           color: 'var(--mui-palette-common-white) !important',
-          backgroundColor: 'var(--mui-palette-primary-main) !important'
+          backgroundColor: 'var(--mui-palette-primary-main) !important',
+          '&:hover': {
+            borderTopRightRadius: '50% !important',
+            borderBottomRightRadius: '50% !important',
+            borderTopLeftRadius: '0 !important',
+            borderBottomLeftRadius: '0 !important'
+          }
         },
         '&:focus, &:active': {
           outline: 0

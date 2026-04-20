@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  basePath: '',
+  basePath: process.env.BASEPATH,
   redirects: async () => {
     return [
       {
@@ -17,8 +17,8 @@ const nextConfig: NextConfig = {
         locale: false
       },
       {
-        source: '/((?!(?:en|fr|front-pages|favicon.ico)\\b)):path',
-        destination: '/fr/:path',
+        source: '/:path((?!en|fr|front-pages|images|api|favicon.ico).*)*',
+        destination: '/fr/:path*',
         permanent: true,
         locale: false
       }

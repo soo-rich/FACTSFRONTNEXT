@@ -10,10 +10,10 @@ export const updateLayoutFile = async () => {
 
   // Modify the file content as needed
   layoutFileContent = layoutFileContent
-    .replace(/lang={params.lang}/g, "lang='en'")
+    .replace(/lang={lang}/g, "lang='en'")
     .replace(/const headersList.*/, '')
     .replace(/<TranslationWrapper[^>]*>([\s\S]*?)<\/TranslationWrapper>/, '$1')
-    .replace(/&\s*\{[^}]*params:\s*Promise<[^}]*lang:\s*Locale[^}]*\}>\s}/, '')
+    .replace(/&\s*\{[^}]*params:\s*Promise<[^}]*lang:\s*string[^}]*\}>\s}/, '')
     .replace(/const params = await props.params/g, '')
 
   // Write the modified content back to the file
@@ -41,9 +41,9 @@ export const updateDashboardLayoutFile = async () => {
   // Add disableDirection to <Customizer> if not already present
   content = content
     .replace(/<Customizer((?!disableDirection)[^>]*?)\/?>/g, `<Customizer$1 disableDirection />`)
-    .replace(/const dictionary = await getDictionary\(params.lang\)\n?/, '')
-    .replace(/(AuthGuard\s*[^>]*?)locale={params.lang}(.*?>)/, '$1$2')
-    .replace(/&\s*\{[^}]*params:\s*Promise<[^}]*lang:\s*Locale[^}]*\}>\s}/, '')
+    .replace(/const dictionary = await getDictionary\(lang\)\n?/, '')
+    .replace(/(AuthGuard\s*[^>]*?)locale={lang}(.*?>)/, '$1$2')
+    .replace(/&\s*\{[^}]*params:\s*Promise<[^}]*lang:\s*string[^}]*\}>\s}/, '')
     .replace(/const params = await props.params/g, '')
 
   await fs.promises.writeFile(filePath, content)
@@ -59,8 +59,8 @@ export const updateGuestLayoutFile = async () => {
   let content = await fs.promises.readFile(filePath, 'utf8')
 
   content = content
-    .replace(/lang={params.lang}/, '')
-    .replace(/&\s*\{[^}]*params:\s*Promise<[^}]*lang:\s*Locale[^}]*\}>\s}/, '')
+    .replace(/lang={lang}/g, '')
+    .replace(/&\s*\{[^}]*params:\s*Promise<[^}]*lang:\s*string[^}]*\}>\s}/, '')
     .replace(/const params = await props.params/g, '')
 
   await fs.promises.writeFile(filePath, content)

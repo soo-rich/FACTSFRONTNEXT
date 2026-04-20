@@ -3,14 +3,13 @@ import Swal from 'sweetalert2'
 import { fr } from 'date-fns/locale'
 
 // import axios from 'axios'
-
 import { toast } from 'react-toastify'
 
 import type { SweetconfirmProps } from '@/types/soosmart/sweetAlertProps'
 import instance from '@/service/axios-manager/instance'
-import type { FileObject } from '@/types/soosmart/dossier/purchaseOrder.type'
+import type { FileObject } from '@/types/soosmart/file.object.type'
 
-class UtiliMetod {
+class UtilsMetod {
   static formatBytes(size: number): string {
     if (size === 0) return '0 Bytes'
     const k = 1024
@@ -19,12 +18,19 @@ class UtiliMetod {
 
     return parseFloat((size / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
-  static formatDevise = (value: number, format?: string) => {
-    return new Intl.NumberFormat(format ?? 'fr-FR').format(value)
+
+  static formatDevise = (value: number, format?: string, currency = 'XOF') => {
+    // Remplace les espaces par des points pour les milliers
+    return value.toLocaleString(format ?? 'fr-FR', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    })
   }
 
-  static formatDate = (date: Date, format?: string) => {
-    return formatter(date, format ?? 'yyyy-MM-dd', { locale: fr })
+  static formatDate = (date: Date | string, format?: string) => {
+    return formatter(new Date(date), format ?? 'yyyy-MM-dd', { locale: fr })
   }
 
   static confirmDialog = async ({ icon, title, subtitle, confirmAction, cancelAction }: SweetconfirmProps) => {
@@ -98,10 +104,20 @@ class UtiliMetod {
     return colors[Math.floor(Math.random() * colors.length)]
   }
 
-  static getFileFormApi = async (url: string, provider?: 'minio' | 'local') => {
-    return provider === 'minio'
-      ? (await instance.get('file/presigned', { params: { url } })).data
-      : { presigned: process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') + url }
+  static getFileFormApi = async (url: string, provider: 'local' | 'minio' = 'local') => {
+    if (!url) {
+      return null
+    }
+
+    if (provider === 'local') {
+      return process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, '') + url
+    }
+
+    if (provider === 'minio') {
+      const uri = (await instance.get('uploads/presigned-url', { params: { filename: url } })).data
+
+      return uri.url
+    }
   }
 
   static getImagefromLocal = async (url: string) => {
@@ -122,7 +138,7 @@ class UtiliMetod {
         const link = document.createElement('a')
 
         link.href = url
-        link.download = file ? file.filename : 'file'
+        link.download = file ? file.originalName : 'file'
         document.body.appendChild(link)
         link.click()
 
@@ -144,4 +160,4 @@ class UtiliMetod {
   }
 }
 
-export default UtiliMetod
+export default UtilsMetod

@@ -1,14 +1,15 @@
 import * as v from 'valibot'
 
+import type { BaseType } from '@/types/soosmart/api-default,type'
+import type { ClientType } from '@/types/soosmart/client.type'
+
 export type ProjetType = {
-  id: string;
-  projet_type: string;
-  description: string;
-  offre: boolean;
-  client: string;
-  createdat: Date;
-  update_at: Date;
-};
+  isdeleted: boolean
+  projet_type: string
+  description: string
+  offre: boolean
+  client: ClientType
+}&BaseType
 
 export const schemaProjetSave = v.object({
   projet_type: v.pipe(v.string(), v.minLength(5, 'le champ doit contenir au minimum 5 caratere')),

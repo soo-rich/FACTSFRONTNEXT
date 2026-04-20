@@ -13,15 +13,18 @@ import { i18n } from '@configs/i18n'
 import { getSystemMode } from '@core/utils/serverHelpers'
 
 type Props = ChildrenType & {
-  params: Promise<{ lang: Locale }>
+  params: Promise<{ lang: string }>
 }
 
 const Layout = async (props: Props) => {
   const params = await props.params
   const { children } = props
 
+  // Type guard to ensure lang is a valid Locale
+  const lang: Locale = i18n.locales.includes(params.lang as Locale) ? (params.lang as Locale) : i18n.defaultLocale
+
   // Vars
-  const direction = i18n.langDirection[params.lang]
+  const direction = i18n.langDirection[lang]
   const systemMode = await getSystemMode()
 
   return (

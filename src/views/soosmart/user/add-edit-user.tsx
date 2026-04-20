@@ -1,34 +1,30 @@
-import { useMemo } from 'react'
+import { useEffect, useState } from 'react'
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Controller, useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 
-
 import { toast } from 'react-toastify'
-import { Grid2 } from '@mui/material'
-import { styled } from '@mui/material/styles';
+import { Grid as Grid2 } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
 import Button from '@mui/material/Button'
-
-import Typography from '@mui/material/Typography'
-
-import { PhoneInput } from 'react-international-phone'
 
 import MenuItem from '@mui/material/MenuItem'
 
 import { Upload } from 'lucide-react'
 
 import CustomTextField from '@core/components/mui/TextField'
-import type { UtilisateurDto, UtilisateurUpdate, UtilsateurRegister } from '@/types/soosmart/utilisateur.type'
-import { userCreateSchema } from '@/types/soosmart/utilisateur.type'
+
+import type { UtilisateurDto, UtilsateurRegister } from '@/types/soosmart/utilisateur.type'
+import { userCreateSchema, userUpdateSchema } from '@/types/soosmart/utilisateur.type'
 import { UserService } from '@/service/user/user.service'
 import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 import CustomAvatar from '@/@core/components/mui/Avatar'
 
 import Utilsmethod from '@/utils/utilsmethod'
+import CustomPhoneInput from '@components/CustomInput/CustomPhoneInput'
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -39,23 +35,12 @@ const VisuallyHiddenInput = styled('input')({
   bottom: 0,
   left: 0,
   whiteSpace: 'nowrap',
-  width: 1,
-});
+  width: 1
+})
 
 const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<UtilisateurDto>) => {
   const queryClient = useQueryClient()
-
-
-
-  const queryKey = useMemo(() => [user?.image + '-file'], [user?.image])
-
-  const { data: uripresigned } = useQuery({
-    queryKey: queryKey,
-    queryFn: async () => {
-      return (await Utilsmethod.getFileFormApi(user?.image ?? '', 'minio'))
-    },
-    enabled: !!user?.image
-  })
+  const [imageUrl, setImageUrl] = useState<string>('https://picsum.photos/200')
 
   const {
     control,
@@ -64,30 +49,32 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
     reset,
     watch
   } = useForm<UtilsateurRegister>({
-    resolver: valibotResolver(userCreateSchema),
+    resolver: valibotResolver(user !== undefined ? userUpdateSchema : userCreateSchema),
     defaultValues: {
       image: undefined,
       email: user?.email ?? '',
       nom: user?.nom ?? '',
-      numero: user?.telephone ?? '288',
+      numero: user?.numero ?? '288',
       username: user?.username ?? '',
       prenom: user?.prenom ?? '',
-      role: user?.role.toUpperCase() ?? 'USER',
+      role: user?.role.toUpperCase() ?? 'USER'
     }
   })
 
   const image = watch('image')
 
-  const imageUrl = useMemo(() => {
+  useEffect(() => {
     if (image) {
-      // console.log('imag', image)
-
-      return URL.createObjectURL(image)
+      setImageUrl(URL.createObjectURL(image))
+    } else if (user?.image) {
+      Utilsmethod.getFileFormApi(user?.image.storageKey).then(value => {
+        if (value) {
+          setImageUrl(value)
+        }
+      })
     }
-
-    return uripresigned?.presigned || 'https://picsum.photos/200'
-  }, [image, uripresigned])
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [image])
 
   const AddMutation = useMutation({
     mutationFn: async (data: UtilsateurRegister) => {
@@ -95,22 +82,19 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
     },
     onSuccess: () => {
       toast.success('Ajout OK')
-      reset(
-        {
-          email: '',
-          nom: '',
-          prenom: '',
-          username: '',
-          numero: '',
-          role: 'USER',
-        }
-      )
+      reset({
+        email: '',
+        nom: '',
+        prenom: '',
+        username: '',
+        numero: '',
+        role: 'USER'
+      })
 
       // Invalider le cache pour rafraîchir la liste
       queryClient.invalidateQueries({
         queryKey: [UserService.USER_KEY]
       })
-
 
       // Appeler le callback de succès si fourni
       if (onSuccess) {
@@ -118,10 +102,9 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
       }
     },
     onError: () => {
-      toast.error('Erreur lors de l\'ajout de l\'utilisateur')
+      toast.error("Erreur lors de l'ajout de l'utilisateur")
     }
   })
-
 
   const UpdateMutation = useMutation({
     mutationFn: async (data: UtilsateurRegister) => {
@@ -131,8 +114,7 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
         return
       }
 
-      const updateData: UtilisateurUpdate = { ...data, id: user.id }
-
+      const updateData: UtilsateurRegister = { ...data }
 
       return await UserService.update({ id: user.id, user: updateData })
     },
@@ -145,27 +127,24 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
         queryKey: [UserService.USER_KEY]
       })
 
-
       // Appeler le callback de succès si fourni
       if (onSuccess) {
         onSuccess()
       }
     },
     onError: () => {
-      toast.error('Erreur lors de la mise à jour de l\'utilisateur')
+      toast.error("Erreur lors de la mise à jour de l'utilisateur")
     }
   })
 
   const handleCancel = () => {
-    reset(
-      {
-        email: '',
-        nom: '',
-        prenom: '',
-        username: '',
-        role: 'USER',
-      }
-    )
+    reset({
+      email: '',
+      nom: '',
+      prenom: '',
+      username: '',
+      role: 'USER'
+    })
 
     if (onCancel) {
       onCancel()
@@ -180,41 +159,39 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
     }
   }
 
-
-
+  useEffect(() => {
+    console.log(errors)
+  }, [errors])
 
   return (
-    <form onSubmit={handleSubmit(submitForm)} className="space-y-4">
-      <Grid2 spacing={2} direction={'column'} container >
-        <CustomAvatar alt="user-profile" src={imageUrl} variant="rounded" size={220} />
+    <form onSubmit={handleSubmit(submitForm)} className='space-y-4'>
+      <Grid2 spacing={2} direction={'column'} container>
+        <CustomAvatar alt='user-profile' src={imageUrl} variant='rounded' size={220} />
 
-        <div className='w-1/3'><Controller
-          render={
-            ({ field }) => (
-              <Button
-                component="label"
-                role={undefined}
-                variant="contained"
-                tabIndex={-1}
-                startIcon={<Upload />}
-              >
+        <div className='w-1/3'>
+          <Controller
+            render={({ field }) => (
+              <Button component='label' role={undefined} variant='contained' tabIndex={-1} startIcon={<Upload />}>
                 Télécharger une image
                 <VisuallyHiddenInput
-                  type="file"
-                  accept="image/*"
+                  type='file'
+                  accept='image/*'
                   onChange={(event: any) => field.onChange(event.target.files[0])}
                   multiple
                 />
-              </Button>)} control={control} name='image' />
+              </Button>
+            )}
+            control={control}
+            name='image'
+          />
         </div>
       </Grid2>
       <Grid2 container direction={'column'} spacing={3}>
-        <Controller render={
-          ({ field }) => (
+        <Controller
+          render={({ field }) => (
             <CustomTextField
               {...field}
               fullWidth
-
               label={'Nom'}
               error={!!errors.nom}
               {...(errors.nom && {
@@ -222,14 +199,15 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
                 helperText: errors?.nom?.message
               })}
             />
-          )
-        } name={'nom'} control={control} />
-        <Controller render={
-          ({ field }) => (
+          )}
+          name={'nom'}
+          control={control}
+        />
+        <Controller
+          render={({ field }) => (
             <CustomTextField
               {...field}
               fullWidth
-
               label={'Prenom'}
               error={!!errors.prenom}
               {...(errors.prenom && {
@@ -237,10 +215,12 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
                 helperText: errors?.prenom?.message
               })}
             />
-          )
-        } name={'prenom'} control={control} />
-        <Controller render={
-          ({ field }) => (
+          )}
+          name={'prenom'}
+          control={control}
+        />
+        <Controller
+          render={({ field }) => (
             <CustomTextField
               {...field}
               fullWidth
@@ -252,30 +232,41 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
                 helperText: errors?.email?.message
               })}
             />
-          )
-        } name={'email'} control={control} />
+          )}
+          name={'email'}
+          control={control}
+        />
         <Controller
           render={({ field }) => (
-            <div className={'w-full flex flex-col gap-2 focus:text-primary'}>
-              <Typography variant={'body2'}> Telephone </Typography>
-              <PhoneInput className={'w-full'} inputClassName={'w-full'} {...field} defaultCountry={'tg'} />
-            </div>
+            <CustomPhoneInput
+              label={'Telephone principal'}
+              required
+              value={field.value ?? ''}
+              onChange={field.onChange}
+              {...(errors.numero && {
+                error: true,
+                helperText: errors?.numero?.message
+              })}
+            />
           )}
           name={'numero'}
           control={control}
         />
 
-        <Grid2 size={12} direction={'row'} container spacing={2} sx={{
-          justifyContent: 'space-evenly',
-          alignItems: 'center'
-        }}>
-
+        <Grid2
+          size={12}
+          direction={'row'}
+          container
+          spacing={2}
+          sx={{
+            justifyContent: 'space-evenly',
+            alignItems: 'center'
+          }}
+        >
           <Grid2 hidden={!!user} size={6}>
-
-            <Controller render={
-              ({ field }) => (
+            <Controller
+              render={({ field }) => (
                 <CustomTextField
-
                   {...field}
                   fullWidth
                   label={'Username'}
@@ -285,13 +276,14 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
                     helperText: errors?.username?.message
                   })}
                 />
-              )
-            } name={'username'} control={control} />
+              )}
+              name={'username'}
+              control={control}
+            />
           </Grid2>
           <Grid2 size={user ? 12 : 6}>
-
-            <Controller render={
-              ({ field }) => (
+            <Controller
+              render={({ field }) => (
                 <CustomTextField
                   select
                   {...field}
@@ -306,30 +298,27 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
                   <MenuItem value={'USER'}>Utilisateur</MenuItem>
                   <MenuItem value={'ADMIN'}>Administrateur</MenuItem>
                 </CustomTextField>
-              )
-            } name={'role'} control={control} />
+              )}
+              name={'role'}
+              control={control}
+            />
           </Grid2>
-
-
         </Grid2>
       </Grid2>
 
       <Grid2>
-        <div className="flex justify-center gap-4 mt-6">
+        <div className='flex justify-center gap-4 mt-6'>
           <Button
-            variant="contained"
-            color="primary"
-            type="submit"
+            variant='contained'
+            color='primary'
+            type='submit'
             disabled={AddMutation.isPending || UpdateMutation.isPending}
           >
-            {AddMutation.isPending || UpdateMutation.isPending
-              ? 'Traitement...'
-              : user ? 'Mettre à jour' : 'Ajouter'
-            }
+            {AddMutation.isPending || UpdateMutation.isPending ? 'Traitement...' : user ? 'Mettre à jour' : 'Ajouter'}
           </Button>
           <Button
-            variant="outlined"
-            color="error"
+            variant='outlined'
+            color='error'
             onClick={handleCancel}
             disabled={AddMutation.isPending || UpdateMutation.isPending}
           >
@@ -337,7 +326,6 @@ const AddEditUser = ({ data: user, onSuccess, onCancel }: AddEditFormType<Utilis
           </Button>
         </div>
       </Grid2>
-
     </form>
   )
 }

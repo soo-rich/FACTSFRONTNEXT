@@ -1,6 +1,83 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme) important;
+@import 'tailwindcss/utilities.css' layer(utilities) important;
+@plugin 'tailwindcss-logical';
+
+@theme {
+  --radius-none: 0px;
+  --radius-xs: var(--mui-shape-customBorderRadius-xs);
+  --radius-sm: var(--mui-shape-customBorderRadius-sm);
+  --radius: var(--mui-shape-customBorderRadius-md);
+  --radius-md: var(--mui-shape-customBorderRadius-md);
+  --radius-lg: var(--mui-shape-customBorderRadius-lg);
+  --radius-xl: var(--mui-shape-customBorderRadius-xl);
+  --radius-2xl: 0.75rem;
+  --radius-3xl: 1rem;
+  --radius-4xl: 1.5rem;
+  --radius-full: 9999px;
+
+  --color-primary: var(--primary-color);
+  --color-primaryLight: var(--mui-palette-primary-lightOpacity);
+  --color-primaryLighter: var(--mui-palette-primary-lighterOpacity);
+  --color-secondary: var(--mui-palette-secondary-main);
+  --color-error: var(--mui-palette-error-main);
+  --color-errorLight: var(--mui-palette-error-lightOpacity);
+  --color-errorLighter: var(--mui-palette-error-lighterOpacity);
+  --color-warning: var(--mui-palette-warning-main);
+  --color-info: var(--mui-palette-info-main);
+  --color-success: var(--mui-palette-success-main);
+  --color-textPrimary: var(--mui-palette-text-primary);
+  --color-textSecondary: var(--mui-palette-text-secondary);
+  --color-textDisabled: var(--mui-palette-text-disabled);
+  --color-actionActive: var(--mui-palette-action-active);
+  --color-actionHover: var(--mui-palette-action-hover);
+  --color-actionSelected: var(--mui-palette-action-selected);
+  --color-actionFocus: var(--mui-palette-action-focus);
+  --color-backgroundPaper: var(--mui-palette-background-paper);
+  --color-backgroundDefault: var(--mui-palette-background-default);
+  --color-backgroundChat: var(--mui-palette-customColors-chatBg);
+  --color-backdrop: var(--backdrop-color);
+  --color-facebook: #4267b2;
+  --color-twitter: #1da1f2;
+  --color-linkedin: #007bb6;
+
+  --shadow-xs: var(--mui-customShadows-xs);
+  --shadow-sm: var(--mui-customShadows-sm);
+  --shadow-DEFAULT: var(--mui-customShadows-md);
+  --shadow-md: var(--mui-customShadows-md);
+  --shadow-lg: var(--mui-customShadows-lg);
+  --shadow-xl: var(--mui-customShadows-xl);
+  --shadow-primarySm: var(--mui-customShadows-primary-sm);
+  --shadow-primaryMd: var(--mui-customShadows-primary-md);
+  --shadow-primaryLg: var(--mui-customShadows-primary-lg);
+  --shadow-secondarySm: var(--mui-customShadows-secondary-sm);
+  --shadow-secondaryMd: var(--mui-customShadows-secondary-md);
+  --shadow-secondaryLg: var(--mui-customShadows-secondary-lg);
+  --shadow-errorSm: var(--mui-customShadows-error-sm);
+  --shadow-errorMd: var(--mui-customShadows-error-md);
+  --shadow-errorLg: var(--mui-customShadows-error-lg);
+  --shadow-warningSm: var(--mui-customShadows-warning-sm);
+  --shadow-warningMd: var(--mui-customShadows-warning-md);
+  --shadow-warningLg: var(--mui-customShadows-warning-lg);
+  --shadow-infoSm: var(--mui-customShadows-info-sm);
+  --shadow-infoMd: var(--mui-customShadows-info-md);
+  --shadow-infoLg: var(--mui-customShadows-info-lg);
+  --shadow-successSm: var(--mui-customShadows-success-sm);
+  --shadow-successMd: var(--mui-customShadows-success-md);
+  --shadow-successLg: var(--mui-customShadows-success-lg);
+
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 900px;
+  --breakpoint-lg: 1200px;
+  --breakpoint-xl: 1536px;
+  --breakpoint-2xl: 1920px;
+
+  --z-header: var(--header-z-index);
+  --z-footer: var(--footer-z-index);
+  --z-customizer: var(--customizer-z-index);
+  --z-search: var(--search-z-index);
+  --z-drawer: var(--drawer-z-index);
+}
 
 :root {
   --border-radius: var(--mui-shape-borderRadius);
@@ -23,15 +100,16 @@
   --mui-mainColorChannels-shadow: var(--mui-mainColorChannels-darkShadow);
 }
 
-*,
-::before,
-::after {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  border-width: 0;
-  border-style: solid;
-  border-color: theme('borderColor.DEFAULT', currentColor);
+@layer base {
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    border: 0 solid;
+    border-color: var(--border-color, currentColor);
+  }
 }
 
 html {
@@ -58,6 +136,7 @@ ul:not([class]) {
 [data-floating-ui-safe-polygon] .scrollbar-container {
   pointer-events: auto;
 }
+
 [data-floating-ui-safe-polygon] .scrollbar-container .ps__rail-y {
   pointer-events: none;
 }
@@ -65,22 +144,26 @@ ul:not([class]) {
 .ps__rail-y {
   inset-inline-end: 0 !important;
   inset-inline-start: auto !important;
+
   & .ps__thumb-y {
     inset-inline-end: 3px !important;
     inset-inline-start: auto !important;
     background-color: var(--mui-palette-divider);
     inline-size: 6px;
+
     &:hover,
     &:focus,
     &.ps--clicking {
       background-color: var(--mui-palette-action-disabled) !important;
     }
   }
+
   &:hover,
   &:focus,
   &.ps--clicking {
     background-color: var(--mui-palette-action-hover) !important;
   }
+
   &:hover,
   &:focus,
   &.ps--clicking {
@@ -93,18 +176,22 @@ ul:not([class]) {
 .ts-vertical-nav-root {
   .ps__thumb-y {
     inline-size: 4px;
+
     &:hover,
     &:focus,
     &.ps--clicking {
       inline-size: 6px;
     }
   }
+
   .ps__rail-y {
     inline-size: 10px;
+
     &:hover,
     &:focus,
     &.ps--clicking {
       background-color: transparent !important;
+
       .ps__thumb-y {
         inline-size: 6px;
       }
@@ -130,72 +217,4 @@ code {
   color: var(--mui-palette-info-main);
   background-color: rgb(var(--mui-palette-info-mainChannel) / 0.08);
   border: 0;
-}
-
-/* À ajouter dans votre global.css ou globals.css */
-
-@media print {
-  /* ÉTAPE 1: Cache tout par défaut */
-  body * {
-    visibility: hidden !important;
-  }
-
-  /* ÉTAPE 2: Réaffiche uniquement l'élément à imprimer et tous ses enfants */
-  .printable-area,
-  .printable-area * {
-    visibility: visible !important;
-  }
-
-  /* ÉTAPE 3: Positionne l'élément à imprimer pour qu'il prenne toute la page */
-  .printable-area {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 100% !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 20px !important;
-    background: white !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-
-  /* ÉTAPE 4: Cache explicitement certains éléments même s'ils sont dans la zone imprimable */
-  .no-print {
-    display: none !important;
-    visibility: hidden !important;
-  }
-
-  /* ÉTAPE 5: Optimisations pour l'impression */
-  @page {
-    margin: 0.5in;
-    size: A4;
-  }
-
-  /* Préserve les couleurs et les backgrounds */
-  .printable-area,
-  .printable-area * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* Évite les coupures de page dans les éléments importants */
-  .printable-area h1,
-  .printable-area h2,
-  .printable-area h3,
-  .printable-area .no-page-break {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* Force les sauts de page si nécessaire */
-  .page-break-before {
-    page-break-before: always !important;
-    break-before: always !important;
-  }
-
-  .page-break-after {
-    page-break-after: always !important;
-    break-after: always !important;
-  }
 }

@@ -78,7 +78,7 @@ export type SubMenuProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'prefix
     prefix?: ReactNode
     suffix?: ReactNode
     disabled?: boolean
-    component?: string | ReactElement
+    component?: string | ReactElement<{ className?: string; href?: string; [key: string]: unknown }>
     contentClassName?: string
     onOpenChange?: (open: boolean) => void
 

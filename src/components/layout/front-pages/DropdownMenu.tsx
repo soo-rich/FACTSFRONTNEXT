@@ -315,7 +315,7 @@ const DropdownMenu = (props: Props) => {
             <Link
               key={index}
               href={'/front-pages' + page.href}
-              className={classnames('flex items-center gap-3 focus:outline-none hover:text-primary', {
+              className={classnames('flex items-center gap-3 focus:outline-hidden hover:text-primary', {
                 'text-primary': pathname.includes('/front-pages' + page.href)
               })}
               onClick={handleLinkClick}
@@ -337,7 +337,7 @@ const DropdownMenu = (props: Props) => {
               key={index}
               href={'/pages/auth' + page.href}
               target='_blank'
-              className='flex items-center gap-3 focus:outline-none hover:text-primary'
+              className='flex items-center gap-3 focus:outline-hidden hover:text-primary'
               onClick={handleLinkClick}
             >
               <i className='tabler-circle text-[10px]' />
@@ -357,7 +357,7 @@ const DropdownMenu = (props: Props) => {
               key={index}
               href={'/pages' + page.href}
               target='_blank'
-              className='flex items-center gap-3 focus:outline-none hover:text-primary'
+              className='flex items-center gap-3 focus:outline-hidden hover:text-primary'
               onClick={handleLinkClick}
             >
               <i className='tabler-circle text-[10px]' />

@@ -5,7 +5,7 @@ import { valibotResolver } from '@hookform/resolvers/valibot'
 
 import { toast } from 'react-toastify'
 
-import { Grid2 } from '@mui/material'
+import { Grid as Grid2 } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 
 import Typography from '@mui/material/Typography'
@@ -24,8 +24,6 @@ import { ClientService } from '@/service/client/client.service'
 import type { AddEditFormType } from '@/types/soosmart/add-edit-modal.type'
 
 const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<ClientType>) => {
-
-
   const {
     control,
     handleSubmit,
@@ -44,7 +42,7 @@ const AddEditClient = ({ data: client, onCancel, onSuccess }: AddEditFormType<Cl
 
   const addMutation = useMutation({
     mutationFn: async (data: ClientSave) => {
-      return (await ClientService.saveClient(data))
+      return await ClientService.saveClient(data)
     },
     onSuccess: data => {
       toast.success(`Client ${data.nom} ajouté avec succès`)

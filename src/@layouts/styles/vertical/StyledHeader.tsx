@@ -21,7 +21,7 @@ const StyledHeader = styled.header<StyledHeaderProps>`
   align-items: center;
   justify-content: center;
   inline-size: 100%;
-  flex-shrink: 0;
+  shrink: 0;
   min-block-size: var(--header-height);
 
   &.${verticalLayoutClasses.headerContentCompact} {

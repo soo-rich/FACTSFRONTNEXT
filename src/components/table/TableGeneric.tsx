@@ -31,7 +31,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Checkbox from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography'
 
-import { ArrowDown, ArrowUp, SearchX } from 'lucide-react'
+import { ArrowDown, ArrowUp, PlusIcon, SearchX } from 'lucide-react'
 
 import LoadingWithoutModal from '../LoadingWithoutModal'
 import ErrorView from '../ErrorView'
@@ -60,11 +60,7 @@ type TableProps<T> = {
   renderHeaderCell?: (header: Header<T, unknown>) => React.ReactNode
   displayTableHeaderSession?: boolean
   cardProps?: CardProps
-  buttonadd?: {
-    elementProps?: any
-    text?: string
-    action?: () => void
-  }
+  buttonadd?: ButtonProps
 }
 
 const Menu = styled(MuiMenu)<MenuProps>({
@@ -86,31 +82,35 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
-const TableGeneric = <T,>({
-  tabledata: table_data,
-  columns,
-  title,
-  page,
-  totalElements,
-  pageSize,
-  SetPage,
-  SetPageSize,
-  globalFilter,
-  setGlobalFilter,
-  ComponentOther: FilterComponent,
-  isError,
-  isLoading,
-  pagination = true,
-  renderHeaderCell,
-  displayTableHeaderSession = true,
-  cardProps,
-  visibleColumns,
-  buttonadd
-}: TableProps<T>) => {
-  const buttonProps: ButtonProps = {
-    startIcon: <i className="tabler-plus" />,
+const TableGeneric = <T,>(props: TableProps<T>) => {
+  const {
+    tabledata: table_data,
+    columns,
+    title,
+    page,
+    totalElements,
+    pageSize,
+    SetPage,
+    SetPageSize,
+    globalFilter,
+    setGlobalFilter,
+    ComponentOther: FilterComponent,
+    isError,
+    isLoading,
+    pagination = true,
+    renderHeaderCell,
+    displayTableHeaderSession = true,
+    cardProps,
+    visibleColumns,
+    buttonadd
+  } = props
+
+  const defaultButton: ButtonProps = {
+    size: 'small',
     variant: 'contained',
-    children: 'Nouveau'
+    children: 'Nouveau',
+    startIcon: <PlusIcon />,
+    ...buttonadd
   }
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -159,40 +159,42 @@ const TableGeneric = <T,>({
 
   const handlePageSizeChange = (event: any) => {
     pagination ? SetPageSize?.(parseInt(event.target.value, 10)) : table.setPageSize(parseInt(event.target.value, 10))
+    SetPage?.(0)
   }
 
   return (
     <>
       <Card {...cardProps}>
-        {title && <CardHeader title={title ?? 'Table'} className="pbe-4" />}
+        {title && <CardHeader title={title ?? 'Table'} className='pbe-4' />}
 
         {displayTableHeaderSession && (
-          <div className="flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4">
-            {!pagination || pageSize && (
-              <CustomTextField
-                select
-                value={pagination ? (pageSize ?? 10) : table.getState().pagination.pageSize}
-                onChange={e => handlePageSizeChange(e)}
-                className="max-sm:is-full sm:is-[70px]"
-              >
-                <MenuItem value="5">5</MenuItem>
-                <MenuItem value="10">10</MenuItem>
-                <MenuItem value="25">25</MenuItem>
-                <MenuItem value="50">50</MenuItem>
-              </CustomTextField>
-            )}
-            <div className="flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4">
+          <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
+            {!pagination ||
+              (pageSize && (
+                <CustomTextField
+                  select
+                  value={pagination ? (pageSize ?? 10) : table.getState().pagination.pageSize}
+                  onChange={e => handlePageSizeChange(e)}
+                  className='max-sm:is-full sm:is-[70px]'
+                >
+                  <MenuItem value='5'>5</MenuItem>
+                  <MenuItem value='10'>10</MenuItem>
+                  <MenuItem value='25'>25</MenuItem>
+                  <MenuItem value='50'>50</MenuItem>
+                </CustomTextField>
+              ))}
+            <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
               {FilterComponent}
               {visibleColumns && (
                 <>
-                  <Button variant="outlined" aria-haspopup="true" onClick={handleClick} aria-controls="customized-menu">
+                  <Button variant='outlined' aria-haspopup='true' onClick={handleClick} aria-controls='customized-menu'>
                     Colonnes
                   </Button>
                   <Menu
                     keepMounted
                     elevation={0}
                     anchorEl={anchorEl}
-                    id="customized-menu"
+                    id='customized-menu'
                     onClose={handleClose}
                     open={Boolean(anchorEl)}
                     anchorOrigin={{
@@ -219,7 +221,7 @@ const TableGeneric = <T,>({
                               e.preventDefault()
                               column.toggleVisibility()
                             }}
-                            className="flex items-center gap-2"
+                            className='flex items-center gap-2'
                           >
                             <Checkbox
                               checked={column.getIsVisible()}
@@ -239,26 +241,16 @@ const TableGeneric = <T,>({
                 <DebouncedInput
                   value={globalFilter ?? ''}
                   onChange={value => setGlobalFilter && setGlobalFilter(String(value))}
-                  placeholder="Recherche"
-                  className="max-sm:is-full"
+                  placeholder='Recherche'
+                  className='max-sm:is-full'
                 />
               )}
 
-              {buttonadd ? (
-                buttonadd.elementProps ? (
-                  <Button {...buttonadd.elementProps} onClick={buttonadd.action}>
-                    {buttonadd.text ?? buttonProps.children}
-                  </Button>
-                ) : (
-                  <Button {...buttonProps} onClick={buttonadd.action}>
-                    {buttonProps.children}
-                  </Button>
-                )
-              ) : null}
+              {buttonadd ? <Button {...defaultButton} /> : null}
             </div>
           </div>
         )}
-        <div className="overflow-x-auto">
+        <div className='overflow-x-auto'>
           <table className={tableStyles.table}>
             <thead>
               {table.getHeaderGroups().map(headerGroup => (
@@ -290,15 +282,15 @@ const TableGeneric = <T,>({
             {isLoading ? (
               <tbody>
                 <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
-                    <LoadingWithoutModal padding="p-4" />
+                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                    <LoadingWithoutModal padding='p-4' />
                   </td>
                 </tr>
               </tbody>
             ) : isError ? (
               <tbody>
                 <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
                     <ErrorView />
                   </td>
                 </tr>
@@ -306,9 +298,9 @@ const TableGeneric = <T,>({
             ) : table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
                 <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className="text-center">
+                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
                     <div>
-                      <SearchX className="mx-auto mb-2 text-gray-400" size={48} />
+                      <SearchX className='mx-auto mb-2 text-gray-400' size={48} />
                       <Typography>Aucune donnée disponible</Typography>
                     </div>
                   </td>

@@ -12,12 +12,10 @@ import { createColumnHelper } from '@tanstack/react-table'
 
 import { toast } from 'react-toastify'
 
-
 import Tooltip from '@mui/material/Tooltip'
 
-import Button from '@mui/material/Button'
-
-import UtiliMetod from '@/utils/utilsmethod'
+// import Button from '@mui/material/Button'
+import UtilsMetod from '@/utils/utilsmethod'
 
 import TableGeneric from '@/components/table/TableGeneric'
 import { BorderauService } from '@/service/dossier/borderau.service'
@@ -28,9 +26,9 @@ import AdoptedSwitchComponent from '@views/soosmart/dossier/AdopteComponent'
 import CustomIconButton from '@core/components/mui/IconButton'
 import { getLocalizedUrl } from '@/utils/i18n'
 import type { Locale } from '@configs/i18n'
-import Link from "@components/Link";
-import { DocumentService } from '@/service/document/document.service'
-
+import Link from '@components/Link'
+import OptionMenu from '@core/components/option-menu'
+import { PDFService } from '@/service/pdf/pdf.service'
 
 const columnHelper = createColumnHelper<BorderauType>()
 
@@ -44,24 +42,22 @@ const BordereauList = () => {
   // hooks
   const { lang: locale } = useParams()
 
-  const querykey = useMemo(() => [BorderauService.BORDERAU_KEY, pageIndex, pageSize, notadopted], [pageIndex, pageSize, notadopted])
+  const querykey = useMemo(
+    () => [BorderauService.queryKey.all({ page: pageIndex, pagesize: pageSize, adopted: notadopted, search: filter })],
+    [pageIndex, pageSize, notadopted, filter]
+  )
 
   const { data, isLoading, isError } = useQuery({
     queryKey: querykey,
     queryFn: async () => {
-      return notadopted
-        ? await BorderauService.getAllWhoNoUseTocreateFacture({
-          page: pageIndex,
-          pagesize: pageSize
-        })
-        : await BorderauService.getAll({
-          page: pageIndex,
-          pagesize: pageSize
-        })
+      return await BorderauService.getAll({
+        page: pageIndex,
+        pagesize: pageSize,
+        adopted: notadopted
+      })
     },
     refetchOnWindowFocus: true,
-    refetchOnMount: true,
-    staleTime: 1000 * 60 * 5 // 5 minutes
+    refetchOnMount: true
   })
 
   const DeleteMutation = useMutation({
@@ -94,14 +90,14 @@ const BordereauList = () => {
         .then(r => r)
       toast.success('Bordereau adoptée avec succès')
     },
-    onError: (error) => {
-      toast.error((error as any).response.data.message || 'Erreur lors de l\'adoption de la Bordereau')
+    onError: error => {
+      toast.error((error as any).response.data.message || "Erreur lors de l'adoption de la Bordereau")
     }
   })
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('reference', {
+      columnHelper.accessor('proforma.reference', {
         header: 'Reference',
         cell: info => info.getValue()
       }),
@@ -109,75 +105,93 @@ const BordereauList = () => {
         header: 'Numéro',
         cell: info => info.getValue()
       }),
-      columnHelper.accessor('client', {
+      columnHelper.accessor('proforma.client.nom', {
         header: 'Client',
         cell: info => info.getValue()
       }),
-      columnHelper.accessor('date', {
+      columnHelper.accessor('createdat', {
         header: 'Créé le',
-        cell: ({ row }) => <Typography>{UtiliMetod.formatDate(row.original.date)}</Typography>
+        cell: ({ row }) => <Typography>{UtilsMetod.formatDate(row.original.createdat)}</Typography>
       }),
-
-      // columnHelper.accessor('total_ht', {
-      //   header: 'Total HT',
-      //   cell: info => info.getValue()
-      // }),
-      columnHelper.accessor('total_ttc', {
+      columnHelper.accessor('proforma.total_ttc', {
         header: 'Total TTC (Fcfa)',
         cell: info => info.getValue()
       }),
-
-      // columnHelper.accessor('total_tva', {
-      //   header: 'Total TVA',
-      //   cell: info => info.getValue()
-      // }),
-      columnHelper.accessor('numeroProforma', {
+      columnHelper.accessor('proforma.numero', {
         header: 'Numero Proforma',
-        cell: ({ row }) => (<Link href={getLocalizedUrl(`/dossier/${row.original.numeroProforma}`, locale as Locale)}>{row.original.numeroProforma}</Link>)
+        cell: ({ row }) => (
+          <Link href={getLocalizedUrl(`/docs/${row.original.proforma.numero}`, locale as Locale)}>
+            {row.original.proforma.numero}
+          </Link>
+        )
       }),
-      columnHelper.accessor('adopte', {
+
+      /*  columnHelper.accessor('adopte', {
         header: 'Status',
         cell: ({ row }) =>
-          row.original.adopte ? 'Adoptée' :
-            <Button color={'primary'} variant={'outlined'} className={'hover:bg-primary hover:text-white'}
-              onClick={() => AdoptMutation.mutate(row.original.id)}>Adopter</Button>
-
-      }),
+          row.original.adopte ? (
+            'Adoptée'
+          ) : (
+            <Button
+              color={'primary'}
+              variant={'outlined'}
+              className={'hover:bg-primary hover:text-white'}
+              onClick={() => AdoptMutation.mutate(row.original.id)}
+            >
+              Adopter
+            </Button>
+          )
+      }),*/
       columnHelper.display({
         id: 'actions', // Important : donner un ID à la colonne display
         header: 'Actions',
         cell: ({ row }) => (
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             <Tooltip title={'Voir le PDF'}>
               <CustomIconButton
                 href={getLocalizedUrl(`/docs/${row.original.numero}`, locale as Locale)}
-                className="cursor-pointer text-green-600 hover:text-green-800"
+                className='cursor-pointer text-green-600 hover:text-green-800'
               >
-                <i className="tabler-file-type-pdf" />
+                <i className='tabler-file-type-pdf' />
               </CustomIconButton>
             </Tooltip>
-            <Tooltip title={'Télécharger le PDF'}>
-              <CustomIconButton
-                onClick={() => DocumentService.generatePdf(row.original.numero)}
-                className="cursor-pointer  hover:text-green-800"
-              >
-                <i className="tabler-download" />
-              </CustomIconButton>
-            </Tooltip>
-            <Tooltip title={`Supprimer ${row.original.numero}`} placement={'top'}>
-              <CustomIconButton
-                onClick={() => UtiliMetod.SuppressionConfirmDialog({
-                  data: row.original.reference,
-                  confirmAction: () => DeleteMutation.mutate(row.original.id)
-                })
+
+            <OptionMenu
+              iconButtonProps={{ size: 'medium' }}
+              iconClassName='text-textSecondary'
+              options={[
+                {
+                  text: 'Télécharger le PDF',
+                  icon: 'tabler-download hover:text-green-600 text-green-900',
+                  menuItemProps: {
+                    className: 'flex items-center gap-2 text-textSecondary',
+                    onClick: () => {
+                      PDFService.downloadPdfByNumero(row.original.numero)
+                    }
+                  }
+                },
+                {
+                  text: row.original.invoice ? 'Facture déjà creer' : 'Creer la facture',
+                  icon: 'tabler-check hover:text-green-600 text-green-900',
+                  menuItemProps: {
+                    disabled: !!row.original.invoice,
+                    onClick: () => AdoptMutation.mutate(row.original.id)
+                  }
+                },
+                {
+                  text: `Supprimer ${row.original.numero}`,
+                  icon: 'tabler-trash hover:text-red-900 text-red-600',
+                  menuItemProps: {
+                    disabled: !!row.original.invoice,
+                    onClick: () =>
+                      UtilsMetod.SuppressionConfirmDialog({
+                        data: row.original.proforma.reference,
+                        confirmAction: () => DeleteMutation.mutate(row.original.id)
+                      })
+                  }
                 }
-                className="cursor-pointer flex items-center gap-2 text-textSecondary"
-              >
-                <i className="tabler-trash text-red-600" />
-              </CustomIconButton>
-            </Tooltip>
-
-
+              ]}
+            />
           </div>
         ),
         enableHiding: true // Permet de cacher cette colonne
@@ -203,11 +217,9 @@ const BordereauList = () => {
         globalFilter={filter}
         setGlobalFilter={setFilter}
         totalElements={data?.totalElements}
-
       />
     </>
   )
 }
-
 
 export default BordereauList

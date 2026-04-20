@@ -1,14 +1,15 @@
 import * as v from 'valibot'
 
+import type { ArticleType } from '@/types/soosmart/article.type'
 import { articleSchema } from '@/types/soosmart/article.type'
+import type { BaseType } from '@/types/soosmart/api-default,type'
 
 export type Article_Quantite = {
-  id: string;
-  article: string;
-  description: string;
-  quantite: number;
-  prix_article: number;
-};
+  article: ArticleType
+  isdeleted: boolean
+  quantite: number
+  prix_article: number
+} & BaseType
 
 
 export const schemaArticleQuantiteslist = v.object({

@@ -44,7 +44,7 @@ export type SubMenuItemElement =
 // Menu Button Props
 export type MenuButtonProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'prefix'> &
   Partial<ChildrenType> & {
-    component?: string | ReactElement
+    component?: string | ReactElement<{ className?: string; href?: string; [key: string]: unknown }>
   }
 
 // Menu Item Styles Params Type

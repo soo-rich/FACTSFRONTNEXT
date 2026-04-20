@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.ts\\(x\\)?$\")",
+      "Bash(ls -la /d/projet/facts/facts_front_new/src/app/[lang]/)",
+      "Bash(npm install:*)",
+      "Bash(npm list:*)",
+      "Bash(npx tsc:*)"
+    ]
+  }
+}
