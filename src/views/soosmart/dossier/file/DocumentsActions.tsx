@@ -231,7 +231,7 @@ const DocumentsActions = ({
                   UpdateRole && UpdateRole(signaturerole)
                   SignatureMutation.mutate({ signature, signaturerole })
                 }}>
-                  Signer le {documenttype ? `${documenttype}  ${numero}` : 'Document non Reconnu '}
+                  Signer  {documenttype ? `${documenttype}  ${numero}` : 'Document non Reconnu '}
                 </Button>
               </Grid>
             ) : null
