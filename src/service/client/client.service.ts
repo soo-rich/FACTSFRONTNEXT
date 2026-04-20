@@ -25,7 +25,7 @@ export class ClientService {
   }
 
   static async updateClient(id: string, client: ClientSave) {
-    return (await instance.put<ClientType>(api + '/' + id, client)).data
+    return (await instance.patch<ClientType>(api + '/' + id, client)).data
   }
 
   static async deleteClient(id: string) {

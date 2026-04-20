@@ -195,7 +195,7 @@ const DocumentsActions = ({
                   }
                 }}
               >
-                Telecharger le {documenttype ? `${documenttype}  ${numero}` : 'Document non Reconnu '}
+                Telecharger {documenttype ? `${documenttype}  ${numero}` : 'Document non Reconnu '}
               </Button>
             </CardContent>
           </Card>
