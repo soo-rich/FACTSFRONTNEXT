@@ -122,9 +122,7 @@ const DefaultDesignFact = ({
               marginRight: '1rem'
             }}
           >
-            {documenttype === DocumentTypes.BORDERAU ? (
-              <Typography className={'font-bold text-center underline uppercase'}>Client :</Typography>
-            ) : null}
+            <Typography className={'font-bold text-center underline uppercase'}>Client :</Typography>
             <Typography className={'text-md font-medium'}>{docs.client.nom}</Typography>
             <Typography className={'text-md font-medium'}>{docs.client.sigle ? docs.client.sigle : ''}</Typography>
             <Typography className={'text-md font-medium'}>{docs.client.lieu}</Typography>
