@@ -1,0 +1,100 @@
+name: Build & Push Docker image
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Tag supplémentaire à appliquer à l'image (ex: 5.0.0)"
+        required: false
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+
+concurrency:
+  group: docker-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build & push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      # Optionnel : contenu complet d'un fichier .env de production, stocké en secret.
+      ENV_PRODUCTION: ${{ secrets.ENV_PRODUCTION }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Le nom d'image GHCR doit être en minuscules (le dépôt contient des majuscules).
+      - name: Calculer le nom de l'image
+        id: image
+        run: echo "name=${REGISTRY}/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
+      # Variables de build Next.js (NEXT_PUBLIC_*) : le .dockerignore autorise
+      # explicitement .env.production.local, qui est donc lu pendant `pnpm build`.
+      - name: Générer .env.production.local
+        if: ${{ env.ENV_PRODUCTION != '' }}
+        run: printf '%s\n' "$ENV_PRODUCTION" > .env.production.local
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Métadonnées (tags & labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.image.outputs.name }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha,format=short,prefix=sha-
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{ inputs.version }},enable=${{ inputs.version != '' }}
+          labels: |
+            org.opencontainers.image.title=facts-front
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+
+      - name: Build & push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+
+      - name: Récapitulatif
+        if: github.event_name != 'pull_request'
+        run: |
+          {
+            echo "### Image publiée"
+            echo ''
+            echo '```'
+            echo "${{ steps.meta.outputs.tags }}"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
