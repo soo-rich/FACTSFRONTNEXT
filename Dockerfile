@@ -2,65 +2,91 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/go/dockerfile-reference/
 
-# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
-
 ARG NODE_VERSION=22
 ARG PNPM_VERSION=11.21.0
 
 ################################################################################
-# Use node image for base image for all stages.
-FROM node:${NODE_VERSION}-alpine AS base
+# Base commune à l'exécution : node seul, sans pnpm (inutile pour `next start`).
+FROM node:${NODE_VERSION}-alpine AS runtime-base
 
 # Set working directory for all build stages.
 WORKDIR /app
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
+################################################################################
+# Base des stages de build : ajoute pnpm.
+FROM runtime-base AS base
 
 # Install pnpm.
 RUN --mount=type=cache,target=/root/.npm \
     npm install -g pnpm@${PNPM_VERSION}
 
 ################################################################################
-# Create a stage for installing production dependecies.
+# Toutes les dépendances (dev incluses), nécessaires pour `next build`.
+# Seuls les manifestes sont copiés : cette couche n'est réinstallée que si
+# package.json / pnpm-lock.yaml changent, pas à chaque modification du code.
+# --ignore-scripts : le postinstall (build:icons) a besoin de src/, absent ici.
+FROM base AS deps
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm install --frozen-lockfile --ignore-scripts
+
+################################################################################
+# Dépendances de production uniquement — c'est ce node_modules qui part dans
+# l'image finale (sans typescript, eslint, @iconify/json, etc.).
+FROM base AS prod-deps
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm install --frozen-lockfile --prod --ignore-scripts
+
+################################################################################
+# Create a stage for building the application.
 FROM base AS builder
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.local/share/pnpm/store to speed up subsequent builds.
+COPY --from=deps /app/node_modules ./node_modules
 
 # Copy all project files
 COPY . .
 
-# Install dependencies
-RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
-    pnpm install
+# Générer le CSS des icônes (normalement fait par le postinstall) puis builder.
+RUN pnpm build:icons && pnpm build
 
-# Build the application
-RUN pnpm build
-################################################################################
-# Create a stage for building the application.
-
+# Le cache de build webpack/turbopack pèse plusieurs centaines de Mo et n'a
+# aucune utilité à l'exécution ; Next recrée .next/cache au démarrage si besoin.
+RUN rm -rf .next/cache
 
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
 # where the necessary files are copied from the build stage.
-FROM base AS final
+FROM runtime-base AS final
 
 # Use production node environment by default.
 ENV NODE_ENV=production
 
+# /app est créé par WORKDIR sous root : sans ça, l'utilisateur node ne peut pas
+# y écrire (Next y crée des fichiers temporaires et .next/cache au démarrage).
+RUN chown node:node /app
+
 # Run the application as a non-root user.
 USER node
 
-# Copy package.json so that package manager commands can be used.
-# COPY package.json .
-
-# Copy the production dependencies from the deps stage and also
-# the built application from the build stage into the image.
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+# Dépendances de production + sortie de build. --chown pour que `next start`
+# puisse écrire dans .next/cache (ISR, optimisation d'images).
+COPY --from=prod-deps --chown=node:node /app/node_modules ./node_modules
+COPY --from=builder --chown=node:node /app/.next ./.next
+COPY --from=builder --chown=node:node /app/public ./public
+COPY --from=builder --chown=node:node /app/package.json ./package.json
+COPY --from=builder --chown=node:node /app/next.config.ts ./next.config.ts
 
 # Expose the port that the application listens on.
 EXPOSE 3000
 
 # Run the application.
-CMD ["pnpm", "start"]
+# On invoque next directement : `pnpm start` déclencherait la vérification
+# automatique des dépendances de pnpm, qui tente un `pnpm install` en écriture.
+CMD ["node_modules/.bin/next", "start"]
