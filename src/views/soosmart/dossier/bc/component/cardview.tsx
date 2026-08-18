@@ -34,44 +34,63 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
 
   const [open, setOpen] = useState(false)
 
+  // `file` peut être null : un bon de commande n'a pas toujours de pièce jointe
+  const file = bc?.file ?? null
+  const hasFile = Boolean(file?.storageKey)
+
   const { data: presignedurl, isLoading } = useQuery({
-    queryKey: ['purchaseOrder', 'presignedUrl', bc?.file?.storageKey, bc?.file?.provider],
+    queryKey: ['purchaseOrder', 'presignedUrl', file?.storageKey, file?.provider],
     queryFn: async () => {
-      return (await UtilsMetod.getFileFormApi(bc?.file?.storageKey, bc?.file?.provider)) as string
+      return (await UtilsMetod.getFileFormApi(file?.storageKey, file?.provider)) as string
     },
-    enabled: open && !!bc?.file?.storageKey && !!bc?.file?.provider,
+    enabled: open && hasFile,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5 // 5 minutes
   })
 
   const { lang: locale } = useParams()
 
-  const getMimeLabel = (mime: string) => {
+  const getMimeLabel = (mime?: string | null) => {
+    if (!mime) return 'Aucun fichier'
     if (mime === 'application/pdf') return 'PDF'
-    if (mime?.startsWith('image/')) return 'Image'
-    if (mime?.includes('word')) return 'Word'
+    if (mime.startsWith('image/')) return 'Image'
+    if (mime.includes('word')) return 'Word'
 
     return 'Fichier'
   }
 
   const getFileTypeIcon = () => {
-    if (bc?.file?.mimetype === 'application/pdf') {
+    const mimetype = file?.mimetype
+
+    if (mimetype === 'application/pdf') {
       return <img src={pdfisvg} alt='PDF' className='size-[80px]' />
     }
 
-    if (['image/jpeg', 'image/png', 'image/gif'].includes(bc?.file?.mimetype)) {
+    if (mimetype && ['image/jpeg', 'image/png', 'image/gif'].includes(mimetype)) {
       return <img src={imagesvg} alt='Image' className='size-[80px]' />
     }
 
     if (
+      mimetype &&
       ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(
-        bc?.file?.mimetype
+        mimetype
       )
     ) {
       return <img src={ms_wordsvg} alt='Word' className='size-[80px]' />
     }
 
     return <FileIcon size={80} className='text-gray-400' />
+  }
+
+  const formatDate = (date?: Date | string | null) => (date ? UtilsMetod.formatDate(date, 'dd/MM/yyyy') : '--')
+
+  const handleDownload = () => {
+    UtilsMetod.getFileFormApi(file?.storageKey, file?.provider)
+      .then(value => {
+        if (value) UtilsMetod.download(value, file)
+        else toast.error('Aucun fichier associé à ce bon de commande')
+      })
+      .catch(() => toast.error('Erreur lors de la récupération du fichier'))
   }
 
   const MetaRow = ({ label, value, uppercase }: { label: string; value: string; uppercase?: boolean }) => (
@@ -98,7 +117,13 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
         {/* Preview zone — fixed height */}
         <div className='flex flex-col items-center justify-center gap-2 bg-gray-100 h-40 px-4'>
           {getFileTypeIcon()}
-          <Chip label={getMimeLabel(bc?.file?.mimetype)} size='small' variant='outlined' className='text-xs' />
+          <Chip
+            label={getMimeLabel(file?.mimetype)}
+            size='small'
+            variant='outlined'
+            color={hasFile ? 'default' : 'warning'}
+            className='text-xs'
+          />
         </div>
 
         <Divider />
@@ -106,8 +131,18 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
         <CardContent className='p-3 flex flex-col gap-2'>
           <Typography className='text-center text-blue-900 font-semibold text-sm line-clamp-2'>{bc.label}</Typography>
           <Typography variant='caption' className='text-center text-gray-400 block'>
-            {UtilsMetod.formatBytes(bc?.file?.size)}
+            {hasFile ? UtilsMetod.formatBytes(file?.size) : `Ajouté le ${formatDate(bc?.createdat)}`}
           </Typography>
+          {(bc?.proforma?.numero || bc?.bordereau?.numero) && (
+            <div className='flex flex-wrap justify-center gap-1'>
+              {bc?.proforma?.numero && (
+                <Chip label={bc.proforma.numero} size='small' variant='tonal' color='primary' className='text-xs' />
+              )}
+              {bc?.bordereau?.numero && (
+                <Chip label={bc.bordereau.numero} size='small' variant='tonal' color='warning' className='text-xs' />
+              )}
+            </div>
+          )}
           <div className='flex gap-2 mt-1'>
             <Button
               variant='tonal'
@@ -122,14 +157,9 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
               variant='contained'
               size='small'
               fullWidth
+              disabled={!hasFile}
               startIcon={<Download size={14} />}
-              onClick={() => {
-                UtilsMetod.getFileFormApi(bc?.file?.storageKey, bc?.file?.provider)
-                  .then(value => {
-                    if (value) UtilsMetod.download(value, bc.file)
-                  })
-                  .catch(() => toast.error('Erreur lors de la récupération du fichier'))
-              }}
+              onClick={handleDownload}
             >
               Télécharger
             </Button>
@@ -139,15 +169,22 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
 
       <DefaultDialog open={open} setOpen={setOpen} onClose={() => setOpen(false)} title={bc?.label}>
         {/* Preview */}
-        {isLoading ? (
+        {!hasFile ? (
+          <div className='flex flex-col justify-center items-center gap-2 h-40'>
+            <FileIcon size={40} className='text-gray-300' />
+            <Typography variant='body2' className='text-gray-400'>
+              Aucun fichier n&apos;est associé à ce bon de commande.
+            </Typography>
+          </div>
+        ) : isLoading ? (
           <div className='flex justify-center items-center h-40'>
             <CircularProgress size={32} />
           </div>
         ) : presignedurl ? (
-          bc.file.mimetype === 'application/pdf' ? (
-            <iframe src={presignedurl} width='100%' height='500px' title={bc.file.originalName} />
-          ) : bc.file.mimetype.startsWith('image/') ? (
-            <img src={presignedurl} alt={bc.file.originalName} className='max-w-full max-h-[500px] mx-auto block' />
+          file?.mimetype === 'application/pdf' ? (
+            <iframe src={presignedurl} width='100%' height='500px' title={file?.originalName} />
+          ) : file?.mimetype?.startsWith('image/') ? (
+            <img src={presignedurl} alt={file?.originalName} className='max-w-full max-h-[500px] mx-auto block' />
           ) : (
             <div className='flex flex-col items-center gap-2 p-4'>
               <a href={presignedurl} target='_blank' rel='noopener noreferrer' className='text-blue-600 underline'>
@@ -173,11 +210,22 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
           Informations
         </Typography>
         <div className='grid grid-cols-2 gap-x-4 gap-y-3'>
-          <MetaRow label='Nom du fichier' value={bc?.file?.originalName} />
-          <MetaRow label='Type' value={getMimeLabel(bc?.file?.mimetype)} />
-          <MetaRow label='Taille' value={UtilsMetod.formatBytes(bc?.file?.size)} />
-          <MetaRow label='Téléchargé par' value={bc?.file?.uploadBy ?? ''} uppercase />
-          <MetaRow label='Mis à jour le' value={new Date(bc?.file?.updatedat).toLocaleDateString()} />
+          <MetaRow label='Libellé' value={bc?.label ?? '--'} />
+          <MetaRow label='Créé le' value={formatDate(bc?.createdat)} />
+          {hasFile ? (
+            <>
+              <MetaRow label='Nom du fichier' value={file?.originalName ?? '--'} />
+              <MetaRow label='Type' value={getMimeLabel(file?.mimetype)} />
+              <MetaRow label='Taille' value={UtilsMetod.formatBytes(file?.size)} />
+              <MetaRow label='Téléchargé par' value={file?.uploadBy ?? '--'} uppercase />
+              <MetaRow label='Mis à jour le' value={formatDate(file?.updatedat)} />
+            </>
+          ) : (
+            <MetaRow label='Fichier' value='Aucun fichier joint' />
+          )}
+          {bc?.proforma?.numero && <MetaRow label='Proforma' value={bc.proforma.numero} />}
+          {bc?.proforma?.reference && <MetaRow label='Référence' value={bc.proforma.reference} />}
+          {bc?.bordereau?.numero && <MetaRow label='Bordereau' value={bc.bordereau.numero} />}
         </div>
 
         {/* Actions */}
@@ -210,9 +258,9 @@ const CardView = ({ bc, onRemove }: { bc: PurchaseOrderType; onRemove?: () => vo
             color='success'
             size='small'
             startIcon={<Download size={14} />}
-            disabled={isLoading || !presignedurl}
+            disabled={!hasFile || isLoading || !presignedurl}
             onClick={() => {
-              if (presignedurl) UtilsMetod.download(presignedurl, bc.file)
+              if (presignedurl) UtilsMetod.download(presignedurl, file)
             }}
           >
             Télécharger

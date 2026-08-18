@@ -114,7 +114,7 @@ const PurchaseOrderList = () => {
                 bc={item}
                 onRemove={() =>
                   UtilsMetod.SuppressionConfirmDialog({
-                    data: item?.file?.storageKey||'',
+                    data: item?.file?.originalName ?? item?.proforma?.numero ?? item.label,
                     confirmAction: () => DeleteMutation.mutate(item.id)
                   })
                 }

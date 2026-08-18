@@ -10,8 +10,9 @@ import instance from '@/service/axios-manager/instance'
 import type { FileObject } from '@/types/soosmart/file.object.type'
 
 class UtilsMetod {
-  static formatBytes(size: number): string {
-    if (size === 0) return '0 Bytes'
+  static formatBytes(size?: number | null): string {
+    if (size === null || size === undefined || Number.isNaN(size)) return '--'
+    if (size <= 0) return '0 Bytes'
     const k = 1024
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
     const i = Math.floor(Math.log(size) / Math.log(k))
@@ -104,7 +105,7 @@ class UtilsMetod {
     return colors[Math.floor(Math.random() * colors.length)]
   }
 
-  static getFileFormApi = async (url: string, provider: 'local' | 'minio' = 'local') => {
+  static getFileFormApi = async (url?: string | null, provider: 'local' | 'minio' = 'local') => {
     if (!url) {
       return null
     }
@@ -124,7 +125,7 @@ class UtilsMetod {
     return process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') + url
   }
 
-  static download = async (uri: string, file?: FileObject) => {
+  static download = async (uri: string, file?: FileObject | null) => {
     const downloadPromise = fetch(uri, {
       method: 'GET'
     })
