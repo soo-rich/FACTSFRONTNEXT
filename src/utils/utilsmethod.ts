@@ -106,13 +106,34 @@ class UtilsMetod {
     return colors[Math.floor(Math.random() * colors.length)]
   }
 
+  /**
+   * Les fichiers `local` sont servis à la racine du serveur d'API, pas sous le
+   * chemin de l'API : on repart donc de l'origine de API_URL, quel que soit ce
+   * chemin (/api, /api/v1, ...).
+   */
+  private static fileUrlFromStorageKey = (storageKey: string) => {
+    const { apiUrl } = getPublicEnv()
+
+    let origin: string
+
+    try {
+      origin = new URL(apiUrl).origin
+    } catch {
+      console.error("API_URL absente ou invalide : impossible de construire l'URL du fichier")
+
+      return null
+    }
+
+    return `${origin}${storageKey.startsWith('/') ? '' : '/'}${storageKey}`
+  }
+
   static getFileFormApi = async (url?: string | null, provider: 'local' | 'minio' = 'local') => {
     if (!url) {
       return null
     }
 
     if (provider === 'local') {
-      return getPublicEnv().apiUrl.replace(/\/api\/?$/, '') + url
+      return UtilsMetod.fileUrlFromStorageKey(url)
     }
 
     if (provider === 'minio') {
@@ -123,7 +144,7 @@ class UtilsMetod {
   }
 
   static getImagefromLocal = async (url: string) => {
-    return getPublicEnv().apiUrl.replace('/api', '') + url
+    return UtilsMetod.fileUrlFromStorageKey(url)
   }
 
   static download = async (uri: string, file?: FileObject | null) => {
