@@ -1,0 +1,55 @@
+# Déploiement de l'image publiée par la CI (GHCR).
+#
+#   docker compose -f compose.prod.yml --env-file .env.production up -d
+#
+# Toute la configuration est lue au démarrage du conteneur : la même image sert
+# tous les environnements, aucun rebuild n'est nécessaire pour changer d'API ou
+# de domaine. Les valeurs destinées au navigateur sont injectées dans le HTML à
+# chaque requête (src/components/RuntimeEnvScript.tsx).
+#
+# Variables requises dans .env.production :
+#   APP_URL           URL publique du front            (https://facts.exemple.com)
+#   API_URL           base de l'API, chemin inclus     (https://api.exemple.com/api/v1)
+#   NEXTAUTH_URL      APP_URL + NEXTAUTH_BASEPATH      (https://facts.exemple.com/api/auth)
+#   NEXTAUTH_SECRET   openssl rand -base64 32
+#
+# Variables optionnelles :
+#   IMAGE_TAG (latest), HOST_PORT (5000), NEXTAUTH_BASEPATH (/api/auth)
+
+services:
+  front:
+    image: ghcr.io/soo-rich/factsfrontnext:${IMAGE_TAG:-latest}
+    container_name: facts-front
+    restart: unless-stopped
+    pull_policy: always
+    environment:
+      NODE_ENV: production
+      APP_URL: ${APP_URL:?APP_URL est requis}
+      API_URL: ${API_URL:?API_URL est requis}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:?NEXTAUTH_URL est requis}
+      NEXTAUTH_BASEPATH: ${NEXTAUTH_BASEPATH:-/api/auth}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:?NEXTAUTH_SECRET est requis}
+    ports:
+      - '${HOST_PORT:-5000}:3000'
+    # Le conteneur tourne déjà en utilisateur `node` (voir Dockerfile).
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      # `/` redirige (308) vers le dashboard : tout statut < 500 prouve que le
+      # serveur Next répond. Pas de curl dans l'image, on utilise node.
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:3000/', { redirect: 'manual' }).then(r => process.exit(r.status < 500 ? 0 : 1)).catch(() => process.exit(1))"
+        ]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
