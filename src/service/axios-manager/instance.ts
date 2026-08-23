@@ -5,12 +5,18 @@ import {
   InterceptorErrorHandler,
   InterceptorRemoveParamsNull
 } from '@/service/axios-manager/interceptor'
-
-const locationHostname = typeof window !== 'undefined' ? window.location.hostname : ''
+import { getPublicEnv } from '@/libs/runtimeEnv'
 
 const instance = axios.create({
-  baseURL: `http://${locationHostname}:4000/api/v1`,
   timeout: 10000
+})
+
+// baseURL résolue à chaque requête (et non à la création) : la valeur provient
+// de l'environnement d'exécution, jamais du build.
+instance.interceptors.request.use(config => {
+  config.baseURL = getPublicEnv().apiUrl
+
+  return config
 })
 
 InterceptorAxios(instance)

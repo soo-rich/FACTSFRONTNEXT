@@ -13,6 +13,7 @@ import { IntersectionProvider } from '@/contexts/intersectionContext'
 
 // Component Imports
 import Providers from '@components/Providers'
+import RuntimeEnvScript from '@components/RuntimeEnvScript'
 import BlankLayout from '@layouts/BlankLayout'
 import FrontLayout from '@components/layout/front-pages'
 import ScrollToTop from '@core/components/scroll-to-top'
@@ -39,6 +40,7 @@ const Layout = async ({ children }: ChildrenType) => {
   return (
     <html id='__next' suppressHydrationWarning>
       <body className='flex is-full min-bs-full flex-auto flex-col'>
+        <RuntimeEnvScript />
         <InitColorSchemeScript attribute='data' defaultMode={systemMode} />
         <Providers direction='ltr'>
           <BlankLayout systemMode={systemMode}>

@@ -13,6 +13,8 @@ import { toast } from 'react-toastify'
 
 import type { ComponentDictonaryParamsType } from '@/types/componentTypes'
 
+import { getPublicEnv } from '@/libs/runtimeEnv'
+
 const PathGenerate = ({ dictionary }: ComponentDictonaryParamsType) => {
   const trad = ['order_slip', 'purchase_order']
 
@@ -38,7 +40,7 @@ const PathGenerate = ({ dictionary }: ComponentDictonaryParamsType) => {
       })
 
       setTimeout(async () => {
-        await signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL })
+        await signOut({ callbackUrl: getPublicEnv().appUrl })
       }, 5000)
     }
   }

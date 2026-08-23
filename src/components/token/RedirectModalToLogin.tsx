@@ -14,6 +14,8 @@ import type { SlideProps } from '@mui/material/Slide'
 
 import { signOut } from 'next-auth/react'
 
+import { getPublicEnv } from '@/libs/runtimeEnv'
+
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
   ref: Ref<unknown>
@@ -32,7 +34,7 @@ const RedirectModalToLogin = ({ show }: { show: boolean }) => {
   const handleUserLogout = async () => {
     try {
       // Sign out from the app
-      await signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL })
+      await signOut({ callbackUrl: getPublicEnv().appUrl })
     } catch (error) {
       console.error(error)
 

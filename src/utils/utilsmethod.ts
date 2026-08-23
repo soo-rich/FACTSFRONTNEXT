@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 
 import type { SweetconfirmProps } from '@/types/soosmart/sweetAlertProps'
 import instance from '@/service/axios-manager/instance'
+import { getPublicEnv } from '@/libs/runtimeEnv'
 import type { FileObject } from '@/types/soosmart/file.object.type'
 
 class UtilsMetod {
@@ -111,7 +112,7 @@ class UtilsMetod {
     }
 
     if (provider === 'local') {
-      return process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, '') + url
+      return getPublicEnv().apiUrl.replace(/\/api\/?$/, '') + url
     }
 
     if (provider === 'minio') {
@@ -122,7 +123,7 @@ class UtilsMetod {
   }
 
   static getImagefromLocal = async (url: string) => {
-    return process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') + url
+    return getPublicEnv().apiUrl.replace('/api', '') + url
   }
 
   static download = async (uri: string, file?: FileObject | null) => {

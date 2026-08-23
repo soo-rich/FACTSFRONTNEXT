@@ -17,6 +17,7 @@ import type { Locale } from '@configs/i18n'
 
 // HOC Imports
 import TranslationWrapper from '@/hocs/TranslationWrapper'
+import RuntimeEnvScript from '@components/RuntimeEnvScript'
 
 // Config Imports
 import { i18n } from '@configs/i18n'
@@ -53,6 +54,7 @@ const RootLayout = async (props: ChildrenType & { params: Promise<{ lang: string
     <TranslationWrapper headersList={headersList} lang={lang}>
       <html id='__next' lang={lang} dir={direction} suppressHydrationWarning>
         <body className='flex is-full min-bs-full flex-auto flex-col'>
+          <RuntimeEnvScript />
           <InitColorSchemeScript attribute='data' defaultMode={systemMode} />
           <NuqsAdapter> {children}</NuqsAdapter>
         </body>

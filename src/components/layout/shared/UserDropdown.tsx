@@ -34,6 +34,8 @@ import { useTourContext } from '@components/product-tour/TourProvider'
 // Util Imports
 import { getLocalizedUrl } from '@/utils/i18n'
 
+import { getPublicEnv } from '@/libs/runtimeEnv'
+
 // Styled component for badge content
 const BadgeContentSpan = styled('span')({
   width: 8,
@@ -78,7 +80,7 @@ const UserDropdown = () => {
   const handleUserLogout = async () => {
     try {
       // Sign out from the app
-      await signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL })
+      await signOut({ callbackUrl: getPublicEnv().appUrl })
     } catch (error) {
       console.error(error)
 
