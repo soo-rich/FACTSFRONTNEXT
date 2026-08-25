@@ -3,6 +3,7 @@ import type { CustomresponseType } from '@/types/soosmart/customresponse.type'
 import type { BorderauOneType, BorderauType } from '@/types/soosmart/dossier/borderau.type'
 import type { ParamRequests } from '@/types/soosmart/pagination/paramrequestion.type'
 import type { OneQueryDocs } from '@/types/soosmart/dossier/DocumentDTO'
+import { toApiPagination } from '@/utils/pagination'
 
 const url = `bordereau`
 
@@ -21,7 +22,7 @@ export class BorderauService {
   static async getAll(params?: ParamRequests & { adopted?: boolean }) {
     return (
       await instance.get<CustomresponseType<BorderauType>>(`${url}`, {
-        params: params
+        params: toApiPagination(params)
       })
     ).data
   }

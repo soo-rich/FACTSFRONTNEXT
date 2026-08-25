@@ -3,6 +3,7 @@ import instance from '@/service/axios-manager/instance'
 import type { CustomresponseType } from '@/types/soosmart/customresponse.type'
 import type { ParamRequests } from '@/types/soosmart/pagination/paramrequestion.type'
 import type { OneQueryDocs } from '@/types/soosmart/dossier/DocumentDTO'
+import { toApiPagination } from '@/utils/pagination'
 
 const url = `proforma`
 
@@ -25,7 +26,7 @@ export class ProformaService {
   static async getAll(params?: ParamRequests & ProformaQuery) {
     return (
       await instance.get<CustomresponseType<ProformaType>>(url, {
-        params: params
+        params: toApiPagination(params)
       })
     ).data
   }
