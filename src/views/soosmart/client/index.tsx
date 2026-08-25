@@ -50,7 +50,7 @@ const ClientIndex = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: querykey
+        queryKey: [ClientService.CLIENT_KEY]
       })
       toast.success('Client supprimé avec succès')
     },
@@ -65,7 +65,7 @@ const ClientIndex = () => {
     },
     onSuccess: data => {
       queryClient.invalidateQueries({
-        queryKey: querykey
+        queryKey: [ClientService.CLIENT_KEY]
       })
       toast.success(`Cette Entité ${data ? 'est maintenant un potentiel' : 'n\'est plus un potentiel'} client`)
     },
@@ -193,7 +193,7 @@ const ClientIndex = () => {
           data={clientSelect}
           onSuccess={() => {
             queryClient.invalidateQueries({
-              queryKey: querykey
+              queryKey: [ClientService.CLIENT_KEY]
             })
             setIsModalOpen(false)
             setClientSelect(undefined)

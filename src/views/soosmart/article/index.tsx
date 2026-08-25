@@ -26,12 +26,15 @@ const ArticleIndex = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedArticle, setSelectedArticle] = useState<ArticleType | undefined>(undefined)
 
-  const querykey = useMemo(() => [ArticleService.ARTICLE_KEY, pageIndex, pageSize], [pageIndex, pageSize])
+  const querykey = useMemo(
+    () => [ArticleService.ARTICLE_KEY, pageIndex, pageSize, filter],
+    [pageIndex, pageSize, filter]
+  )
 
   const { data, isLoading, isError } = useQuery({
     queryKey: querykey,
     queryFn: async () => {
-      return await ArticleService.getArticles({ page: pageIndex, pagesize: pageSize })
+      return await ArticleService.getArticles({ page: pageIndex, pagesize: pageSize, search: filter })
     },
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5 // 5 minutes
@@ -43,7 +46,7 @@ const ArticleIndex = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [ArticleService.ARTICLE_KEY, pageIndex, pageSize]
+        queryKey: [ArticleService.ARTICLE_KEY]
       }).then(r => r)
       toast.success('Suppresion OK ')
     },
@@ -129,7 +132,7 @@ const ArticleIndex = () => {
             onSuccess={() => {
               // Invalider le cache pour rafraîchir la liste
               queryClient.invalidateQueries({
-                queryKey: querykey
+                queryKey: [ArticleService.ARTICLE_KEY]
               }).then(r =>console.info(r))
               setSelectedArticle(undefined)
               setIsModalOpen(false)

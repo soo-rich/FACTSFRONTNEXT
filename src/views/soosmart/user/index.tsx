@@ -90,7 +90,7 @@ const UserIndex = () => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey: [UserService.USER_KEY, pageIndex, pageSize]
+          queryKey: [UserService.USER_KEY]
         })
         .then(r => r)
       toast.success('Suppresion OK ')
@@ -107,7 +107,7 @@ const UserIndex = () => {
     onSuccess: data => {
       queryClient
         .invalidateQueries({
-          queryKey: [UserService.USER_KEY, pageIndex, pageSize]
+          queryKey: [UserService.USER_KEY]
         })
         .then(r => r)
       toast.success(`${data.isActive ? 'Activation OK' : 'Désactivation OK '}`)

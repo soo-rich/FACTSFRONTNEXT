@@ -43,15 +43,19 @@ const ProjetIndex = () => {
 
   const columnHelper = createColumnHelper<ProjetType>()
 
-  const querykey= useMemo(() => [ProjetService.PROJT_KEY, pageIndex, pageSize], [pageIndex, pageSize])
+  const querykey = useMemo(
+    () => [ProjetService.PROJT_KEY, pageIndex, pageSize, filter],
+    [pageIndex, pageSize, filter]
+  )
 
   const { data, isLoading, isError } = useQuery({
     queryKey:querykey,
     queryFn: async () => {
       // Remplacez par votre service pour récupérer les utilisateurs
       return await ProjetService.getAllProjet({
-        page: pageIndex, pagesize:
-        pageSize
+        page: pageIndex,
+        pagesize: pageSize,
+        search: filter
       })
     },
     refetchOnWindowFocus: false,
@@ -213,7 +217,7 @@ const ProjetIndex = () => {
       >
         <AddEditProjet data={projetSelect} onSuccess={() => {
           queryClient.invalidateQueries({
-            queryKey: querykey
+            queryKey: [ProjetService.PROJT_KEY]
           })
           setIsModalOpen(false)
           setProjetSelect(undefined)

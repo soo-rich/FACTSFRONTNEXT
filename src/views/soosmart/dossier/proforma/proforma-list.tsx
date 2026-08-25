@@ -59,8 +59,25 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
   const { lang: locale } = useParams()
   const router = useRouter()
 
+  // Tout changement de filtre reduit la liste : rester au-dela de la derniere
+  // page afficherait un tableau vide.
+  const handleAdoptedChange = (value: boolean) => {
+    setNotadopte(value)
+    setPageIndex(0)
+  }
+
+  const handleStartDateChange = (value: Date | null) => {
+    setStartDate(value)
+    setPageIndex(0)
+  }
+
+  const handleEndDateChange = (value: Date | null) => {
+    setEndDate(value)
+    setPageIndex(0)
+  }
+
   const queryKey = useMemo(
-    () => [
+    () =>
       ProformaService.queryKey.all({
         page: pageIndex,
         pagesize: pageSize,
@@ -70,8 +87,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
         start: startDate,
         client_id: props?.client_id,
         projet_id: props?.projet_id
-      })
-    ],
+      }),
     [filter, pageIndex, pageSize, notadopted, startDate, endDate, props?.client_id, props?.projet_id]
   )
 
@@ -100,7 +116,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey
+          queryKey: [ProformaService.PROFORMA_KEY]
         })
         .then(r => r)
       toast.success('Proforma supprimée avec succès')
@@ -118,7 +134,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey
+          queryKey: [ProformaService.PROFORMA_KEY]
         })
         .then(r => r)
       toast.success('Proforma adoptée avec succès')
@@ -136,7 +152,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey
+          queryKey: [ProformaService.PROFORMA_KEY]
         })
         .then(r => r)
       toast.success('Borderau de livraison créé avec succès')
@@ -319,7 +335,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
             selected={startDate}
             id='picker-open-date'
             openToDate={new Date()}
-            onChange={(date: Date | null) => setStartDate(date)}
+            onChange={(date: Date | null) => handleStartDateChange(date)}
             customInput={<CustomTextField label='Date de Debut' fullWidth />}
           />
           <AppReactDatepicker
@@ -329,7 +345,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
             isClearable={true}
             id='picker-open-date'
             openToDate={new Date()}
-            onChange={(date: Date | null) => setEndDate(date)}
+            onChange={(date: Date | null) => handleEndDateChange(date)}
             customInput={<CustomTextField label='Date de Fin' fullWidth />}
           />
         </CardContent>
@@ -340,7 +356,7 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
         columns={columns}
         isLoading={isLoading}
         isError={isError}
-        ComponentOther={<AdoptedSwitchComponent checked={notadopted} handleChange={setNotadopte} />}
+        ComponentOther={<AdoptedSwitchComponent checked={notadopted} handleChange={handleAdoptedChange} />}
         page={pageIndex}
         visibleColumns={true}
         SetPage={setPageIndex}

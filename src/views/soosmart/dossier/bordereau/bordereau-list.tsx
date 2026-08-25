@@ -42,8 +42,15 @@ const BordereauList = () => {
   // hooks
   const { lang: locale } = useParams()
 
+  // Changer de filtre reduit la liste : rester au-dela de la derniere page
+  // afficherait un tableau vide.
+  const handleAdoptedChange = (value: boolean) => {
+    setNotadopte(value)
+    setPageIndex(0)
+  }
+
   const querykey = useMemo(
-    () => [BorderauService.queryKey.all({ page: pageIndex, pagesize: pageSize, adopted: notadopted, search: filter })],
+    () => BorderauService.queryKey.all({ page: pageIndex, pagesize: pageSize, adopted: notadopted, search: filter }),
     [pageIndex, pageSize, notadopted, filter]
   )
 
@@ -53,7 +60,8 @@ const BordereauList = () => {
       return await BorderauService.getAll({
         page: pageIndex,
         pagesize: pageSize,
-        adopted: notadopted
+        adopted: notadopted,
+        search: filter
       })
     },
     refetchOnWindowFocus: true,
@@ -67,7 +75,7 @@ const BordereauList = () => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey: querykey
+          queryKey: [BorderauService.BORDERAU_KEY]
         })
         .then(r => r)
       toast.success('Bordereau supprimée avec succès')
@@ -85,7 +93,7 @@ const BordereauList = () => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey: [BorderauService.BORDERAU_KEY, pageIndex, pageSize]
+          queryKey: [BorderauService.BORDERAU_KEY]
         })
         .then(r => r)
       toast.success('Bordereau adoptée avec succès')
@@ -208,7 +216,7 @@ const BordereauList = () => {
         columns={columns}
         isLoading={isLoading}
         isError={isError}
-        ComponentOther={<AdoptedSwitchComponent checked={notadopted} handleChange={setNotadopte} />}
+        ComponentOther={<AdoptedSwitchComponent checked={notadopted} handleChange={handleAdoptedChange} />}
         page={pageIndex}
         visibleColumns={true}
         SetPage={setPageIndex}

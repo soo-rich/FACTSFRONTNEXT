@@ -2,6 +2,7 @@ import instance from '@/service/axios-manager/instance'
 import type { UtilisateurDto, UtilsateurRegister } from '@/types/soosmart/utilisateur.type'
 import type { ParamRequests } from '@/types/soosmart/pagination/paramrequestion.type'
 import type { CustomresponseType } from '@/types/soosmart/customresponse.type'
+import { toApiPagination } from '@/utils/pagination'
 
 const url = `user`
 
@@ -10,7 +11,7 @@ export class UserService {
 
   static async getAll(params?: ParamRequests ) {
     return (
-      await instance.get<CustomresponseType<UtilisateurDto>>(url, { params: params })
+      await instance.get<CustomresponseType<UtilisateurDto>>(url, { params: toApiPagination(params) })
     ).data
   }
 

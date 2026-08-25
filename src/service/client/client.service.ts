@@ -2,6 +2,7 @@ import instance from '@/service/axios-manager/instance'
 import type { ParamRequests } from '@/types/soosmart/pagination/paramrequestion.type'
 import type { CustomresponseType } from '@/types/soosmart/customresponse.type'
 import type { ClientSave, ClientType } from '@/types/soosmart/client.type'
+import { toApiPagination } from '@/utils/pagination'
 
 const api = 'client'
 
@@ -11,7 +12,7 @@ export class ClientService {
   static async getClients(params?: ParamRequests) {
     return (
       await instance.get<CustomresponseType<ClientType>>(api, {
-        params: params
+        params: toApiPagination(params)
       })
     ).data
   }

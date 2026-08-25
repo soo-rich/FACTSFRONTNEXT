@@ -2,6 +2,7 @@ import instance from '@/service/axios-manager/instance'
 import type { ArticleType, SaveArticleType } from '@/types/soosmart/article.type'
 import type { CustomresponseType } from '@/types/soosmart/customresponse.type'
 import type { ParamRequests } from '@/types/soosmart/pagination/paramrequestion.type'
+import { toApiPagination } from '@/utils/pagination'
 
 const url = 'article'
 
@@ -11,7 +12,7 @@ export class ArticleService {
   static getArticles = async (params?: ParamRequests) => {
     return (
       await instance.get<CustomresponseType<ArticleType>>(`${url}`, {
-        params: params
+        params: toApiPagination(params)
       })
     ).data
   }

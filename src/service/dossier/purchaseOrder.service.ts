@@ -3,6 +3,7 @@ import instance from '@/service/axios-manager/instance'
 import type { CustomresponseType } from '@/types/soosmart/customresponse.type'
 import type { PurchaseOrderSave, PurchaseOrderType } from '@/types/soosmart/dossier/purchaseOrder.type'
 import type { OneQueryDocs } from '@/types/soosmart/dossier/DocumentDTO'
+import { toApiPagination } from '@/utils/pagination'
 
 const url = `purchase-order`
 
@@ -17,7 +18,7 @@ export class PurchaseOrderService {
   static async getAll(params?: ParamRequests) {
     return (
       await instance.get<CustomresponseType<PurchaseOrderType>>(`${url}`, {
-        params: params
+        params: toApiPagination(params)
       })
     ).data
   }

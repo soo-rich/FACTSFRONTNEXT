@@ -1,7 +1,7 @@
 'use client'
 
 // Style Imports
-import { type ReactNode, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 
 import classnames from 'classnames'
 
@@ -123,7 +123,11 @@ const TableGeneric = <T,>(props: TableProps<T>) => {
       fuzzy: fuzzyFilter
     },
     state: {
-      globalFilter,
+      // En pagination serveur la recherche est déjà appliquée par l'API :
+      // re-filtrer ici masquerait les lignes trouvées sur un champ non affiché
+      // (email, téléphone…), jusqu'à afficher « Aucune donnée disponible »
+      // alors que l'API a bien répondu.
+      globalFilter: pagination ? undefined : globalFilter,
       columnVisibility
     },
     onColumnVisibilityChange: setColumnVisibility, // Important: ajouter cette ligne
@@ -134,7 +138,10 @@ const TableGeneric = <T,>(props: TableProps<T>) => {
     },
     enableRowSelection: true,
     globalFilterFn: fuzzyFilter,
-    manualPagination: !!totalElements,
+
+    // Dérivé du mode, pas de la donnée : avec `!!totalElements`, une liste
+    // vide repassait la table en pagination cliente.
+    manualPagination: pagination,
     getCoreRowModel: getCoreRowModel(),
     onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
@@ -157,6 +164,25 @@ const TableGeneric = <T,>(props: TableProps<T>) => {
     SetPage?.(newPage)
   }
 
+  // Une nouvelle recherche repart de la première page : y rester afficherait un
+  // tableau vide dès que le résultat tient sur moins de pages qu'auparavant.
+  const handleGlobalFilterChange = (value?: string) => {
+    setGlobalFilter?.(value ?? '')
+    pagination ? SetPage?.(0) : table.setPageIndex(0)
+  }
+
+  // Le nombre de pages peut diminuer sous les pieds de l'utilisateur
+  // (suppression du dernier élément d'une page, filtre plus restrictif). Sans
+  // ce recadrage, la page courante reste au-delà de la dernière et le tableau
+  // se fige sur un contenu vide.
+  useEffect(() => {
+    if (!pagination || totalElements === undefined) return
+
+    const lastPage = Math.max(0, Math.ceil(totalElements / (pageSize || 10)) - 1)
+
+    if ((page ?? 0) > lastPage) SetPage?.(lastPage)
+  }, [pagination, totalElements, pageSize, page, SetPage])
+
   const handlePageSizeChange = (event: any) => {
     pagination ? SetPageSize?.(parseInt(event.target.value, 10)) : table.setPageSize(parseInt(event.target.value, 10))
     SetPage?.(0)
@@ -169,20 +195,19 @@ const TableGeneric = <T,>(props: TableProps<T>) => {
 
         {displayTableHeaderSession && (
           <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
-            {!pagination ||
-              (pageSize && (
-                <CustomTextField
-                  select
-                  value={pagination ? (pageSize ?? 10) : table.getState().pagination.pageSize}
-                  onChange={e => handlePageSizeChange(e)}
-                  className='max-sm:is-full sm:is-[70px]'
-                >
-                  <MenuItem value='5'>5</MenuItem>
-                  <MenuItem value='10'>10</MenuItem>
-                  <MenuItem value='25'>25</MenuItem>
-                  <MenuItem value='50'>50</MenuItem>
-                </CustomTextField>
-              ))}
+            {(!pagination || pageSize !== undefined) && (
+              <CustomTextField
+                select
+                value={pagination ? (pageSize ?? 10) : table.getState().pagination.pageSize}
+                onChange={e => handlePageSizeChange(e)}
+                className='max-sm:is-full sm:is-[70px]'
+              >
+                <MenuItem value='5'>5</MenuItem>
+                <MenuItem value='10'>10</MenuItem>
+                <MenuItem value='25'>25</MenuItem>
+                <MenuItem value='50'>50</MenuItem>
+              </CustomTextField>
+            )}
             <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
               {FilterComponent}
               {visibleColumns && (
@@ -240,7 +265,7 @@ const TableGeneric = <T,>(props: TableProps<T>) => {
               {globalFilter !== undefined && (
                 <DebouncedInput
                   value={globalFilter ?? ''}
-                  onChange={value => setGlobalFilter && setGlobalFilter(String(value))}
+                  onChange={handleGlobalFilterChange}
                   placeholder='Recherche'
                   className='max-sm:is-full'
                 />
@@ -348,7 +373,7 @@ const TableGeneric = <T,>(props: TableProps<T>) => {
             )}
             count={totalElements ?? 0}
             rowsPerPage={pageSize ?? 10}
-            page={page ?? 1}
+            page={page ?? 0}
             onPageChange={(_, page) => {
               handlePageChange(page)
             }}
