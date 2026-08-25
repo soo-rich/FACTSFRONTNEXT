@@ -64,6 +64,7 @@ const AddModalBc = () => {
       ProformaService.queryKey.all({
         page: 0,
         pagesize: pageSize,
+        bon_commande: false,
         search: filterP
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,7 +72,7 @@ const AddModalBc = () => {
   )
 
   const queryKeyBordereau = useMemo(
-    () => BorderauService.queryKey.all({ page: 0, pagesize: pageSize, search: filterB }),
+    () => BorderauService.queryKey.all({ page: 0, pagesize: pageSize, bon_commande: false, search: filterB }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [filterB]
   )
@@ -128,6 +129,7 @@ const AddModalBc = () => {
             await ProformaService.getAll({
               page: 0,
               pagesize: pageSize,
+              bon_commande: false,
               search: filterP
             })
           ).content
@@ -142,6 +144,7 @@ const AddModalBc = () => {
             await BorderauService.getAll({
               page: 0,
               pagesize: pageSize,
+              bon_commande: false,
               search: filterB
             })
           ).content

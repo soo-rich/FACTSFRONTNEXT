@@ -32,6 +32,9 @@ export type ProformaQuery = {
   end?: Date | null
   start?: Date | null
   adopted?: boolean
+
+  /** Omis : aucun filtre. `false` ne retient que les documents sans bon de commande. */
+  bon_commande?: boolean
   client_id?: string
   projet_id?: string
   status?: StatusProforma

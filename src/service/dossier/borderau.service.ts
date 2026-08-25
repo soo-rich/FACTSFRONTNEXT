@@ -7,11 +7,18 @@ import { toApiPagination } from '@/utils/pagination'
 
 const url = `bordereau`
 
+type BorderauQuery = ParamRequests & {
+  adopted?: boolean
+
+  /** Omis : aucun filtre. `false` ne retient que les bordereaux sans bon de commande. */
+  bon_commande?: boolean
+}
+
 export class BorderauService {
   static BORDERAU_KEY = 'bordereau'
 
   static queryKey = {
-    all: (query?: ParamRequests & { adopted?: boolean }) => [BorderauService.BORDERAU_KEY, 'all', query],
+    all: (query?: BorderauQuery) => [BorderauService.BORDERAU_KEY, 'all', query],
     one: (query: OneQueryDocs) => [BorderauService.BORDERAU_KEY, 'one', query]
   }
 
@@ -19,7 +26,7 @@ export class BorderauService {
     return (await instance.post<BorderauType>(`${url}`, { proforma_id: id_proforma })).data
   }
 
-  static async getAll(params?: ParamRequests & { adopted?: boolean }) {
+  static async getAll(params?: BorderauQuery) {
     return (
       await instance.get<CustomresponseType<BorderauType>>(`${url}`, {
         params: toApiPagination(params)
