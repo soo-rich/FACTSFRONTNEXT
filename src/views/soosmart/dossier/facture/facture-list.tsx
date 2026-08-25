@@ -41,11 +41,12 @@ const FactureList = () => {
   const { lang: locale } = useParams()
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: [FactureService.FACTURE_KEY, pageIndex, pageSize],
+    queryKey: [FactureService.FACTURE_KEY, pageIndex, pageSize, filter],
     queryFn: async () => {
       return await FactureService.getAll({
         page: pageIndex,
-        pagesize: pageSize
+        pagesize: pageSize,
+        search: filter
       })
     },
     refetchOnWindowFocus: true,
@@ -60,7 +61,7 @@ const FactureList = () => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey: [FactureService.FACTURE_KEY, pageIndex, pageSize]
+          queryKey: [FactureService.FACTURE_KEY]
         })
         .then(r => r)
       toast.success('Bordereau supprimée avec succès')

@@ -34,7 +34,14 @@ const PurchaseOrderList = () => {
   // hooks
   const { lang: locale } = useParams()
 
-  const queryKey = [PurchaseOrderService.queryKey.all({ page: pageIndex, pagesize: pageSize, search: filter })]
+  const queryKey = PurchaseOrderService.queryKey.all({ page: pageIndex, pagesize: pageSize, search: filter })
+
+  // Une nouvelle recherche repart de la premiere page : y rester afficherait
+  // une grille vide des que le resultat tient sur moins de pages qu'avant.
+  const handleFilterChange = (value?: string) => {
+    setFilter(value ?? '')
+    setPageIndex(0)
+  }
 
   const { data, isLoading, isError } = useQuery({
     queryKey,
@@ -56,7 +63,7 @@ const PurchaseOrderList = () => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey
+          queryKey: [PurchaseOrderService.PURCHASE_ORDER_KEY]
         })
         .then(r => r)
       toast.success('Bon de commande supprimée avec succès')
@@ -86,7 +93,7 @@ const PurchaseOrderList = () => {
         >
           Ajouter un bon de commande
         </Button>
-        <DebouncedInput value={filter} onChange={data => setFilter(String(data))} placeholder={'Rechercher'} />
+        <DebouncedInput value={filter} onChange={handleFilterChange} placeholder={'Rechercher'} />
       </Grid>
       <Grid
         container
@@ -143,8 +150,8 @@ const PurchaseOrderList = () => {
             />
           )}
           count={data?.totalElements ?? 0}
-          rowsPerPage={pageSize ?? 10}
-          page={pageIndex ?? 1}
+          rowsPerPage={pageSize}
+          page={pageIndex}
           onPageChange={(_, page) => {
             setPageIndex(page)
           }}
