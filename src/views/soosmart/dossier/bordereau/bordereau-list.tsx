@@ -96,6 +96,11 @@ const BordereauList = () => {
           queryKey: [BorderauService.BORDERAU_KEY]
         })
         .then(r => r)
+      queryClient
+        .invalidateQueries({
+          queryKey: [FactureService.FACTURE_KEY]
+        })
+        .then(r => r)
       toast.success('Bordereau adoptée avec succès')
     },
     onError: error => {
