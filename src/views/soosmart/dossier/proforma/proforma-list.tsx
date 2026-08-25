@@ -155,6 +155,11 @@ const ProformaList = ({ props }: { props?: Partial<ProformaQuery> }) => {
           queryKey: [ProformaService.PROFORMA_KEY]
         })
         .then(r => r)
+      queryClient
+        .invalidateQueries({
+          queryKey: [BorderauService.BORDERAU_KEY]
+        })
+        .then(r => r)
       toast.success('Borderau de livraison créé avec succès')
     },
     onError: () => {

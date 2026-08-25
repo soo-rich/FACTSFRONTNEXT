@@ -60,20 +60,18 @@ const AddModalBc = () => {
   const router = useRouter()
 
   const queryKeyProforma = useMemo(
-    () => [
+    () =>
       ProformaService.queryKey.all({
         page: 0,
         pagesize: pageSize,
-        adopted: true,
         search: filterP
-      })
-    ],
+      }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [filterP]
   )
 
   const queryKeyBordereau = useMemo(
-    () => [BorderauService.queryKey.all({ page: 0, pagesize: pageSize, adopted: true, search: filterB })],
+    () => BorderauService.queryKey.all({ page: 0, pagesize: pageSize, search: filterB }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [filterB]
   )
@@ -100,7 +98,13 @@ const AddModalBc = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [[PurchaseOrderService.PURCHASE_ORDER_KEY]]
+        queryKey: [PurchaseOrderService.PURCHASE_ORDER_KEY]
+      })
+      queryClient.invalidateQueries({
+        queryKey: [ProformaService.PROFORMA_KEY]
+      })
+      queryClient.invalidateQueries({
+        queryKey: [BorderauService.BORDERAU_KEY]
       })
       toast.success('Purchase order added successfully')
       reset()
@@ -124,7 +128,6 @@ const AddModalBc = () => {
             await ProformaService.getAll({
               page: 0,
               pagesize: pageSize,
-              adopted: true,
               search: filterP
             })
           ).content
@@ -139,7 +142,6 @@ const AddModalBc = () => {
             await BorderauService.getAll({
               page: 0,
               pagesize: pageSize,
-              adopted: true,
               search: filterB
             })
           ).content
